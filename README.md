@@ -42,7 +42,7 @@ Nb: Due to the limited number of place and to keep the savour of christmas exper
 ## Credits of the project
 - Director: David Ronai / @makio64
 - Artistic director: Lionel Taurus / @filsdegraphiste
-- Creative developer: Florian Zumbrunm / @florianzumbrunn
+- Creative developer: Florian Zumbrunn / @florianzumbrunn
 
 ## Special thanks for dev & review helping to :
 - Damien Moritini / @dmmn
