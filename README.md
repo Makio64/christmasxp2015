@@ -4,8 +4,8 @@ Christmas xp is a Digital Advent Calendar featuring artists everyday until chris
 
 ## How to participate
 Christmas Experiments is a project with a community composed of many top digital artist all around the world like Acko, Mrdoob, Matt Groves, Cabibbo, Nicoptere, Brunoimbrizi, Saqoosha... and the list is long.
-This year, we decide to open it to more people to spotlight new talents, with the same desire of quality that we have since the start.
-Therefore, everyday will have a limited number of places/chocolate available. If you wish to contribute to the adventure, please check the followings:
+This year, we decided to open it to more people to spotlight new talents, with the same desire of quality that we have since the start.
+Therefore, every day will have a limited number of places/chocolates available. If you wish to contribute to the adventure, please check the followings:
 
 ### Experiments requierement:
 - all style accepted but keep a high quality
@@ -34,15 +34,15 @@ if you meet any bugs, thanks to report it as issue on github.
 - the email should contain a url to test your experiments directly.
 - if you wish a special day, thanks to let us know.
 
-##### When its approve:
-- you'll receive a mail which indicate you which day your experiment will be on christmasxp.
+##### When it's approved:
+- you'll receive an email which will indicate you which day your experiment will be published.
 
-Nb: Due to the limited number of place and to keep the savour of christmas experiments, only the top experiments will be feature everyday.
+Nb: Due to the limited number of place and to keep the savour of christmas experiments, only the top experiments will be featured everyday.
 
-## Credit of the project
+## Credits of the project
 - Director: David Ronai / @makio64
 - Artistic director: Lionel Taurus / @filsdegraphiste
-- Creative developper: Florian Zumbrunm / @floz
+- Creative developer: Florian Zumbrunm / @florianzumbrunn
 
 ## Special thanks for dev & review helping to :
 - Damien Moritini / @dmmn
