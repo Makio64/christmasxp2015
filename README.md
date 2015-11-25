@@ -1,10 +1,11 @@
 # Christmas Experiments 2015
 
 Christmas xp is a Digital Advent Calendar featuring artists everyday until christmas :)
-This year Christmas Experiments feature artists but also decide to open to more peoples to discover new talents & share more lovely pixels together.
 
 ## How to participate
-Christmas Experiments is a project with a community composed of many top digital artist all around the world like Acko, Mrdoob, Matt Groves, Cabibbo, Nicoptere, Brunoimbrizi, Saqoosha... and the list is long. This year, we decide to open it to more people to spotlight new talents, with the same desire of quality that we have since the start. Therefore, everyday will have a limited number of places available. If you wish to contribute, please check the followings:
+Christmas Experiments is a project with a community composed of many top digital artist all around the world like Acko, Mrdoob, Matt Groves, Cabibbo, Nicoptere, Brunoimbrizi, Saqoosha... and the list is long.
+This year, we decide to open it to more people to spotlight new talents, with the same desire of quality that we have since the start.
+Therefore, everyday will have a limited number of places/chocolate available. If you wish to contribute to the adventure, please check the followings:
 
 ### Experiments requierement:
 - all style accepted but keep a high quality
@@ -15,7 +16,7 @@ Christmas Experiments is a project with a community composed of many top digital
 - in case of installation, simply provide the video link
 - in case of motion design, simply provide the video link
 
-### Your zip should contain the following:
+### The following files are required:
 - xpname/index.html [use this model](https://github.com/Makio64/christmasxp2015/xptemplate/index.html) : don't change the meta
 - xpname/preview.jpg : picture of your experiments (640x640)
 - xpname/facebook.jpg : picture of your experiments for facebook (1200x630)
@@ -34,7 +35,7 @@ if you meet any bugs, thanks to report it as issue on github.
 - if you wish a special day, thanks to let us know.
 
 ##### When its approve:
-- you'll receive a mail witch indicate you witch day your experiment will be on christmasxp.
+- you'll receive a mail which indicate you which day your experiment will be on christmasxp.
 
 Nb: Due to the limited number of place and to keep the savour of christmas experiments, only the top experiments will be feature everyday.
 
