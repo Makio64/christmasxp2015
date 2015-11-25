@@ -5,9 +5,9 @@ Christmas xp is a Digital Advent Calendar featuring artists everyday until chris
 ## How to participate
 Christmas Experiments is a project with a community composed of many top digital artist all around the world like Acko, Mrdoob, Matt Groves, Cabibbo, Nicoptere, Brunoimbrizi, Saqoosha... and the list is long.
 This year, we decided to open it to more people to spotlight new talents, with the same desire of quality that we have since the start.
-Therefore, every day will have a limited number of places/chocolates available. If you wish to contribute to the adventure, please check the followings:
+Therefore, each day will have a limited number of places/chocolates available. If you wish to contribute to the adventure, please check the followings:
 
-### Experiments requierement:
+### Experiments requirements:
 - all style accepted but keep a high quality
 - match the theme of christmas / winter
 - work on the latest chrome
