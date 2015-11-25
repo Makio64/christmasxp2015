@@ -1,0 +1,12 @@
+{
+	"author":"FirstName LastName",
+	"nickname":"Nickname",
+	"website":"Your website or blank",
+	"twitter":"Your twitter or blank",
+	"title":"Title of your experiment",
+    "technology":"technology you used",
+	"description":"Push the description: why you did it, how you did it, etc... its not limited in size",
+    "casestudy":"the url or blank",
+	"source":"Github or blank",
+	"mobileFriendly":"1 or 0"
+}
