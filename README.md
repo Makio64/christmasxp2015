@@ -26,7 +26,7 @@ Therefore, everyday will have a limited number of places/chocolate available. If
 - all files required need to be join when possible (js/libs/sound/video/etc..)
 
 ##### You can test your experiments in our iframe by using :
-http://christmasexperiments.com/test
+http://christmasexperiments.com/test (available from the 26.11.15)
 if you meet any bugs, thanks to report it as issue on github.
 
 ##### When your experiment is ready & tested :
