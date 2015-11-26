@@ -10,6 +10,6 @@ gulp.task( "default", function( cb ) {
 
 gulp.task( "build", function( cb ) {
 
-  runSequence( [ "views", "stytes", "scripts" ], cb );
+  runSequence( [ "scripts" ], cb );
 
 })

@@ -1,9 +1,7 @@
-class Home extends PIXI.Container {
+class About {
 
   constructor() {
-    super()
 
-    this._createLines()
   }
 
   bindEvents() {
@@ -23,4 +21,4 @@ class Home extends PIXI.Container {
 
 }
 
-module.exports = Home
+module.exports = About

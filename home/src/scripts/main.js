@@ -1,19 +1,20 @@
 const loop = require( "fz/core/loop" )
 const stage = require( "fz/core/stage" )
-const engine = require( "core/engine" )
-const Scene = require( "iao/Scene" )
+const pixi = require( "fz/core/pixi" )
+
+const Xmas = require( "xmas/Xmas" )
 
 stage.init()
-engine.init()
+pixi.init()
 
-const loader = new ( require( "xmas/Loader" ) )()
+const loader = require( "loader" )
 loader.on( "complete", () => {
   const xmas = new Xmas()
   xmas.bindEvents()
-  engine.stage.addChild( xmas )
 })
 loader.load()
+
 loop.start()
 
-document.getElementById( "main" ).appendChild( engine.dom )
+document.getElementById( "main" ).appendChild( pixi.dom )
 
