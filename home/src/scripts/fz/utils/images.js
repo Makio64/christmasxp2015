@@ -15,5 +15,5 @@ module.exports.fit = ( wImg, hImg, wHolder, hHolder ) => {
   const x = wHolder - w >> 1
   const y = hHolder - h >> 1
 
-  return { x: x, y: y, w: w, h: h }
+  return { x: x, y: y, width: w, height: h }
 }

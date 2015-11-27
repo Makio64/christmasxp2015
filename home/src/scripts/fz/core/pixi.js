@@ -27,6 +27,7 @@ class Pixi {
 
   _onUpdate() {
     this.renderer.render( this.stage )
+    // console.log( this.renderer.drawCount )
   }
 
   _onResize() {
