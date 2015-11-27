@@ -1,0 +1,18 @@
+{
+  "name": "xp_json_generator",
+  "version": "1.0.0",
+  "description": "generate json from xp architecture",
+  "license": "MIT",
+  "authors": [
+    "david.ronai <david.ronai@gmail.com>"
+  ],
+  "engines": {
+    "node": "*",
+    "npm": "*"
+  },
+  "dependencies": {
+    "gulp": "*",
+    "gulp-util": "*",
+    "yargs": "*"
+  }
+}
