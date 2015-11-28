@@ -28,7 +28,7 @@ class Line extends PIXI.Container {
     this._cntTitle.y = 60
 
     const cntLeft = new PIXI.Container()
-    cntLeft.y = 26
+    cntLeft.y = 31
     this._cntTitle.addChild( cntLeft )
 
     this._cntTfDay = uXmasTexts.create( "DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1 )
@@ -70,6 +70,20 @@ class Line extends PIXI.Container {
   _createDummy() {
     const entry = new Entry()
     this._cntEntries.addChild( entry )
+  }
+
+  bindEvents() {
+    const n = this._cntEntries.children.length
+    for( let i = 0; i < n; i++ ) {
+      this._cntEntries.getChildAt( i ).bindEvents() 
+    }
+  }
+
+  unbindEvents() {
+    const n = this._cntEntries.children.length
+    for( let i = 0; i < n; i++ ) {
+      this._cntEntries.getChildAt( i ).unbindEvents() 
+    }
   }
 
 }

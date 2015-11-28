@@ -31,6 +31,24 @@ class Entry extends PIXI.Container {
 
   }
 
+  bindEvents() {
+    if( this._content.bindEvents ) {
+      this._content.bindEvents()
+    }
+    if( this._circle.bindEvents ) {
+      this._circle.bindEvents()
+    }
+  }
+
+  unbindEvents() {
+    if( this._content.unbindEvents ) {
+      this._content.unbindEvents()
+    }
+    if( this._circle.unbindEvents ) {
+      this._circle.unbindEvents()
+    }
+  }
+
 }
 
 module.exports = Entry

@@ -663,6 +663,13 @@ config.colors = {
   blue: 0x3e67ff
 };
 
+config.sizes = {
+  entry: {
+    w: 139,
+    h: 160
+  }
+};
+
 module.exports = config;
 
 },{}],14:[function(require,module,exports){
@@ -713,7 +720,11 @@ var Home = (function (_PIXI$Container) {
   _createClass(Home, [{
     key: "_onResize",
     value: function _onResize() {
-      this._cntLines.x = stage.width - 880 >> 1;
+      var w = 980;
+      if (stage.width < 1000) {
+        w = 880;
+      }
+      this._cntLines.x = stage.width - w >> 1;
 
       this._yMin = -26 * this._hLine + stage.height;
 
@@ -751,9 +762,13 @@ var Home = (function (_PIXI$Container) {
       for (var i = 0; i < 25; i++) {
         line = this._lines[i];
         if (i >= start && i < end) {
-          this._cntLines.addChild(line);
+          if (!line.parent) {
+            line.bindEvents();
+            this._cntLines.addChild(line);
+          }
         } else {
           if (line.parent) {
+            line.unbindEvents();
             this._cntLines.removeChild(line);
           }
         }
@@ -875,7 +890,7 @@ var Line = (function (_PIXI$Container) {
       this._cntTitle.y = 60;
 
       var cntLeft = new PIXI.Container();
-      cntLeft.y = 26;
+      cntLeft.y = 31;
       this._cntTitle.addChild(cntLeft);
 
       this._cntTfDay = uXmasTexts.create("DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1);
@@ -919,6 +934,22 @@ var Line = (function (_PIXI$Container) {
       var entry = new Entry();
       this._cntEntries.addChild(entry);
     }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      var n = this._cntEntries.children.length;
+      for (var i = 0; i < n; i++) {
+        this._cntEntries.getChildAt(i).bindEvents();
+      }
+    }
+  }, {
+    key: "unbindEvents",
+    value: function unbindEvents() {
+      var n = this._cntEntries.children.length;
+      for (var i = 0; i < n; i++) {
+        this._cntEntries.getChildAt(i).unbindEvents();
+      }
+    }
   }]);
 
   return Line;
@@ -926,83 +957,7 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":13,"xmas/home/entry/Entry":17,"xmas/utils/texts":22}],16:[function(require,module,exports){
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BaseEntry = (function (_PIXI$Container) {
-  _inherits(BaseEntry, _PIXI$Container);
-
-  function BaseEntry() {
-    _classCallCheck(this, BaseEntry);
-
-    _get(Object.getPrototypeOf(BaseEntry.prototype), "constructor", this).call(this);
-
-    this._w = 139;
-    this._h = 160;
-    this._countMaskPoints = 6;
-
-    this._msk = new PIXI.Graphics();
-    this._msk.x = this._w >> 1;
-    this._msk.y = this._h >> 1;
-    this._msk.rotation = Math.PI / 6;
-    this.addChild(this._msk);
-
-    this._updateMsk();
-
-    this.mask = this._msk;
-  }
-
-  _createClass(BaseEntry, [{
-    key: "_updateMsk",
-    value: function _updateMsk() {
-      this._msk.clear();
-
-      this._msk.beginFill(0xff00ff);
-      this._drawPolyMask();
-    }
-  }, {
-    key: "_drawPolyMask",
-    value: function _drawPolyMask() {
-      var a = 0;
-      var xLast = 0;
-      var yLast = 0;
-      var x = 0;
-      var y = 0;
-      var rad = this._h >> 1;
-
-      var aAdd = 2 * Math.PI / this._countMaskPoints;
-      for (var i = 0; i < this._countMaskPoints; i++) {
-        x = Math.cos(a) * rad >> 0;
-        y = Math.sin(a) * rad >> 0;
-
-        if (i != 0) {
-          this._msk.lineTo(x, y);
-        } else {
-          this._msk.moveTo(x, y);
-        }
-
-        xLast = x;
-        yLast = y;
-
-        a += aAdd;
-      }
-    }
-  }]);
-
-  return BaseEntry;
-})(PIXI.Container);
-
-module.exports = BaseEntry;
-
-},{}],17:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":22}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1052,6 +1007,26 @@ var Entry = (function (_PIXI$Container) {
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
     }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      if (this._content.bindEvents) {
+        this._content.bindEvents();
+      }
+      if (this._circle.bindEvents) {
+        this._circle.bindEvents();
+      }
+    }
+  }, {
+    key: "unbindEvents",
+    value: function unbindEvents() {
+      if (this._content.unbindEvents) {
+        this._content.unbindEvents();
+      }
+      if (this._circle.unbindEvents) {
+        this._circle.unbindEvents();
+      }
+    }
   }]);
 
   return Entry;
@@ -1059,7 +1034,7 @@ var Entry = (function (_PIXI$Container) {
 
 module.exports = Entry;
 
-},{"xmas/home/entry/EntryComingSoon":18,"xmas/home/entry/EntryContentPreview":19,"xmas/home/entry/EntryNumber":20,"xmas/home/entry/EntrySmiley":21}],18:[function(require,module,exports){
+},{"xmas/home/entry/EntryComingSoon":17,"xmas/home/entry/EntryContentPreview":18,"xmas/home/entry/EntryNumber":19,"xmas/home/entry/EntrySmiley":20}],17:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1071,11 +1046,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var config = require("xmas/core/config");
-var BaseEntry = require("xmas/home/entry/BaseEntry");
+var PolyShape = require("xmas/home/entry/PolyShape");
 var uXmasTexts = require("xmas/utils/texts");
 
-var EntryComingSoon = (function (_BaseEntry) {
-  _inherits(EntryComingSoon, _BaseEntry);
+var EntryComingSoon = (function (_PIXI$Container) {
+  _inherits(EntryComingSoon, _PIXI$Container);
 
   function EntryComingSoon() {
     _classCallCheck(this, EntryComingSoon);
@@ -1086,8 +1061,15 @@ var EntryComingSoon = (function (_BaseEntry) {
     this.addChild(this._layer);
 
     this._cntContent = this._createContent();
-    this._cntContent.y = this._h - this._cntContent.height >> 1;
+    this._cntContent.y = config.sizes.entry.h - this._cntContent.height >> 1;
     this.addChild(this._cntContent);
+
+    this._polyShape = new PolyShape();
+    this._polyShape.x = config.sizes.entry.w >> 1;
+    this._polyShape.y = config.sizes.entry.h >> 1;
+    this.addChild(this._polyShape);
+
+    this.mask = this._polyShape;
   }
 
   _createClass(EntryComingSoon, [{
@@ -1096,11 +1078,11 @@ var EntryComingSoon = (function (_BaseEntry) {
       var cnt = new PIXI.Container();
 
       this._cntTfTop = uXmasTexts.create("more fun", { font: "15px " + config.fonts.bold, fill: config.colors.red }, 2);
-      this._cntTfTop.x = this._w - this._cntTfTop.width >> 1;
+      this._cntTfTop.x = config.sizes.entry.w - this._cntTfTop.width >> 1;
       cnt.addChild(this._cntTfTop);
 
       this._cntTfBottom = uXmasTexts.create("coming soon", { font: "15px " + config.fonts.bold, fill: config.colors.red }, 2);
-      this._cntTfBottom.x = this._w - this._cntTfBottom.width >> 1;
+      this._cntTfBottom.x = config.sizes.entry.w - this._cntTfBottom.width >> 1;
       this._cntTfBottom.y = 32;
       cnt.addChild(this._cntTfBottom);
 
@@ -1109,11 +1091,11 @@ var EntryComingSoon = (function (_BaseEntry) {
   }]);
 
   return EntryComingSoon;
-})(BaseEntry);
+})(PIXI.Container);
 
 module.exports = EntryComingSoon;
 
-},{"xmas/core/config":13,"xmas/home/entry/BaseEntry":16,"xmas/utils/texts":22}],19:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":22}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1127,36 +1109,176 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var uImg = require("fz/utils/images");
 var pixi = require("fz/core/pixi");
 var config = require("xmas/core/config");
-var BaseEntry = require("xmas/home/entry/BaseEntry");
+var PolyShape = require("xmas/home/entry/PolyShape");
 
-var EntryContentPreview = (function (_BaseEntry) {
-  _inherits(EntryContentPreview, _BaseEntry);
+var DefaultShape = (function (_PIXI$Container) {
+  _inherits(DefaultShape, _PIXI$Container);
 
-  function EntryContentPreview() {
-    _classCallCheck(this, EntryContentPreview);
+  function DefaultShape() {
+    _classCallCheck(this, DefaultShape);
 
-    _get(Object.getPrototypeOf(EntryContentPreview.prototype), "constructor", this).call(this);
+    _get(Object.getPrototypeOf(DefaultShape.prototype), "constructor", this).call(this);
+
+    this._cntPreview = this._createPreview();
+    this.addChild(this._cntPreview);
+
+    this.pivot.x = config.sizes.entry.w >> 1;
+    this.pivot.y = config.sizes.entry.h >> 1;
+
+    this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this._layer.tint = config.colors.blue;
+    this._layer.alpha = .95;
+    this._layer.x = -20;
+    this._layer.y = -20;
+    this.addChild(this._layer);
+
+    this._polyShape = new PolyShape();
+    this._polyShape.x = config.sizes.entry.w >> 1;
+    this._polyShape.y = config.sizes.entry.h >> 1;
+    this.addChild(this._polyShape);
+
+    this.mask = this._polyShape;
+
+    // this._shapeOver = new PolyShape( 0xe5f2ff )
+    this._shapeOver = new PIXI.Graphics();
+    this._shapeOver.beginFill(0xe5f2ff);
+    // this._shapeOver.x = this._msk.x
+    // this._shapeOver.y = this._msk.y
+    this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
+    this._shapeOver.x = this._polyShape.x;
+    this._shapeOver.y = this._polyShape.y;
+    this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
+    // this.addChild( this._shapeOver )
+  }
+
+  _createClass(DefaultShape, [{
+    key: "_createPreview",
+    value: function _createPreview() {
+      var cnt = new PIXI.Container();
+
+      this._img = new PIXI.Sprite(PIXI.Texture.fromFrame("img/default.jpg"));
+      var fit = uImg.fit(this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h);
+      this._img.width = fit.width >> 0;
+      this._img.height = fit.height >> 0;
+      this._img.x = config.sizes.entry.w - fit.width >> 1;
+      this._img.y = config.sizes.entry.h - fit.height >> 1;
+      this.addChild(this._img);
+
+      return cnt;
+    }
+  }, {
+    key: "over",
+    value: function over() {
+      TweenLite.killTweensOf(this);
+      TweenLite.killTweensOf(this._shapeOver.scale);
+      TweenLite.killTweensOf(this._polyShape.scale);
+
+      this._polyShape.scale.x = this._polyShape.scale.y = 1;
+      this._shapeOver.scale.x = 0;
+      this._shapeOver.scale.y = 0;
+      this.scale.x = this.scale.y = 1;
+
+      this.addChild(this._shapeOver);
+      TweenLite.set(this._shapeOver.scale, {
+        delay: .175,
+        x: .675,
+        y: .675
+      });
+      TweenLite.to(this._shapeOver.scale, .4, {
+        delay: .175,
+        x: 1.1,
+        y: 1.1,
+        ease: Quart.easeOut
+      });
+
+      TweenLite.to(this._polyShape.scale, .4, {
+        delay: .1,
+        x: 1.1,
+        y: 1.1,
+        ease: Quart.easeOut
+      });
+    }
+  }, {
+    key: "out",
+    value: function out() {
+      TweenLite.killTweensOf(this);
+      TweenLite.killTweensOf(this._shapeOver.scale);
+      TweenLite.killTweensOf(this._polyShape.scale);
+      this.rotation = 0;
+
+      this.removeChild(this._shapeOver);
+
+      this.scale.x = this.scale.y = 1;
+      this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
+      this._polyShape.scale.x = this._polyShape.scale.y = 1.05;
+
+      TweenLite.to(this._polyShape.scale, .6, {
+        x: 1,
+        y: 1,
+        ease: Quad.easeOut
+      });
+    }
+  }]);
+
+  return DefaultShape;
+})(PIXI.Container);
+
+var HoverShape = (function (_PIXI$Container2) {
+  _inherits(HoverShape, _PIXI$Container2);
+
+  function HoverShape() {
+    _classCallCheck(this, HoverShape);
+
+    _get(Object.getPrototypeOf(HoverShape.prototype), "constructor", this).call(this);
+
+    this._size = config.sizes.entry.w;
+
+    this._percent = 0.0001;
+
+    this.pivot.x = config.sizes.entry.w >> 1;
+    this.pivot.y = config.sizes.entry.h >> 1;
 
     this._cntPreview = this._createPreview();
     this.addChild(this._cntPreview);
 
     this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
     this._layer.tint = config.colors.blue;
-    this._layer.alpha = .95;
+    this._layer.x = -20;
+    this._layer.y = -20;
+    this._layer.alpha = .3;
+
     this.addChild(this._layer);
+    this._msk = new PIXI.Graphics();
+    this._msk.x = config.sizes.entry.w >> 1;
+    this._msk.y = config.sizes.entry.h >> 1;
+    this.addChild(this._msk);
+
+    this._updateMsk();
+
+    this.mask = this._msk;
+
+    this._shapeOver = new PIXI.Graphics();
+    this._shapeOver.beginFill(0xe5f2ff);
+    this._shapeOver.x = this._msk.x;
+    this._shapeOver.y = this._msk.y;
+    this._shapeOver.drawCircle(0, 0, config.sizes.entry.w >> 1);
+    this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
+
+    this._binds = {};
+    this._binds.updateMsk = this._updateMsk.bind(this);
   }
 
-  _createClass(EntryContentPreview, [{
+  _createClass(HoverShape, [{
     key: "_createPreview",
     value: function _createPreview() {
       var cnt = new PIXI.Container();
 
       this._img = new PIXI.Sprite(PIXI.Texture.fromFrame("img/default.jpg"));
-      var fit = uImg.fit(this._img.width, this._img.height, this._w, this._h);
+      var fit = uImg.fit(this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h);
       this._img.width = fit.width >> 0;
       this._img.height = fit.height >> 0;
-      this._img.x = this._w - fit.width >> 1;
-      this._img.y = this._h - fit.height >> 1;
+      this._img.x = config.sizes.entry.w - fit.width >> 1;
+      this._img.y = config.sizes.entry.h - fit.height >> 1;
       this.addChild(this._img);
 
       return cnt;
@@ -1164,24 +1286,142 @@ var EntryContentPreview = (function (_BaseEntry) {
   }, {
     key: "_updateMsk",
     value: function _updateMsk() {
-      _get(Object.getPrototypeOf(EntryContentPreview.prototype), "_updateMsk", this).call(this);
-
+      this._msk.clear();
       this._msk.beginFill(0x00ff00);
       this._drawCircleMask();
     }
   }, {
     key: "_drawCircleMask",
     value: function _drawCircleMask() {
-      this._msk.drawCircle(0, 0, this._w >> 1);
+      this._msk.drawCircle(0, 0, (config.sizes.entry.w >> 1) * this._percent);
+    }
+  }, {
+    key: "over",
+    value: function over() {
+      TweenLite.killTweensOf(this);
+      TweenLite.killTweensOf(this._shapeOver.scale);
+
+      this.scale.x = this.scale.y = 1;
+      this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
+      this._percent = 0.0001;
+      this._updateMsk();
+
+      this.removeChild(this._shapeOver);
+
+      TweenLite.to(this, .155, {
+        _percent: 0.2,
+        ease: Quad.easeIn,
+        onUpdate: this._binds.updateMsk
+      });
+      TweenLite.set(this, {
+        delay: .155,
+        _percent: .75
+      });
+      TweenLite.to(this, .5, {
+        delay: .155,
+        _percent: 1,
+        ease: Quart.easeOut,
+        onUpdate: this._binds.updateMsk
+      });
+    }
+  }, {
+    key: "out",
+    value: function out(cb) {
+      TweenLite.killTweensOf(this);
+      TweenLite.killTweensOf(this._shapeOver.scale);
+
+      this.addChild(this._shapeOver);
+      TweenLite.set(this._shapeOver.scale, {
+        x: .4,
+        y: .4
+      });
+      TweenLite.to(this._shapeOver.scale, .4, {
+        x: 1,
+        y: 1,
+        ease: Quart.easeOut
+      });
+
+      TweenLite.to(this.scale, .5, {
+        x: 1.1,
+        y: 1.1,
+        ease: Quart.easeOut
+      });
+    }
+  }]);
+
+  return HoverShape;
+})(PIXI.Container);
+
+var EntryContentPreview = (function (_PIXI$Container3) {
+  _inherits(EntryContentPreview, _PIXI$Container3);
+
+  function EntryContentPreview() {
+    _classCallCheck(this, EntryContentPreview);
+
+    _get(Object.getPrototypeOf(EntryContentPreview.prototype), "constructor", this).call(this);
+
+    this._default = new DefaultShape();
+    this._default.x = config.sizes.entry.w >> 1;
+    this._default.y = config.sizes.entry.h >> 1;
+    this.addChild(this._default);
+
+    this._hover = new HoverShape();
+    this._hover.x = config.sizes.entry.w >> 1;
+    this._hover.y = config.sizes.entry.h >> 1;
+    // this.addChild( this._hover )
+
+    this._hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this._hoverZone.scale.set(.5, .5);
+    this._hoverZone.tint = Math.random() * 0xffffff;
+    this._hoverZone.alpha = 0;
+    this.addChild(this._hoverZone);
+
+    this._binds = {};
+    this._binds.onMouseOver = this._onMouseOver.bind(this);
+    this._binds.onMouseOut = this._onMouseOut.bind(this);
+  }
+
+  _createClass(EntryContentPreview, [{
+    key: "_onMouseOver",
+    value: function _onMouseOver() {
+      this._default.over();
+
+      this.addChild(this._hover);
+      this._hover.over();
+    }
+  }, {
+    key: "_onMouseOut",
+    value: function _onMouseOut() {
+      this._default.out();
+      this.addChild(this._default);
+
+      // this._hover.out( () => {
+      //   this.removeChild( this._hover )
+      // })
+      this.removeChild(this._hover);
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      this._hoverZone.interactive = true;
+
+      this._hoverZone.on("mouseover", this._binds.onMouseOver);
+      this._hoverZone.on("mouseout", this._binds.onMouseOut);
+    }
+  }, {
+    key: "unbindEvents",
+    value: function unbindEvents() {
+      this._hoverZone.off("mouseover", this._binds.onMouseOver);
+      this._hoverZone.off("mouseout", this._binds.onMouseOut);
     }
   }]);
 
   return EntryContentPreview;
-})(BaseEntry);
+})(PIXI.Container);
 
 module.exports = EntryContentPreview;
 
-},{"fz/core/pixi":2,"fz/utils/images":5,"xmas/core/config":13,"xmas/home/entry/BaseEntry":16}],20:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/utils/images":5,"xmas/core/config":13,"xmas/home/entry/PolyShape":21}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1248,7 +1488,7 @@ var EntryNumber = (function (_PIXI$Container) {
 
 module.exports = EntryNumber;
 
-},{"xmas/core/config":13,"xmas/utils/texts":22}],21:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/utils/texts":22}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1327,7 +1567,111 @@ var EntrySmiley = (function (_PIXI$Container) {
 
 module.exports = EntrySmiley;
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
+"use strict";
+
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var config = require("xmas/core/config");
+
+var Point = (function () {
+  function Point() {
+    _classCallCheck(this, Point);
+  }
+
+  _createClass(Point, [{
+    key: "set",
+    value: function set(a, radDefault, radOver) {
+      var cos = Math.cos(a);
+      var sin = Math.sin(a);
+
+      this._xDefault = cos * radDefault;
+      this._yDefault = sin * radDefault;
+
+      this._xOver = cos * radOver;
+      this._yOver = sin * radOver;
+
+      this.x = this._xDefault;
+      this.y = this._yDefault;
+    }
+  }]);
+
+  return Point;
+})();
+
+var PolyShape = (function (_PIXI$Graphics) {
+  _inherits(PolyShape, _PIXI$Graphics);
+
+  function PolyShape() {
+    var color = arguments.length <= 0 || arguments[0] === undefined ? 0xff00ff : arguments[0];
+
+    _classCallCheck(this, PolyShape);
+
+    _get(Object.getPrototypeOf(PolyShape.prototype), "constructor", this).call(this);
+
+    this._color = color;
+    this._countMaskPoints = 6;
+
+    this.rotation = Math.PI / 6;
+
+    this._init();
+    this._update();
+  }
+
+  _createClass(PolyShape, [{
+    key: "_update",
+    value: function _update() {
+      this.clear();
+
+      this.beginFill(this._color);
+      this._draw();
+    }
+  }, {
+    key: "_init",
+    value: function _init() {
+      var a = 0;
+      var radDefault = config.sizes.entry.h >> 1;
+      var radOver = config.sizes.entry.w >> 1;
+      var p = null;
+
+      this._points = [];
+
+      var aAdd = 2 * Math.PI / this._countMaskPoints;
+      for (var i = 0; i < this._countMaskPoints; i++) {
+        p = new Point();
+        p.set(a, radDefault, radOver);
+        this._points.push(p);
+
+        a += aAdd;
+      }
+    }
+  }, {
+    key: "_draw",
+    value: function _draw() {
+      var p = null;
+      for (var i = 0; i < this._countMaskPoints; i++) {
+        p = this._points[i];
+        if (i != 0) {
+          this.lineTo(p.x, p.y);
+        } else {
+          this.moveTo(p.x, p.y);
+        }
+      }
+    }
+  }]);
+
+  return PolyShape;
+})(PIXI.Graphics);
+
+module.exports = PolyShape;
+
+},{"xmas/core/config":13}],22:[function(require,module,exports){
 "use strict";
 
 var stage = require("fz/core/stage");
