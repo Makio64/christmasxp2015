@@ -13,6 +13,7 @@ module.exports.create = ( text, style, letterSpacing = 2 ) => {
     tf.tint = style.fill
     // tf.resolution = stage.resolution
     tf.x = px
+    tf.xBase = px
     cnt.addChild( tf )
 
     px += tf.width + letterSpacing //>> 0

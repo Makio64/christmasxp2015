@@ -11,6 +11,10 @@ class EntrySmiley extends PIXI.Container {
     this._cntSmiley.x = this._bg.width >> 1
     this._cntSmiley.y = this._bg.height * .5 + 7
     this.addChild( this._cntSmiley )
+
+    this.scale.x =
+    this.scale.y = 0
+    this.pivot.set( this._bg.width >> 1, this._bg.height >> 1 )
   }
 
   _createSmiley() {
@@ -51,6 +55,26 @@ class EntrySmiley extends PIXI.Container {
     this._mouth.quadraticCurveTo( -this._wSmiley, 0, -this._wSmiley, -this._hSmileyMouth )
     this._mouth.moveTo( 0, 0 )
     this._mouth.quadraticCurveTo( this._wSmiley, 0, this._wSmiley, -this._hSmileyMouth )
+  }
+
+  show( delay = 0 ) {
+    TweenLite.to( this.scale, .2, {
+      delay: delay,
+      x: 0.4,
+      y: 0.4,
+      ease: Sine.easeIn,
+    } )
+    TweenLite.set( this.scale, {
+      delay: delay + .2,
+      x: .6,
+      y: .6
+    } )
+    TweenLite.to( this.scale, .4, {
+      delay: delay + .2,
+      x: 1,
+      y: 1,
+      ease: Quart.easeOut,
+    } )
   }
 
 }

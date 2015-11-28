@@ -31,9 +31,9 @@ class Home extends PIXI.Container {
 
   _onResize() {
     let w = 980
-    if( stage.width < 1000 ) {
+    // if( stage.width < 1000 ) {
       w = 880
-    }
+    // }
     this._cntLines.x = stage.width - w >> 1
 
     this._yMin = -26 * this._hLine + stage.height
@@ -72,6 +72,9 @@ class Home extends PIXI.Container {
         if( !line.parent ) {
           line.bindEvents()
           this._cntLines.addChild( line )
+          if( !line.isShown && ( i == start || i == end - 1 ) ) {
+            line.show( .3 )
+          }
         }
       } else {
         if( line.parent ) {
@@ -131,6 +134,11 @@ class Home extends PIXI.Container {
 
   show() {
     pixi.stage.addChild( this )
+
+    const n = this._lines.length
+    for( let i = 0; i < this._countLinesVisible; i++ ) {
+      this._lines[ i ].show( i * .04 )
+    }
   }
 
   hide( cb ) {

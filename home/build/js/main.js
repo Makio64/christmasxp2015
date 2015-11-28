@@ -721,9 +721,9 @@ var Home = (function (_PIXI$Container) {
     key: "_onResize",
     value: function _onResize() {
       var w = 980;
-      if (stage.width < 1000) {
-        w = 880;
-      }
+      // if( stage.width < 1000 ) {
+      w = 880;
+      // }
       this._cntLines.x = stage.width - w >> 1;
 
       this._yMin = -26 * this._hLine + stage.height;
@@ -765,6 +765,9 @@ var Home = (function (_PIXI$Container) {
           if (!line.parent) {
             line.bindEvents();
             this._cntLines.addChild(line);
+            if (!line.isShown && (i == start || i == end - 1)) {
+              line.show(.3);
+            }
           }
         } else {
           if (line.parent) {
@@ -828,6 +831,11 @@ var Home = (function (_PIXI$Container) {
     key: "show",
     value: function show() {
       pixi.stage.addChild(this);
+
+      var n = this._lines.length;
+      for (var i = 0; i < this._countLinesVisible; i++) {
+        this._lines[i].show(i * .04);
+      }
     }
   }, {
     key: "hide",
@@ -847,7 +855,7 @@ module.exports = Home;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -869,6 +877,8 @@ var Line = (function (_PIXI$Container) {
 
     this._idx = idx;
     this._count = count;
+
+    this.isShown = false;
 
     this._createTitle();
 
@@ -894,17 +904,21 @@ var Line = (function (_PIXI$Container) {
       this._cntTitle.addChild(cntLeft);
 
       this._cntTfDay = uXmasTexts.create("DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1);
+      this._cntTfDay.alpha = 0;
       cntLeft.addChild(this._cntTfDay);
 
       this._line = new PIXI.Graphics();
+      this._line.x = -25;
       this._line.y = 26;
       this._line.lineStyle(1, config.colors.blue);
       this._line.moveTo(0, 0);
       this._line.lineTo(20, 0);
+      this._line.scale.x = 0;
       cntLeft.addChild(this._line);
 
       this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "60px " + config.fonts.bold, fill: config.colors.red });
-      this._cntTfNumber.x = 36;
+      this._cntTfNumber.x = 16;
+      this._cntTfNumber.alpha = 0;
       this._cntTitle.addChild(this._cntTfNumber);
 
       this.addChild(this._cntTitle);
@@ -939,7 +953,7 @@ var Line = (function (_PIXI$Container) {
     value: function bindEvents() {
       var n = this._cntEntries.children.length;
       for (var i = 0; i < n; i++) {
-        this._cntEntries.getChildAt(i).bindEvents();
+        this._cntEntries.children[i].bindEvents();
       }
     }
   }, {
@@ -947,7 +961,78 @@ var Line = (function (_PIXI$Container) {
     value: function unbindEvents() {
       var n = this._cntEntries.children.length;
       for (var i = 0; i < n; i++) {
-        this._cntEntries.getChildAt(i).unbindEvents();
+        this._cntEntries.children[i].unbindEvents();
+      }
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      if (this.isShown) {
+        return;
+      }
+      this.isShown = true;
+
+      var letter = null;
+      var n = this._cntTfDay.children.length;
+      for (var i = 0; i < n; i++) {
+        letter = this._cntTfDay.children[i];
+        TweenLite.set(letter, {
+          delay: delay + .02,
+          x: letter.xBase - 25,
+          alpha: 0
+        });
+        TweenLite.to(letter, .4, {
+          delay: delay + .02 + (n - i) * .02,
+          x: letter.xBase,
+          alpha: 1,
+          ease: Cubic.easeInOut
+        });
+      }
+      TweenLite.set(this._cntTfDay, {
+        delay: delay + .04,
+        alpha: 1
+      });
+      TweenLite.to(this._line, .4, {
+        delay: delay + .04,
+        x: 0,
+        ease: Cubic.easeInOut
+      });
+      TweenLite.to(this._line.scale, .4, {
+        delay: delay + .04,
+        x: 1,
+        ease: Cubic.easeInOut
+      });
+
+      TweenLite.to(this._cntTfNumber, .4, {
+        delay: delay,
+        x: 36,
+        alpha: 1,
+        ease: Cubic.easeInOut
+      });
+
+      this._showEntries(delay + .1);
+    }
+  }, {
+    key: "_showEntries",
+    value: function _showEntries(delay) {
+      var d = 0;
+      var dAdd = .04;
+      var dMin = .01;
+      var dFriction = .85;
+
+      var entry = null;
+      var n = this._cntEntries.children.length;
+      for (var i = 0; i < n; i++) {
+        entry = this._cntEntries.children[i];
+        entry.show(delay + d);
+
+        d += dAdd;
+        dAdd *= dFriction;
+        if (dAdd < dMin) {
+          dAdd = dMin;
+        }
       }
     }
   }]);
@@ -988,30 +1073,69 @@ var Entry = (function (_PIXI$Container) {
       this.addChild(this._content);
 
       this._circle = new EntryNumber(idx);
-      this._circle.x = 119;
-      this._circle.y = 106;
+      this._circle.x = 133;
+      this._circle.y = 124;
       this.addChild(this._circle);
     } else {
       this._content = new EntryComingSoon();
       this.addChild(this._content);
 
       this._circle = new EntrySmiley();
-      this._circle.x = 119;
-      this._circle.y = 106;
+      this._circle.x = 133;
+      this._circle.y = 124;
       this.addChild(this._circle);
     }
+
+    this._binds = {};
+    this._binds.onMouseOver = this._onMouseOver.bind(this);
+    this._binds.onMouseOut = this._onMouseOut.bind(this);
   }
 
   _createClass(Entry, [{
+    key: "_onMouseOver",
+    value: function _onMouseOver() {
+      if (this._content.over) {
+        this._content.over();
+      }
+      if (this._circle.over) {
+        this._circle.over();
+      }
+    }
+  }, {
+    key: "_onMouseOut",
+    value: function _onMouseOut() {
+      if (this._content.out) {
+        this._content.out();
+      }
+      if (this._circle.out) {
+        this._circle.out();
+      }
+    }
+  }, {
     key: "show",
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this._content.show(delay);
+      this._circle.show(delay + .3);
+      this._circle.x = 113;
+      TweenLite.to(this._circle, .6, {
+        delay: delay + .3,
+        x: 133,
+        ease: Quart.easeOut
+      });
     }
   }, {
     key: "bindEvents",
     value: function bindEvents() {
       if (this._content.bindEvents) {
         this._content.bindEvents();
+      }
+      if (this._content.hoverZone) {
+        this._content.hoverZone.interactive = true;
+
+        this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
+        this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
       }
       if (this._circle.bindEvents) {
         this._circle.bindEvents();
@@ -1039,7 +1163,7 @@ module.exports = Entry;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1062,11 +1186,13 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
     this._cntContent = this._createContent();
     this._cntContent.y = config.sizes.entry.h - this._cntContent.height >> 1;
+    this._cntContent.alpha = 0;
     this.addChild(this._cntContent);
 
     this._polyShape = new PolyShape();
     this._polyShape.x = config.sizes.entry.w >> 1;
     this._polyShape.y = config.sizes.entry.h >> 1;
+    this._polyShape.scale.x = this._polyShape.scale.y = 0;
     this.addChild(this._polyShape);
 
     this.mask = this._polyShape;
@@ -1088,6 +1214,93 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
       return cnt;
     }
+  }, {
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this.x = -60;
+      // this.y = 40
+      TweenLite.to(this, .7, {
+        delay: delay,
+        x: 0,
+        y: 0,
+        ease: Cubic.easeOut
+      });
+      TweenLite.to(this._polyShape.scale, .2, {
+        delay: delay,
+        x: 0.3,
+        y: 0.3,
+        ease: Sine.easeIn
+      });
+      TweenLite.set(this._polyShape.scale, {
+        delay: delay + .2,
+        x: .6,
+        y: .6
+      });
+      TweenLite.to(this._polyShape.scale, .6, {
+        delay: delay + .2,
+        x: 1,
+        y: 1,
+        ease: Cubic.easeOut
+      });
+
+      var letter = null;
+
+      var d = .4;
+      var dAdd = .02;
+      var dMin = .01;
+      var dFriction = .89;
+
+      var i = this._cntTfTop.children.length;
+      while (--i > -1) {
+        letter = this._cntTfTop.children[i];
+        letter.x = letter.xBase - 25 >> 0;
+        letter.alpha = 0;
+        TweenLite.to(letter, .4, {
+          delay: delay + d,
+          x: letter.xBase >> 0,
+          alpha: 1,
+          ease: Cubic.easeInOut
+        });
+
+        d += dAdd;
+        dAdd *= dFriction;
+        if (dAdd < dMin) {
+          dAdd = dMin;
+        }
+      }
+
+      d = .6;
+      dAdd = .04;
+
+      i = this._cntTfBottom.children.length;
+      while (--i > -1) {
+        letter = this._cntTfBottom.children[i];
+        letter.x = letter.xBase - 25 >> 0;
+        letter.alpha = 0;
+        TweenLite.to(letter, .4, {
+          delay: delay + d,
+          x: letter.xBase >> 0,
+          alpha: 1,
+          ease: Cubic.easeInOut
+        });
+
+        d += dAdd;
+        dAdd *= dFriction;
+        if (dAdd < dMin) {
+          dAdd = dMin;
+        }
+      }
+
+      this._cntContent.alpha = 1;
+
+      // TweenLite.to( this._cntContent, .6, {
+      //   delay: .4,
+      //   alpha: 1,
+      //   ease: Quart.easeOut
+      // })
+    }
   }]);
 
   return EntryComingSoon;
@@ -1100,7 +1313,7 @@ module.exports = EntryComingSoon;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1119,8 +1332,11 @@ var DefaultShape = (function (_PIXI$Container) {
 
     _get(Object.getPrototypeOf(DefaultShape.prototype), "constructor", this).call(this);
 
+    this._cntGlobal = new PIXI.Container();
+    this.addChild(this._cntGlobal);
+
     this._cntPreview = this._createPreview();
-    this.addChild(this._cntPreview);
+    this._cntGlobal.addChild(this._cntPreview);
 
     this.pivot.x = config.sizes.entry.w >> 1;
     this.pivot.y = config.sizes.entry.h >> 1;
@@ -1130,25 +1346,29 @@ var DefaultShape = (function (_PIXI$Container) {
     this._layer.alpha = .95;
     this._layer.x = -20;
     this._layer.y = -20;
-    this.addChild(this._layer);
+    this._cntGlobal.addChild(this._layer);
 
     this._polyShape = new PolyShape();
     this._polyShape.x = config.sizes.entry.w >> 1;
     this._polyShape.y = config.sizes.entry.h >> 1;
-    this.addChild(this._polyShape);
+    this._cntGlobal.addChild(this._polyShape);
 
-    this.mask = this._polyShape;
+    this._cntGlobal.mask = this._polyShape;
 
-    // this._shapeOver = new PolyShape( 0xe5f2ff )
     this._shapeOver = new PIXI.Graphics();
     this._shapeOver.beginFill(0xe5f2ff);
-    // this._shapeOver.x = this._msk.x
-    // this._shapeOver.y = this._msk.y
     this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
     this._shapeOver.x = this._polyShape.x;
     this._shapeOver.y = this._polyShape.y;
     this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
-    // this.addChild( this._shapeOver )
+
+    this._mskCircle = new PIXI.Graphics();
+    this._mskCircle.beginFill(0xff00ff);
+    this._mskCircle.drawCircle(0, 0, config.sizes.entry.h >> 1);
+    this._mskCircle.x = this._polyShape.x;
+    this._mskCircle.y = this._polyShape.y;
+    this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
+    this.addChild(this._mskCircle);
   }
 
   _createClass(DefaultShape, [{
@@ -1162,7 +1382,7 @@ var DefaultShape = (function (_PIXI$Container) {
       this._img.height = fit.height >> 0;
       this._img.x = config.sizes.entry.w - fit.width >> 1;
       this._img.y = config.sizes.entry.h - fit.height >> 1;
-      this.addChild(this._img);
+      cnt.addChild(this._img);
 
       return cnt;
     }
@@ -1172,13 +1392,17 @@ var DefaultShape = (function (_PIXI$Container) {
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._shapeOver.scale);
       TweenLite.killTweensOf(this._polyShape.scale);
+      TweenLite.killTweensOf(this._mskCircle.scale);
 
       this._polyShape.scale.x = this._polyShape.scale.y = 1;
       this._shapeOver.scale.x = 0;
       this._shapeOver.scale.y = 0;
       this.scale.x = this.scale.y = 1;
 
-      this.addChild(this._shapeOver);
+      this.mask = null;
+      this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
+
+      this._cntGlobal.addChild(this._shapeOver);
       TweenLite.set(this._shapeOver.scale, {
         delay: .175,
         x: .675,
@@ -1201,23 +1425,70 @@ var DefaultShape = (function (_PIXI$Container) {
   }, {
     key: "out",
     value: function out() {
+      var _this = this;
+
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._shapeOver.scale);
       TweenLite.killTweensOf(this._polyShape.scale);
+      TweenLite.killTweensOf(this._mskCircle.scale);
       this.rotation = 0;
 
-      this.removeChild(this._shapeOver);
+      this._cntGlobal.removeChild(this._shapeOver);
 
       this.scale.x = this.scale.y = 1;
       this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
-      this._polyShape.scale.x = this._polyShape.scale.y = 1.05;
+      this._polyShape.scale.x = this._polyShape.scale.y = .93;
 
-      TweenLite.to(this._polyShape.scale, .6, {
+      TweenLite.to(this._polyShape.scale, .8, {
         x: 1,
         y: 1,
         ease: Quad.easeOut
       });
+
+      this.mask = this._mskCircle;
+      this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
+      TweenLite.to(this._mskCircle.scale, .155, {
+        x: 0.2,
+        y: 0.2,
+        ease: Quad.easeIn
+      });
+      TweenLite.set(this._mskCircle.scale, {
+        delay: .155,
+        x: .75,
+        y: .75
+      });
+      TweenLite.to(this._mskCircle.scale, .5, {
+        delay: .155,
+        x: 1,
+        y: 1,
+        ease: Quart.easeOut,
+        onComplete: function onComplete() {
+          _this._mskCircle.scale.x = _this._mskCircle.scale.y = 0;
+          _this.mask = null;
+        }
+      });
     }
+
+    // show( delay ) {
+    //   TweenLite.to( this._polyShape.scale, .2, {
+    //     delay: delay,
+    //     x: 0.2,
+    //     y: 0.2,
+    //     ease: Sine.easeIn,
+    //   } )
+    //   TweenLite.set( this._polyShape.scale, {
+    //     delay: delay + .2,
+    //     x: .6,
+    //     y: .6
+    //   } )
+    //   TweenLite.to( this._polyShape.scale, .6, {
+    //     delay: delay + .2,
+    //     x: 1,
+    //     y: 1,
+    //     ease: Cubic.easeOut,
+    //   } )
+    // }
+
   }]);
 
   return DefaultShape;
@@ -1257,11 +1528,9 @@ var HoverShape = (function (_PIXI$Container2) {
 
     this.mask = this._msk;
 
-    this._shapeOver = new PIXI.Graphics();
-    this._shapeOver.beginFill(0xe5f2ff);
+    this._shapeOver = new PolyShape(0xe5f2ff);
     this._shapeOver.x = this._msk.x;
     this._shapeOver.y = this._msk.y;
-    this._shapeOver.drawCircle(0, 0, config.sizes.entry.w >> 1);
     this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
 
     this._binds = {};
@@ -1279,7 +1548,7 @@ var HoverShape = (function (_PIXI$Container2) {
       this._img.height = fit.height >> 0;
       this._img.x = config.sizes.entry.w - fit.width >> 1;
       this._img.y = config.sizes.entry.h - fit.height >> 1;
-      this.addChild(this._img);
+      cnt.addChild(this._img);
 
       return cnt;
     }
@@ -1332,19 +1601,24 @@ var HoverShape = (function (_PIXI$Container2) {
 
       this.addChild(this._shapeOver);
       TweenLite.set(this._shapeOver.scale, {
-        x: .4,
-        y: .4
+        delay: .175,
+        x: .6,
+        y: .6
       });
       TweenLite.to(this._shapeOver.scale, .4, {
-        x: 1,
-        y: 1,
+        delay: .175,
+        x: 1.2,
+        y: 1.2,
         ease: Quart.easeOut
       });
 
-      TweenLite.to(this.scale, .5, {
-        x: 1.1,
-        y: 1.1,
-        ease: Quart.easeOut
+      TweenLite.to(this, .4, {
+        delay: .125,
+        // x: 1.2,
+        // y: 1.2,
+        _percent: 1.2,
+        ease: Quart.easeOut,
+        onUpdate: this._binds.updateMsk
       });
     }
   }]);
@@ -1363,6 +1637,7 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     this._default = new DefaultShape();
     this._default.x = config.sizes.entry.w >> 1;
     this._default.y = config.sizes.entry.h >> 1;
+    this._default.scale.x = this._default.scale.y = 0;
     this.addChild(this._default);
 
     this._hover = new HoverShape();
@@ -1370,50 +1645,67 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     this._hover.y = config.sizes.entry.h >> 1;
     // this.addChild( this._hover )
 
-    this._hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    this._hoverZone.scale.set(.5, .5);
-    this._hoverZone.tint = Math.random() * 0xffffff;
-    this._hoverZone.alpha = 0;
-    this.addChild(this._hoverZone);
-
-    this._binds = {};
-    this._binds.onMouseOver = this._onMouseOver.bind(this);
-    this._binds.onMouseOut = this._onMouseOut.bind(this);
+    this.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this.hoverZone.scale.set(.5, .5);
+    this.hoverZone.tint = Math.random() * 0xffffff;
+    this.hoverZone.alpha = 0;
+    this.addChild(this.hoverZone);
   }
 
   _createClass(EntryContentPreview, [{
-    key: "_onMouseOver",
-    value: function _onMouseOver() {
+    key: "over",
+    value: function over() {
       this._default.over();
 
       this.addChild(this._hover);
       this._hover.over();
     }
   }, {
-    key: "_onMouseOut",
-    value: function _onMouseOut() {
+    key: "out",
+    value: function out() {
       this._default.out();
       this.addChild(this._default);
 
+      this._hover.out();
       // this._hover.out( () => {
       //   this.removeChild( this._hover )
       // })
-      this.removeChild(this._hover);
+      // this.removeChild( this._hover )
     }
   }, {
-    key: "bindEvents",
-    value: function bindEvents() {
-      this._hoverZone.interactive = true;
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      this._hoverZone.on("mouseover", this._binds.onMouseOver);
-      this._hoverZone.on("mouseout", this._binds.onMouseOut);
+      this.x = -60;
+      // this.y = 40
+      TweenLite.to(this, .7, {
+        delay: delay,
+        x: 0,
+        y: 0,
+        ease: Cubic.easeOut
+      });
+      TweenLite.to(this._default.scale, .2, {
+        delay: delay,
+        x: 0.3,
+        y: 0.3,
+        ease: Sine.easeIn
+      });
+      TweenLite.set(this._default.scale, {
+        delay: delay + .2,
+        x: .6,
+        y: .6
+      });
+      TweenLite.to(this._default.scale, .6, {
+        delay: delay + .2,
+        x: 1,
+        y: 1,
+        ease: Cubic.easeOut
+      });
     }
   }, {
-    key: "unbindEvents",
-    value: function unbindEvents() {
-      this._hoverZone.off("mouseover", this._binds.onMouseOver);
-      this._hoverZone.off("mouseout", this._binds.onMouseOut);
-    }
+    key: "hide",
+    value: function hide() {}
   }]);
 
   return EntryContentPreview;
@@ -1426,7 +1718,7 @@ module.exports = EntryContentPreview;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1443,6 +1735,9 @@ var EntryNumber = (function (_PIXI$Container) {
 
     _get(Object.getPrototypeOf(EntryNumber.prototype), "constructor", this).call(this);
 
+    this._percentArrowLine = 0;
+    this._percentArrowEnd = 0;
+
     this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
     this._bg.scale.set(.5, .5);
     this.addChild(this._bg);
@@ -1454,32 +1749,151 @@ var EntryNumber = (function (_PIXI$Container) {
     this._cntText.y -= 1;
     this.addChild(this._cntText);
 
-    // this._createArrow()
+    this._createArrow();
+
+    this.scale.x = this.scale.y = 0;
+    this.pivot.set(this._bg.width >> 1, this._bg.height >> 1);
+
+    this._binds = {};
+    this._binds.drawArrowLine = this._drawArrowLine.bind(this);
+    this._binds.drawArrowEnd = this._drawArrowEnd.bind(this);
   }
 
   _createClass(EntryNumber, [{
     key: "_createArrow",
     value: function _createArrow() {
       this._cntArrow = new PIXI.Container();
+      this._cntArrow.x = -4;
       this._cntArrow.y = this._bg.height >> 1;
-      this.addChild(this._cntArrow);
+      // this.addChild( this._cntArrow )
 
       this._wArrowLine = 22;
       this._sizeArrowEnd = 5;
 
       this._arrowLine = new PIXI.Graphics();
-      this._arrowLine.lineStyle(2, 0xffffff);
-      this._arrowLine.moveTo(0, 0);
-      this._arrowLine.lineTo(this._wArrowLine, 0);
       this._cntArrow.addChild(this._arrowLine);
 
       this._arrowEnd = new PIXI.Graphics();
-      this._arrowEnd.lineStyle(2, 0xffffff);
-      this._arrowEnd.moveTo(-this._sizeArrowEnd, -this._sizeArrowEnd);
-      this._arrowEnd.lineTo(0, 0);
-      this._arrowEnd.lineTo(-this._sizeArrowEnd, this._sizeArrowEnd);
-      this._arrowEnd.x = this._wArrowLine;
+      // this._arrowEnd.x = this._wArrowLine
       this._cntArrow.addChild(this._arrowEnd);
+    }
+  }, {
+    key: "_drawArrowLine",
+    value: function _drawArrowLine() {
+      this._arrowLine.clear();
+      this._arrowLine.lineStyle(2, 0xffffff);
+      this._arrowLine.moveTo(0, 0);
+      this._arrowLine.lineTo(-this._wArrowLine * this._percentArrowLine, 0);
+    }
+  }, {
+    key: "_drawArrowEnd",
+    value: function _drawArrowEnd() {
+      this._arrowEnd.clear();
+      this._arrowEnd.lineStyle(2, 0xffffff);
+      this._arrowEnd.moveTo(-this._sizeArrowEnd * this._percentArrowEnd, -this._sizeArrowEnd * this._percentArrowEnd);
+      this._arrowEnd.lineTo(0, 0);
+      this._arrowEnd.lineTo(-this._sizeArrowEnd * this._percentArrowEnd, this._sizeArrowEnd * this._percentArrowEnd);
+    }
+  }, {
+    key: "over",
+    value: function over() {
+      var letter = null;
+      var n = this._cntText.children.length;
+      for (var i = 0; i < n; i++) {
+        letter = this._cntText.children[i];
+        TweenLite.killTweensOf(letter);
+        TweenLite.to(letter, .4, {
+          delay: (n - i) * .04,
+          x: letter.xBase + 25 >> 0,
+          alpha: 0,
+          ease: Cubic.easeInOut
+        });
+      }
+
+      this.addChild(this._cntArrow);
+
+      this._cntArrow.x = -4;
+      TweenLite.killTweensOf(this);
+      TweenLite.killTweensOf(this._cntArrow);
+      TweenLite.to(this, .4, {
+        delay: .2,
+        _percentArrowLine: 1,
+        ease: Cubic.easeInOut,
+        onUpdate: this._binds.drawArrowLine
+      });
+      TweenLite.to(this, .4, {
+        delay: .2,
+        _percentArrowEnd: 1,
+        ease: Cubic.easeInOut,
+        onUpdate: this._binds.drawArrowEnd
+      });
+      TweenLite.to(this._cntArrow, .4, {
+        delay: .2,
+        x: 16,
+        ease: Cubic.easeInOut
+      });
+    }
+  }, {
+    key: "out",
+    value: function out() {
+      var _this = this;
+
+      var letter = null;
+      var n = this._cntText.children.length;
+      for (var i = 0; i < n; i++) {
+        letter = this._cntText.children[i];
+        letter.x = letter.xBase - 25;
+        TweenLite.killTweensOf(letter);
+        TweenLite.to(letter, .4, {
+          delay: (n - i) * .04,
+          x: letter.xBase >> 0,
+          alpha: 1,
+          ease: Cubic.easeInOut
+        });
+      }
+
+      TweenLite.killTweensOf(this);
+      TweenLite.killTweensOf(this._cntArrow);
+      TweenLite.to(this, .4, {
+        _percentArrowLine: 0,
+        ease: Cubic.easeInOut,
+        onUpdate: this._binds.drawArrowLine
+      });
+      TweenLite.to(this, .4, {
+        _percentArrowEnd: 0,
+        ease: Cubic.easeInOut,
+        onUpdate: this._binds.drawArrowEnd
+      });
+      TweenLite.to(this._cntArrow, .4, {
+        x: 46,
+        ease: Cubic.easeInOut,
+        onComplete: function onComplete() {
+          _this.removeChild(_this._cntArrow);
+        }
+      });
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this.scale, .2, {
+        delay: delay,
+        x: 0.4,
+        y: 0.4,
+        ease: Sine.easeIn
+      });
+      TweenLite.set(this.scale, {
+        delay: delay + .2,
+        x: .6,
+        y: .6
+      });
+      TweenLite.to(this.scale, .4, {
+        delay: delay + .2,
+        x: 1,
+        y: 1,
+        ease: Quart.easeOut
+      });
     }
   }]);
 
@@ -1493,7 +1907,7 @@ module.exports = EntryNumber;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1515,6 +1929,9 @@ var EntrySmiley = (function (_PIXI$Container) {
     this._cntSmiley.x = this._bg.width >> 1;
     this._cntSmiley.y = this._bg.height * .5 + 7;
     this.addChild(this._cntSmiley);
+
+    this.scale.x = this.scale.y = 0;
+    this.pivot.set(this._bg.width >> 1, this._bg.height >> 1);
   }
 
   _createClass(EntrySmiley, [{
@@ -1559,6 +1976,29 @@ var EntrySmiley = (function (_PIXI$Container) {
       this._mouth.quadraticCurveTo(-this._wSmiley, 0, -this._wSmiley, -this._hSmileyMouth);
       this._mouth.moveTo(0, 0);
       this._mouth.quadraticCurveTo(this._wSmiley, 0, this._wSmiley, -this._hSmileyMouth);
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this.scale, .2, {
+        delay: delay,
+        x: 0.4,
+        y: 0.4,
+        ease: Sine.easeIn
+      });
+      TweenLite.set(this.scale, {
+        delay: delay + .2,
+        x: .6,
+        y: .6
+      });
+      TweenLite.to(this.scale, .4, {
+        delay: delay + .2,
+        x: 1,
+        y: 1,
+        ease: Quart.easeOut
+      });
     }
   }]);
 
@@ -1691,6 +2131,7 @@ module.exports.create = function (text, style) {
     tf.tint = style.fill;
     // tf.resolution = stage.resolution
     tf.x = px;
+    tf.xBase = px;
     cnt.addChild(tf);
 
     px += tf.width + letterSpacing; //>> 0
