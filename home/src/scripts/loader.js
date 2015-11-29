@@ -15,12 +15,15 @@ class Loader extends Emitter {
     this._pixiLoader = new PIXI.loaders.Loader()
     this._pixiLoader.add( "img/default.jpg" )
     this._pixiLoader.add( "img/sprites/sprites.json" )
-    this._pixiLoader.add( "img/sprites/advent_bold.fnt" )
+
+    this._fontsLoader = new PIXI.loaders.Loader()
+    this._fontsLoader.add( "img/sprites/advent_bold.fnt" )
 
     this._binds = {}
     this._binds.onProgress = this._onProgress.bind( this )
     this._binds.onComplete = this._onComplete.bind( this )
     this._binds.onPixiComplete = this._onPixiComplete.bind( this )
+    this._binds.onFontsComplete = this._onFontsComplete.bind( this )
   }
 
   _onProgress( e ) {
@@ -38,6 +41,13 @@ class Loader extends Emitter {
     this._checkComplete()
   }
 
+  _onFontsComplete() {
+    this.emit( "ready" )
+
+    this._pixiLoader.once( "complete", this._binds.onPixiComplete )
+    this._pixiLoader.load()
+  }
+
   _checkComplete() {
     console.log( this._countComplete )
     // if( this._countComplete == 2 ) {
@@ -50,8 +60,8 @@ class Loader extends Emitter {
     // this._pxLoader.addCompletionListener( this._binds.onComplete )
     // this._pxLoader.start()
 
-    this._pixiLoader.once( "complete", this._binds.onPixiComplete )
-    this._pixiLoader.load()
+    this._fontsLoader.once( "complete", this._binds.onFontsComplete )
+    this._fontsLoader.load()
   }
 
 }

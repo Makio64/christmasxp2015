@@ -8,6 +8,8 @@ class Entry extends PIXI.Container {
   constructor( idx = -1 ) {
     super()
 
+    this._isShown = false
+
     if( idx >= 0 ) {
       this._content = new EntryContentPreview()
       this.addChild( this._content )
@@ -32,6 +34,9 @@ class Entry extends PIXI.Container {
   }
 
   _onMouseOver() {
+    if( !this._isShown ) {
+      return
+    }
     if( this._content.over ) {
       this._content.over()
     }
@@ -41,6 +46,10 @@ class Entry extends PIXI.Container {
   }
 
   _onMouseOut() {
+    if( !this._isShown ) {
+      return
+    }
+    
     if( this._content.out ) {
       this._content.out()
     }
@@ -56,31 +65,28 @@ class Entry extends PIXI.Container {
     TweenLite.to( this._circle, .6, {
       delay: delay + .3,
       x: 133,
-      ease: Quart.easeOut
+      ease: Quart.easeOut,
+      onComplete: () => {
+        this._isShown = true
+      }
     })
   }
 
   bindEvents() {
-    if( this._content.bindEvents ) {
-      this._content.bindEvents()
-    }
     if( this._content.hoverZone ) {
       this._content.hoverZone.interactive = true
 
       this._content.hoverZone.on( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.on( "mouseout", this._binds.onMouseOut )
     }
-    if( this._circle.bindEvents ) {
-      this._circle.bindEvents()
-    }
   }
 
   unbindEvents() {
-    if( this._content.unbindEvents ) {
-      this._content.unbindEvents()
-    }
-    if( this._circle.unbindEvents ) {
-      this._circle.unbindEvents()
+    if( this._content.hoverZone ) {
+      this._content.hoverZone.interactive = false
+
+      this._content.hoverZone.off( "mouseover", this._binds.onMouseOver )
+      this._content.hoverZone.off( "mouseout", this._binds.onMouseOut )
     }
   }
 

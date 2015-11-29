@@ -116,7 +116,8 @@ class DefaultShape extends PIXI.Container {
     this._polyShape.scale.x = 
     this._polyShape.scale.y = .93
 
-    TweenLite.to( this._polyShape.scale, .8, {
+    TweenLite.to( this._polyShape.scale, .6, {
+      delay: .2,
       x: 1,
       y: 1,
       ease: Quad.easeOut
@@ -147,26 +148,6 @@ class DefaultShape extends PIXI.Container {
       }
     } )
   }
-
-  // show( delay ) {
-  //   TweenLite.to( this._polyShape.scale, .2, {
-  //     delay: delay,
-  //     x: 0.2,
-  //     y: 0.2,
-  //     ease: Sine.easeIn,
-  //   } )
-  //   TweenLite.set( this._polyShape.scale, {
-  //     delay: delay + .2,
-  //     x: .6,
-  //     y: .6
-  //   } )
-  //   TweenLite.to( this._polyShape.scale, .6, {
-  //     delay: delay + .2,
-  //     x: 1,
-  //     y: 1,
-  //     ease: Cubic.easeOut,
-  //   } )
-  // }
 
 }
 

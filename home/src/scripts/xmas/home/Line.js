@@ -33,9 +33,11 @@ class Line extends PIXI.Container {
     cntLeft.y = 31
     this._cntTitle.addChild( cntLeft )
 
-    this._cntTfDay = uXmasTexts.create( "DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1 )
-    this._cntTfDay.alpha = 0
-    cntLeft.addChild( this._cntTfDay )
+    if( this._idx == 1 ) {
+      this._cntTfDay = uXmasTexts.create( "DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1 )
+      this._cntTfDay.alpha = 0
+      cntLeft.addChild( this._cntTfDay )
+    }
 
     this._line = new PIXI.Graphics()
     this._line.x = -25
@@ -98,26 +100,28 @@ class Line extends PIXI.Container {
     }
     this.isShown = true
 
-    let letter = null
-    const  n = this._cntTfDay.children.length
-    for( let i = 0; i < n; i++ ) {
-      letter = this._cntTfDay.children[ i ]
-      TweenLite.set( letter, {
-        delay: delay + .02,
-        x: letter.xBase - 25,
-        alpha: 0
-      } )
-      TweenLite.to( letter, .4, {
-        delay: delay + .02 + ( n - i ) * .02,
-        x: letter.xBase,
+    if( this._idx == 1 ) {
+      let letter = null
+      const  n = this._cntTfDay.children.length
+      for( let i = 0; i < n; i++ ) {
+        letter = this._cntTfDay.children[ i ]
+        TweenLite.set( letter, {
+          delay: delay + .02,
+          x: letter.xBase - 25,
+          alpha: 0
+        } )
+        TweenLite.to( letter, .4, {
+          delay: delay + .02 + ( n - i ) * .02,
+          x: letter.xBase,
+          alpha: 1,
+          ease: Cubic.easeInOut
+        } )
+      }
+      TweenLite.set( this._cntTfDay, {
+        delay: delay + .04,
         alpha: 1,
-        ease: Cubic.easeInOut
-      } )
+      })
     }
-    TweenLite.set( this._cntTfDay, {
-      delay: delay + .04,
-      alpha: 1,
-    })
     TweenLite.to( this._line, .4, {
       delay: delay + .04,
       x: 0,
@@ -136,7 +140,7 @@ class Line extends PIXI.Container {
       ease: Cubic.easeInOut
     })
 
-    this._showEntries( delay + .1 )
+    this._showEntries( delay + .2 )
   }
 
   _showEntries( delay ) {

@@ -1,5 +1,6 @@
 const Home = require( "xmas/home/Home" )
 const About = require( "xmas/about/About" )
+const Ui = require( "xmas/ui/Ui" )
 
 class Xmas {
 
@@ -15,10 +16,17 @@ class Xmas {
     this._binds.onAbout = this._onAbout.bind( this )
   }
 
-  bindEvents() {
+  show() {
     page( "/", this._binds.onChange, this._binds.onHome )
     page( "/about", this._binds.onChange, this._binds.onAbout )
+
+    // TweenLite.set( this, {
+    //   delay: delay,
+    //   onComplete: () => {
     page()
+    // this._onHome() // tmp
+      // }
+    // })
   }
 
   _onChange( ctx, next ) {

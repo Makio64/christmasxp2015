@@ -73,7 +73,7 @@ class Home extends PIXI.Container {
           line.bindEvents()
           this._cntLines.addChild( line )
           if( !line.isShown && ( i == start || i == end - 1 ) ) {
-            line.show( .3 )
+            line.show( .2 )
           }
         }
       } else {
@@ -133,12 +133,19 @@ class Home extends PIXI.Container {
   }
 
   show() {
+    // this._onResize()
+
     pixi.stage.addChild( this )
 
     const n = this._lines.length
     for( let i = 0; i < this._countLinesVisible; i++ ) {
       this._lines[ i ].show( i * .04 )
     }
+
+    TweenLite.set( this, {
+      delay: 2,
+      onComplete: this.bindEvents.bind( this )
+    })
   }
 
   hide( cb ) {

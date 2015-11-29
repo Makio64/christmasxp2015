@@ -474,12 +474,15 @@ var Loader = (function (_Emitter) {
     this._pixiLoader = new PIXI.loaders.Loader();
     this._pixiLoader.add("img/default.jpg");
     this._pixiLoader.add("img/sprites/sprites.json");
-    this._pixiLoader.add("img/sprites/advent_bold.fnt");
+
+    this._fontsLoader = new PIXI.loaders.Loader();
+    this._fontsLoader.add("img/sprites/advent_bold.fnt");
 
     this._binds = {};
     this._binds.onProgress = this._onProgress.bind(this);
     this._binds.onComplete = this._onComplete.bind(this);
     this._binds.onPixiComplete = this._onPixiComplete.bind(this);
+    this._binds.onFontsComplete = this._onFontsComplete.bind(this);
   }
 
   _createClass(Loader, [{
@@ -501,6 +504,14 @@ var Loader = (function (_Emitter) {
       this._checkComplete();
     }
   }, {
+    key: "_onFontsComplete",
+    value: function _onFontsComplete() {
+      this.emit("ready");
+
+      this._pixiLoader.once("complete", this._binds.onPixiComplete);
+      this._pixiLoader.load();
+    }
+  }, {
     key: "_checkComplete",
     value: function _checkComplete() {
       console.log(this._countComplete);
@@ -515,8 +526,8 @@ var Loader = (function (_Emitter) {
       // this._pxLoader.addCompletionListener( this._binds.onComplete )
       // this._pxLoader.start()
 
-      this._pixiLoader.once("complete", this._binds.onPixiComplete);
-      this._pixiLoader.load();
+      this._fontsLoader.once("complete", this._binds.onFontsComplete);
+      this._fontsLoader.load();
     }
   }]);
 
@@ -533,14 +544,23 @@ var stage = require("fz/core/stage");
 var pixi = require("fz/core/pixi");
 
 var Xmas = require("xmas/Xmas");
+var Ui = require("xmas/ui/Ui");
 
 stage.init();
 pixi.init();
 
+var ui = null;
+
 var loader = require("loader");
+loader.on("ready", function () {
+  ui = new Ui();
+  ui.showLoading();
+});
 loader.on("complete", function () {
   var xmas = new Xmas();
-  xmas.bindEvents();
+  ui.hideLoading(xmas);
+
+  // xmas.show( 1 )
 });
 loader.load();
 
@@ -548,7 +568,7 @@ loop.start();
 
 document.getElementById("main").appendChild(pixi.dom);
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11}],11:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11,"xmas/ui/Ui":25}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -557,6 +577,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Home = require("xmas/home/Home");
 var About = require("xmas/about/About");
+var Ui = require("xmas/ui/Ui");
 
 var Xmas = (function () {
   function Xmas() {
@@ -574,11 +595,18 @@ var Xmas = (function () {
   }
 
   _createClass(Xmas, [{
-    key: "bindEvents",
-    value: function bindEvents() {
+    key: "show",
+    value: function show() {
       page("/", this._binds.onChange, this._binds.onHome);
       page("/about", this._binds.onChange, this._binds.onAbout);
+
+      // TweenLite.set( this, {
+      //   delay: delay,
+      //   onComplete: () => {
       page();
+      // this._onHome() // tmp
+      // }
+      // })
     }
   }, {
     key: "_onChange",
@@ -615,7 +643,7 @@ var Xmas = (function () {
 
 module.exports = Xmas;
 
-},{"xmas/about/About":12,"xmas/home/Home":14}],12:[function(require,module,exports){
+},{"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Ui":25}],12:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -766,7 +794,7 @@ var Home = (function (_PIXI$Container) {
             line.bindEvents();
             this._cntLines.addChild(line);
             if (!line.isShown && (i == start || i == end - 1)) {
-              line.show(.3);
+              line.show(.2);
             }
           }
         } else {
@@ -830,12 +858,19 @@ var Home = (function (_PIXI$Container) {
   }, {
     key: "show",
     value: function show() {
+      // this._onResize()
+
       pixi.stage.addChild(this);
 
       var n = this._lines.length;
       for (var i = 0; i < this._countLinesVisible; i++) {
         this._lines[i].show(i * .04);
       }
+
+      TweenLite.set(this, {
+        delay: 2,
+        onComplete: this.bindEvents.bind(this)
+      });
     }
   }, {
     key: "hide",
@@ -903,9 +938,11 @@ var Line = (function (_PIXI$Container) {
       cntLeft.y = 31;
       this._cntTitle.addChild(cntLeft);
 
-      this._cntTfDay = uXmasTexts.create("DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1);
-      this._cntTfDay.alpha = 0;
-      cntLeft.addChild(this._cntTfDay);
+      if (this._idx == 1) {
+        this._cntTfDay = uXmasTexts.create("DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1);
+        this._cntTfDay.alpha = 0;
+        cntLeft.addChild(this._cntTfDay);
+      }
 
       this._line = new PIXI.Graphics();
       this._line.x = -25;
@@ -974,26 +1011,28 @@ var Line = (function (_PIXI$Container) {
       }
       this.isShown = true;
 
-      var letter = null;
-      var n = this._cntTfDay.children.length;
-      for (var i = 0; i < n; i++) {
-        letter = this._cntTfDay.children[i];
-        TweenLite.set(letter, {
-          delay: delay + .02,
-          x: letter.xBase - 25,
-          alpha: 0
-        });
-        TweenLite.to(letter, .4, {
-          delay: delay + .02 + (n - i) * .02,
-          x: letter.xBase,
-          alpha: 1,
-          ease: Cubic.easeInOut
+      if (this._idx == 1) {
+        var letter = null;
+        var n = this._cntTfDay.children.length;
+        for (var i = 0; i < n; i++) {
+          letter = this._cntTfDay.children[i];
+          TweenLite.set(letter, {
+            delay: delay + .02,
+            x: letter.xBase - 25,
+            alpha: 0
+          });
+          TweenLite.to(letter, .4, {
+            delay: delay + .02 + (n - i) * .02,
+            x: letter.xBase,
+            alpha: 1,
+            ease: Cubic.easeInOut
+          });
+        }
+        TweenLite.set(this._cntTfDay, {
+          delay: delay + .04,
+          alpha: 1
         });
       }
-      TweenLite.set(this._cntTfDay, {
-        delay: delay + .04,
-        alpha: 1
-      });
       TweenLite.to(this._line, .4, {
         delay: delay + .04,
         x: 0,
@@ -1012,7 +1051,7 @@ var Line = (function (_PIXI$Container) {
         ease: Cubic.easeInOut
       });
 
-      this._showEntries(delay + .1);
+      this._showEntries(delay + .2);
     }
   }, {
     key: "_showEntries",
@@ -1042,7 +1081,7 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":22}],16:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":26}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1067,6 +1106,8 @@ var Entry = (function (_PIXI$Container) {
     _classCallCheck(this, Entry);
 
     _get(Object.getPrototypeOf(Entry.prototype), "constructor", this).call(this);
+
+    this._isShown = false;
 
     if (idx >= 0) {
       this._content = new EntryContentPreview();
@@ -1094,6 +1135,9 @@ var Entry = (function (_PIXI$Container) {
   _createClass(Entry, [{
     key: "_onMouseOver",
     value: function _onMouseOver() {
+      if (!this._isShown) {
+        return;
+      }
       if (this._content.over) {
         this._content.over();
       }
@@ -1104,6 +1148,10 @@ var Entry = (function (_PIXI$Container) {
   }, {
     key: "_onMouseOut",
     value: function _onMouseOut() {
+      if (!this._isShown) {
+        return;
+      }
+
       if (this._content.out) {
         this._content.out();
       }
@@ -1114,6 +1162,8 @@ var Entry = (function (_PIXI$Container) {
   }, {
     key: "show",
     value: function show() {
+      var _this = this;
+
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
       this._content.show(delay);
@@ -1122,33 +1172,30 @@ var Entry = (function (_PIXI$Container) {
       TweenLite.to(this._circle, .6, {
         delay: delay + .3,
         x: 133,
-        ease: Quart.easeOut
+        ease: Quart.easeOut,
+        onComplete: function onComplete() {
+          _this._isShown = true;
+        }
       });
     }
   }, {
     key: "bindEvents",
     value: function bindEvents() {
-      if (this._content.bindEvents) {
-        this._content.bindEvents();
-      }
       if (this._content.hoverZone) {
         this._content.hoverZone.interactive = true;
 
         this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
       }
-      if (this._circle.bindEvents) {
-        this._circle.bindEvents();
-      }
     }
   }, {
     key: "unbindEvents",
     value: function unbindEvents() {
-      if (this._content.unbindEvents) {
-        this._content.unbindEvents();
-      }
-      if (this._circle.unbindEvents) {
-        this._circle.unbindEvents();
+      if (this._content.hoverZone) {
+        this._content.hoverZone.interactive = false;
+
+        this._content.hoverZone.off("mouseover", this._binds.onMouseOver);
+        this._content.hoverZone.off("mouseout", this._binds.onMouseOut);
       }
     }
   }]);
@@ -1219,6 +1266,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
+      console.log("yo");
       this.x = -60;
       // this.y = 40
       TweenLite.to(this, .7, {
@@ -1245,53 +1293,91 @@ var EntryComingSoon = (function (_PIXI$Container) {
         ease: Cubic.easeOut
       });
 
-      var letter = null;
+      var px = config.sizes.entry.w - this._cntTfTop.width >> 1;
+      px -= 20;
+      this._cntTfTop.x = px;
+      this._cntTfTop.alpha = 0;
+      TweenLite.set(this._cntTfTop, {
+        delay: delay + .3,
+        alpha: .7
+      });
+      TweenLite.to(this._cntTfTop, .5, {
+        delay: delay + .3,
+        x: px + 20,
+        alpha: 1,
+        ease: Cubic.easeOut
+      });
 
-      var d = .4;
-      var dAdd = .02;
-      var dMin = .01;
-      var dFriction = .89;
+      px = config.sizes.entry.w - this._cntTfBottom.width >> 1;
+      px -= 25;
+      this._cntTfBottom.x = px;
+      this._cntTfBottom.alpha = 0;
+      TweenLite.set(this._cntTfBottom, {
+        delay: delay + .375,
+        alpha: .7
+      });
+      TweenLite.to(this._cntTfBottom, .5, {
+        delay: delay + .375,
+        x: px + 25,
+        alpha: 1,
+        ease: Cubic.easeOut
+      });
 
-      var i = this._cntTfTop.children.length;
-      while (--i > -1) {
-        letter = this._cntTfTop.children[i];
-        letter.x = letter.xBase - 25 >> 0;
-        letter.alpha = 0;
-        TweenLite.to(letter, .4, {
-          delay: delay + d,
-          x: letter.xBase >> 0,
-          alpha: 1,
-          ease: Cubic.easeInOut
-        });
+      // let letter = null
 
-        d += dAdd;
-        dAdd *= dFriction;
-        if (dAdd < dMin) {
-          dAdd = dMin;
-        }
-      }
+      // let d = .4
+      // let dAdd = .02
+      // let dMin = .01
+      // let dFriction = .89
 
-      d = .6;
-      dAdd = .04;
+      // let i = this._cntTfTop.children.length
+      // while( --i > -1 ) {
+      //   letter = this._cntTfTop.children[ i ]
+      //   letter.x = letter.xBase - 25 >> 0
+      //   letter.alpha = 0
+      //   TweenLite.set( letter, {
+      //     delay: delay + d,
+      //     alpha: .8
+      //   })
+      //   TweenLite.to( letter, .4, {
+      //     delay: delay + d,
+      //     x: letter.xBase >> 0,
+      //     alpha: 1,
+      //     ease: Cubic.easeInOut
+      //   })
 
-      i = this._cntTfBottom.children.length;
-      while (--i > -1) {
-        letter = this._cntTfBottom.children[i];
-        letter.x = letter.xBase - 25 >> 0;
-        letter.alpha = 0;
-        TweenLite.to(letter, .4, {
-          delay: delay + d,
-          x: letter.xBase >> 0,
-          alpha: 1,
-          ease: Cubic.easeInOut
-        });
+      //   d += dAdd
+      //   dAdd *= dFriction
+      //   if( dAdd < dMin ) {
+      //     dAdd = dMin
+      //   }
+      // }
 
-        d += dAdd;
-        dAdd *= dFriction;
-        if (dAdd < dMin) {
-          dAdd = dMin;
-        }
-      }
+      // d = .6
+      // dAdd = .04
+
+      // i = this._cntTfBottom.children.length
+      // while( --i > -1 ) {
+      //   letter = this._cntTfBottom.children[ i ]
+      //   letter.x = letter.xBase - 25 >> 0
+      //   letter.alpha = 0
+      //   TweenLite.set( letter, {
+      //     delay: delay + d,
+      //     alpha: .8
+      //   })
+      //   TweenLite.to( letter, .4, {
+      //     delay: delay + d,
+      //     x: letter.xBase >> 0,
+      //     alpha: 1,
+      //     ease: Cubic.easeInOut
+      //   })
+
+      //   d += dAdd
+      //   dAdd *= dFriction
+      //   if( dAdd < dMin ) {
+      //     dAdd = dMin
+      //   }
+      // }
 
       this._cntContent.alpha = 1;
 
@@ -1308,7 +1394,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
 module.exports = EntryComingSoon;
 
-},{"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":22}],18:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":26}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1439,7 +1525,8 @@ var DefaultShape = (function (_PIXI$Container) {
       this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
       this._polyShape.scale.x = this._polyShape.scale.y = .93;
 
-      TweenLite.to(this._polyShape.scale, .8, {
+      TweenLite.to(this._polyShape.scale, .6, {
+        delay: .2,
         x: 1,
         y: 1,
         ease: Quad.easeOut
@@ -1468,27 +1555,6 @@ var DefaultShape = (function (_PIXI$Container) {
         }
       });
     }
-
-    // show( delay ) {
-    //   TweenLite.to( this._polyShape.scale, .2, {
-    //     delay: delay,
-    //     x: 0.2,
-    //     y: 0.2,
-    //     ease: Sine.easeIn,
-    //   } )
-    //   TweenLite.set( this._polyShape.scale, {
-    //     delay: delay + .2,
-    //     x: .6,
-    //     y: .6
-    //   } )
-    //   TweenLite.to( this._polyShape.scale, .6, {
-    //     delay: delay + .2,
-    //     x: 1,
-    //     y: 1,
-    //     ease: Cubic.easeOut,
-    //   } )
-    // }
-
   }]);
 
   return DefaultShape;
@@ -1902,7 +1968,7 @@ var EntryNumber = (function (_PIXI$Container) {
 
 module.exports = EntryNumber;
 
-},{"xmas/core/config":13,"xmas/utils/texts":22}],20:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/utils/texts":26}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2112,6 +2178,523 @@ var PolyShape = (function (_PIXI$Graphics) {
 module.exports = PolyShape;
 
 },{"xmas/core/config":13}],22:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var config = require("xmas/core/config");
+var uTexts = require("xmas/utils/texts");
+
+var Title = require("xmas/ui/Title");
+var ProgressBar = require("xmas/ui/ProgressBar");
+
+var Logo = (function (_PIXI$Container) {
+  _inherits(Logo, _PIXI$Container);
+
+  function Logo() {
+    _classCallCheck(this, Logo);
+
+    _get(Object.getPrototypeOf(Logo.prototype), "constructor", this).call(this);
+
+    this._title = new Title();
+    this._title.x = -270;
+    this._title.y = -140;
+    this.addChild(this._title);
+
+    this._progressBar = new ProgressBar();
+    this._progressBar.y = -200;
+    this.addChild(this._progressBar);
+
+    this._a = 2 * Math.PI / 6;
+    this._rad = 32;
+
+    this._cntLogo = new PIXI.Container();
+    this.addChild(this._cntLogo);
+
+    this._treeGray = this._createTree(0xbcc5dd, 0xffffff);
+    this._treeGray.rotation = Math.PI / 6 * 4;
+    this._cntLogo.addChild(this._treeGray);
+
+    this._treeWhite = this._createTree(0xffffff, config.colors.red);
+    this._treeWhite.rotation = -Math.PI / 6 * 4;
+    this._cntLogo.addChild(this._treeWhite);
+
+    this._treeMain = new PIXI.Graphics();
+    this._cntLogo.addChild(this._treeMain);
+
+    this._updateTreeMain();
+
+    this._cntLogo.scale.x = this._cntLogo.scale.y = .6;
+    this._cntLogo.alpha = 0;
+
+    this._initDate();
+
+    this._canHideLoading = false;
+    this._wantsToHideLoading = false;
+  }
+
+  _createClass(Logo, [{
+    key: "_createTree",
+    value: function _createTree(cBg, cDot) {
+      var aCurr = -Math.PI / 4 * 2;
+      var aCircle = 0;
+
+      var g = new PIXI.Graphics();
+      g.beginFill(cBg);
+      g.moveTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      aCurr += this._a * 2;
+      aCircle = aCurr;
+      g.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      aCurr += this._a;
+      g.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      aCurr += this._a;
+      g.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+
+      g.beginFill(cDot);
+      g.drawCircle(3, Math.sin(aCircle) * this._rad, 3);
+
+      return g;
+    }
+  }, {
+    key: "_updateTreeMain",
+    value: function _updateTreeMain() {
+      var aCurr = -Math.PI / 4 * 2;
+      var aCircle = 0;
+
+      this._treeMain.clear();
+
+      this._treeMain.beginFill(config.colors.blue);
+      this._treeMain.moveTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      aCurr += this._a * 2;
+      aCircle = aCurr;
+      this._treeMain.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      aCurr += this._a;
+      this._treeMain.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      aCurr += this._a;
+      this._treeMain.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+
+      aCurr = -Math.PI / 4 * 2;
+      this._treeMain.beginFill(0x305ad1);
+      this._treeMain.moveTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+      this._treeMain.lineTo(0, 0);
+      aCurr += this._a * 4;
+      this._treeMain.lineTo(Math.cos(aCurr) * this._rad, Math.sin(aCurr) * this._rad);
+
+      this._treeMain.beginFill(0xffffff);
+      this._treeMain.drawCircle(3, Math.sin(aCircle) * this._rad, 3);
+    }
+  }, {
+    key: "_initDate",
+    value: function _initDate() {
+      this._cntDate = uTexts.create("2015", { font: "10px " + config.fonts.bold, fill: config.colors.blue }, 10);
+      this._cntDate.x = -this._cntDate.width >> 1;
+      this._cntDate.y = 40;
+      this._cntLogo.addChild(this._cntDate);
+
+      this._cntDate.alpha = 0;
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var _this = this;
+
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this._title.show();
+      this._progressBar.show(.5);
+
+      TweenLite.to(this._cntLogo, .8, {
+        delay: delay + .3,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+      TweenLite.to(this._cntLogo.scale, 1.2, {
+        delay: delay + .3,
+        x: 1,
+        y: 1,
+        ease: Cubic.easeOut
+      });
+
+      TweenLite.to(this._cntDate, .8, {
+        delay: delay + .9,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+
+      //
+      this._progressBar.setPercent(.2);
+      TweenLite.set(this, {
+        delay: .8,
+        onComplete: function onComplete() {
+          _this._progressBar.setPercent(.8);
+        }
+      });
+
+      TweenLite.set(this, {
+        delay: 1.4,
+        onComplete: function onComplete() {
+          _this._canHideLoading = true;
+          if (_this._wantsToHideLoading) {
+            _this.hideLoading();
+          }
+        }
+      });
+    }
+  }, {
+    key: "hideLoading",
+    value: function hideLoading(xmas) {
+      var _this2 = this;
+
+      if (xmas) {
+        this._xmas = xmas;
+      }
+
+      this._wantsToHideLoading = true;
+      if (!this._canHideLoading) {
+        return;
+      }
+      // tmp
+      TweenLite.set(this, {
+        onComplete: function onComplete() {
+          _this2._progressBar.setPercent(1);
+        }
+      });
+      //
+
+      TweenLite.set(this, {
+        delay: .6,
+        onComplete: function onComplete() {
+          _this2._title.hide();
+          TweenLite.to(_this2, .8, {
+            delay: .4,
+            y: 90,
+            ease: Quart.easeInOut
+          });
+          _this2._progressBar.switchMode(.4);
+          TweenLite.to(_this2._cntDate, .6, {
+            delay: 1.4,
+            alpha: 0,
+            ease: Quad.easeOut
+          });
+
+          TweenLite.set(_this2, {
+            delay: .8,
+            onComplete: function onComplete() {
+              _this2._xmas.show();
+            }
+          });
+        }
+      });
+    }
+  }]);
+
+  return Logo;
+})(PIXI.Container);
+
+module.exports = Logo;
+
+},{"xmas/core/config":13,"xmas/ui/ProgressBar":23,"xmas/ui/Title":24,"xmas/utils/texts":26}],23:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var loop = require("fz/core/loop");
+var stage = require("fz/core/stage");
+var config = require("xmas/core/config");
+
+var ProgressBar = (function (_PIXI$Container) {
+  _inherits(ProgressBar, _PIXI$Container);
+
+  function ProgressBar() {
+    _classCallCheck(this, ProgressBar);
+
+    _get(Object.getPrototypeOf(ProgressBar.prototype), "constructor", this).call(this);
+
+    this._gTop = new PIXI.Graphics();
+    this.addChild(this._gTop);
+
+    this._gBot = new PIXI.Graphics();
+    this._gBot.y = 290;
+    this.addChild(this._gBot);
+
+    this._percent = 0;
+    this._percentTo = 0;
+
+    this._xStartTop = -stage.width * .5;
+    this._xStartBottom = stage.width * .5;
+
+    this.alpha = 0;
+
+    this._binds = {};
+    this._binds.onUpdate = this._onUpdate.bind(this);
+    this._binds.draw = this._draw.bind(this);
+  }
+
+  _createClass(ProgressBar, [{
+    key: "_onUpdate",
+    value: function _onUpdate() {
+      this._percent += (this._percentTo - this._percent) * .09;
+      this._draw();
+    }
+  }, {
+    key: "_draw",
+    value: function _draw() {
+      var wh = stage.width >> 1;
+
+      this._gTop.clear();
+      this._gTop.lineStyle(2, config.colors.blue);
+      this._gTop.moveTo(this._xStartTop, 0);
+      this._gTop.lineTo(-wh + this._percent * (wh + 28), 0);
+
+      this._gBot.clear();
+      this._gBot.lineStyle(2, config.colors.blue);
+      this._gBot.moveTo(this._xStartBottom, 0);
+      this._gBot.lineTo(wh - this._percent * (wh + 28), 0);
+    }
+  }, {
+    key: "setPercent",
+    value: function setPercent(value) {
+      if (value < 1) {
+        this._percentTo = value;
+        if (this._percentTo >= .4) {
+          this.bindEvents();
+        }
+      } else {
+        this.unbindEvents();
+        var wh = stage.width >> 1;
+        TweenLite.to(this, .8, {
+          _percent: 1,
+          _xStartTop: -28 >> 0,
+          _xStartBottom: 28 >> 0,
+          onUpdate: this._binds.draw,
+          onComplete: this._binds.draw,
+          ease: Cubic.easeInOut
+        });
+      }
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      loop.add(this._binds.onUpdate);
+    }
+  }, {
+    key: "unbindEvents",
+    value: function unbindEvents() {
+      loop.remove(this._binds.onUpdate);
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this, .8, {
+        delay: delay,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+    }
+  }, {
+    key: "switchMode",
+    value: function switchMode() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this._gTop, .4, {
+        delay: delay,
+        y: 140,
+        ease: Quad.easeIn
+      });
+      TweenLite.to(this._gBot, .4, {
+        delay: delay,
+        y: 280,
+        ease: Quad.easeIn
+      });
+      TweenLite.to(this._gBot, .6, {
+        delay: delay + 1,
+        alpha: 0,
+        ease: Quad.easeOut
+      });
+    }
+  }]);
+
+  return ProgressBar;
+})(PIXI.Container);
+
+module.exports = ProgressBar;
+
+},{"fz/core/loop":1,"fz/core/stage":3,"xmas/core/config":13}],24:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var config = require("xmas/core/config");
+var uTexts = require("xmas/utils/texts");
+
+var Title = (function (_PIXI$Container) {
+  _inherits(Title, _PIXI$Container);
+
+  function Title() {
+    _classCallCheck(this, Title);
+
+    _get(Object.getPrototypeOf(Title.prototype), "constructor", this).call(this);
+
+    this._cntTop = uTexts.create("CHRIST", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 60);
+    this.addChild(this._cntTop);
+
+    this._cntBotLeft = uTexts.create("MAS", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 50);
+    this._cntBotLeft.y = 100;
+    this._cntBotLeft.children[1].x += 4;
+    this._cntBotLeft.children[2].x += 7;
+    this.addChild(this._cntBotLeft);
+
+    this._cntBotRight = uTexts.create("XP", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 50);
+    this._cntBotRight.x = 277;
+    this._cntBotRight.y = 100;
+    this._cntBotRight.children[0].x += 50;
+    this._cntBotRight.children[1].x += 52;
+    this.addChild(this._cntBotRight);
+
+    this._hideLetters(this._cntTop);
+    this._hideLetters(this._cntBotLeft);
+    this._hideLetters(this._cntBotRight);
+  }
+
+  _createClass(Title, [{
+    key: "_hideLetters",
+    value: function _hideLetters(cnt) {
+      var n = cnt.children.length;
+      for (var i = 0; i < n; i++) {
+        cnt.children[i].alpha = 0;
+      }
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      this._delay = 0;
+      this._showLetter(this._cntTop.children[1]);
+      this._showLetter(this._cntBotRight.children[0]);
+      this._showLetter(this._cntTop.children[4], false);
+      this._showLetter(this._cntBotLeft.children[2]);
+      this._showLetter(this._cntTop.children[2], false);
+      this._showLetter(this._cntTop.children[5], false);
+      this._showLetter(this._cntBotLeft.children[0], false);
+      this._showLetter(this._cntBotRight.children[1]);
+      this._showLetter(this._cntBotRight.children[1], false);
+      this._showLetter(this._cntTop.children[0]);
+      this._showLetter(this._cntBotLeft.children[1], false);
+      this._showLetter(this._cntTop.children[3]);
+    }
+  }, {
+    key: "_showLetter",
+    value: function _showLetter(letter) {
+      var andIncrement = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+      TweenLite.to(letter, .8, {
+        delay: this._delay,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+      if (andIncrement) {
+        this._delay += .1;
+      }
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      TweenLite.to(this, .8, {
+        alpha: 0,
+        ease: Cubic.easeInOut
+      });
+    }
+  }]);
+
+  return Title;
+})(PIXI.Container);
+
+module.exports = Title;
+
+},{"xmas/core/config":13,"xmas/utils/texts":26}],25:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var pixi = require("fz/core/pixi");
+var stage = require("fz/core/stage");
+
+var Logo = require("xmas/ui/Logo");
+
+var Ui = (function (_PIXI$Container) {
+  _inherits(Ui, _PIXI$Container);
+
+  function Ui() {
+    _classCallCheck(this, Ui);
+
+    _get(Object.getPrototypeOf(Ui.prototype), "constructor", this).call(this);
+
+    pixi.stage.addChild(this);
+
+    this._logo = new Logo();
+    this.addChild(this._logo);
+
+    this._onResize();
+  }
+
+  _createClass(Ui, [{
+    key: "_onResize",
+    value: function _onResize() {
+      // this._title.x = stage.width - this._title.width >> 1
+      // this._title.y = stage.height - this._title.height >> 1
+      // this._title.y += -100
+
+      // this._progressBar.y = this._title.y - 50
+
+      // this._logo.x = this._title.x + 270
+      // this._logo.y = this._title.y + 142
+
+      this._logo.x = stage.width >> 1;
+      this._logo.y = stage.height >> 1;
+    }
+  }, {
+    key: "showLoading",
+    value: function showLoading() {
+      this._logo.show();
+    }
+  }, {
+    key: "hideLoading",
+    value: function hideLoading(xmas) {
+      this._logo.hideLoading(xmas);
+    }
+  }]);
+
+  return Ui;
+})(PIXI.Container);
+
+module.exports = Ui;
+
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/ui/Logo":22}],26:[function(require,module,exports){
 "use strict";
 
 var stage = require("fz/core/stage");

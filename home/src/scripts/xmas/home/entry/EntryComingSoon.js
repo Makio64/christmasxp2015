@@ -40,6 +40,7 @@ class EntryComingSoon extends PIXI.Container {
   }
 
   show( delay = 0 ) {
+    console.log( "yo" )
     this.x = -60
     // this.y = 40
     TweenLite.to( this, .7, {
@@ -66,53 +67,91 @@ class EntryComingSoon extends PIXI.Container {
       ease: Cubic.easeOut,
     } )
 
-    let letter = null
+    let px = config.sizes.entry.w - this._cntTfTop.width >> 1
+    px -= 20
+    this._cntTfTop.x = px
+    this._cntTfTop.alpha = 0
+    TweenLite.set( this._cntTfTop, {
+      delay: delay + .3,
+      alpha: .7
+    })
+    TweenLite.to( this._cntTfTop, .5, {
+      delay: delay + .3,
+      x: px + 20,
+      alpha: 1,
+      ease: Cubic.easeOut
+    })
 
-    let d = .4
-    let dAdd = .02
-    let dMin = .01
-    let dFriction = .89
+    px = config.sizes.entry.w - this._cntTfBottom.width >> 1
+    px -= 25
+    this._cntTfBottom.x = px
+    this._cntTfBottom.alpha = 0
+    TweenLite.set( this._cntTfBottom, {
+      delay: delay + .375,
+      alpha: .7
+    })
+    TweenLite.to( this._cntTfBottom, .5, {
+      delay: delay + .375,
+      x: px + 25,
+      alpha: 1,
+      ease: Cubic.easeOut
+    })
 
-    let i = this._cntTfTop.children.length
-    while( --i > -1 ) {
-      letter = this._cntTfTop.children[ i ]
-      letter.x = letter.xBase - 25 >> 0
-      letter.alpha = 0
-      TweenLite.to( letter, .4, {
-        delay: delay + d,
-        x: letter.xBase >> 0,
-        alpha: 1,
-        ease: Cubic.easeInOut
-      })
+    // let letter = null
 
-      d += dAdd
-      dAdd *= dFriction
-      if( dAdd < dMin ) {
-        dAdd = dMin
-      }
-    }
+    // let d = .4
+    // let dAdd = .02
+    // let dMin = .01
+    // let dFriction = .89
 
-    d = .6
-    dAdd = .04
+    // let i = this._cntTfTop.children.length
+    // while( --i > -1 ) {
+    //   letter = this._cntTfTop.children[ i ]
+    //   letter.x = letter.xBase - 25 >> 0
+    //   letter.alpha = 0
+    //   TweenLite.set( letter, {
+    //     delay: delay + d,
+    //     alpha: .8
+    //   })
+    //   TweenLite.to( letter, .4, {
+    //     delay: delay + d,
+    //     x: letter.xBase >> 0,
+    //     alpha: 1,
+    //     ease: Cubic.easeInOut
+    //   })
 
-    i = this._cntTfBottom.children.length
-    while( --i > -1 ) {
-      letter = this._cntTfBottom.children[ i ]
-      letter.x = letter.xBase - 25 >> 0
-      letter.alpha = 0
-      TweenLite.to( letter, .4, {
-        delay: delay + d,
-        x: letter.xBase >> 0,
-        alpha: 1,
-        ease: Cubic.easeInOut
-      })
+    //   d += dAdd
+    //   dAdd *= dFriction
+    //   if( dAdd < dMin ) {
+    //     dAdd = dMin
+    //   }
+    // }
 
-      d += dAdd
-      dAdd *= dFriction
-      if( dAdd < dMin ) {
-        dAdd = dMin
-      }
-    }
+    // d = .6
+    // dAdd = .04
+
+    // i = this._cntTfBottom.children.length
+    // while( --i > -1 ) {
+    //   letter = this._cntTfBottom.children[ i ]
+    //   letter.x = letter.xBase - 25 >> 0
+    //   letter.alpha = 0
+    //   TweenLite.set( letter, {
+    //     delay: delay + d,
+    //     alpha: .8
+    //   })
+    //   TweenLite.to( letter, .4, {
+    //     delay: delay + d,
+    //     x: letter.xBase >> 0,
+    //     alpha: 1,
+    //     ease: Cubic.easeInOut
+    //   })
+
+    //   d += dAdd
+    //   dAdd *= dFriction
+    //   if( dAdd < dMin ) {
+    //     dAdd = dMin
+    //   }
+    // }
 
     this._cntContent.alpha = 1
 
