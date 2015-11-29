@@ -17,16 +17,16 @@ Therefore, each day will have a limited number of places/chocolates available. I
 - in case of motion design, simply provide the video link
 
 ### The following files are required:
-- xpname/index.html [use this model](https://github.com/Makio64/christmasxp2015/xptemplate/index.html) : don't change the meta
+- xpname/index.html [use this model](https://github.com/Makio64/christmasxp2015/blob/master/xptemplate/index.html) : don't change the meta
 - xpname/preview.jpg : picture of your experiments (640x640)
 - xpname/facebook.jpg : picture of your experiments for facebook (1200x630)
 - xpname/twitter.jpg : picture of your experiments for twitter (590x295)
 - xpname/author.jpg : picture of you (640x640)
-- xpname/infos.json : [use this model](https://github.com/Makio64/christmasxp2015/xptemplate/info.json)
+- xpname/infos.json : [use this model](https://github.com/Makio64/christmasxp2015/blob/master/xptemplate/info.json)
 - all files required need to be join when possible (js/libs/sound/video/etc..)
 
 ##### You can test your experiments in our iframe by using :
-http://christmasexperiments.com/test (available from the 26.11.15)
+http://christmasexperiments.com/test (available from the 29.11.15)
 if you meet any bugs, thanks to report it as issue on github.
 
 ##### When your experiment is ready & tested :
