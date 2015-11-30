@@ -25,8 +25,8 @@ Therefore, each day will have a limited number of places/chocolates available. I
 - xpname/infos.json : [use this model](https://github.com/Makio64/christmasxp2015/blob/master/xptemplate/info.json)
 - all files required need to be join when possible (js/libs/sound/video/etc..)
 
-##### You can test your experiments in our iframe by using :
-http://christmasexperiments.com/test (available from the 29.11.15)
+##### Check your files & your experiments in our iframe by using :
+http://christmasexperiments.com/test (v.alpha)
 if you meet any bugs, thanks to report it as issue on github.
 
 ##### When your experiment is ready & tested :
