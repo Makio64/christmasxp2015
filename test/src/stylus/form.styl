@@ -1,0 +1,63 @@
+#main
+	padding-top 30px
+	width 300px
+	margin auto
+	opacity 0
+	transition all .5s ease-in-out
+
+	&.hideOut
+		opacity 1
+		// visibility auto
+
+#form
+	height 40px
+	padding 15px
+	background #FAFAFA
+	// visibility hidden
+	margin-bottom 30px
+
+	input
+		width 100%
+		height 20px
+		text-align center
+		font-size 16px
+
+#check
+	padding 15px
+	font-size : 10px
+	background #FFF
+	div
+		transition all .5s ease-in-out
+		padding 15px
+		border 1px solid #DDD
+		margin 5px 0
+		color #CCC
+
+		img
+			width 100%
+			height auto
+
+		&.error
+			background #F55
+			color #FEE
+
+		&.success
+			background #5F5
+			color #000
+
+	pre
+		font-size : 9px
+		white-space: pre-wrap
+
+#allgood
+	padding 15px
+	background #FAFAFA
+	// visibility hidden
+	transition all .5s ease-in-out
+	height 30px
+	margin-bottom 30px
+	&.hide
+		opacity 0
+		height 0
+		margin-bottom 0
+		padding 0

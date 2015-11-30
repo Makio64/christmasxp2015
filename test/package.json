@@ -1,0 +1,64 @@
+{
+  "name": "Template-Modules",
+  "version": "1.0.0",
+  "description": "Simple boilerplate with gulp / coffee / stylus / jade / webpack & asynchronous loading",
+  "homepage": "https://github.com/Makio64/Template-Modules",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Makio64/Template-Modules"
+  },
+  "bugs": {
+    "url": "https://github.com/Makio64/Template-Modules/issues"
+  },
+  "keywords": [
+    "boilerplate",
+    "starter",
+    "gulp",
+    "webpack",
+    "stylus",
+    "jade",
+    "coffee",
+    "asynchronous"
+  ],
+  "license": "MIT",
+  "authors": [
+    "david.ronai <david.ronai@gmail.com>"
+  ],
+  "engines": {
+    "node": "*",
+    "npm": "*"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.10.0",
+    "coffee-loader": "^0.7.2",
+    "coffee-script": "^1.10.0",
+    "del": "^2.1.0",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-copy": "0.0.2",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-data": "*",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "*",
+    "gulp-rename": "^1.2.2",
+    "gulp-rev": "^6.0.1",
+    "gulp-rev-collector": "^1.0.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.1.0",
+    "gulp-uglify": "^1.5.1",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "gulp-webpack": "^1.5.0",
+    "jade": "^1.11.0",
+    "nib": "^1.1.0",
+    "run-sequence": "^1.1.5",
+    "signals": "^1.0.0",
+    "stylus": "^0.52.4",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.12.9",
+    "yargs": "^3.30.0"
+  }
+}

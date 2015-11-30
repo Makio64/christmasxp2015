@@ -1,0 +1,20 @@
+FONT_PATH = '../fonts/'
+
+// push your fonts name here, fontname and filename should be same.
+fonts = Helvetica Drone Test
+
+importFont(name)
+	url = FONT_PATH + name
+	@font-face
+		font-family name
+		src url(url+'.eot')
+		src url(url+'.eot?#iefix') format('embedded-opentype'), 
+			url(url+'.woff2') format('woff2'),
+			url(url+'.woff') format('woff'), 
+			url(url+'.ttf') format('truetype'), 
+			url(url+'.svg#' + $icon-font-svg-id) format('svg')
+		font-weight normal
+		font-style normal
+		
+for font in fonts
+	importFont(font)
