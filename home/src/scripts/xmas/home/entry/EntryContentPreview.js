@@ -317,35 +317,46 @@ class EntryContentPreview extends PIXI.Container {
   }
 
   show( delay = 0 ) {
-    this.x = -60
+    // this.x = -60
     // this.y = 40
-    TweenLite.to( this, .7, {
-      delay: delay,
-      x: 0,
-      y: 0,
-      ease: Cubic.easeOut
-    })
-    TweenLite.to( this._default.scale, .2, {
-      delay: delay,
-      x: 0.3,
-      y: 0.3,
-      ease: Sine.easeIn,
-    } )
-    TweenLite.set( this._default.scale, {
-      delay: delay + .2,
-      x: .6,
-      y: .6
-    } )
-    TweenLite.to( this._default.scale, .6, {
-      delay: delay + .2,
+    // TweenLite.to( this, .7, {
+    //   delay: delay,
+    //   x: 0,
+    //   y: 0,
+    //   ease: Cubic.easeOut
+    // })
+    // TweenLite.to( this._default.scale, .25, {
+    //   delay: delay,
+    //   x: 0.35,
+    //   y: 0.35,
+    //   ease: Sine.easeIn,
+    // } )
+    // TweenLite.set( this._default.scale, {
+    //   delay: delay + .25,
+    //   x: .6,
+    //   y: .6
+    // } )
+    // TweenLite.to( this._default.scale, .6, {
+    //   delay: delay + .25,
+    //   x: 1,
+    //   y: 1,
+    //   ease: Cubic.easeOut,
+    // } )
+    TweenLite.to( this._default.scale, .8, {
+      delay: delay,// + .25,
       x: 1,
       y: 1,
-      ease: Cubic.easeOut,
+      ease: Quart.easeInOut,
     } )
   }
 
-  hide() {
-
+  hide( delay = 0 ) {
+    TweenLite.to( this._default.scale, .6, {
+      delay: delay,// + .25,
+      x: 0,
+      y: 0,
+      ease: Quart.easeInOut,
+    } )
   }
 
 }

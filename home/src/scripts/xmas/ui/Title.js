@@ -6,16 +6,16 @@ class Title extends PIXI.Container {
   constructor() {
     super()
 
-    this._cntTop = uTexts.create( "CHRIST", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 60 )
+    this._cntTop = uTexts.create( "CHRIST", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 60 )
     this.addChild( this._cntTop )
 
-    this._cntBotLeft = uTexts.create( "MAS", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 50 )
+    this._cntBotLeft = uTexts.create( "MAS", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50 )
     this._cntBotLeft.y = 100
     this._cntBotLeft.children[ 1 ].x += 4
     this._cntBotLeft.children[ 2 ].x += 7
     this.addChild( this._cntBotLeft )
 
-    this._cntBotRight = uTexts.create( "XP", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 50 )
+    this._cntBotRight = uTexts.create( "XP", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50 )
     this._cntBotRight.x = 277
     this._cntBotRight.y = 100
     this._cntBotRight.children[ 0 ].x += 50

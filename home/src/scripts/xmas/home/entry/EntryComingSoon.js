@@ -1,3 +1,5 @@
+const pixi = require( "fz/core/pixi" )
+const stage = require( "fz/core/stage" )
 const config = require( "xmas/core/config" )
 const PolyShape = require( "xmas/home/entry/PolyShape" )
 const uXmasTexts = require( "xmas/utils/texts" )
@@ -27,11 +29,15 @@ class EntryComingSoon extends PIXI.Container {
   _createContent() {
     const cnt = new PIXI.Container()
 
-    this._cntTfTop = uXmasTexts.create( "more fun", { font: "15px " + config.fonts.bold, fill: config.colors.red }, 2 )
+    let tfTmp = uXmasTexts.create( "more fun", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2 )
+    let tex = tfTmp.generateTexture( pixi.renderer, stage.resolution )
+    this._cntTfTop = new PIXI.Sprite( tex )
     this._cntTfTop.x = config.sizes.entry.w - this._cntTfTop.width >> 1
     cnt.addChild( this._cntTfTop )
 
-    this._cntTfBottom = uXmasTexts.create( "coming soon", { font: "15px " + config.fonts.bold, fill: config.colors.red }, 2 )
+    tfTmp = uXmasTexts.create( "coming soon", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2 )
+    tex = tfTmp.generateTexture( pixi.renderer, stage.resolution )
+    this._cntTfBottom = new PIXI.Sprite( tex )
     this._cntTfBottom.x = config.sizes.entry.w - this._cntTfBottom.width >> 1
     this._cntTfBottom.y = 32
     cnt.addChild( this._cntTfBottom )
@@ -40,31 +46,37 @@ class EntryComingSoon extends PIXI.Container {
   }
 
   show( delay = 0 ) {
-    console.log( "yo" )
-    this.x = -60
+    // this.x = -60
     // this.y = 40
-    TweenLite.to( this, .7, {
-      delay: delay,
-      x: 0,
-      y: 0,
-      ease: Cubic.easeOut
-    })
-    TweenLite.to( this._polyShape.scale, .2, {
-      delay: delay,
-      x: 0.3,
-      y: 0.3,
-      ease: Sine.easeIn,
-    } )
-    TweenLite.set( this._polyShape.scale, {
-      delay: delay + .2,
-      x: .6,
-      y: .6
-    } )
-    TweenLite.to( this._polyShape.scale, .6, {
-      delay: delay + .2,
+    // TweenLite.to( this, .7, {
+    //   delay: delay,
+    //   x: 0,
+    //   y: 0,
+    //   ease: Cubic.easeOut
+    // // })
+    // TweenLite.to( this._polyShape.scale, .2, {
+    //   delay: delay,
+    //   x: 0.3,
+    //   y: 0.3,
+    //   ease: Sine.easeIn,
+    // } )
+    // TweenLite.set( this._polyShape.scale, {
+    //   delay: delay + .2,
+    //   x: .6,
+    //   y: .6
+    // } )
+    // TweenLite.to( this._polyShape.scale, .6, {
+    //   delay: delay + .2,
+    //   x: 1,
+    //   y: 1,
+    //   ease: Cubic.easeOut,
+    // } )
+
+    TweenLite.to( this._polyShape.scale, .8, {
+      delay: delay,// + .25,
       x: 1,
       y: 1,
-      ease: Cubic.easeOut,
+      ease: Quart.easeInOut,
     } )
 
     let px = config.sizes.entry.w - this._cntTfTop.width >> 1
@@ -75,7 +87,7 @@ class EntryComingSoon extends PIXI.Container {
       delay: delay + .3,
       alpha: .7
     })
-    TweenLite.to( this._cntTfTop, .5, {
+    TweenLite.to( this._cntTfTop, .8, {
       delay: delay + .3,
       x: px + 20,
       alpha: 1,
@@ -90,7 +102,7 @@ class EntryComingSoon extends PIXI.Container {
       delay: delay + .375,
       alpha: .7
     })
-    TweenLite.to( this._cntTfBottom, .5, {
+    TweenLite.to( this._cntTfBottom, .8, {
       delay: delay + .375,
       x: px + 25,
       alpha: 1,
@@ -160,6 +172,29 @@ class EntryComingSoon extends PIXI.Container {
     //   alpha: 1,
     //   ease: Quart.easeOut
     // })
+  }
+
+  hide( delay = 0 ) {
+    TweenLite.to( this._polyShape.scale, .6, {
+      delay: delay,// + .25,
+      x: 0,
+      y: 0,
+      ease: Quart.easeInOut,
+    } )
+
+    TweenLite.to( this._cntTfTop, .6, {
+      delay: delay,
+      x: this._cntTfTop.x + 25,
+      alpha: 0,
+      ease: Cubic.easeOut
+    })
+
+    TweenLite.to( this._cntTfBottom, .6, {
+      delay: delay + .3,
+      x: this._cntTfBottom.x + 20,
+      alpha: 0,
+      ease: Cubic.easeOut
+    })
   }
 
 }

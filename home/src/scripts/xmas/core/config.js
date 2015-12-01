@@ -1,7 +1,8 @@
 const config = {}
 
 config.fonts = {
-  medium: "Roboto-Medium",
+  regular: "Roboto Regular",
+  medium: "Roboto Medium",
   bold: "Advent Pro"
 }
 

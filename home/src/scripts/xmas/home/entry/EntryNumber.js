@@ -13,22 +13,34 @@ class EntryNumber extends PIXI.Container {
     this._bg.scale.set( .5, .5 )
     this.addChild( this._bg )
 
-    this._cntText = uXmasTexts.create( "0" + idx,  { font: "10px " + config.fonts.bold, fill: 0xffffff } )
+    this._cntText = uXmasTexts.create( "0" + idx,  { font: "20px " + config.fonts.bold, fill: 0xffffff } )
     this._cntText.x = this._bg.width - this._cntText.width >> 1
     this._cntText.y = this._bg.height - this._cntText.height >> 1
     this._cntText.x -= 1
     this._cntText.y -= 1
+    this._initLetters()
     this.addChild( this._cntText )
 
     this._createArrow()
 
     this.scale.x =
     this.scale.y = 0
+    this.alpha = 0
     this.pivot.set( this._bg.width >> 1, this._bg.height >> 1 )
 
     this._binds = {}
     this._binds.drawArrowLine = this._drawArrowLine.bind( this )
     this._binds.drawArrowEnd = this._drawArrowEnd.bind( this )
+  }
+
+  _initLetters() {
+    let letter = null
+    const n = this._cntText.children.length
+    for( let i = 0; i < n; i++ ) {
+      letter = this._cntText.children[ i ]
+      letter.alpha = 0
+      letter.y = 10
+    }
   }
 
   _createArrow() {
@@ -138,6 +150,15 @@ class EntryNumber extends PIXI.Container {
   }
 
   show( delay = 0 ) {
+    // TweenLite.set( this, {
+    //   delay: delay,
+    //   alpha: .6
+    // })
+    TweenLite.to( this, .6, {
+      delay: delay,
+      alpha: 1,
+      ease: Cubic.easeInOut
+    })
     TweenLite.to( this.scale, .2, {
       delay: delay,
       x: 0.4,
@@ -149,11 +170,37 @@ class EntryNumber extends PIXI.Container {
       x: .6,
       y: .6
     } )
-    TweenLite.to( this.scale, .4, {
+    TweenLite.to( this.scale, .8, {
       delay: delay + .2,
       x: 1,
       y: 1,
-      ease: Quart.easeOut,
+      ease: Cubic.easeOut,
+    } )
+
+    let letter = null
+    const n = this._cntText.children.length
+    for( let i = 0; i < n; i++ ) {
+      letter = this._cntText.children[ i ]
+      TweenLite.to( letter, .6, {
+        delay: delay + .2 + i * .04,
+        y: 0,
+        alpha: 1,
+        ease: Cubic.easeInOut
+      })  
+    }
+  }
+
+  hide( delay = 0 ) {
+    TweenLite.to( this, .6, {
+      delay: delay,
+      alpha: 0,
+      ease: Cubic.easeInOut
+    })
+    TweenLite.to( this.scale, .6, {
+      delay: delay,
+      x: 0,
+      y: 0,
+      ease: Cubic.easeInOut,
     } )
   }
 

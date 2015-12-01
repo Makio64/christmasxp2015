@@ -15,9 +15,12 @@ class Loader extends Emitter {
     this._pixiLoader = new PIXI.loaders.Loader()
     this._pixiLoader.add( "img/default.jpg" )
     this._pixiLoader.add( "img/sprites/sprites.json" )
+    this._pixiLoader.add( "img/sprites/roboto_regular.fnt" )
+    this._pixiLoader.add( "img/sprites/roboto_medium.fnt" )
 
-    this._fontsLoader = new PIXI.loaders.Loader()
-    this._fontsLoader.add( "img/sprites/advent_bold.fnt" )
+    this._loaderOfLoader = new PIXI.loaders.Loader()
+    this._loaderOfLoader.add( "img/logo.png" )
+    this._loaderOfLoader.add( "img/sprites/advent_bold.fnt" )
 
     this._binds = {}
     this._binds.onProgress = this._onProgress.bind( this )
@@ -60,8 +63,8 @@ class Loader extends Emitter {
     // this._pxLoader.addCompletionListener( this._binds.onComplete )
     // this._pxLoader.start()
 
-    this._fontsLoader.once( "complete", this._binds.onFontsComplete )
-    this._fontsLoader.load()
+    this._loaderOfLoader.once( "complete", this._binds.onFontsComplete )
+    this._loaderOfLoader.load()
   }
 
 }

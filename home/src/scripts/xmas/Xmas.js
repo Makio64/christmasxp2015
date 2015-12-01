@@ -24,7 +24,9 @@ class Xmas {
     //   delay: delay,
     //   onComplete: () => {
     page()
-    // this._onHome() // tmp
+    if( location.href == "http://bouboup.com/tce2015/" ) {
+      this._onHome() // tmp
+    }
       // }
     // })
   }

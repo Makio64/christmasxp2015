@@ -1,8 +1,12 @@
+const pixi = require( "fz/core/pixi" )
+const stage = require( "fz/core/stage" )
+
 const config = require( "xmas/core/config" )
 const uTexts = require( "xmas/utils/texts" )
 
 const Title = require( "xmas/ui/Title" )
 const ProgressBar = require( "xmas/ui/ProgressBar" )
+const Storyline = require( "xmas/ui/Storyline" )
 
 class Logo extends PIXI.Container {
 
@@ -21,24 +25,31 @@ class Logo extends PIXI.Container {
     this._a = 2 * Math.PI / 6
     this._rad = 32
 
+    // const cntTmp = new PIXI.Container()
+    // this._cntLogo = new PIXI.Sprite( PIXI.Texture.fromFrame( "logo.png" ) )
+    // this.addChild( this._cntLogo )
+
+    // this._treeGray = this._createTree( 0xbcc5dd, 0xffffff )
+    // this._treeGray.rotation = Math.PI / 6 * 4
+    // cntTmp.addChild( this._treeGray ) 
+
+    // this._treeWhite = this._createTree( 0xffffff, config.colors.red )
+    // this._treeWhite.rotation = -Math.PI / 6 * 4
+    // cntTmp.addChild( this._treeWhite ) 
+
+    // this._treeMain = new PIXI.Graphics()
+    // cntTmp.addChild( this._treeMain )
+
+    // const tex = cntTmp.generateTexture( pixi.renderer, stage.resolution )
+
+    // this._updateTreeMain()
+
     this._cntLogo = new PIXI.Container()
     this.addChild( this._cntLogo )
 
-    this._treeGray = this._createTree( 0xbcc5dd, 0xffffff )
-    this._treeGray.rotation = Math.PI / 6 * 4
-    this._cntLogo.addChild( this._treeGray ) 
-
-    this._treeWhite = this._createTree( 0xffffff, config.colors.red )
-    this._treeWhite.rotation = -Math.PI / 6 * 4
-    this._cntLogo.addChild( this._treeWhite ) 
-
-    this._treeMain = new PIXI.Graphics()
-    this._cntLogo.addChild( this._treeMain )
-
-    this._updateTreeMain()
-
-    this._cntLogo.scale.x = 
-    this._cntLogo.scale.y = .6
+    this._logo = new PIXI.Sprite( PIXI.Texture.fromFrame( "img/logo.png" ) )
+    this._logo.anchor.set( .5, .5 )
+    this._cntLogo.addChild( this._logo )
     this._cntLogo.alpha = 0
 
     this._initDate()
@@ -97,7 +108,11 @@ class Logo extends PIXI.Container {
   }
 
   _initDate() {
-    this._cntDate = uTexts.create( "2015", { font: "10px " + config.fonts.bold, fill: config.colors.blue }, 10 )
+    const cntTmp = uTexts.create( "2015", { font: "20px " + config.fonts.bold, fill: config.colors.blue }, 10 )
+
+    const tex = cntTmp.generateTexture( pixi.renderer, stage.resolution )
+
+    this._cntDate = new PIXI.Sprite( tex )
     this._cntDate.x = - this._cntDate.width >> 1
     this._cntDate.y = 40
     this._cntLogo.addChild( this._cntDate )
@@ -114,10 +129,10 @@ class Logo extends PIXI.Container {
       alpha: 1,
       ease: Quart.easeInOut
     })
-    TweenLite.to( this._cntLogo.scale, 1.2, {
+    TweenLite.to( this._logo.scale, 1.2, {
       delay: delay + .3,
-      x: 1,
-      y: 1,
+      x: .6,
+      y: .6,
       ease: Cubic.easeOut
     })
 
@@ -176,14 +191,36 @@ class Logo extends PIXI.Container {
         })
         this._progressBar.switchMode( .4 )
         TweenLite.to( this._cntDate, .6, {
-          delay: 1.4,
+          delay: 3,
           alpha: 0,
-          ease: Quad.easeOut
-        })
-        
-        TweenLite.set( this, {
-          delay: .8,
+          ease: Quad.easeOut,
           onComplete: () => {
+            this._cntLogo.removeChild( this._cntDate )
+          }
+        })
+        this._progressBar.hideBottomBar( 3 )
+
+        this._storyline = new Storyline()
+        this._storyline.x = -200
+        this._storyline.y = 220
+        this.addChild( this._storyline )
+
+        this._storyline.show( .6 )
+        this._storyline.hide( 2.7 )
+
+        TweenLite.set( this, {
+          delay: 3.4,
+          onComplete: () => {
+            // TweenLite.to( this._progressBar.scale, .6, {
+            //   x: .8,
+            //   y: .8,
+            //   ease: Cubic.easeInOut
+            // })
+            // TweenLite.to( this._cntLogo.scale, .6, {
+            //   x: .8,
+            //   y: .8,
+            //   ease: Cubic.easeInOut
+            // })
             this._xmas.show()
           }
         })

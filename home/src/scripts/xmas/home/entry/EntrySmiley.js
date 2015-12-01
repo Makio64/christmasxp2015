@@ -14,6 +14,7 @@ class EntrySmiley extends PIXI.Container {
 
     this.scale.x =
     this.scale.y = 0
+    this.alpha = 0
     this.pivot.set( this._bg.width >> 1, this._bg.height >> 1 )
   }
 
@@ -58,6 +59,11 @@ class EntrySmiley extends PIXI.Container {
   }
 
   show( delay = 0 ) {
+    TweenLite.to( this, .4, {
+      delay: delay,
+      alpha: 1,
+      ease: Cubic.easeInOut
+    })
     TweenLite.to( this.scale, .2, {
       delay: delay,
       x: 0.4,
@@ -69,11 +75,25 @@ class EntrySmiley extends PIXI.Container {
       x: .6,
       y: .6
     } )
-    TweenLite.to( this.scale, .4, {
+    TweenLite.to( this.scale, .8, {
       delay: delay + .2,
       x: 1,
       y: 1,
-      ease: Quart.easeOut,
+      ease: Cubic.easeOut,
+    } )
+  }
+
+  hide( delay = 0 ) {
+    TweenLite.to( this, .6, {
+      delay: delay,
+      alpha: 0,
+      ease: Cubic.easeInOut
+    })
+    TweenLite.to( this.scale, .6, {
+      delay: delay,
+      x: 0,
+      y: 0,
+      ease: Cubic.easeInOut,
     } )
   }
 

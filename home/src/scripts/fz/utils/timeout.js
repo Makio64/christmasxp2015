@@ -1,3 +1,5 @@
+// bigup kewah
+
 const now = require( "fz/utils/now" )
 
 module.exports = function( fn, delay ) {

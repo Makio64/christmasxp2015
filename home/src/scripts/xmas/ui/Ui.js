@@ -12,10 +12,12 @@ class Ui extends PIXI.Container {
 
     this._logo = new Logo()
     this.addChild( this._logo )
-
     
+    this._binds = {}
+    this._binds.onResize = this._onResize.bind( this )
 
     this._onResize()
+    this._logo.y = stage.height >> 1
   }
 
   _onResize() {
@@ -29,7 +31,6 @@ class Ui extends PIXI.Container {
     // this._logo.y = this._title.y + 142
 
     this._logo.x = stage.width >> 1
-    this._logo.y = stage.height >> 1
   }
 
   showLoading() {
@@ -38,6 +39,10 @@ class Ui extends PIXI.Container {
 
   hideLoading( xmas ) {
     this._logo.hideLoading( xmas )
+  }
+
+  bindEvents() {
+    stage.on( "resize", this._binds.onResize )
   }
 
 }

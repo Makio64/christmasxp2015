@@ -10,11 +10,12 @@ class Home extends PIXI.Container {
     super()
 
     this._idx = 0
+    this._idxToHide = 0
 
     this._hLine = 220
 
     this._yMin = 0
-    this._yMax = 195
+    this._yMax = 205
     this._yTo = this._yMax
 
     this._cntLines = new PIXI.Container()
@@ -30,10 +31,11 @@ class Home extends PIXI.Container {
   }
 
   _onResize() {
-    let w = 980
+    // let w = 980
     // if( stage.width < 1000 ) {
-      w = 880
+      // w = 880
     // }
+    let w = 880
     this._cntLines.x = stage.width - w >> 1
 
     this._yMin = -26 * this._hLine + stage.height
@@ -55,11 +57,36 @@ class Home extends PIXI.Container {
   _onUpdate() {
     this._cntLines.y += ( this._yTo - this._cntLines.y ) * .25
 
+    const idxToHide = -( ( this._cntLines.y - this._hLine * .5 - 25 - this._yMax ) / ( this._hLine ) >> 0 )
+    if( idxToHide != this._idxToHide ) {
+      if( idxToHide != 0 && this._idxToHide < idxToHide ) {
+        this._hideLine( idxToHide )
+      } else {
+        this._showLine( idxToHide )
+      }
+      this._idxToHide = idxToHide
+    }    
+
     const idx = - ( this._cntLines.y - this._yMax ) / this._hLine >> 0
     if( idx != this._idx ) {
       this._idx = idx
       this._updateVisibles()
     }
+  }
+
+  _hideLine( idx ) {
+    this._lines[ idx - 1 ].hide()
+    // TweenLite.to( this._lines[ idx - 1 ], .6, {
+    //   alpha: 0,
+    //   ease: Quart.easeInOut
+    // })
+  }
+
+  _showLine( idx ) {
+    TweenLite.to( this._lines[ idx ], .6, {
+      alpha: 1,
+      ease: Quart.easeInOut
+    })
   }
 
   _updateVisibles() {
@@ -135,11 +162,11 @@ class Home extends PIXI.Container {
   show() {
     // this._onResize()
 
-    pixi.stage.addChild( this )
+    pixi.stage.addChildAt( this, 0 )
 
     const n = this._lines.length
     for( let i = 0; i < this._countLinesVisible; i++ ) {
-      this._lines[ i ].show( i * .04 )
+      this._lines[ i ].show( i * .08 )
     }
 
     TweenLite.set( this, {

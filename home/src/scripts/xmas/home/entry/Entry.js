@@ -1,3 +1,5 @@
+const timeout = require( "fz/utils/timeout" )
+
 const EntryContentPreview = require( "xmas/home/entry/EntryContentPreview" )
 const EntryNumber = require( "xmas/home/entry/EntryNumber" )
 const EntryComingSoon = require( "xmas/home/entry/EntryComingSoon" )
@@ -60,16 +62,26 @@ class Entry extends PIXI.Container {
 
   show( delay = 0 ) {
     this._content.show( delay )
-    this._circle.show( delay + .3 )
-    this._circle.x = 113
-    TweenLite.to( this._circle, .6, {
-      delay: delay + .3,
-      x: 133,
-      ease: Quart.easeOut,
-      onComplete: () => {
-        this._isShown = true
-      }
-    })
+    this._circle.show( delay + .5 + Math.random() * .45 )
+
+    timeout( () => {
+      this._isShown = true
+    }, delay * 1000 + 1200 )
+    // this._circle.x = 113
+    // TweenLite.to( this._circle, .6, {
+    //   delay: delay + .3,
+    //   x: 133,
+    //   ease: Quart.easeOut,
+    //   onComplete: () => {
+    //     this._isShown = true
+    //   }
+    // })
+  }
+
+  hide( delay = 0 ) {
+    this._content.hide( delay + .1 )
+    this._circle.hide( delay )
+    this._isShown = false
   }
 
   bindEvents() {

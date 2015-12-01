@@ -13,6 +13,7 @@ let ui = null
 const loader = require( "loader" )
 loader.on( "ready", () => {
   ui = new Ui()
+  ui.bindEvents()
   ui.showLoading()
 })
 loader.on( "complete", () => {

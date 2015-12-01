@@ -416,6 +416,8 @@ module.exports = (function () {
 })();
 
 },{}],8:[function(require,module,exports){
+// bigup kewah
+
 "use strict";
 
 var now = require("fz/utils/now");
@@ -474,9 +476,12 @@ var Loader = (function (_Emitter) {
     this._pixiLoader = new PIXI.loaders.Loader();
     this._pixiLoader.add("img/default.jpg");
     this._pixiLoader.add("img/sprites/sprites.json");
+    this._pixiLoader.add("img/sprites/roboto_regular.fnt");
+    this._pixiLoader.add("img/sprites/roboto_medium.fnt");
 
-    this._fontsLoader = new PIXI.loaders.Loader();
-    this._fontsLoader.add("img/sprites/advent_bold.fnt");
+    this._loaderOfLoader = new PIXI.loaders.Loader();
+    this._loaderOfLoader.add("img/logo.png");
+    this._loaderOfLoader.add("img/sprites/advent_bold.fnt");
 
     this._binds = {};
     this._binds.onProgress = this._onProgress.bind(this);
@@ -526,8 +531,8 @@ var Loader = (function (_Emitter) {
       // this._pxLoader.addCompletionListener( this._binds.onComplete )
       // this._pxLoader.start()
 
-      this._fontsLoader.once("complete", this._binds.onFontsComplete);
-      this._fontsLoader.load();
+      this._loaderOfLoader.once("complete", this._binds.onFontsComplete);
+      this._loaderOfLoader.load();
     }
   }]);
 
@@ -554,6 +559,7 @@ var ui = null;
 var loader = require("loader");
 loader.on("ready", function () {
   ui = new Ui();
+  ui.bindEvents();
   ui.showLoading();
 });
 loader.on("complete", function () {
@@ -568,7 +574,7 @@ loop.start();
 
 document.getElementById("main").appendChild(pixi.dom);
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11,"xmas/ui/Ui":25}],11:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11,"xmas/ui/Ui":26}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -604,7 +610,9 @@ var Xmas = (function () {
       //   delay: delay,
       //   onComplete: () => {
       page();
-      // this._onHome() // tmp
+      if (location.href == "http://bouboup.com/tce2015/") {
+        this._onHome(); // tmp
+      }
       // }
       // })
     }
@@ -643,7 +651,7 @@ var Xmas = (function () {
 
 module.exports = Xmas;
 
-},{"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Ui":25}],12:[function(require,module,exports){
+},{"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Ui":26}],12:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -682,7 +690,8 @@ module.exports = About;
 var config = {};
 
 config.fonts = {
-  medium: "Roboto-Medium",
+  regular: "Roboto Regular",
+  medium: "Roboto Medium",
   bold: "Advent Pro"
 };
 
@@ -726,11 +735,12 @@ var Home = (function (_PIXI$Container) {
     _get(Object.getPrototypeOf(Home.prototype), "constructor", this).call(this);
 
     this._idx = 0;
+    this._idxToHide = 0;
 
     this._hLine = 220;
 
     this._yMin = 0;
-    this._yMax = 195;
+    this._yMax = 205;
     this._yTo = this._yMax;
 
     this._cntLines = new PIXI.Container();
@@ -748,10 +758,11 @@ var Home = (function (_PIXI$Container) {
   _createClass(Home, [{
     key: "_onResize",
     value: function _onResize() {
-      var w = 980;
+      // let w = 980
       // if( stage.width < 1000 ) {
-      w = 880;
+      // w = 880
       // }
+      var w = 880;
       this._cntLines.x = stage.width - w >> 1;
 
       this._yMin = -26 * this._hLine + stage.height;
@@ -775,11 +786,38 @@ var Home = (function (_PIXI$Container) {
     value: function _onUpdate() {
       this._cntLines.y += (this._yTo - this._cntLines.y) * .25;
 
+      var idxToHide = -((this._cntLines.y - this._hLine * .5 - 25 - this._yMax) / this._hLine >> 0);
+      if (idxToHide != this._idxToHide) {
+        if (idxToHide != 0 && this._idxToHide < idxToHide) {
+          this._hideLine(idxToHide);
+        } else {
+          this._showLine(idxToHide);
+        }
+        this._idxToHide = idxToHide;
+      }
+
       var idx = -(this._cntLines.y - this._yMax) / this._hLine >> 0;
       if (idx != this._idx) {
         this._idx = idx;
         this._updateVisibles();
       }
+    }
+  }, {
+    key: "_hideLine",
+    value: function _hideLine(idx) {
+      this._lines[idx - 1].hide();
+      // TweenLite.to( this._lines[ idx - 1 ], .6, {
+      //   alpha: 0,
+      //   ease: Quart.easeInOut
+      // })
+    }
+  }, {
+    key: "_showLine",
+    value: function _showLine(idx) {
+      TweenLite.to(this._lines[idx], .6, {
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
     }
   }, {
     key: "_updateVisibles",
@@ -860,11 +898,11 @@ var Home = (function (_PIXI$Container) {
     value: function show() {
       // this._onResize()
 
-      pixi.stage.addChild(this);
+      pixi.stage.addChildAt(this, 0);
 
       var n = this._lines.length;
       for (var i = 0; i < this._countLinesVisible; i++) {
-        this._lines[i].show(i * .04);
+        this._lines[i].show(i * .08);
       }
 
       TweenLite.set(this, {
@@ -890,7 +928,7 @@ module.exports = Home;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x4, _x5, _x6) { var _again = true; _function: while (_again) { var object = _x4, property = _x5, receiver = _x6; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x4 = parent; _x5 = property; _x6 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -939,22 +977,22 @@ var Line = (function (_PIXI$Container) {
       this._cntTitle.addChild(cntLeft);
 
       if (this._idx == 1) {
-        this._cntTfDay = uXmasTexts.create("DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1);
+        this._cntTfDay = uXmasTexts.create("DAY", { font: "20px " + config.fonts.bold, fill: config.colors.red }, 1);
         this._cntTfDay.alpha = 0;
         cntLeft.addChild(this._cntTfDay);
       }
 
       this._line = new PIXI.Graphics();
-      this._line.x = -25;
+      this._line.x = 20;
       this._line.y = 26;
       this._line.lineStyle(1, config.colors.blue);
-      this._line.moveTo(0, 0);
-      this._line.lineTo(20, 0);
+      this._line.moveTo(-20, 0);
+      this._line.lineTo(0, 0);
       this._line.scale.x = 0;
       cntLeft.addChild(this._line);
 
-      this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "60px " + config.fonts.bold, fill: config.colors.red });
-      this._cntTfNumber.x = 16;
+      this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "120px " + config.fonts.bold, fill: config.colors.red });
+      this._cntTfNumber.x = 36;
       this._cntTfNumber.alpha = 0;
       this._cntTitle.addChild(this._cntTfNumber);
 
@@ -1016,14 +1054,9 @@ var Line = (function (_PIXI$Container) {
         var n = this._cntTfDay.children.length;
         for (var i = 0; i < n; i++) {
           letter = this._cntTfDay.children[i];
-          TweenLite.set(letter, {
-            delay: delay + .02,
-            x: letter.xBase - 25,
-            alpha: 0
-          });
-          TweenLite.to(letter, .4, {
-            delay: delay + .02 + (n - i) * .02,
-            x: letter.xBase,
+          letter.alpha = 0;
+          TweenLite.to(letter, .8, {
+            delay: delay + .1 + (n - i) * .1,
             alpha: 1,
             ease: Cubic.easeInOut
           });
@@ -1033,31 +1066,25 @@ var Line = (function (_PIXI$Container) {
           alpha: 1
         });
       }
-      TweenLite.to(this._line, .4, {
-        delay: delay + .04,
-        x: 0,
-        ease: Cubic.easeInOut
-      });
-      TweenLite.to(this._line.scale, .4, {
+      TweenLite.to(this._line.scale, .8, {
         delay: delay + .04,
         x: 1,
         ease: Cubic.easeInOut
       });
 
-      TweenLite.to(this._cntTfNumber, .4, {
+      TweenLite.to(this._cntTfNumber, .8, {
         delay: delay,
-        x: 36,
         alpha: 1,
         ease: Cubic.easeInOut
       });
 
-      this._showEntries(delay + .2);
+      this._showEntries(delay + .3);
     }
   }, {
     key: "_showEntries",
     value: function _showEntries(delay) {
       var d = 0;
-      var dAdd = .04;
+      var dAdd = .06;
       var dMin = .01;
       var dFriction = .85;
 
@@ -1074,6 +1101,29 @@ var Line = (function (_PIXI$Container) {
         }
       }
     }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      var d = 0;
+      var dAdd = .06;
+      var dMin = .01;
+      var dFriction = .85;
+
+      var entry = null;
+      var n = this._cntEntries.children.length;
+      for (var i = 0; i < n; i++) {
+        entry = this._cntEntries.children[i];
+        entry.hide(delay + d);
+
+        d += dAdd;
+        dAdd *= dFriction;
+        if (dAdd < dMin) {
+          dAdd = dMin;
+        }
+      }
+    }
   }]);
 
   return Line;
@@ -1081,16 +1131,18 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":26}],16:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":27}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x4, _x5, _x6) { var _again = true; _function: while (_again) { var object = _x4, property = _x5, receiver = _x6; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x4 = parent; _x5 = property; _x6 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var timeout = require("fz/utils/timeout");
 
 var EntryContentPreview = require("xmas/home/entry/EntryContentPreview");
 var EntryNumber = require("xmas/home/entry/EntryNumber");
@@ -1167,16 +1219,29 @@ var Entry = (function (_PIXI$Container) {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
       this._content.show(delay);
-      this._circle.show(delay + .3);
-      this._circle.x = 113;
-      TweenLite.to(this._circle, .6, {
-        delay: delay + .3,
-        x: 133,
-        ease: Quart.easeOut,
-        onComplete: function onComplete() {
-          _this._isShown = true;
-        }
-      });
+      this._circle.show(delay + .5 + Math.random() * .45);
+
+      timeout(function () {
+        _this._isShown = true;
+      }, delay * 1000 + 1200);
+      // this._circle.x = 113
+      // TweenLite.to( this._circle, .6, {
+      //   delay: delay + .3,
+      //   x: 133,
+      //   ease: Quart.easeOut,
+      //   onComplete: () => {
+      //     this._isShown = true
+      //   }
+      // })
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this._content.hide(delay + .1);
+      this._circle.hide(delay);
+      this._isShown = false;
     }
   }, {
     key: "bindEvents",
@@ -1205,17 +1270,19 @@ var Entry = (function (_PIXI$Container) {
 
 module.exports = Entry;
 
-},{"xmas/home/entry/EntryComingSoon":17,"xmas/home/entry/EntryContentPreview":18,"xmas/home/entry/EntryNumber":19,"xmas/home/entry/EntrySmiley":20}],17:[function(require,module,exports){
+},{"fz/utils/timeout":8,"xmas/home/entry/EntryComingSoon":17,"xmas/home/entry/EntryContentPreview":18,"xmas/home/entry/EntryNumber":19,"xmas/home/entry/EntrySmiley":20}],17:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var pixi = require("fz/core/pixi");
+var stage = require("fz/core/stage");
 var config = require("xmas/core/config");
 var PolyShape = require("xmas/home/entry/PolyShape");
 var uXmasTexts = require("xmas/utils/texts");
@@ -1250,11 +1317,15 @@ var EntryComingSoon = (function (_PIXI$Container) {
     value: function _createContent() {
       var cnt = new PIXI.Container();
 
-      this._cntTfTop = uXmasTexts.create("more fun", { font: "15px " + config.fonts.bold, fill: config.colors.red }, 2);
+      var tfTmp = uXmasTexts.create("more fun", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2);
+      var tex = tfTmp.generateTexture(pixi.renderer, stage.resolution);
+      this._cntTfTop = new PIXI.Sprite(tex);
       this._cntTfTop.x = config.sizes.entry.w - this._cntTfTop.width >> 1;
       cnt.addChild(this._cntTfTop);
 
-      this._cntTfBottom = uXmasTexts.create("coming soon", { font: "15px " + config.fonts.bold, fill: config.colors.red }, 2);
+      tfTmp = uXmasTexts.create("coming soon", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2);
+      tex = tfTmp.generateTexture(pixi.renderer, stage.resolution);
+      this._cntTfBottom = new PIXI.Sprite(tex);
       this._cntTfBottom.x = config.sizes.entry.w - this._cntTfBottom.width >> 1;
       this._cntTfBottom.y = 32;
       cnt.addChild(this._cntTfBottom);
@@ -1266,31 +1337,37 @@ var EntryComingSoon = (function (_PIXI$Container) {
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      console.log("yo");
-      this.x = -60;
+      // this.x = -60
       // this.y = 40
-      TweenLite.to(this, .7, {
-        delay: delay,
-        x: 0,
-        y: 0,
-        ease: Cubic.easeOut
-      });
-      TweenLite.to(this._polyShape.scale, .2, {
-        delay: delay,
-        x: 0.3,
-        y: 0.3,
-        ease: Sine.easeIn
-      });
-      TweenLite.set(this._polyShape.scale, {
-        delay: delay + .2,
-        x: .6,
-        y: .6
-      });
-      TweenLite.to(this._polyShape.scale, .6, {
-        delay: delay + .2,
+      // TweenLite.to( this, .7, {
+      //   delay: delay,
+      //   x: 0,
+      //   y: 0,
+      //   ease: Cubic.easeOut
+      // // })
+      // TweenLite.to( this._polyShape.scale, .2, {
+      //   delay: delay,
+      //   x: 0.3,
+      //   y: 0.3,
+      //   ease: Sine.easeIn,
+      // } )
+      // TweenLite.set( this._polyShape.scale, {
+      //   delay: delay + .2,
+      //   x: .6,
+      //   y: .6
+      // } )
+      // TweenLite.to( this._polyShape.scale, .6, {
+      //   delay: delay + .2,
+      //   x: 1,
+      //   y: 1,
+      //   ease: Cubic.easeOut,
+      // } )
+
+      TweenLite.to(this._polyShape.scale, .8, {
+        delay: delay, // + .25,
         x: 1,
         y: 1,
-        ease: Cubic.easeOut
+        ease: Quart.easeInOut
       });
 
       var px = config.sizes.entry.w - this._cntTfTop.width >> 1;
@@ -1301,7 +1378,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
         delay: delay + .3,
         alpha: .7
       });
-      TweenLite.to(this._cntTfTop, .5, {
+      TweenLite.to(this._cntTfTop, .8, {
         delay: delay + .3,
         x: px + 20,
         alpha: 1,
@@ -1316,7 +1393,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
         delay: delay + .375,
         alpha: .7
       });
-      TweenLite.to(this._cntTfBottom, .5, {
+      TweenLite.to(this._cntTfBottom, .8, {
         delay: delay + .375,
         x: px + 25,
         alpha: 1,
@@ -1387,6 +1464,32 @@ var EntryComingSoon = (function (_PIXI$Container) {
       //   ease: Quart.easeOut
       // })
     }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this._polyShape.scale, .6, {
+        delay: delay, // + .25,
+        x: 0,
+        y: 0,
+        ease: Quart.easeInOut
+      });
+
+      TweenLite.to(this._cntTfTop, .6, {
+        delay: delay,
+        x: this._cntTfTop.x + 25,
+        alpha: 0,
+        ease: Cubic.easeOut
+      });
+
+      TweenLite.to(this._cntTfBottom, .6, {
+        delay: delay + .3,
+        x: this._cntTfBottom.x + 20,
+        alpha: 0,
+        ease: Cubic.easeOut
+      });
+    }
   }]);
 
   return EntryComingSoon;
@@ -1394,12 +1497,12 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
 module.exports = EntryComingSoon;
 
-},{"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":26}],18:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":27}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1743,35 +1846,50 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      this.x = -60;
+      // this.x = -60
       // this.y = 40
-      TweenLite.to(this, .7, {
-        delay: delay,
-        x: 0,
-        y: 0,
-        ease: Cubic.easeOut
-      });
-      TweenLite.to(this._default.scale, .2, {
-        delay: delay,
-        x: 0.3,
-        y: 0.3,
-        ease: Sine.easeIn
-      });
-      TweenLite.set(this._default.scale, {
-        delay: delay + .2,
-        x: .6,
-        y: .6
-      });
-      TweenLite.to(this._default.scale, .6, {
-        delay: delay + .2,
+      // TweenLite.to( this, .7, {
+      //   delay: delay,
+      //   x: 0,
+      //   y: 0,
+      //   ease: Cubic.easeOut
+      // })
+      // TweenLite.to( this._default.scale, .25, {
+      //   delay: delay,
+      //   x: 0.35,
+      //   y: 0.35,
+      //   ease: Sine.easeIn,
+      // } )
+      // TweenLite.set( this._default.scale, {
+      //   delay: delay + .25,
+      //   x: .6,
+      //   y: .6
+      // } )
+      // TweenLite.to( this._default.scale, .6, {
+      //   delay: delay + .25,
+      //   x: 1,
+      //   y: 1,
+      //   ease: Cubic.easeOut,
+      // } )
+      TweenLite.to(this._default.scale, .8, {
+        delay: delay, // + .25,
         x: 1,
         y: 1,
-        ease: Cubic.easeOut
+        ease: Quart.easeInOut
       });
     }
   }, {
     key: "hide",
-    value: function hide() {}
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this._default.scale, .6, {
+        delay: delay, // + .25,
+        x: 0,
+        y: 0,
+        ease: Quart.easeInOut
+      });
+    }
   }]);
 
   return EntryContentPreview;
@@ -1784,7 +1902,7 @@ module.exports = EntryContentPreview;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1808,16 +1926,18 @@ var EntryNumber = (function (_PIXI$Container) {
     this._bg.scale.set(.5, .5);
     this.addChild(this._bg);
 
-    this._cntText = uXmasTexts.create("0" + idx, { font: "10px " + config.fonts.bold, fill: 0xffffff });
+    this._cntText = uXmasTexts.create("0" + idx, { font: "20px " + config.fonts.bold, fill: 0xffffff });
     this._cntText.x = this._bg.width - this._cntText.width >> 1;
     this._cntText.y = this._bg.height - this._cntText.height >> 1;
     this._cntText.x -= 1;
     this._cntText.y -= 1;
+    this._initLetters();
     this.addChild(this._cntText);
 
     this._createArrow();
 
     this.scale.x = this.scale.y = 0;
+    this.alpha = 0;
     this.pivot.set(this._bg.width >> 1, this._bg.height >> 1);
 
     this._binds = {};
@@ -1826,6 +1946,17 @@ var EntryNumber = (function (_PIXI$Container) {
   }
 
   _createClass(EntryNumber, [{
+    key: "_initLetters",
+    value: function _initLetters() {
+      var letter = null;
+      var n = this._cntText.children.length;
+      for (var i = 0; i < n; i++) {
+        letter = this._cntText.children[i];
+        letter.alpha = 0;
+        letter.y = 10;
+      }
+    }
+  }, {
     key: "_createArrow",
     value: function _createArrow() {
       this._cntArrow = new PIXI.Container();
@@ -1943,6 +2074,15 @@ var EntryNumber = (function (_PIXI$Container) {
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
+      // TweenLite.set( this, {
+      //   delay: delay,
+      //   alpha: .6
+      // })
+      TweenLite.to(this, .6, {
+        delay: delay,
+        alpha: 1,
+        ease: Cubic.easeInOut
+      });
       TweenLite.to(this.scale, .2, {
         delay: delay,
         x: 0.4,
@@ -1954,11 +2094,40 @@ var EntryNumber = (function (_PIXI$Container) {
         x: .6,
         y: .6
       });
-      TweenLite.to(this.scale, .4, {
+      TweenLite.to(this.scale, .8, {
         delay: delay + .2,
         x: 1,
         y: 1,
-        ease: Quart.easeOut
+        ease: Cubic.easeOut
+      });
+
+      var letter = null;
+      var n = this._cntText.children.length;
+      for (var i = 0; i < n; i++) {
+        letter = this._cntText.children[i];
+        TweenLite.to(letter, .6, {
+          delay: delay + .2 + i * .04,
+          y: 0,
+          alpha: 1,
+          ease: Cubic.easeInOut
+        });
+      }
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this, .6, {
+        delay: delay,
+        alpha: 0,
+        ease: Cubic.easeInOut
+      });
+      TweenLite.to(this.scale, .6, {
+        delay: delay,
+        x: 0,
+        y: 0,
+        ease: Cubic.easeInOut
       });
     }
   }]);
@@ -1968,12 +2137,12 @@ var EntryNumber = (function (_PIXI$Container) {
 
 module.exports = EntryNumber;
 
-},{"xmas/core/config":13,"xmas/utils/texts":26}],20:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/utils/texts":27}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1997,6 +2166,7 @@ var EntrySmiley = (function (_PIXI$Container) {
     this.addChild(this._cntSmiley);
 
     this.scale.x = this.scale.y = 0;
+    this.alpha = 0;
     this.pivot.set(this._bg.width >> 1, this._bg.height >> 1);
   }
 
@@ -2048,6 +2218,11 @@ var EntrySmiley = (function (_PIXI$Container) {
     value: function show() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
+      TweenLite.to(this, .4, {
+        delay: delay,
+        alpha: 1,
+        ease: Cubic.easeInOut
+      });
       TweenLite.to(this.scale, .2, {
         delay: delay,
         x: 0.4,
@@ -2059,11 +2234,28 @@ var EntrySmiley = (function (_PIXI$Container) {
         x: .6,
         y: .6
       });
-      TweenLite.to(this.scale, .4, {
+      TweenLite.to(this.scale, .8, {
         delay: delay + .2,
         x: 1,
         y: 1,
-        ease: Quart.easeOut
+        ease: Cubic.easeOut
+      });
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this, .6, {
+        delay: delay,
+        alpha: 0,
+        ease: Cubic.easeInOut
+      });
+      TweenLite.to(this.scale, .6, {
+        delay: delay,
+        x: 0,
+        y: 0,
+        ease: Cubic.easeInOut
       });
     }
   }]);
@@ -2188,11 +2380,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var pixi = require("fz/core/pixi");
+var stage = require("fz/core/stage");
+
 var config = require("xmas/core/config");
 var uTexts = require("xmas/utils/texts");
 
 var Title = require("xmas/ui/Title");
 var ProgressBar = require("xmas/ui/ProgressBar");
+var Storyline = require("xmas/ui/Storyline");
 
 var Logo = (function (_PIXI$Container) {
   _inherits(Logo, _PIXI$Container);
@@ -2214,23 +2410,31 @@ var Logo = (function (_PIXI$Container) {
     this._a = 2 * Math.PI / 6;
     this._rad = 32;
 
+    // const cntTmp = new PIXI.Container()
+    // this._cntLogo = new PIXI.Sprite( PIXI.Texture.fromFrame( "logo.png" ) )
+    // this.addChild( this._cntLogo )
+
+    // this._treeGray = this._createTree( 0xbcc5dd, 0xffffff )
+    // this._treeGray.rotation = Math.PI / 6 * 4
+    // cntTmp.addChild( this._treeGray )
+
+    // this._treeWhite = this._createTree( 0xffffff, config.colors.red )
+    // this._treeWhite.rotation = -Math.PI / 6 * 4
+    // cntTmp.addChild( this._treeWhite )
+
+    // this._treeMain = new PIXI.Graphics()
+    // cntTmp.addChild( this._treeMain )
+
+    // const tex = cntTmp.generateTexture( pixi.renderer, stage.resolution )
+
+    // this._updateTreeMain()
+
     this._cntLogo = new PIXI.Container();
     this.addChild(this._cntLogo);
 
-    this._treeGray = this._createTree(0xbcc5dd, 0xffffff);
-    this._treeGray.rotation = Math.PI / 6 * 4;
-    this._cntLogo.addChild(this._treeGray);
-
-    this._treeWhite = this._createTree(0xffffff, config.colors.red);
-    this._treeWhite.rotation = -Math.PI / 6 * 4;
-    this._cntLogo.addChild(this._treeWhite);
-
-    this._treeMain = new PIXI.Graphics();
-    this._cntLogo.addChild(this._treeMain);
-
-    this._updateTreeMain();
-
-    this._cntLogo.scale.x = this._cntLogo.scale.y = .6;
+    this._logo = new PIXI.Sprite(PIXI.Texture.fromFrame("img/logo.png"));
+    this._logo.anchor.set(.5, .5);
+    this._cntLogo.addChild(this._logo);
     this._cntLogo.alpha = 0;
 
     this._initDate();
@@ -2292,7 +2496,11 @@ var Logo = (function (_PIXI$Container) {
   }, {
     key: "_initDate",
     value: function _initDate() {
-      this._cntDate = uTexts.create("2015", { font: "10px " + config.fonts.bold, fill: config.colors.blue }, 10);
+      var cntTmp = uTexts.create("2015", { font: "20px " + config.fonts.bold, fill: config.colors.blue }, 10);
+
+      var tex = cntTmp.generateTexture(pixi.renderer, stage.resolution);
+
+      this._cntDate = new PIXI.Sprite(tex);
       this._cntDate.x = -this._cntDate.width >> 1;
       this._cntDate.y = 40;
       this._cntLogo.addChild(this._cntDate);
@@ -2314,10 +2522,10 @@ var Logo = (function (_PIXI$Container) {
         alpha: 1,
         ease: Quart.easeInOut
       });
-      TweenLite.to(this._cntLogo.scale, 1.2, {
+      TweenLite.to(this._logo.scale, 1.2, {
         delay: delay + .3,
-        x: 1,
-        y: 1,
+        x: .6,
+        y: .6,
         ease: Cubic.easeOut
       });
 
@@ -2378,14 +2586,36 @@ var Logo = (function (_PIXI$Container) {
           });
           _this2._progressBar.switchMode(.4);
           TweenLite.to(_this2._cntDate, .6, {
-            delay: 1.4,
+            delay: 3,
             alpha: 0,
-            ease: Quad.easeOut
+            ease: Quad.easeOut,
+            onComplete: function onComplete() {
+              _this2._cntLogo.removeChild(_this2._cntDate);
+            }
           });
+          _this2._progressBar.hideBottomBar(3);
+
+          _this2._storyline = new Storyline();
+          _this2._storyline.x = -200;
+          _this2._storyline.y = 220;
+          _this2.addChild(_this2._storyline);
+
+          _this2._storyline.show(.6);
+          _this2._storyline.hide(2.7);
 
           TweenLite.set(_this2, {
-            delay: .8,
+            delay: 3.4,
             onComplete: function onComplete() {
+              // TweenLite.to( this._progressBar.scale, .6, {
+              //   x: .8,
+              //   y: .8,
+              //   ease: Cubic.easeInOut
+              // })
+              // TweenLite.to( this._cntLogo.scale, .6, {
+              //   x: .8,
+              //   y: .8,
+              //   ease: Cubic.easeInOut
+              // })
               _this2._xmas.show();
             }
           });
@@ -2399,7 +2629,7 @@ var Logo = (function (_PIXI$Container) {
 
 module.exports = Logo;
 
-},{"xmas/core/config":13,"xmas/ui/ProgressBar":23,"xmas/ui/Title":24,"xmas/utils/texts":26}],23:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/ui/ProgressBar":23,"xmas/ui/Storyline":24,"xmas/ui/Title":25,"xmas/utils/texts":27}],23:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2520,8 +2750,12 @@ var ProgressBar = (function (_PIXI$Container) {
         y: 280,
         ease: Quad.easeIn
       });
+    }
+  }, {
+    key: "hideBottomBar",
+    value: function hideBottomBar(delay) {
       TweenLite.to(this._gBot, .6, {
-        delay: delay + 1,
+        delay: delay,
         alpha: 0,
         ease: Quad.easeOut
       });
@@ -2534,6 +2768,154 @@ var ProgressBar = (function (_PIXI$Container) {
 module.exports = ProgressBar;
 
 },{"fz/core/loop":1,"fz/core/stage":3,"xmas/core/config":13}],24:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var loop = require("fz/core/loop");
+var timeout = require("fz/utils/timeout");
+
+var config = require("xmas/core/config");
+var uTexts = require("xmas/utils/texts");
+
+var Storyline = (function (_PIXI$Container) {
+  _inherits(Storyline, _PIXI$Container);
+
+  function Storyline() {
+    _classCallCheck(this, Storyline);
+
+    _get(Object.getPrototypeOf(Storyline.prototype), "constructor", this).call(this);
+
+    this._tf = uTexts.createWithWords("A daily dose of interactive experiments till Christmas", { font: "20px " + config.fonts.regular, fill: config.colors.blue }, 3, 10);
+    this.addChild(this._tf);
+
+    this._poly = new PIXI.Sprite(PIXI.Texture.fromFrame("poly_2x.png"));
+    this._poly.tint = config.colors.blue;
+    this._poly.x = -100;
+    this._poly.y = -75;
+    this._poly.anchor.set(.5, .5);
+    this._poly.scale.set(0, 0);
+    this.addChild(this._poly);
+
+    this._circle = new PIXI.Sprite(PIXI.Texture.fromFrame("circle_2x.png"));
+    this._circle.tint = config.colors.red;
+    this._circle.x = 550;
+    this._circle.y = 125;
+    this._circle.anchor.set(.5, .5);
+    this._circle.scale.set(0, 0);
+    this.addChild(this._circle);
+
+    this._initWords();
+
+    this._binds = {};
+    this._binds.onUpdate = this._onUpdate.bind(this);
+  }
+
+  _createClass(Storyline, [{
+    key: "_initWords",
+    value: function _initWords() {
+      var n = this._tf.children.length;
+      for (var i = 0; i < n; i++) {
+        this._tf.children[i].alpha = 0;
+      }
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var _this = this;
+
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this._showWords(delay);
+
+      timeout(function () {
+        loop.add(_this._binds.onUpdate);
+      }, delay * 1000);
+
+      TweenLite.to(this._poly.scale, .8, {
+        delay: delay,
+        x: .5,
+        y: .5,
+        ease: Quart.easeInOut
+      });
+
+      TweenLite.to(this._circle.scale, .8, {
+        delay: delay,
+        x: .5,
+        y: .5,
+        ease: Quart.easeInOut
+      });
+    }
+  }, {
+    key: "_showWords",
+    value: function _showWords(delay) {
+      var n = this._tf.children.length;
+      for (var i = 0; i < n; i++) {
+        TweenLite.to(this._tf.children[i], .8, {
+          delay: delay,
+          alpha: 1,
+          ease: Quart.easeInOut
+        });
+
+        delay += .075;
+      }
+    }
+  }, {
+    key: "_onUpdate",
+    value: function _onUpdate() {
+      this._poly.x += 1.1;
+      this._poly.rotation += .01;
+
+      this._circle.x -= 1.15;
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this._hideWords(delay);
+      TweenLite.to(this._poly.scale, .8, {
+        delay: delay + .2,
+        x: 0,
+        y: 0,
+        ease: Quart.easeInOut
+      });
+
+      TweenLite.to(this._circle.scale, .8, {
+        delay: delay,
+        x: 0,
+        y: 0,
+        ease: Quart.easeInOut
+      });
+    }
+  }, {
+    key: "_hideWords",
+    value: function _hideWords(delay) {
+      var n = this._tf.children.length;
+      for (var i = 0; i < n; i++) {
+        TweenLite.to(this._tf.children[i], .8, {
+          delay: delay,
+          alpha: 0,
+          ease: Cubic.easeInOut
+        });
+
+        delay += .05;
+      }
+    }
+  }]);
+
+  return Storyline;
+})(PIXI.Container);
+
+module.exports = Storyline;
+
+},{"fz/core/loop":1,"fz/utils/timeout":8,"xmas/core/config":13,"xmas/utils/texts":27}],25:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2555,16 +2937,16 @@ var Title = (function (_PIXI$Container) {
 
     _get(Object.getPrototypeOf(Title.prototype), "constructor", this).call(this);
 
-    this._cntTop = uTexts.create("CHRIST", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 60);
+    this._cntTop = uTexts.create("CHRIST", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 60);
     this.addChild(this._cntTop);
 
-    this._cntBotLeft = uTexts.create("MAS", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 50);
+    this._cntBotLeft = uTexts.create("MAS", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50);
     this._cntBotLeft.y = 100;
     this._cntBotLeft.children[1].x += 4;
     this._cntBotLeft.children[2].x += 7;
     this.addChild(this._cntBotLeft);
 
-    this._cntBotRight = uTexts.create("XP", { font: "60px " + config.fonts.bold, fill: config.colors.red }, 50);
+    this._cntBotRight = uTexts.create("XP", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50);
     this._cntBotRight.x = 277;
     this._cntBotRight.y = 100;
     this._cntBotRight.children[0].x += 50;
@@ -2630,7 +3012,7 @@ var Title = (function (_PIXI$Container) {
 
 module.exports = Title;
 
-},{"xmas/core/config":13,"xmas/utils/texts":26}],25:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/utils/texts":27}],26:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2659,7 +3041,11 @@ var Ui = (function (_PIXI$Container) {
     this._logo = new Logo();
     this.addChild(this._logo);
 
+    this._binds = {};
+    this._binds.onResize = this._onResize.bind(this);
+
     this._onResize();
+    this._logo.y = stage.height >> 1;
   }
 
   _createClass(Ui, [{
@@ -2675,7 +3061,6 @@ var Ui = (function (_PIXI$Container) {
       // this._logo.y = this._title.y + 142
 
       this._logo.x = stage.width >> 1;
-      this._logo.y = stage.height >> 1;
     }
   }, {
     key: "showLoading",
@@ -2687,6 +3072,11 @@ var Ui = (function (_PIXI$Container) {
     value: function hideLoading(xmas) {
       this._logo.hideLoading(xmas);
     }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      stage.on("resize", this._binds.onResize);
+    }
   }]);
 
   return Ui;
@@ -2694,7 +3084,7 @@ var Ui = (function (_PIXI$Container) {
 
 module.exports = Ui;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/ui/Logo":22}],26:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/ui/Logo":22}],27:[function(require,module,exports){
 "use strict";
 
 var stage = require("fz/core/stage");
@@ -2712,6 +3102,7 @@ module.exports.create = function (text, style) {
     // tf = new PIXI.Text( text[ i ], style )
     tf = new PIXI.extras.BitmapText(text[i], style);
     tf.tint = style.fill;
+    tf.scale.set(.5, .5);
     // tf.resolution = stage.resolution
     tf.x = px;
     tf.xBase = px;
@@ -2721,6 +3112,45 @@ module.exports.create = function (text, style) {
   }
 
   return cnt;
+};
+
+module.exports.createWithWords = function (text, style) {
+  var letterSpacing = arguments.length <= 2 || arguments[2] === undefined ? 2 : arguments[2];
+  var wordSpacing = arguments.length <= 3 || arguments[3] === undefined ? 2 : arguments[3];
+
+  var cntGlobal = new PIXI.Container();
+
+  var px = 0;
+  var pxWords = 0;
+
+  var cnt = new PIXI.Container();
+  cntGlobal.addChild(cnt);
+  var tf = null;
+
+  var n = text.length;
+  for (var i = 0; i < n; i++) {
+    if (text[i] != " ") {
+      tf = new PIXI.extras.BitmapText(text[i], style);
+      tf.tint = style.fill;
+      tf.scale.set(.5, .5);
+      tf.x = px;
+      tf.xBase = px;
+      cnt.addChild(tf);
+
+      px += tf.width + letterSpacing;
+    } else {
+      pxWords += cnt.width + wordSpacing;
+
+      cnt = new PIXI.Container();
+      cnt.x = pxWords;
+      cnt.xBase = pxWords;
+      cntGlobal.addChild(cnt);
+
+      px = 0;
+    }
+  }
+
+  return cntGlobal;
 };
 
 },{"fz/core/stage":3}]},{},[10]);

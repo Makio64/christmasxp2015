@@ -34,22 +34,22 @@ class Line extends PIXI.Container {
     this._cntTitle.addChild( cntLeft )
 
     if( this._idx == 1 ) {
-      this._cntTfDay = uXmasTexts.create( "DAY", { font: "10px " + config.fonts.bold, fill: config.colors.red }, 1 )
+      this._cntTfDay = uXmasTexts.create( "DAY", { font: "20px " + config.fonts.bold, fill: config.colors.red }, 1 )
       this._cntTfDay.alpha = 0
       cntLeft.addChild( this._cntTfDay )
     }
 
     this._line = new PIXI.Graphics()
-    this._line.x = -25
+    this._line.x = 20
     this._line.y = 26
     this._line.lineStyle( 1, config.colors.blue )
-    this._line.moveTo( 0, 0 )
-    this._line.lineTo( 20, 0 )
+    this._line.moveTo( -20, 0 )
+    this._line.lineTo( 0, 0 )
     this._line.scale.x = 0
     cntLeft.addChild( this._line )
 
-    this._cntTfNumber = uXmasTexts.create( this._idx + "", { font: "60px " + config.fonts.bold, fill: config.colors.red } )
-    this._cntTfNumber.x = 16
+    this._cntTfNumber = uXmasTexts.create( this._idx + "", { font: "120px " + config.fonts.bold, fill: config.colors.red } )
+    this._cntTfNumber.x = 36
     this._cntTfNumber.alpha = 0
     this._cntTitle.addChild( this._cntTfNumber )
 
@@ -105,14 +105,9 @@ class Line extends PIXI.Container {
       const  n = this._cntTfDay.children.length
       for( let i = 0; i < n; i++ ) {
         letter = this._cntTfDay.children[ i ]
-        TweenLite.set( letter, {
-          delay: delay + .02,
-          x: letter.xBase - 25,
-          alpha: 0
-        } )
-        TweenLite.to( letter, .4, {
-          delay: delay + .02 + ( n - i ) * .02,
-          x: letter.xBase,
+        letter.alpha = 0
+        TweenLite.to( letter, .8, {
+          delay: delay + .1 + ( n - i ) * .1,
           alpha: 1,
           ease: Cubic.easeInOut
         } )
@@ -122,30 +117,24 @@ class Line extends PIXI.Container {
         alpha: 1,
       })
     }
-    TweenLite.to( this._line, .4, {
-      delay: delay + .04,
-      x: 0,
-      ease: Cubic.easeInOut
-    })
-    TweenLite.to( this._line.scale, .4, {
+    TweenLite.to( this._line.scale, .8, {
       delay: delay + .04,
       x: 1,
       ease: Cubic.easeInOut
     })
 
-    TweenLite.to( this._cntTfNumber, .4, {
+    TweenLite.to( this._cntTfNumber, .8, {
       delay: delay,
-      x: 36,
       alpha: 1,
       ease: Cubic.easeInOut
     })
 
-    this._showEntries( delay + .2 )
+    this._showEntries( delay + .3 )
   }
 
   _showEntries( delay ) {
     let d = 0
-    let dAdd = .04
+    let dAdd = .06
     let dMin = .01
     let dFriction = .85
 
@@ -161,6 +150,26 @@ class Line extends PIXI.Container {
         dAdd = dMin
       }
     }
+  }
+
+  hide( delay = 0 ) {
+    let d = 0
+    let dAdd = .06
+    let dMin = .01
+    let dFriction = .85
+
+    let entry = null
+    const n = this._cntEntries.children.length
+    for( let i = 0; i < n; i++ ) {
+      entry = this._cntEntries.children[ i ]
+      entry.hide( delay + d )
+
+      d += dAdd
+      dAdd *= dFriction
+      if( dAdd < dMin ) {
+        dAdd = dMin
+      }
+    } 
   }
 
 }

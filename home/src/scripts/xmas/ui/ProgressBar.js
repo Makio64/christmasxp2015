@@ -93,8 +93,11 @@ class ProgressBar extends PIXI.Container {
       y: 280,
       ease: Quad.easeIn
     })
+  }
+
+  hideBottomBar( delay ) {
     TweenLite.to( this._gBot, .6, {
-      delay: delay + 1,
+      delay: delay,
       alpha: 0,
       ease: Quad.easeOut
     })
