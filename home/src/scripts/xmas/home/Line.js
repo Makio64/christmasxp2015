@@ -141,7 +141,6 @@ class Line extends PIXI.Container {
     let dMin = .01
     let dFriction = .85
 
-    console.log( fast )
     let entry = null
     const n = this._cntEntries.children.length
     for( let i = 0; i < n; i++ ) {
