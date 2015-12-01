@@ -84,7 +84,8 @@ var Pixi = (function () {
 
     var opts = {
       antialias: true,
-      resolution: stage.resolution,
+      // resolution: stage.resolution,
+      resolution: 2,
       // resolution: 1,
       transparent: true,
       backgroundColor: 0xe9e9e9
@@ -645,6 +646,7 @@ var Xmas = (function () {
     this._binds.onChange = this._onChange.bind(this);
     this._binds.onHome = this._onHome.bind(this);
     this._binds.onAbout = this._onAbout.bind(this);
+    this._binds.onXP = this._onXP.bind(this);
   }
 
   _createClass(Xmas, [{

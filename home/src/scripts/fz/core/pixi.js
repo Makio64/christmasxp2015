@@ -6,7 +6,8 @@ class Pixi {
   constructor() {
     const opts = {
       antialias: true,
-      resolution: stage.resolution,
+      // resolution: stage.resolution,
+      resolution: 2,
       // resolution: 1,
       transparent: true,
       backgroundColor: 0xe9e9e9
