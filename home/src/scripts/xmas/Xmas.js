@@ -1,5 +1,6 @@
 const Home = require( "xmas/home/Home" )
 const About = require( "xmas/about/About" )
+const XPView = require( "xmas/xpview/XPView" )
 const Ui = require( "xmas/ui/Ui" )
 
 class Xmas {
@@ -7,6 +8,7 @@ class Xmas {
   constructor() {
     this._home = new Home()
     this._about = new About()
+    this._xp = new XPView()
 
     this._current = null
 
@@ -19,6 +21,7 @@ class Xmas {
   show() {
     page( "/", this._binds.onChange, this._binds.onHome )
     page( "/about", this._binds.onChange, this._binds.onAbout )
+	page( "/xp/:day/:name", this._binds.onChange, this._binds.onXP )
 
     // TweenLite.set( this, {
     //   delay: delay,
@@ -45,10 +48,15 @@ class Xmas {
     this._displayCurrent()
   }
 
-  _onAbout() {
-    this._current = this._about
-    this._displayCurrent()
-  }
+    _onAbout() {
+      this._current = this._about
+      this._displayCurrent()
+    }
+
+	_onXP() {
+		this._current = this._about
+		this._displayCurrent()
+	}
 
   _displayCurrent() {
     this._current.bindEvents()
