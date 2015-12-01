@@ -19,6 +19,7 @@ loader.on( "ready", () => {
 loader.on( "complete", () => {
   const xmas = new Xmas()
   ui.hideLoading( xmas )
+  ui.showBts()
 
   // xmas.show( 1 )
 })

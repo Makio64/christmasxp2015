@@ -610,6 +610,7 @@ loader.on("ready", function () {
 loader.on("complete", function () {
   var xmas = new Xmas();
   ui.hideLoading(xmas);
+  ui.showBts();
 
   // xmas.show( 1 )
 });
@@ -619,7 +620,7 @@ loop.start();
 
 document.getElementById("main").appendChild(pixi.dom);
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11,"xmas/ui/Ui":26}],11:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11,"xmas/ui/Ui":27}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -705,7 +706,7 @@ var Xmas = (function () {
 
 module.exports = Xmas;
 
-},{"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Ui":26,"xmas/xpview/XPView":28}],12:[function(require,module,exports){
+},{"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Ui":27,"xmas/xpview/XPView":29}],12:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1232,7 +1233,7 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":27}],16:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/home/entry/Entry":16,"xmas/utils/texts":28}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1360,6 +1361,7 @@ var Entry = (function (_PIXI$Container) {
     value: function bindEvents() {
       if (this._content.hoverZone) {
         this._content.hoverZone.interactive = true;
+        this._content.hoverZone.buttonMode = true;
 
         this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
@@ -1371,6 +1373,7 @@ var Entry = (function (_PIXI$Container) {
     value: function unbindEvents() {
       if (this._content.hoverZone) {
         this._content.hoverZone.interactive = false;
+        this._content.hoverZone.buttonMode = false;
 
         this._content.hoverZone.off("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.off("mouseout", this._binds.onMouseOut);
@@ -1619,7 +1622,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
 module.exports = EntryComingSoon;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":27}],18:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":28}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2085,7 +2088,7 @@ var EntryContentPreview = (function (_PIXI$Container3) {
 
 module.exports = EntryContentPreview;
 
-},{"fz/core/pixi":2,"fz/utils/images":5,"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":27}],19:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/utils/images":5,"xmas/core/config":13,"xmas/home/entry/PolyShape":21,"xmas/utils/texts":28}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2333,7 +2336,7 @@ var EntryNumber = (function (_PIXI$Container) {
 
 module.exports = EntryNumber;
 
-},{"xmas/core/config":13,"xmas/utils/texts":27}],20:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/utils/texts":28}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2608,6 +2611,167 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var Bts = (function (_PIXI$Container) {
+  _inherits(Bts, _PIXI$Container);
+
+  function Bts() {
+    _classCallCheck(this, Bts);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Bts).call(this));
+
+    _this._binds = {};
+    _this._binds.onMouseOver = _this._onMouseOver.bind(_this);
+    _this._binds.onMouseOut = _this._onMouseOut.bind(_this);
+    _this._binds.onClick = _this._onClick.bind(_this);
+
+    _this._initTop();
+    _this._initShare();
+    return _this;
+  }
+
+  _createClass(Bts, [{
+    key: "_onMouseOver",
+    value: function _onMouseOver(e) {
+      var target = e.target;
+      TweenLite.to(target.children[1], .25, {
+        alpha: 1,
+        ease: Quart.easeOut
+      });
+    }
+  }, {
+    key: "_onMouseOut",
+    value: function _onMouseOut(e) {
+      var target = e.target;
+      TweenLite.to(target.children[1], .25, {
+        alpha: 0,
+        ease: Quart.easeOut
+      });
+    }
+  }, {
+    key: "_onClick",
+    value: function _onClick(e) {
+      var target = e.target;
+      if (target == this._btSubmit) {
+        window.open("https://github.com/Makio64/christmasxp2015/blob/master/README.md", "_blank");
+      } else if (target == this._btAbout) {
+        window.open("https://github.com/makio64/christmasxp2015", "_blank");
+      } else if (target == this._btFB) {
+        FB.ui({
+          method: 'feed',
+          name: "Christmas Experiments - 2015",
+          caption: "Christmas Experiments 2015, discover the best experiments of the winter!",
+          link: "http://christmasexperiments.com/",
+          picture: "http://christmasexperiments.com/share.jpg"
+        }, function (response) {
+          console.log("response");
+        });
+      } else if (target == this._btTwitter) {
+        var url = "https://twitter.com/share?";
+        url += "text=" + encodeURIComponent("Christmas Experiments 2015, discover the best experiments of the winter!");
+        url += "&url=" + encodeURIComponent("http://christmasexperiments.com/");
+        window.open(url, "", "top=100, left=200, width=600, height = 500");
+      }
+    }
+  }, {
+    key: "_initTop",
+    value: function _initTop() {
+      this._cntTop = new PIXI.Container();
+      this.addChild(this._cntTop);
+
+      this._btSubmit = this._createBt("bt_submitxp");
+      this._btSubmit.x = -2;
+      this._cntTop.addChild(this._btSubmit);
+
+      this._btAbout = this._createBt("bt_about");
+      this._btAbout.x = 125;
+      this._btAbout.y = 17;
+      this._cntTop.addChild(this._btAbout);
+    }
+  }, {
+    key: "_initShare",
+    value: function _initShare() {
+      this._cntShare = new PIXI.Container();
+      this._cntShare.x = 134;
+      this._cntShare.y = 180;
+      this.addChild(this._cntShare);
+
+      this._btFB = this._createBt("bt_fb");
+      this._cntShare.addChild(this._btFB);
+
+      this._btTwitter = this._createBt("bt_twitter");
+      this._btTwitter.x = 27;
+      this._btTwitter.y = 17;
+      this._cntShare.addChild(this._btTwitter);
+    }
+  }, {
+    key: "_createBt",
+    value: function _createBt(name) {
+      var cnt = new PIXI.Container();
+      cnt.alpha = 0;
+      cnt.interactive = true;
+      cnt.buttonMode = true;
+      cnt.on("mouseover", this._binds.onMouseOver);
+      cnt.on("mouseout", this._binds.onMouseOut);
+      cnt.on("click", this._binds.onClick);
+
+      var normal = new PIXI.Sprite(PIXI.Texture.fromFrame(name + ".png"));
+      normal.scale.set(.5, .5);
+      cnt.addChild(normal);
+
+      var hover = new PIXI.Sprite(PIXI.Texture.fromFrame(name + "_hover.png"));
+      hover.scale.set(.5, .5);
+      hover.alpha = 0;
+      cnt.addChild(hover);
+
+      return cnt;
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      TweenLite.to(this._btSubmit, .8, {
+        delay: delay,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+
+      TweenLite.to(this._btAbout, .8, {
+        delay: delay + .2,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+
+      TweenLite.to(this._btFB, .8, {
+        delay: delay + .1,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+
+      TweenLite.to(this._btTwitter, .8, {
+        delay: delay + .3,
+        alpha: 1,
+        ease: Quart.easeInOut
+      });
+    }
+  }]);
+
+  return Bts;
+})(PIXI.Container);
+
+module.exports = Bts;
+
+},{}],23:[function(require,module,exports){
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var pixi = require("fz/core/pixi");
 var stage = require("fz/core/stage");
 
@@ -2856,7 +3020,7 @@ var Logo = (function (_PIXI$Container) {
 
 module.exports = Logo;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/ui/ProgressBar":23,"xmas/ui/Storyline":24,"xmas/ui/Title":25,"xmas/utils/texts":27}],23:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/ui/ProgressBar":24,"xmas/ui/Storyline":25,"xmas/ui/Title":26,"xmas/utils/texts":28}],24:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2995,7 +3159,7 @@ var ProgressBar = (function (_PIXI$Container) {
 
 module.exports = ProgressBar;
 
-},{"fz/core/loop":1,"fz/core/stage":3,"xmas/core/config":13}],24:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/stage":3,"xmas/core/config":13}],25:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3144,7 +3308,7 @@ var Storyline = (function (_PIXI$Container) {
 
 module.exports = Storyline;
 
-},{"fz/core/loop":1,"fz/utils/timeout":8,"xmas/core/config":13,"xmas/utils/texts":27}],25:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/utils/timeout":8,"xmas/core/config":13,"xmas/utils/texts":28}],26:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3242,7 +3406,7 @@ var Title = (function (_PIXI$Container) {
 
 module.exports = Title;
 
-},{"xmas/core/config":13,"xmas/utils/texts":27}],26:[function(require,module,exports){
+},{"xmas/core/config":13,"xmas/utils/texts":28}],27:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3257,6 +3421,7 @@ var pixi = require("fz/core/pixi");
 var stage = require("fz/core/stage");
 
 var Logo = require("xmas/ui/Logo");
+var Bts = require("xmas/ui/Bts");
 
 var Ui = (function (_PIXI$Container) {
   _inherits(Ui, _PIXI$Container);
@@ -3292,6 +3457,11 @@ var Ui = (function (_PIXI$Container) {
       // this._logo.y = this._title.y + 142
 
       this._logo.x = stage.width >> 1;
+
+      if (this._bts) {
+        this._bts.x = stage.width - 215;
+        this._bts.y = 20;
+      }
     }
   }, {
     key: "showLoading",
@@ -3302,6 +3472,15 @@ var Ui = (function (_PIXI$Container) {
     key: "hideLoading",
     value: function hideLoading(xmas) {
       this._logo.hideLoading(xmas);
+    }
+  }, {
+    key: "showBts",
+    value: function showBts() {
+      this._bts = new Bts();
+      this.addChild(this._bts);
+      this._onResize();
+
+      this._bts.show(5);
     }
   }, {
     key: "bindEvents",
@@ -3315,7 +3494,7 @@ var Ui = (function (_PIXI$Container) {
 
 module.exports = Ui;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/ui/Logo":22}],27:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/ui/Bts":22,"xmas/ui/Logo":23}],28:[function(require,module,exports){
 "use strict";
 
 var stage = require("fz/core/stage");
@@ -3384,7 +3563,7 @@ module.exports.createWithWords = function (text, style) {
   return cntGlobal;
 };
 
-},{"fz/core/stage":3}],28:[function(require,module,exports){
+},{"fz/core/stage":3}],29:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

@@ -2,6 +2,7 @@ const pixi = require( "fz/core/pixi" )
 const stage = require( "fz/core/stage" )
 
 const Logo = require( "xmas/ui/Logo" )
+const Bts = require( "xmas/ui/Bts" )
 
 class Ui extends PIXI.Container {
 
@@ -31,6 +32,11 @@ class Ui extends PIXI.Container {
     // this._logo.y = this._title.y + 142
 
     this._logo.x = stage.width >> 1
+
+    if( this._bts ) {
+      this._bts.x = stage.width - 215
+      this._bts.y = 20
+    }
   }
 
   showLoading() {
@@ -39,6 +45,14 @@ class Ui extends PIXI.Container {
 
   hideLoading( xmas ) {
     this._logo.hideLoading( xmas )
+  }
+
+  showBts() {
+    this._bts = new Bts()
+    this.addChild( this._bts )
+    this._onResize()
+
+    this._bts.show( 5 )
   }
 
   bindEvents() {
