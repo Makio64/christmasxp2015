@@ -572,7 +572,8 @@ var Loader = (function (_Emitter) {
         }
         for (j = 0; j < m; j++) {
           dataEntry = data[j];
-          dataEntry.pathPreview = "./" + idx + "/" + dataEntry.folder + "/preview.jpg";
+          dataEntry.path = "./" + idx + "/" + dataEntry.folder + "/";
+          dataEntry.pathPreview = dataEntry.path + "preview.jpg";
           this._pixiLoader.add(dataEntry.pathPreview);
         }
       }
@@ -1248,6 +1249,8 @@ var Entry = (function (_PIXI$Container) {
 
     _get(Object.getPrototypeOf(Entry.prototype), "constructor", this).call(this);
 
+    this._data = data;
+
     this._isShown = false;
 
     if (idx >= 0) {
@@ -1271,6 +1274,7 @@ var Entry = (function (_PIXI$Container) {
     this._binds = {};
     this._binds.onMouseOver = this._onMouseOver.bind(this);
     this._binds.onMouseOut = this._onMouseOut.bind(this);
+    this._binds.onClick = this._onClick.bind(this);
   }
 
   _createClass(Entry, [{
@@ -1299,6 +1303,11 @@ var Entry = (function (_PIXI$Container) {
       if (this._circle.out) {
         this._circle.out();
       }
+    }
+  }, {
+    key: "_onClick",
+    value: function _onClick() {
+      window.open(this._data.path, "_blank");
     }
   }, {
     key: "show",
@@ -1341,6 +1350,7 @@ var Entry = (function (_PIXI$Container) {
 
         this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
+        this._content.hoverZone.on("click", this._binds.onClick);
       }
     }
   }, {
@@ -1351,6 +1361,7 @@ var Entry = (function (_PIXI$Container) {
 
         this._content.hoverZone.off("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.off("mouseout", this._binds.onMouseOut);
+        this._content.hoverZone.off("click", this._binds.onClick);
       }
     }
   }]);

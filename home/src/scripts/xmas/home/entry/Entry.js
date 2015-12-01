@@ -10,6 +10,8 @@ class Entry extends PIXI.Container {
   constructor( idx = -1, data = null ) {
     super()
 
+    this._data = data
+
     this._isShown = false
 
     if( idx >= 0 ) {
@@ -33,6 +35,7 @@ class Entry extends PIXI.Container {
     this._binds = {}
     this._binds.onMouseOver = this._onMouseOver.bind( this )
     this._binds.onMouseOut = this._onMouseOut.bind( this )
+    this._binds.onClick = this._onClick.bind( this )
   }
 
   _onMouseOver() {
@@ -58,6 +61,10 @@ class Entry extends PIXI.Container {
     if( this._circle.out ) {
       this._circle.out()
     }
+  }
+
+  _onClick() {
+    window.open( this._data.path, "_blank" )
   }
 
   show( delay = 0, fast = false ) {
@@ -90,6 +97,7 @@ class Entry extends PIXI.Container {
 
       this._content.hoverZone.on( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.on( "mouseout", this._binds.onMouseOut )
+      this._content.hoverZone.on( "click", this._binds.onClick )
     }
   }
 
@@ -99,6 +107,7 @@ class Entry extends PIXI.Container {
 
       this._content.hoverZone.off( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.off( "mouseout", this._binds.onMouseOut )
+      this._content.hoverZone.off( "click", this._binds.onClick )
     }
   }
 
