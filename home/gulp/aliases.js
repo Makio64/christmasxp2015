@@ -10,6 +10,6 @@ gulp.task( "default", function( cb ) {
 
 gulp.task( "build", function( cb ) {
 
-  runSequence( [ "scripts" ], cb );
+  runSequence( [ "scripts", "styles-build" ], cb );
 
 })
