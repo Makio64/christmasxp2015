@@ -104,7 +104,7 @@ class Home extends PIXI.Container {
           line.bindEvents()
           this._cntLines.addChild( line )
           if( this._isShown && !line.isShown && ( i == start || i == end - 1 ) ) {
-            line.show( .2 )
+            line.show( .2, true )
           }
         }
       } else {

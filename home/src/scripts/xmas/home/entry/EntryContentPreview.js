@@ -387,6 +387,7 @@ class EntryContentPreview extends PIXI.Container {
   _showLetters( cnt, delay, ratio ) {
     const n = cnt.children.length
     for( let i = 0; i < n; i++ ) {
+      TweenLite.killTweensOf( cnt.children[ i ] )
       TweenLite.to( cnt.children[ i ], .8 * ratio, {
         delay: delay + Math.random() * .4 * ratio,
         alpha: 1,
@@ -410,6 +411,7 @@ class EntryContentPreview extends PIXI.Container {
   _hideLetters( cnt, delay ) {
     const n = cnt.children.length
     for( let i = 0; i < n; i++ ) {
+      TweenLite.killTweensOf( cnt.children[ i ] )
       TweenLite.to( cnt.children[ i ], .4, {
         delay: delay + Math.random() * .2,
         alpha: 0,
