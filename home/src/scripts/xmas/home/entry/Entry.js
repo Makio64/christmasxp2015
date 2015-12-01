@@ -7,13 +7,13 @@ const EntrySmiley = require( "xmas/home/entry/EntrySmiley" )
 
 class Entry extends PIXI.Container {
 
-  constructor( idx = -1 ) {
+  constructor( idx = -1, data = null ) {
     super()
 
     this._isShown = false
 
     if( idx >= 0 ) {
-      this._content = new EntryContentPreview()
+      this._content = new EntryContentPreview( data )
       this.addChild( this._content )
 
       this._circle = new EntryNumber( idx )
@@ -60,9 +60,9 @@ class Entry extends PIXI.Container {
     }
   }
 
-  show( delay = 0 ) {
-    this._content.show( delay )
-    this._circle.show( delay + .5 + Math.random() * .45 )
+  show( delay = 0, fast = false ) {
+    this._content.show( delay, fast )
+    this._circle.show( delay + ( .5 + Math.random() * .45 ) * ( fast ? .5 : 1 ), fast )
 
     timeout( () => {
       this._isShown = true

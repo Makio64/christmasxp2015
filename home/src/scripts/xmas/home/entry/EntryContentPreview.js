@@ -2,11 +2,14 @@ const uImg = require( "fz/utils/images" )
 const pixi = require( "fz/core/pixi" )
 const config = require( "xmas/core/config" )
 const PolyShape = require( "xmas/home/entry/PolyShape" )
+const uTexts = require( "xmas/utils/texts" )
 
 class DefaultShape extends PIXI.Container {
 
-  constructor() {
+  constructor( data ) {
     super()
+
+    this._data = data
 
     this._cntGlobal = new PIXI.Container()
     this.addChild( this._cntGlobal )
@@ -51,7 +54,7 @@ class DefaultShape extends PIXI.Container {
   _createPreview() {
     const cnt = new PIXI.Container()
 
-    this._img = new PIXI.Sprite( PIXI.Texture.fromFrame( "img/default.jpg" ) )
+    this._img = new PIXI.Sprite( PIXI.Texture.fromFrame( this._data.pathPreview ) )
     const fit = uImg.fit( this._img.width, this._img.height, config.sizes.entry.w, ( config.sizes.entry.h ) )
     this._img.width = fit.width >> 0
     this._img.height = fit.height >> 0
@@ -153,8 +156,10 @@ class DefaultShape extends PIXI.Container {
 
 class HoverShape extends PIXI.Container {
 
-  constructor() {
+  constructor( data ) {
     super()
+
+    this._data = data
 
     this._size = config.sizes.entry.w
 
@@ -195,7 +200,7 @@ class HoverShape extends PIXI.Container {
   _createPreview() {
     const cnt = new PIXI.Container()
 
-    this._img = new PIXI.Sprite( PIXI.Texture.fromFrame( "img/default.jpg" ) )
+    this._img = new PIXI.Sprite( PIXI.Texture.fromFrame( this._data.pathPreview ) )
     const fit = uImg.fit( this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h )
     this._img.width = fit.width >> 0
     this._img.height = fit.height >> 0
@@ -277,16 +282,16 @@ class HoverShape extends PIXI.Container {
 
 class EntryContentPreview extends PIXI.Container {
 
-  constructor() {
+  constructor( data ) {
     super()
 
-    this._default = new DefaultShape()
+    this._default = new DefaultShape( data )
     this._default.x = config.sizes.entry.w >> 1
     this._default.y = config.sizes.entry.h >> 1
     this._default.scale.x = this._default.scale.y = 0
     this.addChild( this._default )
 
-    this._hover = new HoverShape()
+    this._hover = new HoverShape( data )
     this._hover.x = config.sizes.entry.w >> 1
     this._hover.y = config.sizes.entry.h >> 1
     // this.addChild( this._hover )
@@ -296,6 +301,28 @@ class EntryContentPreview extends PIXI.Container {
     this.hoverZone.tint = Math.random() * 0xffffff
     this.hoverZone.alpha = 0
     this.addChild( this.hoverZone )
+
+    this._cntTf = new PIXI.Container()
+    this._cntTf.x = 63
+    this._cntTf.y = 170
+    this.addChild( this._cntTf )
+
+    this._tfTitle = uTexts.create( data.title, { font: "15px " + config.fonts.medium, fill: config.colors.blue } )
+    this._cntTf.addChild( this._tfTitle )
+    this._initLetters( this._tfTitle )
+
+    this._tfAuthor = uTexts.create( data.author, { font: "18px " + config.fonts.medium, fill: config.colors.blue } )
+    this._tfAuthor.x = 10
+    this._tfAuthor.y = 15
+    this._cntTf.addChild( this._tfAuthor )
+    this._initLetters( this._tfAuthor )
+  }
+
+  _initLetters( cnt ) {
+    const n = cnt.children.length
+    for( let i = 0; i < n; i++ ) {
+      cnt.children[ i ].alpha = 0
+    }
   }
 
   over() {
@@ -316,7 +343,7 @@ class EntryContentPreview extends PIXI.Container {
     // this.removeChild( this._hover )
   }
 
-  show( delay = 0 ) {
+  show( delay = 0, fast = false ) {
     // this.x = -60
     // this.y = 40
     // TweenLite.to( this, .7, {
@@ -342,12 +369,30 @@ class EntryContentPreview extends PIXI.Container {
     //   y: 1,
     //   ease: Cubic.easeOut,
     // } )
-    TweenLite.to( this._default.scale, .8, {
+    
+    const timing = fast ? .4 : .8
+    const ratio = fast ? .5 : 1
+
+    TweenLite.to( this._default.scale, timing, {
       delay: delay,// + .25,
       x: 1,
       y: 1,
-      ease: Quart.easeInOut,
+      ease: fast ? Quart.easeOut : Quart.easeInOut,
     } )
+
+    this._showLetters( this._tfTitle, delay + .8 * ratio, ratio)
+    this._showLetters( this._tfAuthor, delay + 1 * ratio, ratio)
+  }
+
+  _showLetters( cnt, delay, ratio ) {
+    const n = cnt.children.length
+    for( let i = 0; i < n; i++ ) {
+      TweenLite.to( cnt.children[ i ], .8 * ratio, {
+        delay: delay + Math.random() * .4 * ratio,
+        alpha: 1,
+        ease: Quart.easeInOut
+      } )
+    }
   }
 
   hide( delay = 0 ) {
@@ -357,6 +402,20 @@ class EntryContentPreview extends PIXI.Container {
       y: 0,
       ease: Quart.easeInOut,
     } )
+
+    this._hideLetters( this._tfTitle, delay )
+    this._hideLetters( this._tfAuthor, delay + .1 )
+  }
+
+  _hideLetters( cnt, delay ) {
+    const n = cnt.children.length
+    for( let i = 0; i < n; i++ ) {
+      TweenLite.to( cnt.children[ i ], .4, {
+        delay: delay + Math.random() * .2,
+        alpha: 0,
+        ease: Quart.easeInOut
+      } )
+    }
   }
 
 }

@@ -58,54 +58,54 @@ class Logo extends PIXI.Container {
     this._wantsToHideLoading = false
   }
 
-  _createTree( cBg, cDot ) {
-    let aCurr = -Math.PI / 4 * 2
-    let aCircle = 0
+  // _createTree( cBg, cDot ) {
+  //   let aCurr = -Math.PI / 4 * 2
+  //   let aCircle = 0
 
-    const g = new PIXI.Graphics()
-    g.beginFill( cBg )
-    g.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    aCurr += this._a * 2
-    aCircle = aCurr
-    g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    aCurr += this._a
-    g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    aCurr += this._a
-    g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   const g = new PIXI.Graphics()
+  //   g.beginFill( cBg )
+  //   g.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr += this._a * 2
+  //   aCircle = aCurr
+  //   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr += this._a
+  //   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr += this._a
+  //   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
 
-    g.beginFill( cDot )
-    g.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
+  //   g.beginFill( cDot )
+  //   g.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
 
-    return g
-  }
+  //   return g
+  // }
 
-  _updateTreeMain() {
-    let aCurr = -Math.PI / 4 * 2
-    let aCircle = 0
+  // _updateTreeMain() {
+  //   let aCurr = -Math.PI / 4 * 2
+  //   let aCircle = 0
 
-    this._treeMain.clear()
+  //   this._treeMain.clear()
 
-    this._treeMain.beginFill( config.colors.blue )
-    this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    aCurr += this._a * 2
-    aCircle = aCurr
-    this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    aCurr += this._a
-    this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    aCurr += this._a
-    this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   this._treeMain.beginFill( config.colors.blue )
+  //   this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr += this._a * 2
+  //   aCircle = aCurr
+  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr += this._a
+  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr += this._a
+  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
 
 
-    aCurr = -Math.PI / 4 * 2
-    this._treeMain.beginFill( 0x305ad1 )
-    this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-    this._treeMain.lineTo( 0, 0 )
-    aCurr += this._a * 4
-    this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   aCurr = -Math.PI / 4 * 2
+  //   this._treeMain.beginFill( 0x305ad1 )
+  //   this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+  //   this._treeMain.lineTo( 0, 0 )
+  //   aCurr += this._a * 4
+  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
 
-    this._treeMain.beginFill( 0xffffff )
-    this._treeMain.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
-  }
+  //   this._treeMain.beginFill( 0xffffff )
+  //   this._treeMain.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
+  // }
 
   _initDate() {
     const cntTmp = uTexts.create( "2015", { font: "20px " + config.fonts.bold, fill: config.colors.blue }, 10 )

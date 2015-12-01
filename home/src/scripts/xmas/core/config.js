@@ -18,4 +18,6 @@ config.sizes = {
   }
 }
 
+config.data = null
+
 module.exports = config

@@ -1,4 +1,6 @@
 const config = require( "xmas/core/config" )
+const pixi = require( "fz/core/pixi" )
+const stage = require( "fz/core/stage" )
 
 class Point {
 
@@ -21,7 +23,7 @@ class Point {
 
 }
 
-class PolyShape extends PIXI.Graphics {
+class PolyShapeGraphics extends PIXI.Graphics {
 
   constructor( color = 0xff00ff ) {
     super()
@@ -74,4 +76,26 @@ class PolyShape extends PIXI.Graphics {
 
 }
 
-module.exports = PolyShape
+let tex = null
+
+// class PolyShape extends PIXI.Sprite {
+
+//   constructor( color ) {
+//     super()
+
+//     this._polyShapeGraphics = new PolyShapeGraphics( color )
+//     if( !tex ) {
+//       console.log( "yo" )
+//       tex = this._polyShapeGraphics.generateTexture( pixi.renderer, stage.resolution )
+//     }
+
+//     this.rotation = Math.PI / 6
+
+//     this.texture = tex    
+//     this.tint = color
+//     // this.pivot.set( this.width * .5 >> 1, this.height * .5 >> 1 )
+//     this.anchor.set( .5, .5 )
+//   }
+// }
+
+module.exports = PolyShapeGraphics

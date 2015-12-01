@@ -149,29 +149,32 @@ class EntryNumber extends PIXI.Container {
     })
   }
 
-  show( delay = 0 ) {
+  show( delay = 0, fast = false ) {
     // TweenLite.set( this, {
     //   delay: delay,
     //   alpha: .6
     // })
-    TweenLite.to( this, .6, {
+
+    const ratio = fast ? .5 : 1
+
+    TweenLite.to( this, .6 * ratio, {
       delay: delay,
       alpha: 1,
       ease: Cubic.easeInOut
     })
-    TweenLite.to( this.scale, .2, {
+    TweenLite.to( this.scale, .2 * ratio, {
       delay: delay,
       x: 0.4,
       y: 0.4,
       ease: Sine.easeIn,
     } )
     TweenLite.set( this.scale, {
-      delay: delay + .2,
+      delay: delay + .2 * ratio,
       x: .6,
       y: .6
     } )
-    TweenLite.to( this.scale, .8, {
-      delay: delay + .2,
+    TweenLite.to( this.scale, .8 * ratio, {
+      delay: delay + .2 * ratio,
       x: 1,
       y: 1,
       ease: Cubic.easeOut,
@@ -181,8 +184,8 @@ class EntryNumber extends PIXI.Container {
     const n = this._cntText.children.length
     for( let i = 0; i < n; i++ ) {
       letter = this._cntText.children[ i ]
-      TweenLite.to( letter, .6, {
-        delay: delay + .2 + i * .04,
+      TweenLite.to( letter, .6 * ratio, {
+        delay: delay + .2 * ratio + i * .04 * ratio,
         y: 0,
         alpha: 1,
         ease: Cubic.easeInOut
@@ -191,6 +194,9 @@ class EntryNumber extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
+    TweenLite.killTweensOf( this )
+    TweenLite.killTweensOf( this.scale )
+    
     TweenLite.to( this, .6, {
       delay: delay,
       alpha: 0,

@@ -12,6 +12,8 @@ class Home extends PIXI.Container {
     this._idx = 0
     this._idxToHide = 0
 
+    this._isShown = false
+
     this._hLine = 220
 
     this._yMin = 0
@@ -55,14 +57,15 @@ class Home extends PIXI.Container {
   }
 
   _onUpdate() {
-    this._cntLines.y += ( this._yTo - this._cntLines.y ) * .25
+    const dy = this._yTo - this._cntLines.y
+    this._cntLines.y += dy * .25
 
     const idxToHide = -( ( this._cntLines.y - this._hLine * .5 - 25 - this._yMax ) / ( this._hLine ) >> 0 )
     if( idxToHide != this._idxToHide ) {
-      if( idxToHide != 0 && this._idxToHide < idxToHide ) {
+      if( this._idxToHide < idxToHide ) {
         this._hideLine( idxToHide )
       } else {
-        this._showLine( idxToHide )
+        this._showLine( idxToHide, true )
       }
       this._idxToHide = idxToHide
     }    
@@ -82,11 +85,12 @@ class Home extends PIXI.Container {
     // })
   }
 
-  _showLine( idx ) {
-    TweenLite.to( this._lines[ idx ], .6, {
-      alpha: 1,
-      ease: Quart.easeInOut
-    })
+  _showLine( idx, fast ) {
+    this._lines[ idx ].show( 0, fast )
+    // TweenLite.to( this._lines[ idx ], .6, {
+    //   alpha: 1,
+    //   ease: Quart.easeInOut
+    // })
   }
 
   _updateVisibles() {
@@ -99,7 +103,7 @@ class Home extends PIXI.Container {
         if( !line.parent ) {
           line.bindEvents()
           this._cntLines.addChild( line )
-          if( !line.isShown && ( i == start || i == end - 1 ) ) {
+          if( this._isShown && !line.isShown && ( i == start || i == end - 1 ) ) {
             line.show( .2 )
           }
         }
@@ -160,7 +164,7 @@ class Home extends PIXI.Container {
   }
 
   show() {
-    // this._onResize()
+    this._isShown = true
 
     pixi.stage.addChildAt( this, 0 )
 

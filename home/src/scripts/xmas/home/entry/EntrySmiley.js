@@ -58,25 +58,27 @@ class EntrySmiley extends PIXI.Container {
     this._mouth.quadraticCurveTo( this._wSmiley, 0, this._wSmiley, -this._hSmileyMouth )
   }
 
-  show( delay = 0 ) {
-    TweenLite.to( this, .4, {
+  show( delay = 0, fast = false ) {
+    const ratio = fast ? .5 : 1
+
+    TweenLite.to( this, .4 * ratio, {
       delay: delay,
       alpha: 1,
       ease: Cubic.easeInOut
     })
-    TweenLite.to( this.scale, .2, {
+    TweenLite.to( this.scale, .2 * ratio, {
       delay: delay,
       x: 0.4,
       y: 0.4,
       ease: Sine.easeIn,
     } )
     TweenLite.set( this.scale, {
-      delay: delay + .2,
+      delay: delay + .2 * ratio,
       x: .6,
       y: .6
     } )
-    TweenLite.to( this.scale, .8, {
-      delay: delay + .2,
+    TweenLite.to( this.scale, .8 * ratio, {
+      delay: delay + .2 * ratio,
       x: 1,
       y: 1,
       ease: Cubic.easeOut,
@@ -84,6 +86,9 @@ class EntrySmiley extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
+    TweenLite.killTweensOf( this )
+    TweenLite.killTweensOf( this.scale )
+
     TweenLite.to( this, .6, {
       delay: delay,
       alpha: 0,

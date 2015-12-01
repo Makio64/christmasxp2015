@@ -45,7 +45,7 @@ class EntryComingSoon extends PIXI.Container {
     return cnt
   }
 
-  show( delay = 0 ) {
+  show( delay = 0, fast = false ) {
     // this.x = -60
     // this.y = 40
     // TweenLite.to( this, .7, {
@@ -72,11 +72,13 @@ class EntryComingSoon extends PIXI.Container {
     //   ease: Cubic.easeOut,
     // } )
 
-    TweenLite.to( this._polyShape.scale, .8, {
+    const timing = fast ? .4 : .8
+
+    TweenLite.to( this._polyShape.scale, timing, {
       delay: delay,// + .25,
       x: 1,
       y: 1,
-      ease: Quart.easeInOut,
+      ease: fast ? Quart.easeOut : Quart.easeInOut,
     } )
 
     let px = config.sizes.entry.w - this._cntTfTop.width >> 1
@@ -87,7 +89,7 @@ class EntryComingSoon extends PIXI.Container {
       delay: delay + .3,
       alpha: .7
     })
-    TweenLite.to( this._cntTfTop, .8, {
+    TweenLite.to( this._cntTfTop, timing, {
       delay: delay + .3,
       x: px + 20,
       alpha: 1,
@@ -102,7 +104,7 @@ class EntryComingSoon extends PIXI.Container {
       delay: delay + .375,
       alpha: .7
     })
-    TweenLite.to( this._cntTfBottom, .8, {
+    TweenLite.to( this._cntTfBottom, timing, {
       delay: delay + .375,
       x: px + 25,
       alpha: 1,
@@ -175,25 +177,29 @@ class EntryComingSoon extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
+    TweenLite.killTweensOf( this._polyShape.scale )
+    TweenLite.killTweensOf( this._cntTfTop )
+    TweenLite.killTweensOf( this._cntTfBottom )
+
     TweenLite.to( this._polyShape.scale, .6, {
-      delay: delay,// + .25,
+      delay: delay + .15,
       x: 0,
       y: 0,
       ease: Quart.easeInOut,
     } )
 
-    TweenLite.to( this._cntTfTop, .6, {
+    TweenLite.to( this._cntTfTop, .4, {
       delay: delay,
       x: this._cntTfTop.x + 25,
       alpha: 0,
-      ease: Cubic.easeOut
+      ease: Quart.easeInOut
     })
 
-    TweenLite.to( this._cntTfBottom, .6, {
-      delay: delay + .3,
+    TweenLite.to( this._cntTfBottom, .4, {
+      delay: delay + .075,
       x: this._cntTfBottom.x + 20,
       alpha: 0,
-      ease: Cubic.easeOut
+      ease: Quart.easeInOut
     })
   }
 
