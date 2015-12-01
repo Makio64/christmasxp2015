@@ -15,8 +15,13 @@ class Xmas {
     this._binds = {}
     this._binds.onChange = this._onChange.bind( this )
     this._binds.onHome = this._onHome.bind( this )
+<<<<<<< HEAD
     this._binds.onAbout = this._onAbout.bind( this )
     this._binds.onXP = this._onXP.bind( this )
+=======
+	this._binds.onAbout = this._onAbout.bind( this )
+	this._binds.onXP = this._onXP.bind( this )
+>>>>>>> 4afabc6028fe646047da53429a99aa58ade7c08f
   }
 
   show() {
@@ -55,7 +60,7 @@ class Xmas {
     }
 
 	_onXP() {
-		this._current = this._about
+		this._current = this._xp
 		this._displayCurrent()
 	}
 

@@ -54,7 +54,7 @@ class Entry extends PIXI.Container {
     if( !this._isShown ) {
       return
     }
-    
+
     if( this._content.out ) {
       this._content.out()
     }
@@ -64,7 +64,7 @@ class Entry extends PIXI.Container {
   }
 
   _onClick() {
-    window.open( this._data.path, "_blank" )
+	  page('/xp/'+this._data.path)
   }
 
   show( delay = 0, fast = false ) {
