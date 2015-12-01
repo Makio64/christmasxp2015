@@ -645,6 +645,7 @@ var Xmas = (function () {
     this._binds.onChange = this._onChange.bind(this);
     this._binds.onHome = this._onHome.bind(this);
     this._binds.onAbout = this._onAbout.bind(this);
+    this._binds.onXP = this._onXP.bind(this);
   }
 
   _createClass(Xmas, [{
@@ -689,7 +690,7 @@ var Xmas = (function () {
   }, {
     key: "_onXP",
     value: function _onXP() {
-      this._current = this._about;
+      this._current = this._xp;
       this._displayCurrent();
     }
   }, {
@@ -1316,7 +1317,7 @@ var Entry = (function (_PIXI$Container) {
   }, {
     key: "_onClick",
     value: function _onClick() {
-      window.open(this._data.path, "_blank");
+      page('/xp/' + this._data.path);
     }
   }, {
     key: "show",
@@ -3571,9 +3572,18 @@ var XPView = (function () {
 		// document.body.appendChild(mask)
 	}
 
-	// XP MANAGEMENT
-
 	_createClass(XPView, [{
+		key: 'show',
+		value: function show() {}
+	}, {
+		key: 'hide',
+		value: function hide(cb) {
+			cb();
+		}
+
+		// XP MANAGEMENT
+
+	}, {
 		key: 'getXP',
 		value: function getXP(id) {
 			data = config.data;

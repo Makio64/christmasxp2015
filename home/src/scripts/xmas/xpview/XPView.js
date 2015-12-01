@@ -14,6 +14,14 @@ class XPView {
     // document.body.appendChild(mask)
   }
 
+  show(){
+
+  }
+
+  hide(cb){
+	  cb()
+  }
+
   // XP MANAGEMENT
   getXP(id){
 	 data = config.data
