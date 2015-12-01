@@ -94,6 +94,7 @@ class Entry extends PIXI.Container {
   bindEvents() {
     if( this._content.hoverZone ) {
       this._content.hoverZone.interactive = true
+      this._content.hoverZone.buttonMode = true
 
       this._content.hoverZone.on( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.on( "mouseout", this._binds.onMouseOut )
@@ -104,6 +105,7 @@ class Entry extends PIXI.Container {
   unbindEvents() {
     if( this._content.hoverZone ) {
       this._content.hoverZone.interactive = false
+      this._content.hoverZone.buttonMode = false
 
       this._content.hoverZone.off( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.off( "mouseout", this._binds.onMouseOut )
