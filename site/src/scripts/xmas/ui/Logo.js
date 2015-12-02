@@ -181,7 +181,7 @@ class Logo extends PIXI.Container {
         this._title.hide()
         TweenLite.to( this, .8, {
           delay: .4,
-          y: 90,
+          y: 90 * this.scale.y,
           ease: Quart.easeInOut,
         })
         this._progressBar.switchMode( .4 )

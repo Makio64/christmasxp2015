@@ -209,7 +209,7 @@ var Stage = (function (_Emitter) {
 
 module.exports = new Stage();
 
-},{"fz/events/Emitter":4,"fz/utils/timeout":8}],4:[function(require,module,exports){
+},{"fz/events/Emitter":4,"fz/utils/timeout":10}],4:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -374,6 +374,453 @@ module.exports = Emitter;
 },{}],5:[function(require,module,exports){
 "use strict";
 
+var browsers = require("fz/utils/browsers");
+
+var downs = {};
+var moves = {};
+var ups = {};
+var clicks = {};
+var overs = {};
+var outs = {};
+
+var interactions = [downs, moves, ups, clicks];
+
+var isTouchDevice = browsers.mobile || browsers.tablet;
+
+function getEvent(action) {
+  var evt = "";
+  if (isTouchDevice) {
+
+    if (window.navigator.msPointerEnabled) {
+      switch (action) {
+        case "down":
+          evt = "MSPointerDown";break;
+        case "move":
+          evt = "MSPointerMove";break;
+        case "up":
+          evt = "MSPointerUp";break;
+        case "click":
+          evt = "MSPointerUp";break;
+      }
+
+      //console.log("evt", evt, action);
+    } else {
+        switch (action) {
+          case "down":
+            evt = "touchstart";break;
+          case "move":
+            evt = "touchmove";break;
+          case "up":
+            evt = "touchend";break;
+          case "click":
+            evt = "touchstart";break;
+        }
+      }
+  } else {
+    switch (action) {
+      case "down":
+        evt = "mousedown";break;
+      case "move":
+        evt = "mousemove";break;
+      case "up":
+        evt = "mouseup";break;
+      case "click":
+        evt = "click";break;
+      case "over":
+        evt = browsers.safari ? "mouseover" : "mouseenter";break;
+      case "out":
+        evt = browsers.safari ? "mouseout" : "mouseleave";break;
+    }
+  }
+  return evt;
+}
+
+function getObj(action) {
+  switch (action) {
+    case "down":
+      return downs;
+    case "move":
+      return moves;
+    case "up":
+      return ups;
+    case "click":
+      return clicks;
+    case "over":
+      return overs;
+    case "out":
+      return outs;
+  }
+}
+
+function find(cb, datas) {
+  var data = null;
+  for (var i = 0, n = datas.length; i < n; i++) {
+    data = datas[i];
+    if (data.cb == cb) {
+      return { data: data, idx: i };
+    }
+  }
+  return null;
+}
+
+module.exports.on = function (elt, action, cb) {
+  var evt = getEvent(action);
+  if (evt == "") {
+    return;
+  }
+
+  var obj = getObj(action);
+  if (!obj[elt]) {
+    obj[elt] = [];
+  }
+
+  var isOver = false;
+
+  function proxy(e) {
+    e = { x: 0, y: 0, origin: e };
+
+    if (isTouchDevice) {
+
+      if (window.navigator.msPointerEnabled) {
+        // mspointerevents
+        e.x = e.origin.clientX;
+        e.y = e.origin.clientY;
+      } else {
+        var touch = e.origin.touches[0];
+        if (touch) {
+          e.x = touch.clientX;
+          e.y = touch.clientY;
+        }
+      }
+    } else {
+      e.x = e.origin.clientX;
+      e.y = e.origin.clientY;
+    }
+
+    cb.call(this, e);
+  }
+
+  obj[elt].push({ cb: cb, proxy: proxy });
+  elt.addEventListener(evt, proxy, false);
+};
+
+module.exports.off = function (elt, action, cb) {
+  var evt = getEvent(action);
+  if (evt == "") {
+    return;
+  }
+
+  var obj = getObj(action);
+  if (!obj[elt]) {
+    return;
+  }
+
+  var datas = obj[elt];
+  if (cb) {
+    var result = find(cb, datas);
+    if (!result) {
+      return;
+    }
+    elt.removeEventListener(evt, result.data.proxy, false);
+    obj[elt].splice(result.idx, 1);
+  } else {
+    var data = null;
+    for (var i = 0, n = datas.length; i < n; i++) {
+      data = datas[i];
+      elt.removeEventListener(evt, data.proxy, false);
+    }
+    obj[elt] = null;
+    delete obj[elt];
+  }
+};
+
+module.exports.has = function (elt, action, cb) {
+  var evt = getEvent(action);
+  if (evt == "") {
+    return;
+  }
+
+  var obj = getObj(action);
+  if (!obj[elt]) {
+    return;
+  }
+
+  var datas = obj[elt];
+  if (cb) {
+    return true;
+  }
+  return false;
+};
+
+module.exports.unbind = function (elt) {
+  for (var i = 0, n = interactions.length; i < n; i++) {
+    interactions[i][elt] = null;
+    delete interactions[i][elt];
+  }
+};
+
+},{"fz/utils/browsers":6}],6:[function(require,module,exports){
+/*!
+ * Bowser - a browser detector
+ * https://github.com/ded/bowser
+ * MIT License | (c) Dustin Diaz 2015
+ */
+
+'use strict';
+
+!(function (name, definition) {
+    if (typeof module != 'undefined' && module.exports) module.exports = definition();else if (typeof define == 'function' && define.amd) define(definition);else this[name] = definition();
+})('bowser', function () {
+    /**
+     * See useragents.js for examples of navigator.userAgent
+     */
+
+    var t = true;
+
+    function detect(ua) {
+
+        function getFirstMatch(regex) {
+            var match = ua.match(regex);
+            return match && match.length > 1 && match[1] || '';
+        }
+
+        function getSecondMatch(regex) {
+            var match = ua.match(regex);
+            return match && match.length > 1 && match[2] || '';
+        }
+
+        var iosdevice = getFirstMatch(/(ipod|iphone|ipad)/i).toLowerCase(),
+            likeAndroid = /like android/i.test(ua),
+            android = !likeAndroid && /android/i.test(ua),
+            chromeBook = /CrOS/.test(ua),
+            edgeVersion = getFirstMatch(/edge\/(\d+(\.\d+)?)/i),
+            versionIdentifier = getFirstMatch(/version\/(\d+(\.\d+)?)/i),
+            tablet = /tablet/i.test(ua),
+            mobile = !tablet && /[^-]mobi/i.test(ua),
+            result;
+
+        if (/opera|opr/i.test(ua)) {
+            result = {
+                name: 'Opera',
+                opera: t,
+                version: versionIdentifier || getFirstMatch(/(?:opera|opr)[\s\/](\d+(\.\d+)?)/i)
+            };
+        } else if (/yabrowser/i.test(ua)) {
+            result = {
+                name: 'Yandex Browser',
+                yandexbrowser: t,
+                version: versionIdentifier || getFirstMatch(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i)
+            };
+        } else if (/windows phone/i.test(ua)) {
+            result = {
+                name: 'Windows Phone',
+                windowsphone: t
+            };
+            if (edgeVersion) {
+                result.msedge = t;
+                result.version = edgeVersion;
+            } else {
+                result.msie = t;
+                result.version = getFirstMatch(/iemobile\/(\d+(\.\d+)?)/i);
+            }
+        } else if (/msie|trident/i.test(ua)) {
+            result = {
+                name: 'Internet Explorer',
+                msie: t,
+                version: getFirstMatch(/(?:msie |rv:)(\d+(\.\d+)?)/i)
+            };
+        } else if (chromeBook) {
+            result = {
+                name: 'Chrome',
+                chromeBook: t,
+                chrome: t,
+                version: getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
+            };
+        } else if (/chrome.+? edge/i.test(ua)) {
+            result = {
+                name: 'Microsoft Edge',
+                msedge: t,
+                version: edgeVersion
+            };
+        } else if (/chrome|crios|crmo/i.test(ua)) {
+            result = {
+                name: 'Chrome',
+                chrome: t,
+                version: getFirstMatch(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)
+            };
+        } else if (iosdevice) {
+            result = {
+                name: iosdevice == 'iphone' ? 'iPhone' : iosdevice == 'ipad' ? 'iPad' : 'iPod'
+            };
+            // WTF: version is not part of user agent in web apps
+            if (versionIdentifier) {
+                result.version = versionIdentifier;
+            }
+        } else if (/sailfish/i.test(ua)) {
+            result = {
+                name: 'Sailfish',
+                sailfish: t,
+                version: getFirstMatch(/sailfish\s?browser\/(\d+(\.\d+)?)/i)
+            };
+        } else if (/seamonkey\//i.test(ua)) {
+            result = {
+                name: 'SeaMonkey',
+                seamonkey: t,
+                version: getFirstMatch(/seamonkey\/(\d+(\.\d+)?)/i)
+            };
+        } else if (/firefox|iceweasel/i.test(ua)) {
+            result = {
+                name: 'Firefox',
+                firefox: t,
+                version: getFirstMatch(/(?:firefox|iceweasel)[ \/](\d+(\.\d+)?)/i)
+            };
+            if (/\((mobile|tablet);[^\)]*rv:[\d\.]+\)/i.test(ua)) {
+                result.firefoxos = t;
+            }
+        } else if (/silk/i.test(ua)) {
+            result = {
+                name: 'Amazon Silk',
+                silk: t,
+                version: getFirstMatch(/silk\/(\d+(\.\d+)?)/i)
+            };
+        } else if (android) {
+            result = {
+                name: 'Android',
+                version: versionIdentifier
+            };
+        } else if (/phantom/i.test(ua)) {
+            result = {
+                name: 'PhantomJS',
+                phantom: t,
+                version: getFirstMatch(/phantomjs\/(\d+(\.\d+)?)/i)
+            };
+        } else if (/blackberry|\bbb\d+/i.test(ua) || /rim\stablet/i.test(ua)) {
+            result = {
+                name: 'BlackBerry',
+                blackberry: t,
+                version: versionIdentifier || getFirstMatch(/blackberry[\d]+\/(\d+(\.\d+)?)/i)
+            };
+        } else if (/(web|hpw)os/i.test(ua)) {
+            result = {
+                name: 'WebOS',
+                webos: t,
+                version: versionIdentifier || getFirstMatch(/w(?:eb)?osbrowser\/(\d+(\.\d+)?)/i)
+            };
+            /touchpad\//i.test(ua) && (result.touchpad = t);
+        } else if (/bada/i.test(ua)) {
+            result = {
+                name: 'Bada',
+                bada: t,
+                version: getFirstMatch(/dolfin\/(\d+(\.\d+)?)/i)
+            };
+        } else if (/tizen/i.test(ua)) {
+            result = {
+                name: 'Tizen',
+                tizen: t,
+                version: getFirstMatch(/(?:tizen\s?)?browser\/(\d+(\.\d+)?)/i) || versionIdentifier
+            };
+        } else if (/safari/i.test(ua)) {
+            result = {
+                name: 'Safari',
+                safari: t,
+                version: versionIdentifier
+            };
+        } else {
+            result = {
+                name: getFirstMatch(/^(.*)\/(.*) /),
+                version: getSecondMatch(/^(.*)\/(.*) /)
+            };
+        }
+
+        // set webkit or gecko flag for browsers based on these engines
+        if (!result.msedge && /(apple)?webkit/i.test(ua)) {
+            result.name = result.name || "Webkit";
+            result.webkit = t;
+            if (!result.version && versionIdentifier) {
+                result.version = versionIdentifier;
+            }
+        } else if (!result.opera && /gecko\//i.test(ua)) {
+            result.name = result.name || "Gecko";
+            result.gecko = t;
+            result.version = result.version || getFirstMatch(/gecko\/(\d+(\.\d+)?)/i);
+        }
+
+        // set OS flags for platforms that have multiple browsers
+        if (!result.msedge && (android || result.silk)) {
+            result.android = t;
+        } else if (iosdevice) {
+            result[iosdevice] = t;
+            result.ios = t;
+        }
+
+        // OS version extraction
+        var osVersion = '';
+        if (result.windowsphone) {
+            osVersion = getFirstMatch(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i);
+        } else if (iosdevice) {
+            osVersion = getFirstMatch(/os (\d+([_\s]\d+)*) like mac os x/i);
+            osVersion = osVersion.replace(/[_\s]/g, '.');
+        } else if (android) {
+            osVersion = getFirstMatch(/android[ \/-](\d+(\.\d+)*)/i);
+        } else if (result.webos) {
+            osVersion = getFirstMatch(/(?:web|hpw)os\/(\d+(\.\d+)*)/i);
+        } else if (result.blackberry) {
+            osVersion = getFirstMatch(/rim\stablet\sos\s(\d+(\.\d+)*)/i);
+        } else if (result.bada) {
+            osVersion = getFirstMatch(/bada\/(\d+(\.\d+)*)/i);
+        } else if (result.tizen) {
+            osVersion = getFirstMatch(/tizen[\/\s](\d+(\.\d+)*)/i);
+        }
+        if (osVersion) {
+            result.osversion = osVersion;
+        }
+
+        // device type extraction
+        var osMajorVersion = osVersion.split('.')[0];
+        if (tablet || iosdevice == 'ipad' || android && (osMajorVersion == 3 || osMajorVersion == 4 && !mobile) || result.silk) {
+            result.tablet = t;
+        } else if (mobile || iosdevice == 'iphone' || iosdevice == 'ipod' || android || result.blackberry || result.webos || result.bada) {
+            result.mobile = t;
+        }
+
+        // Graded Browser Support
+        // http://developer.yahoo.com/yui/articles/gbs
+        if (result.msedge || result.msie && result.version >= 10 || result.yandexbrowser && result.version >= 15 || result.chrome && result.version >= 20 || result.firefox && result.version >= 20.0 || result.safari && result.version >= 6 || result.opera && result.version >= 10.0 || result.ios && result.osversion && result.osversion.split(".")[0] >= 6 || result.blackberry && result.version >= 10.1) {
+            result.a = t;
+        } else if (result.msie && result.version < 10 || result.chrome && result.version < 20 || result.firefox && result.version < 20.0 || result.safari && result.version < 6 || result.opera && result.version < 10.0 || result.ios && result.osversion && result.osversion.split(".")[0] < 6) {
+            result.c = t;
+        } else result.x = t;
+
+        return result;
+    }
+
+    var bowser = detect(typeof navigator !== 'undefined' ? navigator.userAgent : '');
+
+    bowser.test = function (browserList) {
+        for (var i = 0; i < browserList.length; ++i) {
+            var browserItem = browserList[i];
+            if (typeof browserItem === 'string') {
+                if (browserItem in bowser) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    /*
+     * Set our detect method to the main bowser object so we can
+     * reuse it to test other user agents.
+     * This is needed to implement future tests.
+     */
+    bowser._detect = detect;
+
+    return bowser;
+});
+
+},{}],7:[function(require,module,exports){
+"use strict";
+
 module.exports.fit = function (wImg, hImg, wHolder, hHolder) {
   var sw = wImg / wHolder;
   var sh = hImg / hHolder;
@@ -394,14 +841,14 @@ module.exports.fit = function (wImg, hImg, wHolder, hHolder) {
   return { x: x, y: y, width: w, height: h };
 };
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 module.exports.clamp = function (value, min, max) {
   return Math.max(min, Math.min(value, max));
 };
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 module.exports = (function () {
@@ -416,7 +863,7 @@ module.exports = (function () {
   }
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // bigup kewah
 
 "use strict";
@@ -446,7 +893,7 @@ module.exports.clear = function (data) {
   }
 };
 
-},{"fz/utils/now":7}],9:[function(require,module,exports){
+},{"fz/utils/now":9}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -572,13 +1019,13 @@ var Loader = (function (_Emitter) {
 
 module.exports = new Loader();
 
-},{"fz/events/Emitter":4,"xmas/core/config":13}],10:[function(require,module,exports){
+},{"fz/events/Emitter":4,"xmas/core/config":15}],12:[function(require,module,exports){
 "use strict";
 
 var Xmas = require("xmas/Xmas");
 var xmas = new Xmas();
 
-},{"xmas/Xmas":11}],11:[function(require,module,exports){
+},{"xmas/Xmas":13}],13:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -729,7 +1176,7 @@ var Xmas = (function () {
 
 module.exports = Xmas;
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/about/About":12,"xmas/core/scrollEmul":14,"xmas/home/Home":15,"xmas/ui/Storyline":26,"xmas/ui/Ui":28,"xmas/xpview/XPView":30}],12:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":11,"xmas/about/About":14,"xmas/core/scrollEmul":16,"xmas/home/Home":17,"xmas/ui/Storyline":28,"xmas/ui/Ui":30,"xmas/xpview/XPView":32}],14:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -762,7 +1209,7 @@ var About = (function () {
 
 module.exports = About;
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 var config = {};
@@ -789,7 +1236,7 @@ config.data = null;
 
 module.exports = config;
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -851,7 +1298,7 @@ var ScrollEmul = (function (_Emitter) {
 
 module.exports = new ScrollEmul();
 
-},{"fz/events/Emitter":4}],15:[function(require,module,exports){
+},{"fz/events/Emitter":4}],17:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -865,6 +1312,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var stage = require("fz/core/stage");
 var pixi = require("fz/core/pixi");
 var loop = require("fz/core/loop");
+var interactions = require("fz/events/interactions");
+var browsers = require("fz/utils/browsers");
 var uMaths = require("fz/utils/maths");
 var Line = require("xmas/home/Line");
 var scrollEmul = require("xmas/core/scrollEmul");
@@ -882,7 +1331,13 @@ var Home = (function (_PIXI$Container) {
 
     this._isShown = false;
 
+    this._yLast = 0;
+
     this._hLine = 220;
+
+    if (browsers.mobile) {
+      this.scale.set(.7, .7);
+    }
 
     this._yMin = 0;
     this._yMax = 205;
@@ -898,11 +1353,30 @@ var Home = (function (_PIXI$Container) {
     this._binds = {};
     this._binds.onResize = this._onResize.bind(this);
     // this._binds.onMouseScroll = this._onMouseScroll.bind( this )
+    this._binds.onTouchDown = this._onTouchDown.bind(this);
+    this._binds.onTouchMove = this._onTouchMove.bind(this);
+    this._binds.onTouchUp = this._onTouchUp.bind(this);
     this._binds.onScroll = this._onScroll.bind(this);
     this._binds.onUpdate = this._onUpdate.bind(this);
   }
 
   _createClass(Home, [{
+    key: "_onTouchDown",
+    value: function _onTouchDown(e) {
+      this._yLast = e.y;
+    }
+  }, {
+    key: "_onTouchMove",
+    value: function _onTouchMove(e) {
+      var dy = e.y - this._yLast;
+      this._yTo += dy;
+      this._yTo = uMaths.clamp(this._yTo, this._yMin + this._hLine + 50, this._yMax);
+      this._yLast = e.y;
+    }
+  }, {
+    key: "_onTouchUp",
+    value: function _onTouchUp(e) {}
+  }, {
     key: "_onResize",
     value: function _onResize() {
       // let w = 980
@@ -911,9 +1385,13 @@ var Home = (function (_PIXI$Container) {
       // }
       var w = 880;
       this._cntLines.x = stage.width - w >> 1;
-
-      this._yMin = -26 * this._hLine - this._yMax; //+ stage.height - this._yMax
-      scrollEmul.setHeight(-this._yMin);
+      if (browsers.tablet || browsers.mobile) {
+        this._cntLines.x = 10;
+        this._yMin = -26 * this._hLine + stage.height;
+      } else {
+        this._yMin = -26 * this._hLine - this._yMax;
+        scrollEmul.setHeight(-this._yMin);
+      }
 
       this._countLinesVisible = Math.ceil((stage.height - this._yMax) / this._hLine);
       this._countLinesVisible += 1;
@@ -942,6 +1420,7 @@ var Home = (function (_PIXI$Container) {
       var dy = this._yTo - this._cntLines.y;
       this._cntLines.y += dy * .25;
 
+      // if( !( browsers.tablet || browsers.mobile ) ) {
       var idxToHide = -((this._cntLines.y - this._hLine * .5 - 25 - this._yMax) / this._hLine >> 0);
       if (idxToHide != this._idxToHide) {
         if (this._idxToHide < idxToHide) {
@@ -951,6 +1430,7 @@ var Home = (function (_PIXI$Container) {
         }
         this._idxToHide = idxToHide;
       }
+      // }
 
       var idx = -(this._cntLines.y - this._yMax) / this._hLine >> 0;
       if (idx != this._idx) {
@@ -1037,9 +1517,15 @@ var Home = (function (_PIXI$Container) {
       stage.on("resize", this._binds.onResize);
       this._onResize();
 
-      scrollEmul.on("change", this._binds.onScroll);
+      if (browsers.mobile || browsers.tablet) {
+        interactions.on(document.body, "down", this._binds.onTouchDown);
+        interactions.on(document.body, "move", this._binds.onTouchMove);
+        interactions.on(document.body, "up", this._binds.onTouchUp);
+      } else {
+        scrollEmul.on("change", this._binds.onScroll);
+      }
 
-      window.addEventListener("mousewheel", this._binds.onMouseScroll, false);
+      // window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
       loop.add(this._binds.onUpdate);
     }
@@ -1048,9 +1534,15 @@ var Home = (function (_PIXI$Container) {
     value: function unbindEvents() {
       stage.off("resize", this._binds.onResize);
 
-      scrollEmul.off("change", this._binds.onScroll);
+      if (browsers.mobile || browsers.tablet) {
+        interactions.off(document.body, "down", this._binds.onTouchDown);
+        interactions.off(document.body, "move", this._binds.onTouchMove);
+        interactions.off(document.body, "up", this._binds.onTouchUp);
+      } else {
+        scrollEmul.off("change", this._binds.onScroll);
+      }
 
-      window.removeEventListener("mousewheel", this._binds.onMouseScroll, false);
+      // window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
       loop.remove(this._binds.onUpdate);
     }
@@ -1084,7 +1576,7 @@ var Home = (function (_PIXI$Container) {
 
 module.exports = Home;
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"fz/utils/maths":6,"xmas/core/scrollEmul":14,"xmas/home/Line":16}],16:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"fz/events/interactions":5,"fz/utils/browsers":6,"fz/utils/maths":8,"xmas/core/scrollEmul":16,"xmas/home/Line":18}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1330,7 +1822,7 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":13,"xmas/home/entry/Entry":17,"xmas/utils/texts":29}],17:[function(require,module,exports){
+},{"xmas/core/config":15,"xmas/home/entry/Entry":19,"xmas/utils/texts":31}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1485,7 +1977,7 @@ var Entry = (function (_PIXI$Container) {
 
 module.exports = Entry;
 
-},{"fz/utils/timeout":8,"xmas/home/entry/EntryComingSoon":18,"xmas/home/entry/EntryContentPreview":19,"xmas/home/entry/EntryNumber":20,"xmas/home/entry/EntrySmiley":21}],18:[function(require,module,exports){
+},{"fz/utils/timeout":10,"xmas/home/entry/EntryComingSoon":20,"xmas/home/entry/EntryContentPreview":21,"xmas/home/entry/EntryNumber":22,"xmas/home/entry/EntrySmiley":23}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1719,7 +2211,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
 module.exports = EntryComingSoon;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/home/entry/PolyShape":22,"xmas/utils/texts":29}],19:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15,"xmas/home/entry/PolyShape":24,"xmas/utils/texts":31}],21:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2184,7 +2676,7 @@ var EntryContentPreview = (function (_PIXI$Container3) {
 
 module.exports = EntryContentPreview;
 
-},{"fz/core/pixi":2,"fz/utils/images":5,"xmas/core/config":13,"xmas/home/entry/PolyShape":22,"xmas/utils/texts":29}],20:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/utils/images":7,"xmas/core/config":15,"xmas/home/entry/PolyShape":24,"xmas/utils/texts":31}],22:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2431,7 +2923,7 @@ var EntryNumber = (function (_PIXI$Container) {
 
 module.exports = EntryNumber;
 
-},{"xmas/core/config":13,"xmas/utils/texts":29}],21:[function(require,module,exports){
+},{"xmas/core/config":15,"xmas/utils/texts":31}],23:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2565,7 +3057,7 @@ var EntrySmiley = (function (_PIXI$Container) {
 
 module.exports = EntrySmiley;
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -2693,7 +3185,7 @@ var tex = null;
 
 module.exports = PolyShapeGraphics;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13}],23:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15}],25:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2853,7 +3345,7 @@ var Bts = (function (_PIXI$Container) {
 
 module.exports = Bts;
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3057,7 +3549,7 @@ var Logo = (function (_PIXI$Container) {
           _this2._title.hide();
           TweenLite.to(_this2, .8, {
             delay: .4,
-            y: 90,
+            y: 90 * _this2.scale.y,
             ease: Quart.easeInOut
           });
           _this2._progressBar.switchMode(.4);
@@ -3081,7 +3573,7 @@ var Logo = (function (_PIXI$Container) {
 
 module.exports = Logo;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/ui/ProgressBar":25,"xmas/ui/Title":27,"xmas/utils/texts":29}],25:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15,"xmas/ui/ProgressBar":27,"xmas/ui/Title":29,"xmas/utils/texts":31}],27:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3219,7 +3711,7 @@ var ProgressBar = (function (_PIXI$Container) {
 
 module.exports = ProgressBar;
 
-},{"fz/core/loop":1,"fz/core/stage":3,"xmas/core/config":13}],26:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/stage":3,"xmas/core/config":15}],28:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3367,7 +3859,7 @@ var Storyline = (function (_PIXI$Container) {
 
 module.exports = Storyline;
 
-},{"fz/core/loop":1,"fz/utils/timeout":8,"xmas/core/config":13,"xmas/utils/texts":29}],27:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/utils/timeout":10,"xmas/core/config":15,"xmas/utils/texts":31}],29:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3464,7 +3956,7 @@ var Title = (function (_PIXI$Container) {
 
 module.exports = Title;
 
-},{"xmas/core/config":13,"xmas/utils/texts":29}],28:[function(require,module,exports){
+},{"xmas/core/config":15,"xmas/utils/texts":31}],30:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3477,6 +3969,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var pixi = require("fz/core/pixi");
 var stage = require("fz/core/stage");
+var browsers = require("fz/utils/browsers");
 
 var Logo = require("xmas/ui/Logo");
 var Bts = require("xmas/ui/Bts");
@@ -3493,6 +3986,10 @@ var Ui = (function (_PIXI$Container) {
 
     this._logo = new Logo();
     this.addChild(this._logo);
+
+    if (browsers.mobile) {
+      this._logo.scale.set(.7, .7);
+    }
 
     this._binds = {};
     this._binds.onResize = this._onResize.bind(this);
@@ -3551,7 +4048,7 @@ var Ui = (function (_PIXI$Container) {
 
 module.exports = Ui;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/ui/Bts":23,"xmas/ui/Logo":24}],29:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"fz/utils/browsers":6,"xmas/ui/Bts":25,"xmas/ui/Logo":26}],31:[function(require,module,exports){
 "use strict";
 
 var stage = require("fz/core/stage");
@@ -3620,7 +4117,7 @@ module.exports.createWithWords = function (text, style) {
   return cntGlobal;
 };
 
-},{"fz/core/stage":3}],30:[function(require,module,exports){
+},{"fz/core/stage":3}],32:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3860,4 +4357,4 @@ var XPView = (function () {
 module.exports = XPView;
 module.exports.idXP = null;
 
-},{"xmas/core/config":13}]},{},[10]);
+},{"xmas/core/config":15}]},{},[12]);

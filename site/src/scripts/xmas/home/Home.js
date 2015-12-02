@@ -1,6 +1,8 @@
 const stage = require( "fz/core/stage" )
 const pixi = require( "fz/core/pixi" )
 const loop = require( "fz/core/loop" )
+const interactions = require( "fz/events/interactions" )
+const browsers = require( "fz/utils/browsers" )
 const uMaths = require( "fz/utils/maths" )
 const Line = require( "xmas/home/Line" )
 const scrollEmul = require( "xmas/core/scrollEmul" )
@@ -15,7 +17,13 @@ class Home extends PIXI.Container {
 
     this._isShown = false
 
+    this._yLast = 0
+
     this._hLine = 220
+
+    if( browsers.mobile ) {
+      this.scale.set( .7, .7 )
+    }
 
     this._yMin = 0
     this._yMax = 205
@@ -31,8 +39,26 @@ class Home extends PIXI.Container {
     this._binds = {}
     this._binds.onResize = this._onResize.bind( this )
     // this._binds.onMouseScroll = this._onMouseScroll.bind( this )
+    this._binds.onTouchDown = this._onTouchDown.bind( this )
+    this._binds.onTouchMove = this._onTouchMove.bind( this )
+    this._binds.onTouchUp = this._onTouchUp.bind( this )
     this._binds.onScroll = this._onScroll.bind( this )
     this._binds.onUpdate = this._onUpdate.bind( this )
+  }
+
+  _onTouchDown( e ) {
+    this._yLast = e.y
+  }
+
+  _onTouchMove( e ) {
+    const dy = e.y - this._yLast
+    this._yTo += dy
+    this._yTo = uMaths.clamp( this._yTo, this._yMin + this._hLine + 50, this._yMax )
+    this._yLast = e.y
+  }
+
+  _onTouchUp( e ) {
+    
   }
 
   _onResize() {
@@ -42,9 +68,14 @@ class Home extends PIXI.Container {
     // }
     let w = 880
     this._cntLines.x = stage.width - w >> 1
+    if( browsers.tablet || browsers.mobile ) {
+      this._cntLines.x = 10
+      this._yMin = -26 * this._hLine + stage.height
+    } else {
+      this._yMin = -26 * this._hLine - this._yMax
+      scrollEmul.setHeight( -this._yMin )
+    }
 
-    this._yMin = -26 * this._hLine - this._yMax//+ stage.height - this._yMax
-    scrollEmul.setHeight( -this._yMin )
 
     this._countLinesVisible = Math.ceil( ( stage.height - this._yMax ) / this._hLine )
     this._countLinesVisible += 1
@@ -70,15 +101,17 @@ class Home extends PIXI.Container {
     const dy = this._yTo - this._cntLines.y
     this._cntLines.y += dy * .25
 
-    const idxToHide = -( ( this._cntLines.y - this._hLine * .5 - 25 - this._yMax ) / ( this._hLine ) >> 0 )
-    if( idxToHide != this._idxToHide ) {
-      if( this._idxToHide < idxToHide ) {
-        this._hideLine( idxToHide )
-      } else {
-        this._showLine( idxToHide, true )
-      }
-      this._idxToHide = idxToHide
-    }    
+    // if( !( browsers.tablet || browsers.mobile ) ) {
+      const idxToHide = -( ( this._cntLines.y - this._hLine * .5 - 25 - this._yMax ) / ( this._hLine ) >> 0 )
+      if( idxToHide != this._idxToHide ) {
+        if( this._idxToHide < idxToHide ) {
+          this._hideLine( idxToHide )
+        } else {
+          this._showLine( idxToHide, true )
+        }
+        this._idxToHide = idxToHide
+      }    
+    // }
 
     const idx = - ( this._cntLines.y - this._yMax ) / this._hLine >> 0
     if( idx != this._idx ) {
@@ -160,9 +193,15 @@ class Home extends PIXI.Container {
     stage.on( "resize", this._binds.onResize )
     this._onResize()
 
-    scrollEmul.on( "change", this._binds.onScroll )
+    if( browsers.mobile || browsers.tablet ) {
+      interactions.on( document.body, "down", this._binds.onTouchDown )
+      interactions.on( document.body, "move", this._binds.onTouchMove )
+      interactions.on( document.body, "up", this._binds.onTouchUp )
+    } else {
+      scrollEmul.on( "change", this._binds.onScroll )
+    }
 
-    window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
+    // window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
     loop.add( this._binds.onUpdate )
   }
@@ -170,9 +209,17 @@ class Home extends PIXI.Container {
   unbindEvents() {
     stage.off( "resize", this._binds.onResize )
 
-    scrollEmul.off( "change", this._binds.onScroll )
+    if( browsers.mobile || browsers.tablet ) {
+      interactions.off( document.body, "down", this._binds.onTouchDown )
+      interactions.off( document.body, "move", this._binds.onTouchMove )
+      interactions.off( document.body, "up", this._binds.onTouchUp )
+    } else {
+      scrollEmul.off( "change", this._binds.onScroll )
+    }
 
-    window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
+
+
+    // window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
     loop.remove( this._binds.onUpdate )
   }

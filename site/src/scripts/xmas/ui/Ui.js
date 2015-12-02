@@ -1,5 +1,6 @@
 const pixi = require( "fz/core/pixi" )
 const stage = require( "fz/core/stage" )
+const browsers = require( "fz/utils/browsers" )
 
 const Logo = require( "xmas/ui/Logo" )
 const Bts = require( "xmas/ui/Bts" )
@@ -13,6 +14,10 @@ class Ui extends PIXI.Container {
 
     this._logo = new Logo()
     this.addChild( this._logo )
+
+    if( browsers.mobile ) {
+      this._logo.scale.set( .7, .7 )
+    }
 
     this._binds = {}
     this._binds.onResize = this._onResize.bind( this )
