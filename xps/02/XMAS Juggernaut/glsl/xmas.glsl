@@ -164,7 +164,7 @@ float noise( in vec3 x )//image
 
 /////////////////////////////////////////////////////////////////////////
 
-const int raymarchSteps = 50;
+const int raymarchSteps = 30;
 const float PI = 3.14159;
 
 //no height
@@ -325,6 +325,18 @@ vec3 rimlight( vec3 pos, vec3 nor )
     return vec3(smoothstep(0., 1.0, vdn));
 }
 
+
+float turbulence ( vec3 coord ) {
+        float frequency = 1.1;
+        float n = 0.0;
+
+        n += 1.0    * ( perlin( coord * frequency ) );
+        n += 0.5    * sin( perlin( coord * frequency * 2.2 ) );
+        n += 0.25   * cos( perlin( coord * frequency * 4.4 ) );
+
+        return n;
+}
+
 void main() {
 
     vec2  screenPos    = squareFrame( resolution );
@@ -335,7 +347,9 @@ void main() {
 
     vec3 color = vec3( 0.4, 0.8, 0.99 );
 
-    gl_FragColor = vec4( vec3(0.), 1. );
+    float n = turbulence(vec3(screenPos.x, -time * 0.1, screenPos.y));
+
+    gl_FragColor = vec4( color * ( screenPos.y) * exp(1.-n), 1. );
 
     if ( collision.x > -0.5)
     {
@@ -348,8 +362,9 @@ void main() {
        //normal vector
        vec3 nor = calcNormal( pos );
 
-       vec3 lig1 = normalize( vec3( cos( time * .5 ) * 50.0, 20.0, sin( time * 1.95 ) * 50.0) );
+       vec3 lig1 = normalize( vec3( cos( time * .25 ) * 50.0, 20.0, sin( time * .95 ) * 50.0) );
        vec3 light1 = max( 0.0, dot( lig1, nor) ) * color;
+       vec3 light2 = max( 0.0, dot( -lig1, nor) ) * color;
 
        vec3 rim1 = rimlight( pos, -lig1 );
        vec3 rim2 = rimlight( lig1, nor ) * .25;
@@ -364,19 +379,19 @@ void main() {
         if( collision.y ==0. )
         {
             col = ( ( refl * vec3(0.1,1.,0.) ) ) * dep;
-            col = ( col + rim2 ) - rim1 * dep;
+            col = ( col + rim2 ) - .5 * rim1 * dep;
         }
         else if( collision.y == 1. )
         {
             col = ( ( refl * vec3(1.,0.1,0.) ) ) * dep;
-            col = ( col + rim2 ) - rim1 * dep;
+            col = ( col + rim2 ) - .5 * rim1 * dep;
         }
         else
         {
-            col = min( vec3(.85), body ) + refl * .15;
+            col = min( vec3( .86 ), body ) + refl * .15 + noise( pos * nor * 10000. ) * .15 ;
         }
 
-       gl_FragColor = vec4( col + noise( pos * nor * 10000. ) * .15 , 1. );
+       gl_FragColor = vec4( col + light2, 1. );
 
 
     }
