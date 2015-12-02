@@ -10,7 +10,6 @@ class Line extends PIXI.Container {
     this._idx = idx
     this._dataEntries = config.data.days[ this._idx ]
     this._count = this._dataEntries ? this._dataEntries.length : 0
-    console.log( this._dataEntries, this._count )
 
     this.isShown = false
 
@@ -28,7 +27,7 @@ class Line extends PIXI.Container {
 
   _createTitle() {
     this._cntTitle = new PIXI.Container()
-    this._cntTitle.x = 35 
+    this._cntTitle.x = 35
     this._cntTitle.y = 60
 
     const cntLeft = new PIXI.Container()
@@ -85,14 +84,14 @@ class Line extends PIXI.Container {
   bindEvents() {
     const n = this._cntEntries.children.length
     for( let i = 0; i < n; i++ ) {
-      this._cntEntries.children[ i ].bindEvents() 
+      this._cntEntries.children[ i ].bindEvents()
     }
   }
 
   unbindEvents() {
     const n = this._cntEntries.children.length
     for( let i = 0; i < n; i++ ) {
-      this._cntEntries.children[ i ].unbindEvents() 
+      this._cntEntries.children[ i ].unbindEvents()
     }
   }
 
@@ -209,7 +208,7 @@ class Line extends PIXI.Container {
       if( dAdd < dMin ) {
         dAdd = dMin
       }
-    } 
+    }
   }
 
 }

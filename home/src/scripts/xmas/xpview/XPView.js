@@ -22,19 +22,23 @@ class XPView {
 	var days = data.days[parseInt(day)]
 	for (var i = 0; i < days.length; i++) {
 		var d = days[i]
-		if(d.title == title){
+		console.log(d.folder.replace( /\//gi, "" ),title,d.folder.replace( /\//gi, "" )==title)
+		if(d.folder.replace( /\//gi, "" ) == title){
 			return d.uid
 		}
 	}
   }
 
   getXP(id){
+  	console.log(id)
 	 var days = config.data.days
-	 for(var i = 1; i < 24; i++) {
+	 for(var i = 1; i <= 24; i++) {
 		 var day = days[i]
+		 console.log(day)
 		 for (var j = 0; j < day.length; j++) {
 	 		var d = day[j]
-			if(d.uid === id){
+   		 	console.log(d)
+			if(d.uid == id){
 			 	return d
 			}
 	 	}

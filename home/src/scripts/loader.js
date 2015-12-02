@@ -100,7 +100,7 @@ class Loader extends Emitter {
       }
       for( j = 0; j < m; j++ ) {
         dataEntry = data[ j ]
-        dataEntry.path = "./" + idx + "/" + dataEntry.folder + "/"
+        dataEntry.path = "./" + idx + dataEntry.folder
         dataEntry.pathPreview = dataEntry.path + "preview.jpg"
         this._pixiLoader.add( dataEntry.pathPreview )
       }

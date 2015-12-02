@@ -8,9 +8,17 @@
                 "author": "Valentin Daguenet",
                 "website": "http://vdaguenet.fr/",
                 "twitter": "https://twitter.com/vdaguenet",
-                "folder": "Baublizer"
+                "folder": "/Baublizer/"
+            },
+            {
+                "uid": 1,
+                "title": "Gift Detonator.",
+                "author": "Josh Freeman",
+                "website": "http://designbuildplay.co.uk",
+                "twitter": "dbp_tweeter",
+                "folder": "/giftDetonator/"
             }
         ]
     },
-    "totalXP": 1
+    "totalXP": 2
 }

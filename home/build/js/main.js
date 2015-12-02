@@ -574,7 +574,7 @@ var Loader = (function (_Emitter) {
         }
         for (j = 0; j < m; j++) {
           dataEntry = data[j];
-          dataEntry.path = "./" + idx + "/" + dataEntry.folder + "/";
+          dataEntry.path = "./" + idx + dataEntry.folder;
           dataEntry.pathPreview = dataEntry.path + "preview.jpg";
           this._pixiLoader.add(dataEntry.pathPreview);
         }
@@ -1044,7 +1044,7 @@ var Line = (function (_PIXI$Container) {
     _this._cntEntries = new PIXI.Container();
     _this._cntEntries.x = 145;
     _this.addChild(_this._cntEntries);
-    if (count > 0) {
+    if (_this._count > 0) {
       _this._createEntries();
     } else {
       _this._createDummy();
@@ -3558,7 +3558,7 @@ module.exports.createWithWords = function (text, style) {
 };
 
 },{"fz/core/stage":3}],29:[function(require,module,exports){
-'use strict';
+"use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -3576,12 +3576,12 @@ var XPView = (function () {
 	}
 
 	_createClass(XPView, [{
-		key: 'show',
+		key: "show",
 		value: function show(day, title) {
 			this.open(this.getID(day, title));
 		}
 	}, {
-		key: 'hide',
+		key: "hide",
 		value: function hide(cb) {
 			this.destroyXP(cb);
 		}
@@ -3589,40 +3589,44 @@ var XPView = (function () {
 		// XP MANAGEMENT
 
 	}, {
-		key: 'getID',
+		key: "getID",
 		value: function getID(day, title) {
 			var data = config.data;
 			var days = data.days[parseInt(day)];
 			for (var i = 0; i < days.length; i++) {
 				var d = days[i];
-				if (d.title == title) {
+				console.log(d.folder.replace(/\//gi, ""), title, d.folder.replace(/\//gi, "") == title);
+				if (d.folder.replace(/\//gi, "") == title) {
 					return d.uid;
 				}
 			}
 		}
 	}, {
-		key: 'getXP',
+		key: "getXP",
 		value: function getXP(id) {
+			console.log(id);
 			var days = config.data.days;
-			for (var i = 1; i < 24; i++) {
+			for (var i = 1; i <= 24; i++) {
 				var day = days[i];
+				console.log(day);
 				for (var j = 0; j < day.length; j++) {
 					var d = day[j];
-					if (d.uid === id) {
+					console.log(d);
+					if (d.uid == id) {
 						return d;
 					}
 				}
 			}
 		}
 	}, {
-		key: 'open',
+		key: "open",
 		value: function open(id) {
 			this.xpIndex = id;
 			this.xp = this.getXP(id);
 			this.xpTransitionIn();
 		}
 	}, {
-		key: 'prev',
+		key: "prev",
 		value: function prev() {
 			this.xpIndex--;
 			if (this.xpIndex < 0) {
@@ -3631,14 +3635,14 @@ var XPView = (function () {
 			this.open(this.xpIndex);
 		}
 	}, {
-		key: 'next',
+		key: "next",
 		value: function next() {
 			this.xpIndex++;
 			if (this.xpIndex >= config.data.totalXP) this.xpIndex = 0;
 			this.open(this.xpIndex);
 		}
 	}, {
-		key: 'xpTransitionIn',
+		key: "xpTransitionIn",
 		value: function xpTransitionIn() {
 			//TODO MASKOUT
 			this.transitioning = true;
@@ -3650,14 +3654,14 @@ var XPView = (function () {
 			TweenMax.to(this.mask, .6, { scaleX: 0, ease: Expo.easeOut });
 		}
 	}, {
-		key: 'createMask',
+		key: "createMask",
 		value: function createMask() {
 			this.mask = document.createElement('div');
 			this.mask.className = 'mask';
 			document.body.appendChild(this.mask);
 		}
 	}, {
-		key: 'destroyXP',
+		key: "destroyXP",
 		value: function destroyXP(cb) {
 			if (this.currentXP) {
 				// The iframe
@@ -3672,7 +3676,7 @@ var XPView = (function () {
 			}
 		}
 	}, {
-		key: 'destroyHTML',
+		key: "destroyHTML",
 		value: function destroyHTML() {
 			this.html = false;
 
@@ -3702,7 +3706,7 @@ var XPView = (function () {
 		// CREATE IFRAME
 
 	}, {
-		key: 'createIframe',
+		key: "createIframe",
 		value: function createIframe(xp) {
 			this.currentXP = true;
 
@@ -3744,7 +3748,7 @@ var XPView = (function () {
 			document.body.appendChild(this.iframe);
 		}
 	}, {
-		key: 'bindEvents',
+		key: "bindEvents",
 		value: function bindEvents() {
 			// stage.on( "resize", this._binds.onResize )
 			// this._onResize()
@@ -3752,7 +3756,7 @@ var XPView = (function () {
 			// loop.add( this._binds.onUpdate )
 		}
 	}, {
-		key: 'unbindEvents',
+		key: "unbindEvents",
 		value: function unbindEvents() {}
 		// stage.off( "resize", this._binds.onResize )
 		// window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
@@ -3761,35 +3765,35 @@ var XPView = (function () {
 		//FEEBACK USER
 
 	}, {
-		key: 'onNextClick',
+		key: "onNextClick",
 		value: function onNextClick() {
 			this.prev();
 		}
 	}, {
-		key: 'onPrevClick',
+		key: "onPrevClick",
 		value: function onPrevClick() {
 			this.next();
 		}
 	}, {
-		key: 'onLogoClick',
+		key: "onLogoClick",
 		value: function onLogoClick() {
 			this.disposeXP();
 			// TODO RESTART ALL! Yukataaaaa
 			this.close();
 		}
 	}, {
-		key: 'onShareClick',
+		key: "onShareClick",
 		value: function onShareClick() {
 			//TODO Twitter
 			//TODO Facebook
 		}
 	}, {
-		key: 'onAuthorOver',
+		key: "onAuthorOver",
 		value: function onAuthorOver() {
 			//TODO CoolAnim to show his website / twitter / autre
 		}
 	}, {
-		key: 'close',
+		key: "close",
 		value: function close() {}
 	}]);
 

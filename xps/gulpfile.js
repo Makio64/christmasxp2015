@@ -16,8 +16,16 @@ gulp.task('generate', function (cb) {
 
 	var index = 0
 
+	var files = [
+		'!gulpfile.js',
+		'!node_modules/',
+		'!package.json',
+		'!README.md'
+	]
+
 	dayFolder.forEach(function(day) {
 		if(parseInt(day) && parseInt(day)<=limit){
+			files.push(day+'/**/*.*')
 			var xps = fs.readdirSync('./'+day+'/');
 			xps.forEach(function(xp) {
 				if(o.days[parseInt(day)] == undefined)
@@ -25,21 +33,25 @@ gulp.task('generate', function (cb) {
 
 				xpMeta = require('./'+day+'/'+xp+'/'+'infos.json')
 				meta = {
-					id:index,
+					uid:index,
 					title:xpMeta.title,
 					author:xpMeta.author,
 					website:xpMeta.website,
 					twitter:xpMeta.twitter,
-					folder:day+'/'+xp+'/'
+					folder:'/'+xp+'/'
 				}
+				console.log(meta)
+
 				o.days[parseInt(day)].push(meta)
 				index++
 			})
+
+			//Copy the files
+			gulp.src(files).pipe(gulp.dest('../home/build/'+day))
 		}
 
 	});
 	o.totalXP = index
-
 	return string_src("xp.json", JSON.stringify(o, null, 4)).pipe(gulp.dest('../home/build'))
 
 })
