@@ -406,9 +406,5 @@ void main() {
         }
 
        gl_FragColor = vec4( col + light2, alpha );
-
-
     }
-
-
 }
