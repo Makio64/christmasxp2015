@@ -63,7 +63,25 @@ class Loader extends Emitter {
     // this._pxLoader.addCompletionListener( this._binds.onComplete )
     // this._pxLoader.start()
 
-    this._loadJSON()
+    this.loadConfig(()=>{
+		this._addImages()
+		this._loaderOfLoader.once( "complete", this._binds.onLoaderOfLoaderComplete )
+		this._loaderOfLoader.load()
+	})
+  }
+
+  loadConfig(cb) {
+	  const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType( "application/json" )
+      xobj.open( "GET", "xp.json?" + ( Math.random() * 10000 >> 0 ), true ) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = () => {
+            if ( xobj.readyState == 4 && xobj.status == "200" ) {
+              this._countComplete++
+              config.data = JSON.parse( xobj.responseText )
+			  if(cb)cb();
+            }
+      }
+      xobj.send( null )
   }
 
   _loadJSON() {
@@ -76,7 +94,6 @@ class Loader extends Emitter {
 
             config.data = JSON.parse( xobj.responseText )
             this._addImages()
-
             this._loaderOfLoader.once( "complete", this._binds.onLoaderOfLoaderComplete )
             this._loaderOfLoader.load()
           }

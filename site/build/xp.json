@@ -8,7 +8,8 @@
                 "author": "Valentin Daguenet",
                 "website": "http://vdaguenet.fr/",
                 "twitter": "https://twitter.com/vdaguenet",
-                "folder": "/Baublizer/"
+                "folder": "/Baublizer/",
+                "path": "/01/Baublizer/"
             },
             {
                 "uid": 1,
@@ -16,7 +17,8 @@
                 "author": "Josh Freeman",
                 "website": "http://designbuildplay.co.uk",
                 "twitter": "dbp_tweeter",
-                "folder": "/giftDetonator/"
+                "folder": "/giftDetonator/",
+                "path": "/01/giftDetonator/"
             }
         ]
     },

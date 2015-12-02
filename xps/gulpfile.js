@@ -38,21 +38,21 @@ gulp.task('generate', function (cb) {
 					author:xpMeta.author,
 					website:xpMeta.website,
 					twitter:xpMeta.twitter,
-					folder:'/'+xp+'/'
+					folder:'/'+xp+'/',
+					path:'/'+day+'/'+xp+'/'
 				}
-				console.log(meta)
 
 				o.days[parseInt(day)].push(meta)
 				index++
 			})
 
 			//Copy the files
-			gulp.src(files).pipe(gulp.dest('../home/build/'+day))
+			gulp.src(files).pipe(gulp.dest('../site/build/'+day))
 		}
 
 	});
 	o.totalXP = index
-	return string_src("xp.json", JSON.stringify(o, null, 4)).pipe(gulp.dest('../home/build'))
+	string_src("xp.json", JSON.stringify(o, null, 4)).pipe(gulp.dest('../site/build'))
 
 })
 

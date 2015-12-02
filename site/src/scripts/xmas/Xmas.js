@@ -7,6 +7,7 @@ const loop = require( "fz/core/loop" )
 const stage = require( "fz/core/stage" )
 const pixi = require( "fz/core/pixi" )
 const Storyline = require( "xmas/ui/Storyline" )
+const loader = require( "loader" )
 
 class Xmas {
 
@@ -71,11 +72,17 @@ class Xmas {
 
 	_onXP(e) {
 		if(!this.xp){
-			this._xp = new XPView()
+			loader.loadConfig(()=>{
+				this._xp = new XPView()
+				this._current = this._xp
+				this._current.bindEvents()
+				this._current.show(e.params.day,e.params.name)
+			})
+		} else {
+			this._current = this._xp
+			this._current.bindEvents()
+			this._current.show(e.params.day,e.params.name)			
 		}
-		this._current = this._xp
-		this._current.bindEvents()
-		this._current.show(e.params.day,e.params.name)
 	}
 
   _displayCurrent() {

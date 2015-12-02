@@ -529,29 +529,51 @@ var Loader = (function (_Emitter) {
   }, {
     key: "load",
     value: function load() {
+      var _this2 = this;
+
       // this._pxLoader.addProgressListener( this._binds.onProgress )
       // this._pxLoader.addCompletionListener( this._binds.onComplete )
       // this._pxLoader.start()
 
-      this._loadJSON();
+      this.loadConfig(function () {
+        _this2._addImages();
+        _this2._loaderOfLoader.once("complete", _this2._binds.onLoaderOfLoaderComplete);
+        _this2._loaderOfLoader.load();
+      });
     }
   }, {
-    key: "_loadJSON",
-    value: function _loadJSON() {
-      var _this2 = this;
+    key: "loadConfig",
+    value: function loadConfig(cb) {
+      var _this3 = this;
 
       var xobj = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
       xobj.open("GET", "xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == "200") {
-          _this2._countComplete++;
+          _this3._countComplete++;
+          config.data = JSON.parse(xobj.responseText);
+          if (cb) cb();
+        }
+      };
+      xobj.send(null);
+    }
+  }, {
+    key: "_loadJSON",
+    value: function _loadJSON() {
+      var _this4 = this;
+
+      var xobj = new XMLHttpRequest();
+      xobj.overrideMimeType("application/json");
+      xobj.open("GET", "xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+          _this4._countComplete++;
 
           config.data = JSON.parse(xobj.responseText);
-          _this2._addImages();
-
-          _this2._loaderOfLoader.once("complete", _this2._binds.onLoaderOfLoaderComplete);
-          _this2._loaderOfLoader.load();
+          _this4._addImages();
+          _this4._loaderOfLoader.once("complete", _this4._binds.onLoaderOfLoaderComplete);
+          _this4._loaderOfLoader.load();
         }
       };
       xobj.send(null);
@@ -609,6 +631,7 @@ var loop = require("fz/core/loop");
 var stage = require("fz/core/stage");
 var pixi = require("fz/core/pixi");
 var Storyline = require("xmas/ui/Storyline");
+var loader = require("loader");
 
 var Xmas = (function () {
 	function Xmas() {
@@ -677,12 +700,20 @@ var Xmas = (function () {
 	}, {
 		key: "_onXP",
 		value: function _onXP(e) {
+			var _this = this;
+
 			if (!this.xp) {
-				this._xp = new XPView();
+				loader.loadConfig(function () {
+					_this._xp = new XPView();
+					_this._current = _this._xp;
+					_this._current.bindEvents();
+					_this._current.show(e.params.day, e.params.name);
+				});
+			} else {
+				this._current = this._xp;
+				this._current.bindEvents();
+				this._current.show(e.params.day, e.params.name);
 			}
-			this._current = this._xp;
-			this._current.bindEvents();
-			this._current.show(e.params.day, e.params.name);
 		}
 	}, {
 		key: "_displayCurrent",
@@ -693,7 +724,7 @@ var Xmas = (function () {
 	}, {
 		key: "init",
 		value: function init(cb) {
-			var _this = this;
+			var _this2 = this;
 
 			if (this.status == "loading") {
 				return;
@@ -714,7 +745,7 @@ var Xmas = (function () {
 				ui.showLoading();
 			});
 			loader.on("complete", function () {
-				_this.status = "loaded";
+				_this2.status = "loaded";
 				ui.hideLoading();
 				ui.showBts();
 			});
@@ -3595,7 +3626,6 @@ var XPView = (function () {
 			var days = data.days[parseInt(day)];
 			for (var i = 0; i < days.length; i++) {
 				var d = days[i];
-				console.log(d.folder.replace(/\//gi, ""), title, d.folder.replace(/\//gi, "") == title);
 				if (d.folder.replace(/\//gi, "") == title) {
 					return d.uid;
 				}
@@ -3604,14 +3634,11 @@ var XPView = (function () {
 	}, {
 		key: "getXP",
 		value: function getXP(id) {
-			console.log(id);
 			var days = config.data.days;
 			for (var i = 1; i <= 24; i++) {
 				var day = days[i];
-				console.log(day);
 				for (var j = 0; j < day.length; j++) {
 					var d = day[j];
-					console.log(d);
 					if (d.uid == id) {
 						return d;
 					}
@@ -3623,6 +3650,7 @@ var XPView = (function () {
 		value: function open(id) {
 			this.xpIndex = id;
 			this.xp = this.getXP(id);
+			console.log(this.xp);
 			this.xpTransitionIn();
 		}
 	}, {
