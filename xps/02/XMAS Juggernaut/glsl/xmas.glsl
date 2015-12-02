@@ -349,7 +349,7 @@ void main() {
 
     float n = turbulence(vec3(screenPos.x, -time * 0.1, screenPos.y));
 
-    gl_FragColor = vec4( color * ( screenPos.y) * exp(1.-n), 1. );
+    gl_FragColor = vec4( color * ( screenPos.y-normalize( camera).y+.5) * exp(1.-n), 1. );
 
     if ( collision.x > -0.5)
     {
