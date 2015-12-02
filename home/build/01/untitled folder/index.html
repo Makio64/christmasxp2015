@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+    <!--
+
+           *             ,
+                       _/^\_
+                      <     >
+     *                 /.-.\         *
+              *        `/&\`                   *
+                      ,@.*;@,
+                     /_o.I %_\    *
+        *           (`'--:o(_@;
+                   /`;--.,__ `')             *
+                  ;@`o % O,*`'`&\
+            *    (`'--)_@ ;o %'()\      *
+                 /`;--._`''--._O'@;
+                /&*,()~o`;-.,_ `""`)
+     *          /`,@ ;+& () o*`;-';\
+               (`""--.,_0 +% @' &()\
+               /-.,_    ``''--....-'`)  *
+          *    /@%;o`:;'--,.__   __.'\
+              ;*,&(); @ % &^;~`"`o;@();         *
+              /(); o^~; & ().o@*&`;&%O\
+        jgs   `"="==""==,,,.,="=="==="`
+           __.----.(\-''#####---...___...-----._
+         '`         \)_`"""""`
+                 .--' ')
+               o(  )_-\
+                 `"""` `
+
+          MERRY CHRISTMAS!
+    -->
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="AUTHOR">
+        <meta name="description" content="DESCRIPTION">
+        <meta property="og:title" content="TITLE"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="URL"/>
+        <meta property="og:image" content="FACEBOOK_IMG"/>
+        <meta property="og:site_name" content="WEBSITE"/>
+        <meta property="og:description" content="DESCRIPTION"/>
+      <meta name="viewport" content="width=device-width">
+
+      <title>Gift Detonator</title>
+      <style>
+
+          html, body {
+            height: 100%;
+            width: 100%;
+            
+            background: rgb(102,20,20);
+            background: -moz-linear-gradient(top,  rgba(102,20,20,1) 0%, rgba(191,36,36,1) 49%, rgba(229,123,123,1) 100%);
+            background: -webkit-linear-gradient(top,  rgba(102,20,20,1) 0%,rgba(191,36,36,1) 49%,rgba(229,123,123,1) 100%);
+            background: linear-gradient(to bottom,  rgba(102,20,20,1) 0%,rgba(191,36,36,1) 49%,rgba(229,123,123,1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#661414', endColorstr='#e57b7b',GradientType=0 );
+          }
+
+          .logo{
+              position: absolute;
+              top: 79px;
+              font-size: 8em;
+              line-height: 58px;
+              color: white;
+              text-align: left;
+              width: 100%;
+              pointer-events: none;
+              padding-left: 40px;
+              z-index: 99;
+          }
+
+          .logo span {
+            font-size: 48px;
+            color: #db2b37;
+          }
+
+          .foot{
+            position: absolute;
+            bottom: 20px;
+            z-index: 20;
+            pointer-events:none;
+            left: 40px;
+            color: white;
+            font-size: 1em;
+          }
+
+          .red {
+            color: #db2b37;
+          }
+          .loading{
+              position: absolute;
+              width: 100%;
+              z-index: 2;
+              pointer-events: none;
+              bottom: 45%;
+              text-align: center;
+              color: white;
+              font-size: 2em;
+          }
+
+          @media (max-width: 800px) {
+            .logo{
+                transform:scale(0.5);
+                top:9px;
+                left: -100px;
+            }
+          }
+      </style>
+      <link rel="stylesheet" href="css/main.css">
+
+  </head>
+  <body>
+    <div class="foot"><span class="red">[</span> drop gifts not bombs <span class="red">]</span></div>
+    <div class="logo" id="logo"><div>Gift</div><span>detonator</span></div>
+    <div class="loading" id="loading">loading...</div>
+    <div id="app"></div>
+    <script src="lib/howler.min.js"></script>
+    <script src="js/main.js"></script>
+
+  </body>
+</html>

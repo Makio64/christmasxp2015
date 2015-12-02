@@ -2,6 +2,7 @@ const Home = require( "xmas/home/Home" )
 const About = require( "xmas/about/About" )
 const XPView = require( "xmas/xpview/XPView" )
 const Ui = require( "xmas/ui/Ui" )
+const scrollEmul = require( "xmas/core/scrollEmul" )
 
 const loop = require( "fz/core/loop" )
 const stage = require( "fz/core/stage" )
@@ -49,14 +50,14 @@ class Xmas {
   }
 
   _onHome() {
-	if(this.status!="loaded"){
-		this.init(this._binds.onHome)
-	} else {
-		if(!this._home)
-			this._home = new Home()
-		this._current = this._home
-	    this._displayCurrent()
-	}
+  	if(this.status!="loaded"){
+  		this.init(this._binds.onHome)
+  	} else {
+  		if(!this._home)
+  			this._home = new Home()
+  		this._current = this._home
+  	    this._displayCurrent()
+  	}
   }
 
     _onAbout() {
@@ -116,6 +117,8 @@ class Xmas {
 	})
 	loader.load()
 	loop.start()
+  scrollEmul.bindElements()
+  scrollEmul.bindEvents()
 	document.getElementById( "main" ).appendChild( pixi.dom )
   }
 

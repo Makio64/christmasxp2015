@@ -3,6 +3,7 @@ const pixi = require( "fz/core/pixi" )
 const loop = require( "fz/core/loop" )
 const uMaths = require( "fz/utils/maths" )
 const Line = require( "xmas/home/Line" )
+const scrollEmul = require( "xmas/core/scrollEmul" )
 
 class Home extends PIXI.Container {
 
@@ -19,6 +20,7 @@ class Home extends PIXI.Container {
     this._yMin = 0
     this._yMax = 205
     this._yTo = this._yMax
+    scrollEmul.setHeight( this._yMin )
 
     this._cntLines = new PIXI.Container()
     this._cntLines.y = this._yTo
@@ -28,7 +30,8 @@ class Home extends PIXI.Container {
 
     this._binds = {}
     this._binds.onResize = this._onResize.bind( this )
-    this._binds.onMouseScroll = this._onMouseScroll.bind( this )
+    // this._binds.onMouseScroll = this._onMouseScroll.bind( this )
+    this._binds.onScroll = this._onScroll.bind( this )
     this._binds.onUpdate = this._onUpdate.bind( this )
   }
 
@@ -40,7 +43,8 @@ class Home extends PIXI.Container {
     let w = 880
     this._cntLines.x = stage.width - w >> 1
 
-    this._yMin = -26 * this._hLine + stage.height
+    this._yMin = -26 * this._hLine - this._yMax//+ stage.height - this._yMax
+    scrollEmul.setHeight( -this._yMin )
 
     this._countLinesVisible = Math.ceil( ( stage.height - this._yMax ) / this._hLine )
     this._countLinesVisible += 1
@@ -48,12 +52,18 @@ class Home extends PIXI.Container {
     this._updateVisibles()
   }
 
-  _onMouseScroll( e ) {
-    e.preventDefault()
+  // _onMouseScroll( e ) {
+  //   e.preventDefault()
 
+  //   this._isDragDrop = false
+  //   this._yTo += -e.deltaY * .4
+  //   this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
+  // }
+
+  _onScroll( yTo ) {
     this._isDragDrop = false
-    this._yTo += -e.deltaY * .4
-    this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
+    this._yTo = -yTo + this._yMax
+    // this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
   }
 
   _onUpdate() {
@@ -150,6 +160,8 @@ class Home extends PIXI.Container {
     stage.on( "resize", this._binds.onResize )
     this._onResize()
 
+    scrollEmul.on( "change", this._binds.onScroll )
+
     window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
     loop.add( this._binds.onUpdate )
@@ -157,6 +169,8 @@ class Home extends PIXI.Container {
 
   unbindEvents() {
     stage.off( "resize", this._binds.onResize )
+
+    scrollEmul.off( "change", this._binds.onScroll )
 
     window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
