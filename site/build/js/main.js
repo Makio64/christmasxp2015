@@ -486,7 +486,6 @@ var Loader = (function (_Emitter) {
 
     _this._binds = {};
     _this._binds.onProgress = _this._onProgress.bind(_this);
-    _this._binds.onComplete = _this._onComplete.bind(_this);
     _this._binds.onPixiComplete = _this._onPixiComplete.bind(_this);
     _this._binds.onLoaderOfLoaderComplete = _this._onLoaderOfLoaderComplete.bind(_this);
     return _this;
@@ -499,16 +498,9 @@ var Loader = (function (_Emitter) {
       // this.emit( "progress", e.completedCount / e.totalCount )
     }
   }, {
-    key: "_onComplete",
-    value: function _onComplete() {
-      this._countComplete++;
-      this._checkComplete();
-    }
-  }, {
     key: "_onPixiComplete",
     value: function _onPixiComplete() {
-      this._countComplete++;
-      this._checkComplete();
+      this.emit("complete");
     }
   }, {
     key: "_onLoaderOfLoaderComplete",
@@ -519,23 +511,15 @@ var Loader = (function (_Emitter) {
       this._pixiLoader.load();
     }
   }, {
-    key: "_checkComplete",
-    value: function _checkComplete() {
-      console.log(this._countComplete);
-      if (this._countComplete == 2) {
-        this.emit("complete");
-      }
-    }
-  }, {
     key: "load",
     value: function load() {
       var _this2 = this;
 
       // this._pxLoader.addProgressListener( this._binds.onProgress )
-      // this._pxLoader.addCompletionListener( this._binds.onComplete )
       // this._pxLoader.start()
 
       this.loadConfig(function () {
+        console.log('load');
         _this2._addImages();
         _this2._loaderOfLoader.once("complete", _this2._binds.onLoaderOfLoaderComplete);
         _this2._loaderOfLoader.load();
@@ -548,32 +532,12 @@ var Loader = (function (_Emitter) {
 
       var xobj = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
-      xobj.open("GET", "xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
+      xobj.open("GET", "/xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == "200") {
           _this3._countComplete++;
           config.data = JSON.parse(xobj.responseText);
           if (cb) cb();
-        }
-      };
-      xobj.send(null);
-    }
-  }, {
-    key: "_loadJSON",
-    value: function _loadJSON() {
-      var _this4 = this;
-
-      var xobj = new XMLHttpRequest();
-      xobj.overrideMimeType("application/json");
-      xobj.open("GET", "xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == "200") {
-          _this4._countComplete++;
-
-          config.data = JSON.parse(xobj.responseText);
-          _this4._addImages();
-          _this4._loaderOfLoader.once("complete", _this4._binds.onLoaderOfLoaderComplete);
-          _this4._loaderOfLoader.load();
         }
       };
       xobj.send(null);
@@ -703,17 +667,21 @@ var Xmas = (function () {
 			var _this = this;
 
 			if (!this.xp) {
-				loader.loadConfig(function () {
-					_this._xp = new XPView();
-					_this._current = _this._xp;
-					_this._current.bindEvents();
-					_this._current.show(e.params.day, e.params.name);
-				});
-			} else {
-				this._current = this._xp;
-				this._current.bindEvents();
-				this._current.show(e.params.day, e.params.name);
+				if (this.status == "notLoaded") {
+					loader.loadConfig(function () {
+						_this._xp = new XPView();
+						_this._current = _this._xp;
+						_this._current.bindEvents();
+						_this._current.show(e.params.day, e.params.name);
+					});
+					return;
+				} else {
+					this._xp = new XPView();
+				}
 			}
+			this._current = this._xp;
+			this._current.bindEvents();
+			this._current.show(e.params.day, e.params.name);
 		}
 	}, {
 		key: "_displayCurrent",
@@ -738,7 +706,6 @@ var Xmas = (function () {
 			pixi.init();
 
 			var ui = null;
-			var loader = require("loader");
 			loader.on("ready", function () {
 				ui = new Ui();
 				ui.bindEvents();
@@ -3650,7 +3617,6 @@ var XPView = (function () {
 		value: function open(id) {
 			this.xpIndex = id;
 			this.xp = this.getXP(id);
-			console.log(this.xp);
 			this.xpTransitionIn();
 		}
 	}, {

@@ -44,7 +44,6 @@ class XPView {
   open(id) {
 	 this.xpIndex = id
 	 this.xp = this.getXP(id)
-	 console.log(this.xp)
 	 this.xpTransitionIn()
   }
 
