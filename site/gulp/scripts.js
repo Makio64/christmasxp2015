@@ -26,8 +26,8 @@ function create( isBuild ) {
   watchify.args.fullPaths = false;
 
   var b = browserify( paths.scripts + "main.js", watchify.args );
-  // b.transform( babelify,{presets: ["es2015"]} );
-  b.transform( babelify );
+  b.transform( babelify,{presets: ["es2015"]} );
+  // b.transform( babelify );
 
   w = watchify( b, { poll: true } );
   w.on( "update", bundle );

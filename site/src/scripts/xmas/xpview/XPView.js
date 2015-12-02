@@ -1,4 +1,5 @@
 const config = require( "xmas/core/config" )
+const scrollEmul = require( "xmas/core/scrollEmul" )
 
 class XPView {
 
@@ -13,7 +14,16 @@ class XPView {
   }
 
   hide(cb){
-	  this.destroyXP(cb)
+	  this.transitioning = true
+	  if(!this.mask)
+		this.createMask()
+	  TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:"left top",ease:Expo.easeOut,onComplete:()=>{
+		  this.destroyXP()
+		  cb()
+		  TweenMax.to(this.mask,.6,{delay:.2,scaleX:0,transformOrigin:"right top",ease:Expo.easeOut,onComplete:()=>{
+			  this.transitioning = false
+		  }})
+	  }})
   }
 
   // XP MANAGEMENT
@@ -67,11 +77,14 @@ class XPView {
 	  this.transitioning = true
 	  if(!this.mask)
 	  	this.createMask()
-
-	  TweenMax.to(this.mask,.6,{scaleX:1,ease:Expo.easeOut})
-	  this.destroyXP()
-	  this.createIframe(this.xp)
-	  TweenMax.to(this.mask,.6,{scaleX:0,ease:Expo.easeOut})
+	  TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:"left top",ease:Expo.easeOut,onComplete:()=>{
+		  this.destroyXP()
+		  scrollEmul.reset()
+		  this.createIframe(this.xp)
+		  TweenMax.to(this.mask,.6,{delay:.2,scaleX:0,transformOrigin:"right top",ease:Expo.easeOut,onComplete:()=>{
+			  this.transitioning = false
+		  }})
+	  }})
   }
 
   createMask(){
@@ -159,6 +172,7 @@ class XPView {
 	// The iframe
     this.iframe = document.createElement('iframe')
     this.iframe.src = xp.path.replace('./','/')
+	this.iframe.className = 'xp'
     document.body.appendChild(this.iframe)
   }
 

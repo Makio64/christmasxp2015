@@ -78,7 +78,7 @@ class Home extends PIXI.Container {
         this._showLine( idxToHide, true )
       }
       this._idxToHide = idxToHide
-    }    
+    }
 
     const idx = - ( this._cntLines.y - this._yMax ) / this._hLine >> 0
     if( idx != this._idx ) {
@@ -191,6 +191,8 @@ class Home extends PIXI.Container {
       delay: 2,
       onComplete: this.bindEvents.bind( this )
     })
+
+	this._onResize()
   }
 
   hide( cb ) {
