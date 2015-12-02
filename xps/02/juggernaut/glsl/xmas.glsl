@@ -79,6 +79,10 @@ vec2 sphere( vec3 p, float radius, vec3 pos )
     return vec2(d,0.);
 }
 
+vec2 roundBox(vec3 p, vec3 size, float corner, vec3 pos )
+{
+    return vec2( length( max( abs( p-pos )-size, 0.0 ) )-corner,1.);
+}
 vec2 roundBox(vec3 p, vec3 size, float corner, vec3 pos, vec4 quat )
 {
     mat3 transform = rotationMatrix3( quat.xyz, quat.w );
@@ -148,6 +152,7 @@ float zigzag( float x, float m )
 }
 float noise( in vec3 x )//image
 {
+
     vec3 p = floor(x);
     vec3 f = fract(x);
 	f = f*f*(3.0-2.0*f);
@@ -164,7 +169,7 @@ float noise( in vec3 x )//image
 
 /////////////////////////////////////////////////////////////////////////
 
-const int raymarchSteps = 30;
+const int raymarchSteps = 50;
 const float PI = 3.14159;
 
 //no height
@@ -201,7 +206,7 @@ vec2 field( vec3 position )
     skeleton = unionAB( skeleton, line( position, anchors[3], anchors[4], radius ) );
 
         //hand
-        skeleton = unionAB( skeleton, roundBox( position, vec3( .1,.5,.1 ), .5, anchors[4], quat ) );
+        skeleton = unionAB( skeleton, roundBox( position, vec3( .1,.5,.1 ), .5, anchors[4] ) );
 
     //right arm
     skeleton = unionAB( skeleton, line( position, anchors[1], anchors[5], radius ) );//shoulder R
@@ -209,7 +214,7 @@ vec2 field( vec3 position )
     skeleton = unionAB( skeleton, line( position, anchors[6], anchors[7], radius ) );
 
         //hand
-        skeleton = unionAB( skeleton, roundBox( position, vec3( .1,.5,.1 ), .5, anchors[7], quat ) );
+        skeleton = unionAB( skeleton, roundBox( position, vec3( .1,.5,.1 ), .5, anchors[7] ) );
 
     //spine
     skeleton = smin( skeleton, line( position, anchors[1], anchors[8], radius * 1.5 ), blendFactor );
@@ -251,8 +256,9 @@ vec2 field( vec3 position )
     float dis0 = ruban.x;
     float dis1 = box.x;
 
-
-    vec2 vor = vec2( voronoiDistribution(position * .5), 0. );
+    position *= .5;
+    position.y += time;
+    vec2 vor = vec2( voronoiDistribution(position), 0. );
     skeleton = unionAB( unionAB( ruban, box ), skeleton-vor );
 
 
@@ -327,19 +333,26 @@ vec3 rimlight( vec3 pos, vec3 nor )
 
 
 float turbulence ( vec3 coord ) {
-        float frequency = 1.1;
-        float n = 0.0;
+    float frequency = 2.1;
+    float n = 0.0;
 
-        n += 1.0    * ( perlin( coord * frequency ) );
-        n += 0.5    * sin( perlin( coord * frequency * 2.2 ) );
-        n += 0.25   * cos( perlin( coord * frequency * 4.4 ) );
+    n += 1.0    * ( perlin( coord * frequency ) );
+    n += 0.5    * sin( perlin( coord * frequency * 2.2 ) );
+    n += 0.25   * cos( perlin( coord * frequency * 4.4 ) );
 
-        return n;
+    return n;
 }
 
 void main() {
 
     vec2  screenPos    = squareFrame( resolution );
+
+    float alpha = smoothstep( .2, 1., 1.- abs( screenPos.x ) );
+
+    //uncomment below for fullscreen
+    //alpha = 1.;
+
+    if( alpha <= 0. ) discard;
 
     vec3  rayDirection = getRay( camera, target, screenPos, fov );
 
@@ -349,7 +362,8 @@ void main() {
 
     float n = turbulence(vec3(screenPos.x, -time * 0.1, screenPos.y));
 
-    gl_FragColor = vec4( color * ( screenPos.y-normalize( camera).y+.5) * exp(1.-n), 1. );
+    gl_FragColor = vec4( color * ( screenPos.y-normalize( camera).y+.5) * exp(1.-n), alpha );
+
 
     if ( collision.x > -0.5)
     {
@@ -364,7 +378,7 @@ void main() {
 
        vec3 lig1 = normalize( vec3( cos( time * .25 ) * 50.0, 20.0, sin( time * .95 ) * 50.0) );
        vec3 light1 = max( 0.0, dot( lig1, nor) ) * color;
-       vec3 light2 = max( 0.0, dot( -lig1, nor) ) * color;
+       vec3 light2 = max( 0.0, dot( -lig1 * .5, nor) ) * color;
 
        vec3 rim1 = rimlight( pos, -lig1 );
        vec3 rim2 = rimlight( lig1, nor ) * .25;
@@ -388,12 +402,13 @@ void main() {
         }
         else
         {
-            col = min( vec3( .86 ), body ) + refl * .15 + noise( pos * nor * 10000. ) * .15 ;
+            col = min( vec3( .86 ), body ) + refl * .15 + noise( pos * nor * 1000. ) * .15;
         }
 
-       gl_FragColor = vec4( col + light2, 1. );
+       gl_FragColor = vec4( col + light2, alpha );
 
 
     }
+
 
 }

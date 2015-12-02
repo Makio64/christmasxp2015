@@ -79,7 +79,7 @@
         co.minDistance = 18;
         co.maxDistance = 28;
 
-        co.minPolarAngle = Math.PI / 4 - Math.PI / 12;
+        co.minPolarAngle = // Math.PI / 4 - Math.PI / 12;
         co.maxPolarAngle = Math.PI / 2 - Math.PI / 8;
 
         rm.camera.position.x = 6;
@@ -109,6 +109,11 @@
 
         scope.createNoiseTexture( "noiseTexture", 256 );
 
+        console.clear();
+        console.log( "%c ❤ MERRY XMAS!! ❤", 'background: #FF0000; color:#FFFFFF; font-size:3em' );
+        console.log( "\nChristmas is coming!\nI believe this Juggernaut will deliver your special gift on time\n\nif it works at all & you have a decent FPS & feel adventurous\ntry to comment line 353 of the ./glsgl/xmas.glsl file.\n\n");
+        console.log( "have bags of fun by the end of the year,\nlove\Nicolas");
+
         animate();
     }
 
@@ -118,7 +123,6 @@
     }
 
     function animate() {
-
 
         requestAnimationFrame( animate );
 
@@ -130,7 +134,6 @@
         rm.render();
 
     }
-
     init();
 
 </script>
