@@ -27,7 +27,7 @@ class Xmas {
   show() {
     page( "/", this._binds.onChange, this._binds.onHome )
     page( "/about", this._binds.onChange, this._binds.onAbout )
-	  page( "/xp/:day/:name", this._binds.onChange, this._binds.onXP )
+	  page( "/xp/:day/:name/", this._binds.onChange, this._binds.onXP )
 
     // TweenLite.set( this, {
     //   delay: delay,
@@ -59,9 +59,10 @@ class Xmas {
       this._displayCurrent()
     }
 
-	_onXP() {
+	_onXP(e) {
 		this._current = this._xp
-		this._displayCurrent()
+		this._current.bindEvents()
+		this._current.show(e.params.day,e.params.name)
 	}
 
   _displayCurrent() {

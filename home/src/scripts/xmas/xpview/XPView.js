@@ -6,42 +6,49 @@ class XPView {
 	this.transitioning = false
 	this.currentXP = false
 	this.html = false
-
-	// HTML Mask
-	// this.mask = document.createElement('div')
-    // this.mask.className = "mask_xp"
-	// this.mask.style.color = "#0000FF"
-    // document.body.appendChild(mask)
   }
 
-  show(){
-
+  show(day,title){
+	  console.log('show')
+	  this.open(this.getID(day,title))
   }
 
   hide(cb){
+	  console.log('hide')
 	  cb()
   }
 
   // XP MANAGEMENT
-  getXP(id){
-	 data = config.data
-	 for (var day in data.days) {
-		 for (var i = 0; i < day.length; i++) {
-		 	if(day[i].id==id)
-				return day[i]
-		 }
-	 }
-	 return null
-	 throw Console.warning('Cant find:'+id)
+  getID(day,title){
+	var data = config.data
+	var days = data.days[parseInt(day)]
+	for (var i = 0; i < days.length; i++) {
+		var d = days[i]
+		if(d.title == title){
+			return d.uid
+		}
+	}
   }
+
+  getXP(id){
+	 var days = config.data.days
+	 for(var i = 0; i < days.length; i++) {
+		 var day = days[i]
+		 for (var j = 0; j < day.length; j++) {
+	 		var d = day[j]
+			console.log(d)
+			if(d.uid === id){
+				console.log(day[i].uid,day[i])
+			 	return day[i]
+			}
+	 	}
+	}
+ }
 
   open(id) {
 	 this.xpIndex = id
 	 this.xp = this.getXP(id)
-	 if(this.currentXP)
-	 	this.xpTransitionOut()
-	else
-		this.xpTransitionOutComplete()
+	 this.xpTransitionIn()
   }
 
   prev(){
@@ -62,20 +69,30 @@ class XPView {
   xpTransitionIn(){
 	  //TODO MASKOUT
 	  this.transitioning = true
+	  if(!this.mask)
+	  	this.createMask()
+
 	  TweenMax.to(this.mask,.6,{scaleX:1,ease:Expo.easeOut})
 	  this.destroyXP()
-	  this.createIframe(this.xp.url)
+	  console.log(this.xp)
+	  this.createIframe(this.xp)
 	  TweenMax.to(this.mask,.6,{scaleX:0,ease:Expo.easeOut})
+  }
+
+  createMask(){
+	  this.mask = document.createElement('div')
+	  this.mask.className = 'mask'
+	  document.body.appendChild(this.mask)
   }
 
   destroyXP(){
 	  if(this.currentXP){
 	  	// The iframe
-		this.iframe = document.createElement('iframe')
-		this.iframe.src = encodeURI(url)
+		this.iframe.innerHTML = ""
 		document.body.removeChild(this.iframe)
 		document.body.removeChild(this.xpinfos)
 		this.xpinfos = null
+		this.currentXP = false
 	}
   }
 
@@ -145,6 +162,19 @@ class XPView {
     this.iframe = document.createElement('iframe')
     this.iframe.src = encodeURI(url)
     document.body.appendChild(this.iframe)
+  }
+
+  bindEvents() {
+    // stage.on( "resize", this._binds.onResize )
+    // this._onResize()
+    // window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
+    // loop.add( this._binds.onUpdate )
+  }
+
+  unbindEvents() {
+    // stage.off( "resize", this._binds.onResize )
+    // window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
+    // loop.remove( this._binds.onUpdate )
   }
 
   //FEEBACK USER

@@ -1,31 +1,16 @@
 {
-	"totalDay": 2,
-	"totalXP": 3,
+    "totalDay": 1,
     "days": {
         "1": [
             {
-                "title": "Particles",
-                "author": "Bouboup",
-                "website": "",
-                "twitter": "Your twitter or blank",
-                "folder": "particles"
-            },
-            {
-                "title": "Particles",
-                "author": "Bouboup",
-                "website": "",
-                "twitter": "Your twitter or blank",
-                "folder": "tornado"
-            }
-        ],
-        "2": [
-            {
-                "title": "XMAS Juggernaut",
-                "author": "Nicolas Barradeau",
-                "website": "http://www.barradeau.com",
-                "twitter": "nicoptere",
-                "folder": "juggernaut"
+                "uid": 0,
+                "title": "Baublizer",
+                "author": "Valentin Daguenet",
+                "website": "http://vdaguenet.fr/",
+                "twitter": "https://twitter.com/vdaguenet",
+                "folder": "Baublizer"
             }
         ]
-    }
+    },
+    "totalXP": 1
 }

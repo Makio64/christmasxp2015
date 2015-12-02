@@ -12,7 +12,9 @@ gulp.task('generate', function (cb) {
 		days:{}
 	}
 
-	var dayFolder = fs.readdirSync('./');
+	var dayFolder = fs.readdirSync('./')
+
+	var index = 0
 
 	dayFolder.forEach(function(day) {
 		if(parseInt(day) && parseInt(day)<=limit){
@@ -21,21 +23,24 @@ gulp.task('generate', function (cb) {
 				if(o.days[parseInt(day)] == undefined)
 					o.days[parseInt(day)] = []
 
-				xpMeta = require('./'+day+'/'+xp+'/'+'info.json')
+				xpMeta = require('./'+day+'/'+xp+'/'+'infos.json')
 				meta = {
+					id:index,
 					title:xpMeta.title,
 					author:xpMeta.author,
 					website:xpMeta.website,
 					twitter:xpMeta.twitter,
-					folder:xp
+					folder:day+'/'+xp+'/'
 				}
 				o.days[parseInt(day)].push(meta)
+				index++
 			})
 		}
 
 	});
+	o.totalXP = index
 
-	return string_src("xp.json", JSON.stringify(o, null, 4)).pipe(gulp.dest('./'))
+	return string_src("xp.json", JSON.stringify(o, null, 4)).pipe(gulp.dest('../home/build'))
 
 })
 
