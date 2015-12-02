@@ -257,7 +257,7 @@ vec2 field( vec3 position )
     float dis1 = box.x;
 
     position *= .5;
-    position.y += time;
+    position.y -= time;
     vec2 vor = vec2( voronoiDistribution(position), 0. );
     skeleton = unionAB( unionAB( ruban, box ), skeleton-vor );
 
