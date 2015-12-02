@@ -9,13 +9,11 @@ class XPView {
   }
 
   show(day,title){
-	  console.log('show')
 	  this.open(this.getID(day,title))
   }
 
   hide(cb){
-	  console.log('hide')
-	  cb()
+	  this.destroyXP(cb)
   }
 
   // XP MANAGEMENT
@@ -32,14 +30,12 @@ class XPView {
 
   getXP(id){
 	 var days = config.data.days
-	 for(var i = 0; i < days.length; i++) {
+	 for(var i = 1; i < 24; i++) {
 		 var day = days[i]
 		 for (var j = 0; j < day.length; j++) {
 	 		var d = day[j]
-			console.log(d)
 			if(d.uid === id){
-				console.log(day[i].uid,day[i])
-			 	return day[i]
+			 	return d
 			}
 	 	}
 	}
@@ -74,7 +70,6 @@ class XPView {
 
 	  TweenMax.to(this.mask,.6,{scaleX:1,ease:Expo.easeOut})
 	  this.destroyXP()
-	  console.log(this.xp)
 	  this.createIframe(this.xp)
 	  TweenMax.to(this.mask,.6,{scaleX:0,ease:Expo.easeOut})
   }
@@ -85,7 +80,7 @@ class XPView {
 	  document.body.appendChild(this.mask)
   }
 
-  destroyXP(){
+  destroyXP(cb){
 	  if(this.currentXP){
 	  	// The iframe
 		this.iframe.innerHTML = ""
@@ -93,6 +88,9 @@ class XPView {
 		document.body.removeChild(this.xpinfos)
 		this.xpinfos = null
 		this.currentXP = false
+	}
+	if(cb){
+		cb()
 	}
   }
 
@@ -123,7 +121,7 @@ class XPView {
   }
 
   // CREATE IFRAME
-  createIframe(url){
+  createIframe(xp){
   	this.currentXP = true
 
 	// UI Elements
@@ -160,7 +158,7 @@ class XPView {
 
 	// The iframe
     this.iframe = document.createElement('iframe')
-    this.iframe.src = encodeURI(url)
+    this.iframe.src = xp.path.replace('./','/')
     document.body.appendChild(this.iframe)
   }
 
@@ -207,3 +205,4 @@ class XPView {
 }
 
 module.exports = XPView
+module.exports.idXP = null

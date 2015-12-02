@@ -3588,14 +3588,12 @@ var XPView = (function () {
 	_createClass(XPView, [{
 		key: 'show',
 		value: function show(day, title) {
-			console.log('show');
 			this.open(this.getID(day, title));
 		}
 	}, {
 		key: 'hide',
 		value: function hide(cb) {
-			console.log('hide');
-			cb();
+			this.destroyXP(cb);
 		}
 
 		// XP MANAGEMENT
@@ -3616,14 +3614,12 @@ var XPView = (function () {
 		key: 'getXP',
 		value: function getXP(id) {
 			var days = config.data.days;
-			for (var i = 0; i < days.length; i++) {
+			for (var i = 1; i < 24; i++) {
 				var day = days[i];
 				for (var j = 0; j < day.length; j++) {
 					var d = day[j];
-					console.log(d);
 					if (d.uid === id) {
-						console.log(day[i].uid, day[i]);
-						return day[i];
+						return d;
 					}
 				}
 			}
@@ -3660,7 +3656,6 @@ var XPView = (function () {
 
 			TweenMax.to(this.mask, .6, { scaleX: 1, ease: Expo.easeOut });
 			this.destroyXP();
-			console.log(this.xp);
 			this.createIframe(this.xp);
 			TweenMax.to(this.mask, .6, { scaleX: 0, ease: Expo.easeOut });
 		}
@@ -3673,7 +3668,7 @@ var XPView = (function () {
 		}
 	}, {
 		key: 'destroyXP',
-		value: function destroyXP() {
+		value: function destroyXP(cb) {
 			if (this.currentXP) {
 				// The iframe
 				this.iframe.innerHTML = "";
@@ -3681,6 +3676,9 @@ var XPView = (function () {
 				document.body.removeChild(this.xpinfos);
 				this.xpinfos = null;
 				this.currentXP = false;
+			}
+			if (cb) {
+				cb();
 			}
 		}
 	}, {
@@ -3715,7 +3713,7 @@ var XPView = (function () {
 
 	}, {
 		key: 'createIframe',
-		value: function createIframe(url) {
+		value: function createIframe(xp) {
 			this.currentXP = true;
 
 			// UI Elements
@@ -3752,7 +3750,7 @@ var XPView = (function () {
 
 			// The iframe
 			this.iframe = document.createElement('iframe');
-			this.iframe.src = encodeURI(url);
+			this.iframe.src = xp.path.replace('./', '/');
 			document.body.appendChild(this.iframe);
 		}
 	}, {
@@ -3809,5 +3807,6 @@ var XPView = (function () {
 })();
 
 module.exports = XPView;
+module.exports.idXP = null;
 
 },{"xmas/core/config":13}]},{},[10]);
