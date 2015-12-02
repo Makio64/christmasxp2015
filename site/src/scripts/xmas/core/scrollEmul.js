@@ -29,6 +29,11 @@ class ScrollEmul extends Emitter {
     this._domEmul.style.height = value + "px"
   }
 
+  reset() {
+    window.scroll( 0, 0 )
+    this._domEmul.style.height = "0px"
+  }
+
 }
 
 module.exports = new ScrollEmul()

@@ -838,6 +838,12 @@ var ScrollEmul = (function (_Emitter) {
       console.log(value);
       this._domEmul.style.height = value + "px";
     }
+  }, {
+    key: "reset",
+    value: function reset() {
+      window.scroll(0, 0);
+      this._domEmul.style.height = "0px";
+    }
   }]);
 
   return ScrollEmul;
@@ -1456,6 +1462,7 @@ var Entry = (function (_PIXI$Container) {
         this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
         this._content.hoverZone.on("click", this._binds.onClick);
+        this._content.hoverZone.on("touchend", this._binds.onClick);
       }
     }
   }, {
@@ -1468,6 +1475,7 @@ var Entry = (function (_PIXI$Container) {
         this._content.hoverZone.off("mouseover", this._binds.onMouseOver);
         this._content.hoverZone.off("mouseout", this._binds.onMouseOut);
         this._content.hoverZone.off("click", this._binds.onClick);
+        this._content.hoverZone.off("touchend", this._binds.onClick);
       }
     }
   }]);

@@ -99,6 +99,7 @@ class Entry extends PIXI.Container {
       this._content.hoverZone.on( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.on( "mouseout", this._binds.onMouseOut )
       this._content.hoverZone.on( "click", this._binds.onClick )
+      this._content.hoverZone.on( "touchend", this._binds.onClick )
     }
   }
 
@@ -110,6 +111,7 @@ class Entry extends PIXI.Container {
       this._content.hoverZone.off( "mouseover", this._binds.onMouseOver )
       this._content.hoverZone.off( "mouseout", this._binds.onMouseOut )
       this._content.hoverZone.off( "click", this._binds.onClick )
+      this._content.hoverZone.off( "touchend", this._binds.onClick )
     }
   }
 
