@@ -1,0 +1,42 @@
+SetEnv PHP_VER 5_3
+SetEnv REGISTER_GLOBALS 0
+
+Redirect permanent /25/index.html http://christmasexperiments.com
+
+# Mistake of the first year
+Redirect permanent /1/ http://christmasexperiments.com/2012/1/
+Redirect permanent /2/ http://christmasexperiments.com/2012/2/
+Redirect permanent /3/ http://christmasexperiments.com/2012/3/
+Redirect permanent /4/ http://christmasexperiments.com/2012/4/
+Redirect permanent /5/ http://christmasexperiments.com/2012/5/
+Redirect permanent /6/ http://christmasexperiments.com/2012/6/
+Redirect permanent /7/ http://christmasexperiments.com/2012/7/
+Redirect permanent /8/ http://christmasexperiments.com/2012/8/
+Redirect permanent /9/ http://christmasexperiments.com/2012/9/
+Redirect permanent /10/ http://christmasexperiments.com/2012/10/
+Redirect permanent /11/ http://christmasexperiments.com/2012/11/
+Redirect permanent /12/ http://christmasexperiments.com/2012/12/
+Redirect permanent /13/ http://christmasexperiments.com/2012/13/
+Redirect permanent /14/ http://christmasexperiments.com/2012/14/
+Redirect permanent /15/ http://christmasexperiments.com/2012/15/
+Redirect permanent /16/ http://christmasexperiments.com/2012/16/
+Redirect permanent /17/ http://christmasexperiments.com/2012/17/
+Redirect permanent /18/ http://christmasexperiments.com/2012/18/
+Redirect permanent /19/ http://christmasexperiments.com/2012/19/
+Redirect permanent /20/ http://christmasexperiments.com/2012/20/
+Redirect permanent /21/ http://christmasexperiments.com/2012/21/
+Redirect permanent /22/ http://christmasexperiments.com/2012/22/
+Redirect permanent /23/ http://christmasexperiments.com/2012/23/
+Redirect permanent /24/ http://christmasexperiments.com/2012/24/
+
+Redirect permanent /2013/2/ http://christmasexperiments.com/2013/02/
+
+# redirect current year
+Redirect permanent /2015 /
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^(.*) /index.html [NC,L]
