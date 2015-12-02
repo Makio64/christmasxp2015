@@ -15,7 +15,7 @@ class ScrollEmul extends Emitter {
   }
 
   bindElements() {
-    this._domEmul = document.getElementById( "scroll-emul" )
+    this._domEmul = document.getElementById( "scroll-emul" )	
   }
 
   bindEvents() {
@@ -26,11 +26,13 @@ class ScrollEmul extends Emitter {
 
   setHeight( value ) {
     console.log( value )
+	if(!this._domEmul)return
     this._domEmul.style.height = value + "px"
   }
 
   reset() {
     window.scroll( 0, 0 )
+	if(!this._domEmul)return
     this._domEmul.style.height = "0px"
   }
 

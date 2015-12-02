@@ -120,8 +120,8 @@ class Xmas {
 	})
 	loader.load()
 	loop.start()
-  scrollEmul.bindElements()
-  scrollEmul.bindEvents()
+  	scrollEmul.bindElements()
+  	scrollEmul.bindEvents()
 	document.getElementById( "main" ).appendChild( pixi.dom )
   }
 

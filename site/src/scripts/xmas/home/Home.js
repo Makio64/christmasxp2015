@@ -101,17 +101,16 @@ class Home extends PIXI.Container {
     const dy = this._yTo - this._cntLines.y
     this._cntLines.y += dy * .25
 
-    // if( !( browsers.tablet || browsers.mobile ) ) {
-      const idxToHide = -( ( this._cntLines.y - this._hLine * .5 - 25 - this._yMax ) / ( this._hLine ) >> 0 )
-      if( idxToHide != this._idxToHide ) {
-        if( this._idxToHide < idxToHide ) {
-          this._hideLine( idxToHide )
-        } else {
-          this._showLine( idxToHide, true )
-        }
-        this._idxToHide = idxToHide
-      }    
-    // }
+
+    const idxToHide = -( ( this._cntLines.y - this._hLine * .5 - 25 - this._yMax ) / ( this._hLine ) >> 0 )
+    if( idxToHide != this._idxToHide ) {
+      if( this._idxToHide < idxToHide ) {
+        this._hideLine( idxToHide )
+      } else {
+        this._showLine( idxToHide, true )
+      }
+      this._idxToHide = idxToHide
+    }
 
     const idx = - ( this._cntLines.y - this._yMax ) / this._hLine >> 0
     if( idx != this._idx ) {
@@ -238,6 +237,8 @@ class Home extends PIXI.Container {
       delay: 2,
       onComplete: this.bindEvents.bind( this )
     })
+
+	this._onResize()
   }
 
   hide( cb ) {
