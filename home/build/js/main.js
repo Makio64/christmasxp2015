@@ -139,9 +139,9 @@ module.exports = new Pixi();
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -154,17 +154,16 @@ var Stage = (function (_Emitter) {
   function Stage() {
     _classCallCheck(this, Stage);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Stage).call(this));
+    _get(Object.getPrototypeOf(Stage.prototype), "constructor", this).call(this);
 
-    _this.width = 0;
-    _this.height = 0;
+    this.width = 0;
+    this.height = 0;
 
-    _this.resolution = window.devicePixelRatio;
+    this.resolution = window.devicePixelRatio;
 
-    _this._binds = {};
-    _this._binds.onResize = _this._onResize.bind(_this);
-    _this._binds.update = _this._update.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.onResize = this._onResize.bind(this);
+    this._binds.update = this._update.bind(this);
   }
 
   _createClass(Stage, [{
@@ -211,7 +210,6 @@ var Stage = (function (_Emitter) {
 module.exports = new Stage();
 
 },{"fz/events/Emitter":4,"fz/utils/timeout":8}],4:[function(require,module,exports){
-'use strict';
 
 /**
  * Expose `Emitter`.
@@ -224,6 +222,8 @@ module.exports = new Stage();
  *
  * @api public
  */
+
+'use strict';
 
 function Emitter(obj) {
   if (obj) return mixin(obj);
@@ -417,9 +417,9 @@ module.exports = (function () {
 })();
 
 },{}],8:[function(require,module,exports){
-"use strict";
-
 // bigup kewah
+
+"use strict";
 
 var now = require("fz/utils/now");
 
@@ -451,9 +451,9 @@ module.exports.clear = function (data) {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -466,30 +466,29 @@ var Loader = (function (_Emitter) {
   function Loader() {
     _classCallCheck(this, Loader);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this));
+    _get(Object.getPrototypeOf(Loader.prototype), "constructor", this).call(this);
 
-    _this._countComplete = 0;
+    this._countComplete = 0;
 
     // this._pxLoader = new PxLoader()
     // this._pxLoader.addFont( config.fonts.medium )
     // this._pxLoader.addFont( config.fonts.bold )
 
-    _this._pixiLoader = new PIXI.loaders.Loader();
-    _this._pixiLoader.add("img/default.jpg");
-    _this._pixiLoader.add("img/sprites/sprites.json");
-    _this._pixiLoader.add("img/sprites/roboto_regular.fnt");
-    _this._pixiLoader.add("img/sprites/roboto_medium.fnt");
+    this._pixiLoader = new PIXI.loaders.Loader();
+    this._pixiLoader.add("img/default.jpg");
+    this._pixiLoader.add("img/sprites/sprites.json");
+    this._pixiLoader.add("img/sprites/roboto_regular.fnt");
+    this._pixiLoader.add("img/sprites/roboto_medium.fnt");
 
-    _this._loaderOfLoader = new PIXI.loaders.Loader();
-    _this._loaderOfLoader.add("img/logo.png");
-    _this._loaderOfLoader.add("img/sprites/advent_bold.fnt");
+    this._loaderOfLoader = new PIXI.loaders.Loader();
+    this._loaderOfLoader.add("img/logo.png");
+    this._loaderOfLoader.add("img/sprites/advent_bold.fnt");
 
-    _this._binds = {};
-    _this._binds.onProgress = _this._onProgress.bind(_this);
-    _this._binds.onComplete = _this._onComplete.bind(_this);
-    _this._binds.onPixiComplete = _this._onPixiComplete.bind(_this);
-    _this._binds.onLoaderOfLoaderComplete = _this._onLoaderOfLoaderComplete.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.onProgress = this._onProgress.bind(this);
+    this._binds.onComplete = this._onComplete.bind(this);
+    this._binds.onPixiComplete = this._onPixiComplete.bind(this);
+    this._binds.onLoaderOfLoaderComplete = this._onLoaderOfLoaderComplete.bind(this);
   }
 
   _createClass(Loader, [{
@@ -538,20 +537,20 @@ var Loader = (function (_Emitter) {
   }, {
     key: "_loadJSON",
     value: function _loadJSON() {
-      var _this2 = this;
+      var _this = this;
 
       var xobj = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
       xobj.open("GET", "xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == "200") {
-          _this2._countComplete++;
+          _this._countComplete++;
 
           config.data = JSON.parse(xobj.responseText);
-          _this2._addImages();
+          _this._addImages();
 
-          _this2._loaderOfLoader.once("complete", _this2._binds.onLoaderOfLoaderComplete);
-          _this2._loaderOfLoader.load();
+          _this._loaderOfLoader.once("complete", _this._binds.onLoaderOfLoaderComplete);
+          _this._loaderOfLoader.load();
         }
       };
       xobj.send(null);
@@ -774,9 +773,9 @@ module.exports = config;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -792,30 +791,29 @@ var Home = (function (_PIXI$Container) {
   function Home() {
     _classCallCheck(this, Home);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Home).call(this));
+    _get(Object.getPrototypeOf(Home.prototype), "constructor", this).call(this);
 
-    _this._idx = 0;
-    _this._idxToHide = 0;
+    this._idx = 0;
+    this._idxToHide = 0;
 
-    _this._isShown = false;
+    this._isShown = false;
 
-    _this._hLine = 220;
+    this._hLine = 220;
 
-    _this._yMin = 0;
-    _this._yMax = 205;
-    _this._yTo = _this._yMax;
+    this._yMin = 0;
+    this._yMax = 205;
+    this._yTo = this._yMax;
 
-    _this._cntLines = new PIXI.Container();
-    _this._cntLines.y = _this._yTo;
-    _this.addChild(_this._cntLines);
+    this._cntLines = new PIXI.Container();
+    this._cntLines.y = this._yTo;
+    this.addChild(this._cntLines);
 
-    _this._createLines();
+    this._createLines();
 
-    _this._binds = {};
-    _this._binds.onResize = _this._onResize.bind(_this);
-    _this._binds.onMouseScroll = _this._onMouseScroll.bind(_this);
-    _this._binds.onUpdate = _this._onUpdate.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.onResize = this._onResize.bind(this);
+    this._binds.onMouseScroll = this._onMouseScroll.bind(this);
+    this._binds.onUpdate = this._onUpdate.bind(this);
   }
 
   _createClass(Home, [{
@@ -993,9 +991,9 @@ module.exports = Home;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x5, _x6, _x7) { var _again = true; _function: while (_again) { var object = _x5, property = _x6, receiver = _x7; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x5 = parent; _x6 = property; _x7 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -1011,25 +1009,25 @@ var Line = (function (_PIXI$Container) {
 
     _classCallCheck(this, Line);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Line).call(this));
+    _get(Object.getPrototypeOf(Line.prototype), "constructor", this).call(this);
 
-    _this._idx = idx;
-    _this._dataEntries = config.data.days[_this._idx];
-    _this._count = _this._dataEntries ? _this._dataEntries.length : 0;
+    this._idx = idx;
+    this._dataEntries = config.data.days[this._idx];
+    this._count = this._dataEntries ? this._dataEntries.length : 0;
+    console.log(this._dataEntries, this._count);
 
-    _this.isShown = false;
+    this.isShown = false;
 
-    _this._createTitle();
+    this._createTitle();
 
-    _this._cntEntries = new PIXI.Container();
-    _this._cntEntries.x = 145;
-    _this.addChild(_this._cntEntries);
-    if (count > 0) {
-      _this._createEntries();
+    this._cntEntries = new PIXI.Container();
+    this._cntEntries.x = 145;
+    this.addChild(this._cntEntries);
+    if (this._count > 0) {
+      this._createEntries();
     } else {
-      _this._createDummy();
+      this._createDummy();
     }
-    return _this;
   }
 
   _createClass(Line, [{
@@ -1240,9 +1238,9 @@ module.exports = Line;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x6, _x7, _x8) { var _again = true; _function: while (_again) { var object = _x6, property = _x7, receiver = _x8; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x6 = parent; _x7 = property; _x8 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -1262,35 +1260,34 @@ var Entry = (function (_PIXI$Container) {
 
     _classCallCheck(this, Entry);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Entry).call(this));
+    _get(Object.getPrototypeOf(Entry.prototype), "constructor", this).call(this);
 
-    _this._data = data;
+    this._data = data;
 
-    _this._isShown = false;
+    this._isShown = false;
 
     if (idx >= 0) {
-      _this._content = new EntryContentPreview(data);
-      _this.addChild(_this._content);
+      this._content = new EntryContentPreview(data);
+      this.addChild(this._content);
 
-      _this._circle = new EntryNumber(idx);
-      _this._circle.x = 133;
-      _this._circle.y = 124;
-      _this.addChild(_this._circle);
+      this._circle = new EntryNumber(idx);
+      this._circle.x = 133;
+      this._circle.y = 124;
+      this.addChild(this._circle);
     } else {
-      _this._content = new EntryComingSoon();
-      _this.addChild(_this._content);
+      this._content = new EntryComingSoon();
+      this.addChild(this._content);
 
-      _this._circle = new EntrySmiley();
-      _this._circle.x = 133;
-      _this._circle.y = 124;
-      _this.addChild(_this._circle);
+      this._circle = new EntrySmiley();
+      this._circle.x = 133;
+      this._circle.y = 124;
+      this.addChild(this._circle);
     }
 
-    _this._binds = {};
-    _this._binds.onMouseOver = _this._onMouseOver.bind(_this);
-    _this._binds.onMouseOut = _this._onMouseOut.bind(_this);
-    _this._binds.onClick = _this._onClick.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.onMouseOver = this._onMouseOver.bind(this);
+    this._binds.onMouseOut = this._onMouseOut.bind(this);
+    this._binds.onClick = this._onClick.bind(this);
   }
 
   _createClass(Entry, [{
@@ -1328,7 +1325,7 @@ var Entry = (function (_PIXI$Container) {
   }, {
     key: "show",
     value: function show() {
-      var _this2 = this;
+      var _this = this;
 
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
       var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
@@ -1337,7 +1334,7 @@ var Entry = (function (_PIXI$Container) {
       this._circle.show(delay + (.5 + Math.random() * .45) * (fast ? .5 : 1), fast);
 
       timeout(function () {
-        _this2._isShown = true;
+        _this._isShown = true;
       }, delay * 1000 + 1200);
       // this._circle.x = 113
       // TweenLite.to( this._circle, .6, {
@@ -1394,9 +1391,9 @@ module.exports = Entry;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x4, _x5, _x6) { var _again = true; _function: while (_again) { var object = _x4, property = _x5, receiver = _x6; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x4 = parent; _x5 = property; _x6 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -1412,24 +1409,23 @@ var EntryComingSoon = (function (_PIXI$Container) {
   function EntryComingSoon() {
     _classCallCheck(this, EntryComingSoon);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryComingSoon).call(this));
+    _get(Object.getPrototypeOf(EntryComingSoon.prototype), "constructor", this).call(this);
 
-    _this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this.addChild(_this._layer);
+    this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this.addChild(this._layer);
 
-    _this._cntContent = _this._createContent();
-    _this._cntContent.y = config.sizes.entry.h - _this._cntContent.height >> 1;
-    _this._cntContent.alpha = 0;
-    _this.addChild(_this._cntContent);
+    this._cntContent = this._createContent();
+    this._cntContent.y = config.sizes.entry.h - this._cntContent.height >> 1;
+    this._cntContent.alpha = 0;
+    this.addChild(this._cntContent);
 
-    _this._polyShape = new PolyShape();
-    _this._polyShape.x = config.sizes.entry.w >> 1;
-    _this._polyShape.y = config.sizes.entry.h >> 1;
-    _this._polyShape.scale.x = _this._polyShape.scale.y = 0;
-    _this.addChild(_this._polyShape);
+    this._polyShape = new PolyShape();
+    this._polyShape.x = config.sizes.entry.w >> 1;
+    this._polyShape.y = config.sizes.entry.h >> 1;
+    this._polyShape.scale.x = this._polyShape.scale.y = 0;
+    this.addChild(this._polyShape);
 
-    _this.mask = _this._polyShape;
-    return _this;
+    this.mask = this._polyShape;
   }
 
   _createClass(EntryComingSoon, [{
@@ -1629,9 +1625,9 @@ module.exports = EntryComingSoon;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x4, _x5, _x6) { var _again = true; _function: while (_again) { var object = _x4, property = _x5, receiver = _x6; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x4 = parent; _x5 = property; _x6 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -1647,48 +1643,47 @@ var DefaultShape = (function (_PIXI$Container) {
   function DefaultShape(data) {
     _classCallCheck(this, DefaultShape);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DefaultShape).call(this));
+    _get(Object.getPrototypeOf(DefaultShape.prototype), "constructor", this).call(this);
 
-    _this._data = data;
+    this._data = data;
 
-    _this._cntGlobal = new PIXI.Container();
-    _this.addChild(_this._cntGlobal);
+    this._cntGlobal = new PIXI.Container();
+    this.addChild(this._cntGlobal);
 
-    _this._cntPreview = _this._createPreview();
-    _this._cntGlobal.addChild(_this._cntPreview);
+    this._cntPreview = this._createPreview();
+    this._cntGlobal.addChild(this._cntPreview);
 
-    _this.pivot.x = config.sizes.entry.w >> 1;
-    _this.pivot.y = config.sizes.entry.h >> 1;
+    this.pivot.x = config.sizes.entry.w >> 1;
+    this.pivot.y = config.sizes.entry.h >> 1;
 
-    _this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this._layer.tint = config.colors.blue;
-    _this._layer.alpha = .95;
-    _this._layer.x = -20;
-    _this._layer.y = -20;
-    _this._cntGlobal.addChild(_this._layer);
+    this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this._layer.tint = config.colors.blue;
+    this._layer.alpha = .95;
+    this._layer.x = -20;
+    this._layer.y = -20;
+    this._cntGlobal.addChild(this._layer);
 
-    _this._polyShape = new PolyShape();
-    _this._polyShape.x = config.sizes.entry.w >> 1;
-    _this._polyShape.y = config.sizes.entry.h >> 1;
-    _this._cntGlobal.addChild(_this._polyShape);
+    this._polyShape = new PolyShape();
+    this._polyShape.x = config.sizes.entry.w >> 1;
+    this._polyShape.y = config.sizes.entry.h >> 1;
+    this._cntGlobal.addChild(this._polyShape);
 
-    _this._cntGlobal.mask = _this._polyShape;
+    this._cntGlobal.mask = this._polyShape;
 
-    _this._shapeOver = new PIXI.Graphics();
-    _this._shapeOver.beginFill(0xe5f2ff);
-    _this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
-    _this._shapeOver.x = _this._polyShape.x;
-    _this._shapeOver.y = _this._polyShape.y;
-    _this._shapeOver.scale.x = _this._shapeOver.scale.y = 0;
+    this._shapeOver = new PIXI.Graphics();
+    this._shapeOver.beginFill(0xe5f2ff);
+    this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
+    this._shapeOver.x = this._polyShape.x;
+    this._shapeOver.y = this._polyShape.y;
+    this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
 
-    _this._mskCircle = new PIXI.Graphics();
-    _this._mskCircle.beginFill(0xff00ff);
-    _this._mskCircle.drawCircle(0, 0, config.sizes.entry.h >> 1);
-    _this._mskCircle.x = _this._polyShape.x;
-    _this._mskCircle.y = _this._polyShape.y;
-    _this._mskCircle.scale.x = _this._mskCircle.scale.y = 0;
-    _this.addChild(_this._mskCircle);
-    return _this;
+    this._mskCircle = new PIXI.Graphics();
+    this._mskCircle.beginFill(0xff00ff);
+    this._mskCircle.drawCircle(0, 0, config.sizes.entry.h >> 1);
+    this._mskCircle.x = this._polyShape.x;
+    this._mskCircle.y = this._polyShape.y;
+    this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
+    this.addChild(this._mskCircle);
   }
 
   _createClass(DefaultShape, [{
@@ -1745,7 +1740,7 @@ var DefaultShape = (function (_PIXI$Container) {
   }, {
     key: "out",
     value: function out() {
-      var _this2 = this;
+      var _this = this;
 
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._shapeOver.scale);
@@ -1784,8 +1779,8 @@ var DefaultShape = (function (_PIXI$Container) {
         y: 1,
         ease: Quart.easeOut,
         onComplete: function onComplete() {
-          _this2._mskCircle.scale.x = _this2._mskCircle.scale.y = 0;
-          _this2.mask = null;
+          _this._mskCircle.scale.x = _this._mskCircle.scale.y = 0;
+          _this.mask = null;
         }
       });
     }
@@ -1800,44 +1795,43 @@ var HoverShape = (function (_PIXI$Container2) {
   function HoverShape(data) {
     _classCallCheck(this, HoverShape);
 
-    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(HoverShape).call(this));
+    _get(Object.getPrototypeOf(HoverShape.prototype), "constructor", this).call(this);
 
-    _this3._data = data;
+    this._data = data;
 
-    _this3._size = config.sizes.entry.w;
+    this._size = config.sizes.entry.w;
 
-    _this3._percent = 0.0001;
+    this._percent = 0.0001;
 
-    _this3.pivot.x = config.sizes.entry.w >> 1;
-    _this3.pivot.y = config.sizes.entry.h >> 1;
+    this.pivot.x = config.sizes.entry.w >> 1;
+    this.pivot.y = config.sizes.entry.h >> 1;
 
-    _this3._cntPreview = _this3._createPreview();
-    _this3.addChild(_this3._cntPreview);
+    this._cntPreview = this._createPreview();
+    this.addChild(this._cntPreview);
 
-    _this3._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this3._layer.tint = config.colors.blue;
-    _this3._layer.x = -20;
-    _this3._layer.y = -20;
-    _this3._layer.alpha = .3;
+    this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this._layer.tint = config.colors.blue;
+    this._layer.x = -20;
+    this._layer.y = -20;
+    this._layer.alpha = .3;
 
-    _this3.addChild(_this3._layer);
-    _this3._msk = new PIXI.Graphics();
-    _this3._msk.x = config.sizes.entry.w >> 1;
-    _this3._msk.y = config.sizes.entry.h >> 1;
-    _this3.addChild(_this3._msk);
+    this.addChild(this._layer);
+    this._msk = new PIXI.Graphics();
+    this._msk.x = config.sizes.entry.w >> 1;
+    this._msk.y = config.sizes.entry.h >> 1;
+    this.addChild(this._msk);
 
-    _this3._updateMsk();
+    this._updateMsk();
 
-    _this3.mask = _this3._msk;
+    this.mask = this._msk;
 
-    _this3._shapeOver = new PolyShape(0xe5f2ff);
-    _this3._shapeOver.x = _this3._msk.x;
-    _this3._shapeOver.y = _this3._msk.y;
-    _this3._shapeOver.scale.x = _this3._shapeOver.scale.y = 0;
+    this._shapeOver = new PolyShape(0xe5f2ff);
+    this._shapeOver.x = this._msk.x;
+    this._shapeOver.y = this._msk.y;
+    this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
 
-    _this3._binds = {};
-    _this3._binds.updateMsk = _this3._updateMsk.bind(_this3);
-    return _this3;
+    this._binds = {};
+    this._binds.updateMsk = this._updateMsk.bind(this);
   }
 
   _createClass(HoverShape, [{
@@ -1935,40 +1929,39 @@ var EntryContentPreview = (function (_PIXI$Container3) {
   function EntryContentPreview(data) {
     _classCallCheck(this, EntryContentPreview);
 
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryContentPreview).call(this));
+    _get(Object.getPrototypeOf(EntryContentPreview.prototype), "constructor", this).call(this);
 
-    _this4._default = new DefaultShape(data);
-    _this4._default.x = config.sizes.entry.w >> 1;
-    _this4._default.y = config.sizes.entry.h >> 1;
-    _this4._default.scale.x = _this4._default.scale.y = 0;
-    _this4.addChild(_this4._default);
+    this._default = new DefaultShape(data);
+    this._default.x = config.sizes.entry.w >> 1;
+    this._default.y = config.sizes.entry.h >> 1;
+    this._default.scale.x = this._default.scale.y = 0;
+    this.addChild(this._default);
 
-    _this4._hover = new HoverShape(data);
-    _this4._hover.x = config.sizes.entry.w >> 1;
-    _this4._hover.y = config.sizes.entry.h >> 1;
+    this._hover = new HoverShape(data);
+    this._hover.x = config.sizes.entry.w >> 1;
+    this._hover.y = config.sizes.entry.h >> 1;
     // this.addChild( this._hover )
 
-    _this4.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this4.hoverZone.scale.set(.5, .5);
-    _this4.hoverZone.tint = Math.random() * 0xffffff;
-    _this4.hoverZone.alpha = 0;
-    _this4.addChild(_this4.hoverZone);
+    this.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    this.hoverZone.scale.set(.5, .5);
+    this.hoverZone.tint = Math.random() * 0xffffff;
+    this.hoverZone.alpha = 0;
+    this.addChild(this.hoverZone);
 
-    _this4._cntTf = new PIXI.Container();
-    _this4._cntTf.x = 63;
-    _this4._cntTf.y = 170;
-    _this4.addChild(_this4._cntTf);
+    this._cntTf = new PIXI.Container();
+    this._cntTf.x = 63;
+    this._cntTf.y = 170;
+    this.addChild(this._cntTf);
 
-    _this4._tfTitle = uTexts.create(data.title, { font: "15px " + config.fonts.medium, fill: config.colors.blue });
-    _this4._cntTf.addChild(_this4._tfTitle);
-    _this4._initLetters(_this4._tfTitle);
+    this._tfTitle = uTexts.create(data.title, { font: "15px " + config.fonts.medium, fill: config.colors.blue });
+    this._cntTf.addChild(this._tfTitle);
+    this._initLetters(this._tfTitle);
 
-    _this4._tfAuthor = uTexts.create(data.author, { font: "18px " + config.fonts.medium, fill: config.colors.blue });
-    _this4._tfAuthor.x = 10;
-    _this4._tfAuthor.y = 15;
-    _this4._cntTf.addChild(_this4._tfAuthor);
-    _this4._initLetters(_this4._tfAuthor);
-    return _this4;
+    this._tfAuthor = uTexts.create(data.author, { font: "18px " + config.fonts.medium, fill: config.colors.blue });
+    this._tfAuthor.x = 10;
+    this._tfAuthor.y = 15;
+    this._cntTf.addChild(this._tfAuthor);
+    this._initLetters(this._tfAuthor);
   }
 
   _createClass(EntryContentPreview, [{
@@ -2097,9 +2090,9 @@ module.exports = EntryContentPreview;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x4, _x5, _x6) { var _again = true; _function: while (_again) { var object = _x4, property = _x5, receiver = _x6; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x4 = parent; _x5 = property; _x6 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -2112,33 +2105,32 @@ var EntryNumber = (function (_PIXI$Container) {
   function EntryNumber(idx) {
     _classCallCheck(this, EntryNumber);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryNumber).call(this));
+    _get(Object.getPrototypeOf(EntryNumber.prototype), "constructor", this).call(this);
 
-    _this._percentArrowLine = 0;
-    _this._percentArrowEnd = 0;
+    this._percentArrowLine = 0;
+    this._percentArrowEnd = 0;
 
-    _this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
-    _this._bg.scale.set(.5, .5);
-    _this.addChild(_this._bg);
+    this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
+    this._bg.scale.set(.5, .5);
+    this.addChild(this._bg);
 
-    _this._cntText = uXmasTexts.create("0" + idx, { font: "20px " + config.fonts.bold, fill: 0xffffff });
-    _this._cntText.x = _this._bg.width - _this._cntText.width >> 1;
-    _this._cntText.y = _this._bg.height - _this._cntText.height >> 1;
-    _this._cntText.x -= 1;
-    _this._cntText.y -= 1;
-    _this._initLetters();
-    _this.addChild(_this._cntText);
+    this._cntText = uXmasTexts.create("0" + idx, { font: "20px " + config.fonts.bold, fill: 0xffffff });
+    this._cntText.x = this._bg.width - this._cntText.width >> 1;
+    this._cntText.y = this._bg.height - this._cntText.height >> 1;
+    this._cntText.x -= 1;
+    this._cntText.y -= 1;
+    this._initLetters();
+    this.addChild(this._cntText);
 
-    _this._createArrow();
+    this._createArrow();
 
-    _this.scale.x = _this.scale.y = 0;
-    _this.alpha = 0;
-    _this.pivot.set(_this._bg.width >> 1, _this._bg.height >> 1);
+    this.scale.x = this.scale.y = 0;
+    this.alpha = 0;
+    this.pivot.set(this._bg.width >> 1, this._bg.height >> 1);
 
-    _this._binds = {};
-    _this._binds.drawArrowLine = _this._drawArrowLine.bind(_this);
-    _this._binds.drawArrowEnd = _this._drawArrowEnd.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.drawArrowLine = this._drawArrowLine.bind(this);
+    this._binds.drawArrowEnd = this._drawArrowEnd.bind(this);
   }
 
   _createClass(EntryNumber, [{
@@ -2229,7 +2221,7 @@ var EntryNumber = (function (_PIXI$Container) {
   }, {
     key: "out",
     value: function out() {
-      var _this2 = this;
+      var _this = this;
 
       var letter = null;
       var n = this._cntText.children.length;
@@ -2261,7 +2253,7 @@ var EntryNumber = (function (_PIXI$Container) {
         x: 46,
         ease: Cubic.easeInOut,
         onComplete: function onComplete() {
-          _this2.removeChild(_this2._cntArrow);
+          _this.removeChild(_this._cntArrow);
         }
       });
     }
@@ -2345,9 +2337,9 @@ module.exports = EntryNumber;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x4, _x5, _x6) { var _again = true; _function: while (_again) { var object = _x4, property = _x5, receiver = _x6; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x4 = parent; _x5 = property; _x6 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -2357,21 +2349,20 @@ var EntrySmiley = (function (_PIXI$Container) {
   function EntrySmiley() {
     _classCallCheck(this, EntrySmiley);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntrySmiley).call(this));
+    _get(Object.getPrototypeOf(EntrySmiley.prototype), "constructor", this).call(this);
 
-    _this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
-    _this._bg.scale.set(.5, .5);
-    _this.addChild(_this._bg);
+    this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
+    this._bg.scale.set(.5, .5);
+    this.addChild(this._bg);
 
-    _this._cntSmiley = _this._createSmiley();
-    _this._cntSmiley.x = _this._bg.width >> 1;
-    _this._cntSmiley.y = _this._bg.height * .5 + 7;
-    _this.addChild(_this._cntSmiley);
+    this._cntSmiley = this._createSmiley();
+    this._cntSmiley.x = this._bg.width >> 1;
+    this._cntSmiley.y = this._bg.height * .5 + 7;
+    this.addChild(this._cntSmiley);
 
-    _this.scale.x = _this.scale.y = 0;
-    _this.alpha = 0;
-    _this.pivot.set(_this._bg.width >> 1, _this._bg.height >> 1);
-    return _this;
+    this.scale.x = this.scale.y = 0;
+    this.alpha = 0;
+    this.pivot.set(this._bg.width >> 1, this._bg.height >> 1);
   }
 
   _createClass(EntrySmiley, [{
@@ -2478,9 +2469,9 @@ module.exports = EntrySmiley;
 },{}],21:[function(require,module,exports){
 "use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -2523,16 +2514,15 @@ var PolyShapeGraphics = (function (_PIXI$Graphics) {
 
     _classCallCheck(this, PolyShapeGraphics);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this));
+    _get(Object.getPrototypeOf(PolyShapeGraphics.prototype), "constructor", this).call(this);
 
-    _this._color = color;
-    _this._countMaskPoints = 6;
+    this._color = color;
+    this._countMaskPoints = 6;
 
-    _this.rotation = Math.PI / 6;
+    this.rotation = Math.PI / 6;
 
-    _this._init();
-    _this._update();
-    return _this;
+    this._init();
+    this._update();
   }
 
   _createClass(PolyShapeGraphics, [{
@@ -2609,9 +2599,9 @@ module.exports = PolyShapeGraphics;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -2621,16 +2611,15 @@ var Bts = (function (_PIXI$Container) {
   function Bts() {
     _classCallCheck(this, Bts);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Bts).call(this));
+    _get(Object.getPrototypeOf(Bts.prototype), "constructor", this).call(this);
 
-    _this._binds = {};
-    _this._binds.onMouseOver = _this._onMouseOver.bind(_this);
-    _this._binds.onMouseOut = _this._onMouseOut.bind(_this);
-    _this._binds.onClick = _this._onClick.bind(_this);
+    this._binds = {};
+    this._binds.onMouseOver = this._onMouseOver.bind(this);
+    this._binds.onMouseOut = this._onMouseOut.bind(this);
+    this._binds.onClick = this._onClick.bind(this);
 
-    _this._initTop();
-    _this._initShare();
-    return _this;
+    this._initTop();
+    this._initShare();
   }
 
   _createClass(Bts, [{
@@ -2770,9 +2759,9 @@ module.exports = Bts;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -2792,19 +2781,19 @@ var Logo = (function (_PIXI$Container) {
   function Logo() {
     _classCallCheck(this, Logo);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Logo).call(this));
+    _get(Object.getPrototypeOf(Logo.prototype), "constructor", this).call(this);
 
-    _this._title = new Title();
-    _this._title.x = -270;
-    _this._title.y = -140;
-    _this.addChild(_this._title);
+    this._title = new Title();
+    this._title.x = -270;
+    this._title.y = -140;
+    this.addChild(this._title);
 
-    _this._progressBar = new ProgressBar();
-    _this._progressBar.y = -200;
-    _this.addChild(_this._progressBar);
+    this._progressBar = new ProgressBar();
+    this._progressBar.y = -200;
+    this.addChild(this._progressBar);
 
-    _this._a = 2 * Math.PI / 6;
-    _this._rad = 32;
+    this._a = 2 * Math.PI / 6;
+    this._rad = 32;
 
     // const cntTmp = new PIXI.Container()
     // this._cntLogo = new PIXI.Sprite( PIXI.Texture.fromFrame( "logo.png" ) )
@@ -2825,19 +2814,18 @@ var Logo = (function (_PIXI$Container) {
 
     // this._updateTreeMain()
 
-    _this._cntLogo = new PIXI.Container();
-    _this.addChild(_this._cntLogo);
+    this._cntLogo = new PIXI.Container();
+    this.addChild(this._cntLogo);
 
-    _this._logo = new PIXI.Sprite(PIXI.Texture.fromFrame("img/logo.png"));
-    _this._logo.anchor.set(.5, .5);
-    _this._cntLogo.addChild(_this._logo);
-    _this._cntLogo.alpha = 0;
+    this._logo = new PIXI.Sprite(PIXI.Texture.fromFrame("img/logo.png"));
+    this._logo.anchor.set(.5, .5);
+    this._cntLogo.addChild(this._logo);
+    this._cntLogo.alpha = 0;
 
-    _this._initDate();
+    this._initDate();
 
-    _this._canHideLoading = false;
-    _this._wantsToHideLoading = false;
-    return _this;
+    this._canHideLoading = false;
+    this._wantsToHideLoading = false;
   }
 
   // _createTree( cBg, cDot ) {
@@ -2905,7 +2893,7 @@ var Logo = (function (_PIXI$Container) {
   }, {
     key: "show",
     value: function show() {
-      var _this2 = this;
+      var _this = this;
 
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
@@ -2935,16 +2923,16 @@ var Logo = (function (_PIXI$Container) {
       TweenLite.set(this, {
         delay: .8,
         onComplete: function onComplete() {
-          _this2._progressBar.setPercent(.8);
+          _this._progressBar.setPercent(.8);
         }
       });
 
       TweenLite.set(this, {
         delay: 1.4,
         onComplete: function onComplete() {
-          _this2._canHideLoading = true;
-          if (_this2._wantsToHideLoading) {
-            _this2.hideLoading();
+          _this._canHideLoading = true;
+          if (_this._wantsToHideLoading) {
+            _this.hideLoading();
           }
         }
       });
@@ -2952,7 +2940,7 @@ var Logo = (function (_PIXI$Container) {
   }, {
     key: "hideLoading",
     value: function hideLoading(xmas) {
-      var _this3 = this;
+      var _this2 = this;
 
       if (xmas) {
         this._xmas = xmas;
@@ -2965,7 +2953,7 @@ var Logo = (function (_PIXI$Container) {
       // tmp
       TweenLite.set(this, {
         onComplete: function onComplete() {
-          _this3._progressBar.setPercent(1);
+          _this2._progressBar.setPercent(1);
         }
       });
       //
@@ -2973,32 +2961,32 @@ var Logo = (function (_PIXI$Container) {
       TweenLite.set(this, {
         delay: .6,
         onComplete: function onComplete() {
-          _this3._title.hide();
-          TweenLite.to(_this3, .8, {
+          _this2._title.hide();
+          TweenLite.to(_this2, .8, {
             delay: .4,
             y: 90,
             ease: Quart.easeInOut
           });
-          _this3._progressBar.switchMode(.4);
-          TweenLite.to(_this3._cntDate, .6, {
+          _this2._progressBar.switchMode(.4);
+          TweenLite.to(_this2._cntDate, .6, {
             delay: 3,
             alpha: 0,
             ease: Quad.easeOut,
             onComplete: function onComplete() {
-              _this3._cntLogo.removeChild(_this3._cntDate);
+              _this2._cntLogo.removeChild(_this2._cntDate);
             }
           });
-          _this3._progressBar.hideBottomBar(3);
+          _this2._progressBar.hideBottomBar(3);
 
-          _this3._storyline = new Storyline();
-          _this3._storyline.x = -200;
-          _this3._storyline.y = 220;
-          _this3.addChild(_this3._storyline);
+          _this2._storyline = new Storyline();
+          _this2._storyline.x = -200;
+          _this2._storyline.y = 220;
+          _this2.addChild(_this2._storyline);
 
-          _this3._storyline.show(.6);
-          _this3._storyline.hide(2.7);
+          _this2._storyline.show(.6);
+          _this2._storyline.hide(2.7);
 
-          TweenLite.set(_this3, {
+          TweenLite.set(_this2, {
             delay: 3.4,
             onComplete: function onComplete() {
               // TweenLite.to( this._progressBar.scale, .6, {
@@ -3011,7 +2999,7 @@ var Logo = (function (_PIXI$Container) {
               //   y: .8,
               //   ease: Cubic.easeInOut
               // })
-              _this3._xmas.show();
+              _this2._xmas.show();
             }
           });
         }
@@ -3029,9 +3017,9 @@ module.exports = Logo;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -3045,27 +3033,26 @@ var ProgressBar = (function (_PIXI$Container) {
   function ProgressBar() {
     _classCallCheck(this, ProgressBar);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ProgressBar).call(this));
+    _get(Object.getPrototypeOf(ProgressBar.prototype), "constructor", this).call(this);
 
-    _this._gTop = new PIXI.Graphics();
-    _this.addChild(_this._gTop);
+    this._gTop = new PIXI.Graphics();
+    this.addChild(this._gTop);
 
-    _this._gBot = new PIXI.Graphics();
-    _this._gBot.y = 290;
-    _this.addChild(_this._gBot);
+    this._gBot = new PIXI.Graphics();
+    this._gBot.y = 290;
+    this.addChild(this._gBot);
 
-    _this._percent = 0;
-    _this._percentTo = 0;
+    this._percent = 0;
+    this._percentTo = 0;
 
-    _this._xStartTop = -stage.width * .5;
-    _this._xStartBottom = stage.width * .5;
+    this._xStartTop = -stage.width * .5;
+    this._xStartBottom = stage.width * .5;
 
-    _this.alpha = 0;
+    this.alpha = 0;
 
-    _this._binds = {};
-    _this._binds.onUpdate = _this._onUpdate.bind(_this);
-    _this._binds.draw = _this._draw.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.onUpdate = this._onUpdate.bind(this);
+    this._binds.draw = this._draw.bind(this);
   }
 
   _createClass(ProgressBar, [{
@@ -3168,9 +3155,9 @@ module.exports = ProgressBar;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x3, _x4, _x5) { var _again = true; _function: while (_again) { var object = _x3, property = _x4, receiver = _x5; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x3 = parent; _x4 = property; _x5 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -3186,32 +3173,31 @@ var Storyline = (function (_PIXI$Container) {
   function Storyline() {
     _classCallCheck(this, Storyline);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Storyline).call(this));
+    _get(Object.getPrototypeOf(Storyline.prototype), "constructor", this).call(this);
 
-    _this._tf = uTexts.createWithWords("A daily dose of interactive experiments till Christmas", { font: "20px " + config.fonts.regular, fill: config.colors.blue }, 3, 10);
-    _this.addChild(_this._tf);
+    this._tf = uTexts.createWithWords("A daily dose of interactive experiments till Christmas", { font: "20px " + config.fonts.regular, fill: config.colors.blue }, 3, 10);
+    this.addChild(this._tf);
 
-    _this._poly = new PIXI.Sprite(PIXI.Texture.fromFrame("poly_2x.png"));
-    _this._poly.tint = config.colors.blue;
-    _this._poly.x = -100;
-    _this._poly.y = -75;
-    _this._poly.anchor.set(.5, .5);
-    _this._poly.scale.set(0, 0);
-    _this.addChild(_this._poly);
+    this._poly = new PIXI.Sprite(PIXI.Texture.fromFrame("poly_2x.png"));
+    this._poly.tint = config.colors.blue;
+    this._poly.x = -100;
+    this._poly.y = -75;
+    this._poly.anchor.set(.5, .5);
+    this._poly.scale.set(0, 0);
+    this.addChild(this._poly);
 
-    _this._circle = new PIXI.Sprite(PIXI.Texture.fromFrame("circle_2x.png"));
-    _this._circle.tint = config.colors.red;
-    _this._circle.x = 550;
-    _this._circle.y = 125;
-    _this._circle.anchor.set(.5, .5);
-    _this._circle.scale.set(0, 0);
-    _this.addChild(_this._circle);
+    this._circle = new PIXI.Sprite(PIXI.Texture.fromFrame("circle_2x.png"));
+    this._circle.tint = config.colors.red;
+    this._circle.x = 550;
+    this._circle.y = 125;
+    this._circle.anchor.set(.5, .5);
+    this._circle.scale.set(0, 0);
+    this.addChild(this._circle);
 
-    _this._initWords();
+    this._initWords();
 
-    _this._binds = {};
-    _this._binds.onUpdate = _this._onUpdate.bind(_this);
-    return _this;
+    this._binds = {};
+    this._binds.onUpdate = this._onUpdate.bind(this);
   }
 
   _createClass(Storyline, [{
@@ -3225,14 +3211,14 @@ var Storyline = (function (_PIXI$Container) {
   }, {
     key: "show",
     value: function show() {
-      var _this2 = this;
+      var _this = this;
 
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
       this._showWords(delay);
 
       timeout(function () {
-        loop.add(_this2._binds.onUpdate);
+        loop.add(_this._binds.onUpdate);
       }, delay * 1000);
 
       TweenLite.to(this._poly.scale, .8, {
@@ -3317,9 +3303,9 @@ module.exports = Storyline;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -3332,28 +3318,27 @@ var Title = (function (_PIXI$Container) {
   function Title() {
     _classCallCheck(this, Title);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Title).call(this));
+    _get(Object.getPrototypeOf(Title.prototype), "constructor", this).call(this);
 
-    _this._cntTop = uTexts.create("CHRIST", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 60);
-    _this.addChild(_this._cntTop);
+    this._cntTop = uTexts.create("CHRIST", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 60);
+    this.addChild(this._cntTop);
 
-    _this._cntBotLeft = uTexts.create("MAS", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50);
-    _this._cntBotLeft.y = 100;
-    _this._cntBotLeft.children[1].x += 4;
-    _this._cntBotLeft.children[2].x += 7;
-    _this.addChild(_this._cntBotLeft);
+    this._cntBotLeft = uTexts.create("MAS", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50);
+    this._cntBotLeft.y = 100;
+    this._cntBotLeft.children[1].x += 4;
+    this._cntBotLeft.children[2].x += 7;
+    this.addChild(this._cntBotLeft);
 
-    _this._cntBotRight = uTexts.create("XP", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50);
-    _this._cntBotRight.x = 277;
-    _this._cntBotRight.y = 100;
-    _this._cntBotRight.children[0].x += 50;
-    _this._cntBotRight.children[1].x += 52;
-    _this.addChild(_this._cntBotRight);
+    this._cntBotRight = uTexts.create("XP", { font: "120px " + config.fonts.bold, fill: config.colors.red }, 50);
+    this._cntBotRight.x = 277;
+    this._cntBotRight.y = 100;
+    this._cntBotRight.children[0].x += 50;
+    this._cntBotRight.children[1].x += 52;
+    this.addChild(this._cntBotRight);
 
-    _this._hideLetters(_this._cntTop);
-    _this._hideLetters(_this._cntBotLeft);
-    _this._hideLetters(_this._cntBotRight);
-    return _this;
+    this._hideLetters(this._cntTop);
+    this._hideLetters(this._cntBotLeft);
+    this._hideLetters(this._cntBotRight);
   }
 
   _createClass(Title, [{
@@ -3415,9 +3400,9 @@ module.exports = Title;
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
@@ -3433,19 +3418,18 @@ var Ui = (function (_PIXI$Container) {
   function Ui() {
     _classCallCheck(this, Ui);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Ui).call(this));
+    _get(Object.getPrototypeOf(Ui.prototype), "constructor", this).call(this);
 
-    pixi.stage.addChild(_this);
+    pixi.stage.addChild(this);
 
-    _this._logo = new Logo();
-    _this.addChild(_this._logo);
+    this._logo = new Logo();
+    this.addChild(this._logo);
 
-    _this._binds = {};
-    _this._binds.onResize = _this._onResize.bind(_this);
+    this._binds = {};
+    this._binds.onResize = this._onResize.bind(this);
 
-    _this._onResize();
-    _this._logo.y = stage.height >> 1;
-    return _this;
+    this._onResize();
+    this._logo.y = stage.height >> 1;
   }
 
   _createClass(Ui, [{
@@ -3570,9 +3554,9 @@ module.exports.createWithWords = function (text, style) {
 },{"fz/core/stage":3}],29:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var config = require("xmas/core/config");
 
@@ -3597,7 +3581,6 @@ var XPView = (function () {
 		}
 
 		// XP MANAGEMENT
-
 	}, {
 		key: 'getID',
 		value: function getID(day, title) {
@@ -3710,7 +3693,6 @@ var XPView = (function () {
 		}
 
 		// CREATE IFRAME
-
 	}, {
 		key: 'createIframe',
 		value: function createIframe(xp) {
