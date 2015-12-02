@@ -73,17 +73,21 @@ class Xmas {
 
 	_onXP(e) {
 		if(!this.xp){
-			loader.loadConfig(()=>{
+			if(this.status=="notLoaded"){
+				loader.loadConfig(()=>{
+					this._xp = new XPView()
+					this._current = this._xp
+					this._current.bindEvents()
+					this._current.show(e.params.day,e.params.name)
+				})
+				return
+			}else{
 				this._xp = new XPView()
-				this._current = this._xp
-				this._current.bindEvents()
-				this._current.show(e.params.day,e.params.name)
-			})
-		} else {
-			this._current = this._xp
-			this._current.bindEvents()
-			this._current.show(e.params.day,e.params.name)			
+			}
 		}
+		this._current = this._xp
+		this._current.bindEvents()
+		this._current.show(e.params.day,e.params.name)
 	}
 
   _displayCurrent() {
@@ -104,7 +108,6 @@ class Xmas {
 	pixi.init()
 
 	let ui = null
-	const loader = require( "loader" )
 	loader.on( "ready", () => {
 	  ui = new Ui()
 	  ui.bindEvents()

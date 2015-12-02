@@ -24,7 +24,6 @@ class Loader extends Emitter {
 
     this._binds = {}
     this._binds.onProgress = this._onProgress.bind( this )
-    this._binds.onComplete = this._onComplete.bind( this )
     this._binds.onPixiComplete = this._onPixiComplete.bind( this )
     this._binds.onLoaderOfLoaderComplete = this._onLoaderOfLoaderComplete.bind( this )
   }
@@ -34,14 +33,8 @@ class Loader extends Emitter {
     // this.emit( "progress", e.completedCount / e.totalCount )
   }
 
-  _onComplete() {
-    this._countComplete++
-    this._checkComplete()
-  }
-
   _onPixiComplete() {
-    this._countComplete++
-    this._checkComplete()
+	  this.emit( "complete" )
   }
 
   _onLoaderOfLoaderComplete() {
@@ -51,19 +44,13 @@ class Loader extends Emitter {
     this._pixiLoader.load()
   }
 
-  _checkComplete() {
-    console.log( this._countComplete )
-    if( this._countComplete == 2 ) {
-      this.emit( "complete" )
-    }
-  }
 
   load() {
     // this._pxLoader.addProgressListener( this._binds.onProgress )
-    // this._pxLoader.addCompletionListener( this._binds.onComplete )
     // this._pxLoader.start()
 
     this.loadConfig(()=>{
+		console.log('load')
 		this._addImages()
 		this._loaderOfLoader.once( "complete", this._binds.onLoaderOfLoaderComplete )
 		this._loaderOfLoader.load()
@@ -73,7 +60,7 @@ class Loader extends Emitter {
   loadConfig(cb) {
 	  const xobj = new XMLHttpRequest()
       xobj.overrideMimeType( "application/json" )
-      xobj.open( "GET", "xp.json?" + ( Math.random() * 10000 >> 0 ), true ) // Replace 'my_data' with the path to your file
+      xobj.open( "GET", "/xp.json?" + ( Math.random() * 10000 >> 0 ), true ) // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = () => {
             if ( xobj.readyState == 4 && xobj.status == "200" ) {
               this._countComplete++
@@ -82,23 +69,6 @@ class Loader extends Emitter {
             }
       }
       xobj.send( null )
-  }
-
-  _loadJSON() {
-    const xobj = new XMLHttpRequest()
-    xobj.overrideMimeType( "application/json" )
-    xobj.open( "GET", "xp.json?" + ( Math.random() * 10000 >> 0 ), true ) // Replace 'my_data' with the path to your file
-    xobj.onreadystatechange = () => {
-          if ( xobj.readyState == 4 && xobj.status == "200" ) {
-            this._countComplete++
-
-            config.data = JSON.parse( xobj.responseText )
-            this._addImages()
-            this._loaderOfLoader.once( "complete", this._binds.onLoaderOfLoaderComplete )
-            this._loaderOfLoader.load()
-          }
-    }
-    xobj.send( null )
   }
 
   _addImages() {
