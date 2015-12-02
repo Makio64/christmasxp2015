@@ -590,38 +590,10 @@ module.exports = new Loader();
 },{"fz/events/Emitter":4,"xmas/core/config":13}],10:[function(require,module,exports){
 "use strict";
 
-var loop = require("fz/core/loop");
-var stage = require("fz/core/stage");
-var pixi = require("fz/core/pixi");
-
 var Xmas = require("xmas/Xmas");
-var Ui = require("xmas/ui/Ui");
+var xmas = new Xmas();
 
-stage.init();
-pixi.init();
-
-var ui = null;
-
-var loader = require("loader");
-loader.on("ready", function () {
-  ui = new Ui();
-  ui.bindEvents();
-  ui.showLoading();
-});
-loader.on("complete", function () {
-  var xmas = new Xmas();
-  ui.hideLoading(xmas);
-  ui.showBts();
-
-  // xmas.show( 1 )
-});
-loader.load();
-
-loop.start();
-
-document.getElementById("main").appendChild(pixi.dom);
-
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/Xmas":11,"xmas/ui/Ui":27}],11:[function(require,module,exports){
+},{"xmas/Xmas":11}],11:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -633,83 +605,131 @@ var About = require("xmas/about/About");
 var XPView = require("xmas/xpview/XPView");
 var Ui = require("xmas/ui/Ui");
 
+var loop = require("fz/core/loop");
+var stage = require("fz/core/stage");
+var pixi = require("fz/core/pixi");
+var Storyline = require("xmas/ui/Storyline");
+
 var Xmas = (function () {
-  function Xmas() {
-    _classCallCheck(this, Xmas);
+	function Xmas() {
+		_classCallCheck(this, Xmas);
 
-    this._home = new Home();
-    this._about = new About();
-    this._xp = new XPView();
+		this._current = null;
+		this.status = "notLoaded";
 
-    this._current = null;
+		this._binds = {};
+		this._binds.onChange = this._onChange.bind(this);
+		this._binds.onHome = this._onHome.bind(this);
+		this._binds.onIntro = this._onIntro.bind(this);
+		this._binds.onAbout = this._onAbout.bind(this);
+		this._binds.onXP = this._onXP.bind(this);
 
-    this._binds = {};
-    this._binds.onChange = this._onChange.bind(this);
-    this._binds.onHome = this._onHome.bind(this);
-    this._binds.onAbout = this._onAbout.bind(this);
-    this._binds.onXP = this._onXP.bind(this);
-  }
+		page("/", this._binds.onChange, this._binds.onHome);
+		page("/intro", this._binds.onIntro, this._binds.onIntro);
+		page("/about", this._binds.onChange, this._binds.onAbout);
+		page("/xp/:day/:name/", this._binds.onChange, this._binds.onXP);
+		page();
+	}
 
-  _createClass(Xmas, [{
-    key: "show",
-    value: function show() {
-      page("/", this._binds.onChange, this._binds.onHome);
-      page("/about", this._binds.onChange, this._binds.onAbout);
-      page("/xp/:day/:name/", this._binds.onChange, this._binds.onXP);
+	_createClass(Xmas, [{
+		key: "_onChange",
+		value: function _onChange(ctx, next) {
+			if (this._current) {
+				this._current.unbindEvents();
+				this._current.hide(next);
+			} else {
+				next();
+			}
+		}
+	}, {
+		key: "_onIntro",
+		value: function _onIntro() {
+			page("/");
+			//   storyline = new Storyline()
+			//   storyline.x = -200
+			//   storyline.y = 220
+			//   storyline.show( .6 )
+			//   storyline.hide( 2.7 )
+			//   TweenLite.set( this, { delay: 3.4,onComplete: () => {page("/")}})
+		}
+	}, {
+		key: "_onHome",
+		value: function _onHome() {
+			if (this.status != "loaded") {
+				this.init(this._binds.onHome);
+			} else {
+				if (!this._home) this._home = new Home();
+				this._current = this._home;
+				this._displayCurrent();
+			}
+		}
+	}, {
+		key: "_onAbout",
+		value: function _onAbout() {
+			if (this.status != "loaded") {
+				this.init(this._binds.onAbout);
+			} else {
+				if (!this._about) this._about = new About();
+				this._current = this._about;
+				this._displayCurrent();
+			}
+		}
+	}, {
+		key: "_onXP",
+		value: function _onXP(e) {
+			if (!this.xp) {
+				this._xp = new XPView();
+			}
+			this._current = this._xp;
+			this._current.bindEvents();
+			this._current.show(e.params.day, e.params.name);
+		}
+	}, {
+		key: "_displayCurrent",
+		value: function _displayCurrent() {
+			this._current.bindEvents();
+			this._current.show();
+		}
+	}, {
+		key: "init",
+		value: function init(cb) {
+			var _this = this;
 
-      // TweenLite.set( this, {
-      //   delay: delay,
-      //   onComplete: () => {
-      page();
-      if (location.href == "http://bouboup.com/tce2015/") {
-        this._onHome(); // tmp
-      }
-      // }
-      // })
-    }
-  }, {
-    key: "_onChange",
-    value: function _onChange(ctx, next) {
-      if (this._current) {
-        this._current.unbindEvents();
-        this._current.hide(next);
-      } else {
-        next();
-      }
-    }
-  }, {
-    key: "_onHome",
-    value: function _onHome() {
-      this._current = this._home;
-      this._displayCurrent();
-    }
-  }, {
-    key: "_onAbout",
-    value: function _onAbout() {
-      this._current = this._about;
-      this._displayCurrent();
-    }
-  }, {
-    key: "_onXP",
-    value: function _onXP(e) {
-      this._current = this._xp;
-      this._current.bindEvents();
-      this._current.show(e.params.day, e.params.name);
-    }
-  }, {
-    key: "_displayCurrent",
-    value: function _displayCurrent() {
-      this._current.bindEvents();
-      this._current.show();
-    }
-  }]);
+			if (this.status == "loading") {
+				return;
+			} else if (this.status == "loaded") {
+				cb();
+				return;
+			}
 
-  return Xmas;
+			this.status = "loading";
+			stage.init();
+			pixi.init();
+
+			var ui = null;
+			var loader = require("loader");
+			loader.on("ready", function () {
+				ui = new Ui();
+				ui.bindEvents();
+				ui.showLoading();
+			});
+			loader.on("complete", function () {
+				_this.status = "loaded";
+				ui.hideLoading();
+				ui.showBts();
+			});
+			loader.load();
+			loop.start();
+			document.getElementById("main").appendChild(pixi.dom);
+		}
+	}]);
+
+	return Xmas;
 })();
 
 module.exports = Xmas;
 
-},{"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Ui":27,"xmas/xpview/XPView":29}],12:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":9,"xmas/about/About":12,"xmas/home/Home":14,"xmas/ui/Storyline":25,"xmas/ui/Ui":27,"xmas/xpview/XPView":29}],12:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2784,7 +2804,6 @@ var uTexts = require("xmas/utils/texts");
 
 var Title = require("xmas/ui/Title");
 var ProgressBar = require("xmas/ui/ProgressBar");
-var Storyline = require("xmas/ui/Storyline");
 
 var Logo = (function (_PIXI$Container) {
   _inherits(Logo, _PIXI$Container);
@@ -2951,12 +2970,8 @@ var Logo = (function (_PIXI$Container) {
     }
   }, {
     key: "hideLoading",
-    value: function hideLoading(xmas) {
+    value: function hideLoading() {
       var _this3 = this;
-
-      if (xmas) {
-        this._xmas = xmas;
-      }
 
       this._wantsToHideLoading = true;
       if (!this._canHideLoading) {
@@ -2968,7 +2983,6 @@ var Logo = (function (_PIXI$Container) {
           _this3._progressBar.setPercent(1);
         }
       });
-      //
 
       TweenLite.set(this, {
         delay: .6,
@@ -2989,31 +3003,7 @@ var Logo = (function (_PIXI$Container) {
             }
           });
           _this3._progressBar.hideBottomBar(3);
-
-          _this3._storyline = new Storyline();
-          _this3._storyline.x = -200;
-          _this3._storyline.y = 220;
-          _this3.addChild(_this3._storyline);
-
-          _this3._storyline.show(.6);
-          _this3._storyline.hide(2.7);
-
-          TweenLite.set(_this3, {
-            delay: 3.4,
-            onComplete: function onComplete() {
-              // TweenLite.to( this._progressBar.scale, .6, {
-              //   x: .8,
-              //   y: .8,
-              //   ease: Cubic.easeInOut
-              // })
-              // TweenLite.to( this._cntLogo.scale, .6, {
-              //   x: .8,
-              //   y: .8,
-              //   ease: Cubic.easeInOut
-              // })
-              _this3._xmas.show();
-            }
-          });
+          page("/intro");
         }
       });
     }
@@ -3024,7 +3014,7 @@ var Logo = (function (_PIXI$Container) {
 
 module.exports = Logo;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/ui/ProgressBar":24,"xmas/ui/Storyline":25,"xmas/ui/Title":26,"xmas/utils/texts":28}],24:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":13,"xmas/ui/ProgressBar":24,"xmas/ui/Title":26,"xmas/utils/texts":28}],24:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3474,8 +3464,8 @@ var Ui = (function (_PIXI$Container) {
     }
   }, {
     key: "hideLoading",
-    value: function hideLoading(xmas) {
-      this._logo.hideLoading(xmas);
+    value: function hideLoading() {
+      this._logo.hideLoading();
     }
   }, {
     key: "showBts",

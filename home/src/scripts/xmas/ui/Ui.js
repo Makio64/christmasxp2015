@@ -13,7 +13,7 @@ class Ui extends PIXI.Container {
 
     this._logo = new Logo()
     this.addChild( this._logo )
-    
+
     this._binds = {}
     this._binds.onResize = this._onResize.bind( this )
 
@@ -43,8 +43,8 @@ class Ui extends PIXI.Container {
     this._logo.show()
   }
 
-  hideLoading( xmas ) {
-    this._logo.hideLoading( xmas )
+  hideLoading(  ) {
+    this._logo.hideLoading(  )
   }
 
   showBts() {

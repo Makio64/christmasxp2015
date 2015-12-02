@@ -6,7 +6,6 @@ const uTexts = require( "xmas/utils/texts" )
 
 const Title = require( "xmas/ui/Title" )
 const ProgressBar = require( "xmas/ui/ProgressBar" )
-const Storyline = require( "xmas/ui/Storyline" )
 
 class Logo extends PIXI.Container {
 
@@ -31,11 +30,11 @@ class Logo extends PIXI.Container {
 
     // this._treeGray = this._createTree( 0xbcc5dd, 0xffffff )
     // this._treeGray.rotation = Math.PI / 6 * 4
-    // cntTmp.addChild( this._treeGray ) 
+    // cntTmp.addChild( this._treeGray )
 
     // this._treeWhite = this._createTree( 0xffffff, config.colors.red )
     // this._treeWhite.rotation = -Math.PI / 6 * 4
-    // cntTmp.addChild( this._treeWhite ) 
+    // cntTmp.addChild( this._treeWhite )
 
     // this._treeMain = new PIXI.Graphics()
     // cntTmp.addChild( this._treeMain )
@@ -120,7 +119,7 @@ class Logo extends PIXI.Container {
     this._cntDate.alpha = 0
   }
 
-  show( delay = 0 ) { 
+  show( delay = 0 ) {
     this._title.show()
     this._progressBar.show( .5 )
 
@@ -146,7 +145,7 @@ class Logo extends PIXI.Container {
     //
     this._progressBar.setPercent( .2 )
     TweenLite.set( this, {
-      delay: .8, 
+      delay: .8,
       onComplete: () => {
         this._progressBar.setPercent( .8 )
       }
@@ -163,10 +162,7 @@ class Logo extends PIXI.Container {
     })
   }
 
-  hideLoading( xmas ) {
-    if( xmas ) {
-      this._xmas = xmas 
-    }
+  hideLoading(  ) {
 
     this._wantsToHideLoading = true
     if( !this._canHideLoading ) {
@@ -178,7 +174,6 @@ class Logo extends PIXI.Container {
         this._progressBar.setPercent( 1 )
       }
     })
-    //
 
     TweenLite.set( this, {
       delay: .6,
@@ -199,31 +194,7 @@ class Logo extends PIXI.Container {
           }
         })
         this._progressBar.hideBottomBar( 3 )
-
-        this._storyline = new Storyline()
-        this._storyline.x = -200
-        this._storyline.y = 220
-        this.addChild( this._storyline )
-
-        this._storyline.show( .6 )
-        this._storyline.hide( 2.7 )
-
-        TweenLite.set( this, {
-          delay: 3.4,
-          onComplete: () => {
-            // TweenLite.to( this._progressBar.scale, .6, {
-            //   x: .8,
-            //   y: .8,
-            //   ease: Cubic.easeInOut
-            // })
-            // TweenLite.to( this._cntLogo.scale, .6, {
-            //   x: .8,
-            //   y: .8,
-            //   ease: Cubic.easeInOut
-            // })
-            this._xmas.show()
-          }
-        })
+		page("/intro")
       }
     })
   }

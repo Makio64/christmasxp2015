@@ -3,36 +3,29 @@ const About = require( "xmas/about/About" )
 const XPView = require( "xmas/xpview/XPView" )
 const Ui = require( "xmas/ui/Ui" )
 
+const loop = require( "fz/core/loop" )
+const stage = require( "fz/core/stage" )
+const pixi = require( "fz/core/pixi" )
+const Storyline = require( "xmas/ui/Storyline" )
+
 class Xmas {
 
   constructor() {
-    this._home = new Home()
-    this._about = new About()
-    this._xp = new XPView()
-
     this._current = null
+	this.status = "notLoaded"
 
     this._binds = {}
     this._binds.onChange = this._onChange.bind( this )
-    this._binds.onHome = this._onHome.bind( this )
+	this._binds.onHome = this._onHome.bind( this )
+	this._binds.onIntro = this._onIntro.bind( this )
     this._binds.onAbout = this._onAbout.bind( this )
-    this._binds.onXP = this._onXP.bind( this )
-  }
+	this._binds.onXP = this._onXP.bind( this )
 
-  show() {
-    page( "/", this._binds.onChange, this._binds.onHome )
+	page( "/", this._binds.onChange, this._binds.onHome )
+	page( "/intro", this._binds.onIntro, this._binds.onIntro )
     page( "/about", this._binds.onChange, this._binds.onAbout )
-	  page( "/xp/:day/:name/", this._binds.onChange, this._binds.onXP )
-
-    // TweenLite.set( this, {
-    //   delay: delay,
-    //   onComplete: () => {
+	page( "/xp/:day/:name/", this._binds.onChange, this._binds.onXP )
     page()
-    if( location.href == "http://bouboup.com/tce2015/" ) {
-      this._onHome() // tmp
-    }
-      // }
-    // })
   }
 
   _onChange( ctx, next ) {
@@ -44,17 +37,42 @@ class Xmas {
     }
   }
 
+  _onIntro(){
+	  page("/")
+	//   storyline = new Storyline()
+	//   storyline.x = -200
+	//   storyline.y = 220
+	//   storyline.show( .6 )
+	//   storyline.hide( 2.7 )
+	//   TweenLite.set( this, { delay: 3.4,onComplete: () => {page("/")}})
+  }
+
   _onHome() {
-    this._current = this._home
-    this._displayCurrent()
+	if(this.status!="loaded"){
+		this.init(this._binds.onHome)
+	} else {
+		if(!this._home)
+			this._home = new Home()
+		this._current = this._home
+	    this._displayCurrent()
+	}
   }
 
     _onAbout() {
-      this._current = this._about
-      this._displayCurrent()
+	  	if(this.status!="loaded"){
+			this.init(this._binds.onAbout)
+		} else {
+			if(!this._about)
+				this._about = new About()
+			this._current = this._about
+			this._displayCurrent()
+		}
     }
 
 	_onXP(e) {
+		if(!this.xp){
+			this._xp = new XPView()
+		}
 		this._current = this._xp
 		this._current.bindEvents()
 		this._current.show(e.params.day,e.params.name)
@@ -63,6 +81,35 @@ class Xmas {
   _displayCurrent() {
     this._current.bindEvents()
     this._current.show()
+  }
+
+  init(cb){
+	if(this.status == "loading"){
+	  return
+	}else if(this.status=="loaded"){
+	  cb()
+	  return
+	}
+
+	this.status = "loading"
+	stage.init()
+	pixi.init()
+
+	let ui = null
+	const loader = require( "loader" )
+	loader.on( "ready", () => {
+	  ui = new Ui()
+	  ui.bindEvents()
+	  ui.showLoading()
+	})
+	loader.on( "complete", () => {
+		this.status = "loaded"
+	  ui.hideLoading()
+	  ui.showBts()
+	})
+	loader.load()
+	loop.start()
+	document.getElementById( "main" ).appendChild( pixi.dom )
   }
 
 }
