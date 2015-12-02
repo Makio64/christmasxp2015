@@ -10,6 +10,7 @@ class Line extends PIXI.Container {
     this._idx = idx
     this._dataEntries = config.data.days[ this._idx ]
     this._count = this._dataEntries ? this._dataEntries.length : 0
+    console.log( this._dataEntries, this._count )
 
     this.isShown = false
 
@@ -18,7 +19,7 @@ class Line extends PIXI.Container {
     this._cntEntries = new PIXI.Container()
     this._cntEntries.x = 145
     this.addChild( this._cntEntries )
-    if( count > 0 ) {
+    if( this._count > 0 ) {
       this._createEntries()
     } else {
       this._createDummy()
