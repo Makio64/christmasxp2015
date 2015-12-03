@@ -22,7 +22,7 @@ Therefore, each day will have a limited number of places/chocolates available. I
 - xpname/facebook.jpg : picture of your experiments for facebook (1200x630)
 - xpname/twitter.jpg : picture of your experiments for twitter (590x295)
 - xpname/author.jpg : picture of you (640x640)
-- xpname/infos.json : [use this model](https://github.com/Makio64/christmasxp2015/blob/master/xptemplate/info.json)
+- xpname/infos.json : [use this model](https://github.com/Makio64/christmasxp2015/blob/master/xptemplate/infos.json)
 - all files required need to be join when possible (js/libs/sound/video/etc..)
 
 ##### Check your files & your experiments in our iframe by using :
