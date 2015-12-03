@@ -15,6 +15,7 @@ class XPView {
 
   hide(cb){
 	  this.transitioning = true
+	  TweenMax.killTweensOf(this.mask)
 	  if(!this.mask)
 		this.createMask()
 	  TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:"left top",ease:Expo.easeOut,onComplete:()=>{
@@ -74,6 +75,8 @@ class XPView {
 
   xpTransitionIn(){
 	  //TODO MASKOUT
+	  if(this.transitioning)return
+	  TweenMax.killTweensOf(this.mask)
 	  this.transitioning = true
 	  if(!this.mask)
 	  	this.createMask()
@@ -81,7 +84,7 @@ class XPView {
 		  this.destroyXP()
 		  scrollEmul.reset()
 		  this.createIframe(this.xp)
-		  TweenMax.to(this.mask,.6,{delay:.2,scaleX:0,transformOrigin:"right top",ease:Expo.easeOut,onComplete:()=>{
+		  TweenMax.to(this.mask,.6,{delay:.7,scaleX:0,transformOrigin:"right top",ease:Expo.easeOut,onComplete:()=>{
 			  this.transitioning = false
 		  }})
 	  }})

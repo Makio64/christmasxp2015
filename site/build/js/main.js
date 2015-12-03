@@ -1062,7 +1062,7 @@ var Xmas = (function () {
 		page("/", this._binds.onChange, this._binds.onHome);
 		page("/intro", this._binds.onIntro, this._binds.onIntro);
 		page("/about", this._binds.onChange, this._binds.onAbout);
-		page("/xp/:day/:name/", this._binds.onChange, this._binds.onXP);
+		page("/xps/:day/:name/", this._binds.onChange, this._binds.onXP);
 		page();
 	}
 
@@ -1916,7 +1916,7 @@ var Entry = (function (_PIXI$Container) {
   }, {
     key: "_onClick",
     value: function _onClick() {
-      page("/xp" + this._data.path.replace("./", "/"));
+      page("/xps" + this._data.path.replace("./", "/"));
     }
   }, {
     key: "show",
@@ -3312,6 +3312,7 @@ var Bts = (function (_PIXI$Container) {
       cnt.on("mouseover", this._binds.onMouseOver);
       cnt.on("mouseout", this._binds.onMouseOut);
       cnt.on("click", this._binds.onClick);
+      cnt.on("touchend", this._binds.onClick);
 
       var normal = new PIXI.Sprite(PIXI.Texture.fromFrame(name + ".png"));
       normal.scale.set(.5, .5);
@@ -4167,6 +4168,7 @@ var XPView = (function () {
 			var _this = this;
 
 			this.transitioning = true;
+			TweenMax.killTweensOf(this.mask);
 			if (!this.mask) this.createMask();
 			TweenMax.to(this.mask, .6, { scaleX: 1, transformOrigin: "left top", ease: Expo.easeOut, onComplete: function onComplete() {
 					_this.destroyXP();
@@ -4234,13 +4236,15 @@ var XPView = (function () {
 			var _this2 = this;
 
 			//TODO MASKOUT
+			if (this.transitioning) return;
+			TweenMax.killTweensOf(this.mask);
 			this.transitioning = true;
 			if (!this.mask) this.createMask();
 			TweenMax.to(this.mask, .6, { scaleX: 1, transformOrigin: "left top", ease: Expo.easeOut, onComplete: function onComplete() {
 					_this2.destroyXP();
 					scrollEmul.reset();
 					_this2.createIframe(_this2.xp);
-					TweenMax.to(_this2.mask, .6, { delay: .2, scaleX: 0, transformOrigin: "right top", ease: Expo.easeOut, onComplete: function onComplete() {
+					TweenMax.to(_this2.mask, .6, { delay: .7, scaleX: 0, transformOrigin: "right top", ease: Expo.easeOut, onComplete: function onComplete() {
 							_this2.transitioning = false;
 						} });
 				} });

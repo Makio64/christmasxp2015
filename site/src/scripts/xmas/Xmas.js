@@ -26,7 +26,7 @@ class Xmas {
 	page( "/", this._binds.onChange, this._binds.onHome )
 	page( "/intro", this._binds.onIntro, this._binds.onIntro )
     page( "/about", this._binds.onChange, this._binds.onAbout )
-	page( "/xp/:day/:name/", this._binds.onChange, this._binds.onXP )
+	page( "/xps/:day/:name/", this._binds.onChange, this._binds.onXP )
     page()
   }
 

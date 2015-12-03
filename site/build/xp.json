@@ -1,5 +1,5 @@
 {
-    "totalDay": 1,
+    "totalDay": 2,
     "days": {
         "1": [
             {
@@ -20,7 +20,18 @@
                 "folder": "/giftDetonator/",
                 "path": "/01/giftDetonator/"
             }
+        ],
+        "2": [
+            {
+                "uid": 2,
+                "title": "XMAS Juggernaut",
+                "author": "Nicolas Barradeau",
+                "website": "http://www.barradeau.com",
+                "twitter": "nicoptere",
+                "folder": "/XMAS Juggernaut/",
+                "path": "/02/XMAS Juggernaut/"
+            }
         ]
     },
-    "totalXP": 2
+    "totalXP": 3
 }

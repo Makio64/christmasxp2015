@@ -64,7 +64,7 @@ class Entry extends PIXI.Container {
   }
 
   _onClick() {
-	  page( "/xp" + this._data.path.replace( "./", "/" ) )
+	  page( "/xps" + this._data.path.replace( "./", "/" ) )
   }
 
   show( delay = 0, fast = false ) {

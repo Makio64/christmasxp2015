@@ -89,6 +89,7 @@ class Bts extends PIXI.Container {
     cnt.on( "mouseover", this._binds.onMouseOver )
     cnt.on( "mouseout", this._binds.onMouseOut )
     cnt.on( "click", this._binds.onClick )
+	cnt.on("touchend", this._binds.onClick )
 
     const normal = new PIXI.Sprite( PIXI.Texture.fromFrame( name + ".png" ) )
     normal.scale.set( .5, .5 )
