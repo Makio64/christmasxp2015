@@ -16,15 +16,18 @@ gulp.task('generate', function (cb) {
 
 	var index = 0
 
-	var files = [
-		'!gulpfile.js',
-		'!node_modules/',
-		'!package.json',
-		'!README.md'
-	]
+
 
 	dayFolder.forEach(function(day) {
+		var files = [
+			'!gulpfile.js',
+			'!node_modules/',
+			'!package.json',
+			'!README.md'
+		]
+
 		if(parseInt(day) && parseInt(day)<=limit){
+
 			files.push(day+'/**/*.*')
 			var xps = fs.readdirSync('./'+day+'/');
 			xps.forEach(function(xp) {
