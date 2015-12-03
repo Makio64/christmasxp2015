@@ -30,7 +30,7 @@ iframe.xp
 	background url(../img/next.png) no-repeat center center
 	background-size 90% 90%
 	opacity 0.7
-	transition: all .5s ease-in-out
+	transition: opacity .2s ease-in-out
 	&:hover
 		opacity .9
 
@@ -45,7 +45,7 @@ iframe.xp
 	background url(../img/prev.png) no-repeat center center
 	background-size 90% 90%
 	opacity 0.7
-	transition: all .2s ease-in-out
+	transition: opacity .2s ease-in-out
 	&:hover
 		opacity .9
 
@@ -61,6 +61,19 @@ iframe.xp
 	background url(../img/logo.png) no-repeat center center
 	background-size 90% 90%
 	opacity 0.4
-	transition: all .5s ease-in-out
+	transition: opacity .5s ease-in-out
 	&:hover
 		opacity .9
+
+@media (max-width: 480px),(max-height: 380px)
+
+	#logo
+		top 5px
+		width 22px
+		height 25px
+		margin-left -11px
+	#next
+		top 5px
+	#prev
+		top 5px
+		left 25px

@@ -4309,6 +4309,7 @@ var XPView = (function () {
 
 				document.body.removeChild(this.xpinfos);
 				this.xpinfos = null;
+				this.currentXP = false;
 			}
 			if (cb) {
 				cb();
