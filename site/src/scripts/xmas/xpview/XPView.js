@@ -237,7 +237,7 @@ class XPView {
 
   onLogoClick(){
 	this.direction = 'next'
-	page('/')
+	page('/home')
   }
 
   onShareClick(){

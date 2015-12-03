@@ -1043,6 +1043,7 @@ var loop = require("fz/core/loop");
 var stage = require("fz/core/stage");
 var pixi = require("fz/core/pixi");
 var Storyline = require("xmas/ui/Storyline");
+var cookie = require("xmas/utils/cookie");
 var loader = require("loader");
 
 var Xmas = (function () {
@@ -1058,15 +1059,30 @@ var Xmas = (function () {
 		this._binds.onIntro = this._onIntro.bind(this);
 		this._binds.onAbout = this._onAbout.bind(this);
 		this._binds.onXP = this._onXP.bind(this);
+		this.onStart = this.onStart.bind(this);
 
-		page("/", this._binds.onChange, this._binds.onHome);
+		page("/home", this._binds.onChange, this._binds.onHome);
 		page("/intro", this._binds.onIntro, this._binds.onIntro);
 		page("/about", this._binds.onChange, this._binds.onAbout);
 		page("/xps/:day/:name/", this._binds.onXP);
+		page("/", this.onStart);
 		page();
 	}
 
 	_createClass(Xmas, [{
+		key: "onStart",
+		value: function onStart() {
+			console.log('test');
+			if (cookie.getCookie("intro") == "") {
+				console.log('intro');
+				cookie.createCookie("intro", Date.now(), 1);
+				page("/intro");
+			} else {
+				console.log('home');
+				page("/home");
+			}
+		}
+	}, {
 		key: "_onChange",
 		value: function _onChange(ctx, next) {
 			if (this._current) {
@@ -1079,13 +1095,19 @@ var Xmas = (function () {
 	}, {
 		key: "_onIntro",
 		value: function _onIntro() {
-			page("/");
-			//   storyline = new Storyline()
-			//   storyline.x = -200
-			//   storyline.y = 220
-			//   storyline.show( .6 )
-			//   storyline.hide( 2.7 )
-			//   TweenLite.set( this, { delay: 3.4,onComplete: () => {page("/")}})
+			if (this.status != "loaded") {
+				this.init(this._binds._onIntro);
+				return;
+			}
+			var storyline = new Storyline();
+			storyline.x = window.innerWidth / 2 - 200;
+			storyline.y = window.innerHeight / 2;
+			storyline.show(.6);
+			storyline.hide(2.7);
+			pixi.stage.addChild(storyline);
+			TweenLite.set(this, { delay: 3.4, onComplete: function onComplete() {
+					page("/home");
+				} });
 		}
 	}, {
 		key: "_onHome",
@@ -1177,7 +1199,7 @@ var Xmas = (function () {
 
 module.exports = Xmas;
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":11,"xmas/about/About":14,"xmas/core/scrollEmul":16,"xmas/home/Home":17,"xmas/ui/Storyline":28,"xmas/ui/Ui":30,"xmas/xpview/XPView":32}],14:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"loader":11,"xmas/about/About":14,"xmas/core/scrollEmul":16,"xmas/home/Home":17,"xmas/ui/Storyline":28,"xmas/ui/Ui":30,"xmas/utils/cookie":31,"xmas/xpview/XPView":33}],14:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1828,7 +1850,7 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":15,"xmas/home/entry/Entry":19,"xmas/utils/texts":31}],19:[function(require,module,exports){
+},{"xmas/core/config":15,"xmas/home/entry/Entry":19,"xmas/utils/texts":32}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2219,7 +2241,7 @@ var EntryComingSoon = (function (_PIXI$Container) {
 
 module.exports = EntryComingSoon;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15,"xmas/home/entry/PolyShape":24,"xmas/utils/texts":31}],21:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15,"xmas/home/entry/PolyShape":24,"xmas/utils/texts":32}],21:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2687,7 +2709,7 @@ var EntryContentPreview = (function (_PIXI$Container3) {
 
 module.exports = EntryContentPreview;
 
-},{"fz/core/pixi":2,"fz/utils/images":7,"xmas/core/config":15,"xmas/home/entry/PolyShape":24,"xmas/utils/texts":31}],22:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/utils/images":7,"xmas/core/config":15,"xmas/home/entry/PolyShape":24,"xmas/utils/texts":32}],22:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2935,7 +2957,7 @@ var EntryNumber = (function (_PIXI$Container) {
 
 module.exports = EntryNumber;
 
-},{"xmas/core/config":15,"xmas/utils/texts":31}],23:[function(require,module,exports){
+},{"xmas/core/config":15,"xmas/utils/texts":32}],23:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3579,7 +3601,7 @@ var Logo = (function (_PIXI$Container) {
             }
           });
           _this3._progressBar.hideBottomBar(3);
-          page("/intro");
+          page("/");
         }
       });
     }
@@ -3590,7 +3612,7 @@ var Logo = (function (_PIXI$Container) {
 
 module.exports = Logo;
 
-},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15,"xmas/ui/ProgressBar":27,"xmas/ui/Title":29,"xmas/utils/texts":31}],27:[function(require,module,exports){
+},{"fz/core/pixi":2,"fz/core/stage":3,"xmas/core/config":15,"xmas/ui/ProgressBar":27,"xmas/ui/Title":29,"xmas/utils/texts":32}],27:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3878,7 +3900,7 @@ var Storyline = (function (_PIXI$Container) {
 
 module.exports = Storyline;
 
-},{"fz/core/loop":1,"fz/utils/timeout":10,"xmas/core/config":15,"xmas/utils/texts":31}],29:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/utils/timeout":10,"xmas/core/config":15,"xmas/utils/texts":32}],29:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3976,7 +3998,7 @@ var Title = (function (_PIXI$Container) {
 
 module.exports = Title;
 
-},{"xmas/core/config":15,"xmas/utils/texts":31}],30:[function(require,module,exports){
+},{"xmas/core/config":15,"xmas/utils/texts":32}],30:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4072,6 +4094,36 @@ module.exports = Ui;
 },{"fz/core/pixi":2,"fz/core/stage":3,"fz/utils/browsers":6,"xmas/ui/Bts":25,"xmas/ui/Logo":26}],31:[function(require,module,exports){
 "use strict";
 
+module.exports.createCookie = function (name, value, days) {
+    var expires;
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toGMTString();
+    } else {
+        expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+};
+
+module.exports.getCookie = function (name) {
+    if (document.cookie.length > 0) {
+        var c_start = document.cookie.indexOf(name + "=");
+        if (c_start != -1) {
+            c_start = c_start + name.length + 1;
+            var c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) {
+                c_end = document.cookie.length;
+            }
+            return unescape(document.cookie.substring(c_start, c_end));
+        }
+    }
+    return "";
+};
+
+},{}],32:[function(require,module,exports){
+"use strict";
+
 var stage = require("fz/core/stage");
 
 module.exports.create = function (text, style) {
@@ -4138,7 +4190,7 @@ module.exports.createWithWords = function (text, style) {
   return cntGlobal;
 };
 
-},{"fz/core/stage":3}],32:[function(require,module,exports){
+},{"fz/core/stage":3}],33:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4420,7 +4472,7 @@ var XPView = (function () {
 		key: "onLogoClick",
 		value: function onLogoClick() {
 			this.direction = 'next';
-			page('/');
+			page('/home');
 		}
 	}, {
 		key: "onShareClick",

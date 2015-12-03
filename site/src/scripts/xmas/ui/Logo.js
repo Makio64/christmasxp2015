@@ -194,7 +194,7 @@ class Logo extends PIXI.Container {
           }
         })
         this._progressBar.hideBottomBar( 3 )
-		page("/intro")
+		page("/")
       }
     })
   }

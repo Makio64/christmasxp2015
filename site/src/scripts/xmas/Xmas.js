@@ -8,6 +8,7 @@ const loop = require( "fz/core/loop" )
 const stage = require( "fz/core/stage" )
 const pixi = require( "fz/core/pixi" )
 const Storyline = require( "xmas/ui/Storyline" )
+const cookie = require( "xmas/utils/cookie" )
 const loader = require( "loader" )
 
 class Xmas {
@@ -22,12 +23,26 @@ class Xmas {
 	this._binds.onIntro = this._onIntro.bind( this )
     this._binds.onAbout = this._onAbout.bind( this )
 	this._binds.onXP = this._onXP.bind( this )
+	this.onStart = this.onStart.bind( this )
 
-	page( "/", this._binds.onChange, this._binds.onHome )
+	page( "/home", this._binds.onChange, this._binds.onHome )
 	page( "/intro", this._binds.onIntro, this._binds.onIntro )
     page( "/about", this._binds.onChange, this._binds.onAbout )
 	page( "/xps/:day/:name/", this._binds.onXP )
-    page()
+    page( "/", this.onStart )
+	page()
+  }
+
+  onStart(){
+	  console.log('test')
+	  if(cookie.getCookie("intro") == ""){
+		  console.log('intro')
+		  cookie.createCookie("intro", Date.now(), 1)
+		  page("/intro")
+	  }else{
+		  console.log('home')
+		  page("/home")
+	  }
   }
 
   _onChange( ctx, next ) {
@@ -40,13 +55,17 @@ class Xmas {
   }
 
   _onIntro(){
-	  page("/")
-	//   storyline = new Storyline()
-	//   storyline.x = -200
-	//   storyline.y = 220
-	//   storyline.show( .6 )
-	//   storyline.hide( 2.7 )
-	//   TweenLite.set( this, { delay: 3.4,onComplete: () => {page("/")}})
+	  if(this.status!="loaded"){
+    	this.init(this._binds._onIntro)
+		return
+    	}
+	  var storyline = new Storyline()
+	  storyline.x = window.innerWidth/2-200
+	  storyline.y = window.innerHeight/2
+	  storyline.show( .6 )
+	  storyline.hide( 2.7 )
+	  pixi.stage.addChild( storyline )
+	  TweenLite.set( this, { delay: 3.4,onComplete: () => {page("/home")}})
   }
 
   _onHome() {
