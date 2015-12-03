@@ -7,6 +7,10 @@ class XPView {
 	this.transitioning = false
 	this.currentXP = false
 	this.html = false
+	this.onNextClick = this.onNextClick.bind(this)
+	this.onPrevClick = this.onPrevClick.bind(this)
+	this.onLogoClick = this.onLogoClick.bind(this)
+	this.direction = 'next'
   }
 
   show(day,title){
@@ -18,10 +22,14 @@ class XPView {
 	  TweenMax.killTweensOf(this.mask)
 	  if(!this.mask)
 		this.createMask()
-	  TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:"left top",ease:Expo.easeOut,onComplete:()=>{
+		var origin = "left top"
+		if(this.direction == 'prev'){origin = "right top"}
+	  	TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:origin,ease:Expo.easeOut,onComplete:()=>{
 		  this.destroyXP()
 		  cb()
-		  TweenMax.to(this.mask,.6,{delay:.2,scaleX:0,transformOrigin:"right top",ease:Expo.easeOut,onComplete:()=>{
+		  origin = "right top"
+		  if(this.direction == 'prev'){origin = "left top"}
+		  TweenMax.to(this.mask,.6,{delay:.2,scaleX:0,transformOrigin:origin,ease:Expo.easeOut,onComplete:()=>{
 			  this.transitioning = false
 		  }})
 	  }})
@@ -59,18 +67,20 @@ class XPView {
   }
 
   prev(){
-    this.xpIndex--
+	this.direction = 'next'
+  	this.xpIndex++
+  	if(this.xpIndex >= config.data.totalXP)
+  		this.xpIndex = 0
+    this.open(this.xpIndex)
+  }
+
+  next(){
+	this.direction = 'prev'
+	this.xpIndex--
 	if(this.xpIndex < 0){
 	  this.xpIndex = config.data.totalXP-1
 	}
 	this.open(this.xpIndex)
-  }
-
-  next(){
-	this.xpIndex++
-	if(this.xpIndex >= config.data.totalXP)
-		this.xpIndex = 0
-    this.open(this.xpIndex)
   }
 
   xpTransitionIn(){
@@ -80,11 +90,15 @@ class XPView {
 	  this.transitioning = true
 	  if(!this.mask)
 	  	this.createMask()
-	  TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:"left top",ease:Expo.easeOut,onComplete:()=>{
+		var origin = "left top"
+		if(this.direction == 'prev'){origin = "right top"}
+	  TweenMax.to(this.mask,.6,{scaleX:1,transformOrigin:origin,ease:Expo.easeOut,onComplete:()=>{
 		  this.destroyXP()
 		  scrollEmul.reset()
 		  this.createIframe(this.xp)
-		  TweenMax.to(this.mask,.6,{delay:.7,scaleX:0,transformOrigin:"right top",ease:Expo.easeOut,onComplete:()=>{
+		  origin = "right top"
+		  if(this.direction == 'prev'){origin = "left top"}
+		  TweenMax.to(this.mask,.6,{delay:.7,scaleX:0,transformOrigin:origin,ease:Expo.easeOut,onComplete:()=>{
 			  this.transitioning = false
 		  }})
 	  }})
@@ -101,39 +115,34 @@ class XPView {
 	  	// The iframe
 		this.iframe.innerHTML = ""
 		document.body.removeChild(this.iframe)
-		document.body.removeChild(this.xpinfos)
-		this.xpinfos = null
-		this.currentXP = false
+		this.iframe = null
+		console.clear()
+		this.logo.removeEventListener('click',this.onLogoClick)
+		  this.logo.removeEventListener('touchStart',this.onLogoClick)
+		  document.body.removeChild(this.logo)
+		  this.logo = null
+
+		  this.nextBtn.removeEventListener('click',this.onNextClick)
+		  this.nextBtn.removeEventListener('touchStart',this.onNextClick)
+		  document.body.removeChild(this.nextBtn)
+		  this.nextBtn = null
+
+		  this.prevBtn.removeEventListener('click',this.onPrevClick)
+		  this.prevBtn.removeEventListener('touchStart',this.onPrevClick)
+		  document.body.removeChild(this.prevBtn)
+		  this.prevBtn = null
+
+		  this.shareBtn.removeEventListener('click',this.onShareClick)
+		  this.shareBtn.removeEventListener('touchStart',this.onShareClick)
+		  document.body.removeChild(this.shareBtn)
+		  this.shareBtn = null
+
+		  document.body.removeChild(this.xpinfos)
+		  this.xpinfos = null
 	}
 	if(cb){
 		cb()
 	}
-  }
-
-  destroyHTML(){
-	  this.html = false
-
-	  this.logo.removeEventListener('click',this.onLogoClick)
-	  this.logo.removeEventListener('touchStart',this.onLogoClick)
-	  document.body.removeChild(this.logo)
-	  this.logo = null
-
-	  this.next.removeEventListener('click',this.onNextClick)
-	  this.next.removeEventListener('touchStart',this.onNextClick)
-	  document.body.removeChild(this.next)
-	  this.next = null
-
-	  this.prev.removeEventListener('click',this.onPrevClick)
-	  this.prev.removeEventListener('touchStart',this.onPrevClick)
-	  document.body.removeChild(this.prev)
-	  this.prev = null
-
-	  this.share.removeEventListener('click',this.onShareClick)
-	  this.share.removeEventListener('touchStart',this.onShareClick)
-	  document.body.removeChild(this.share)
-	  this.share = null
-	  document.body.removeChild(this.xpinfos)
-	  this.xpinfos = null
   }
 
   // CREATE IFRAME
@@ -147,23 +156,23 @@ class XPView {
 	this.logo.addEventListener('touchStart',this.onLogoClick)
     document.body.appendChild(this.logo)
 
-    this.next = document.createElement('div')
-    this.next.id = 'next'
-	this.next.addEventListener('click',this.onNextClick)
-	this.next.addEventListener('touchStart',this.onNextClick)
-    document.body.appendChild(this.next)
+    this.nextBtn = document.createElement('div')
+    this.nextBtn.id = 'next'
+	this.nextBtn.addEventListener('click',this.onNextClick)
+	this.nextBtn.addEventListener('touchStart',this.onNextClick)
+    document.body.appendChild(this.nextBtn)
 
-    this.prev = document.createElement('div')
-    this.prev.id = 'prev'
-	this.prev.addEventListener('click',this.onPrevClick)
-	this.prev.addEventListener('touchStart',this.onPrevClick)
-    document.body.appendChild(this.prev)
+    this.prevBtn = document.createElement('div')
+    this.prevBtn.id = 'prev'
+	this.prevBtn.addEventListener('click',this.onPrevClick)
+	this.prevBtn.addEventListener('touchStart',this.onPrevClick)
+    document.body.appendChild(this.prevBtn)
 
-    this.share = document.createElement('div')
-    this.share.id = 'share'
-	this.share.addEventListener('click',this.onShareClick)
-	this.share.addEventListener('touchStart',this.onShareClick)
-    document.body.appendChild(this.share)
+    this.shareBtn = document.createElement('div')
+    this.shareBtn.id = 'share'
+	this.shareBtn.addEventListener('click',this.onShareClick)
+	this.shareBtn.addEventListener('touchStart',this.onShareClick)
+    document.body.appendChild(this.shareBtn)
 
     this.xpinfos = document.createElement('div')
     this.xpinfos.id = 'xpinfos'
@@ -202,23 +211,22 @@ class XPView {
   }
 
   onLogoClick(){
-	this.disposeXP()
-	// TODO RESTART ALL! Yukataaaaa
-	this.close()
+	this.direction = 'next'
+	page('/')
   }
 
   onShareClick(){
     //TODO Twitter
+
 	//TODO Facebook
+
   }
 
   onAuthorOver(){
 	//TODO CoolAnim to show his website / twitter / autre
-  }
-
-  close(){
 
   }
+
 }
 
 module.exports = XPView
