@@ -14,10 +14,13 @@ class XPView {
   }
 
   show(day,title){
+	  if(this.isActive)return
+	  this.isActive = true
 	  this.open(this.getID(day,title))
   }
 
   hide(cb){
+	  this.isActive = false
 	  this.transitioning = true
 	  TweenMax.killTweensOf(this.mask)
 	  if(!this.mask)
@@ -42,6 +45,7 @@ class XPView {
 	for (var i = 0; i < days.length; i++) {
 		var d = days[i]
 		if(d.folder.replace( /\//gi, "" ) == title){
+			this.xpDay = day
 			return d.uid
 		}
 	}
@@ -60,8 +64,24 @@ class XPView {
 	}
  }
 
+ // XP MANAGEMENT
+ getDay(id){
+   var days = config.data.days
+   for(var j = 1; j <= 24; j++) {
+	   var day = days[j]
+	   for (var i = 0; i < day.length; i++) {
+		   var d = day[i]
+		   if(d.uid == id){
+			   return j
+		   }
+	   }
+   }
+ }
   open(id) {
 	 this.xpIndex = id
+	 var day = this.getDay(this.xpIndex)
+	 if(day<10)day='0'+day
+	 this.xpDay = day
 	 this.xp = this.getXP(id)
 	 this.xpTransitionIn()
   }
@@ -205,10 +225,14 @@ class XPView {
   //FEEBACK USER
   onNextClick(){
 	this.prev()
+	var folder = this.xp.folder
+	page('/xps/'+this.xpDay+folder)
   }
 
   onPrevClick(){
   	this.next()
+	var folder = this.xp.folder
+	page('/xps/'+this.xpDay+folder)
   }
 
   onLogoClick(){

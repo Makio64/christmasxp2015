@@ -26,14 +26,14 @@ class Xmas {
 	page( "/", this._binds.onChange, this._binds.onHome )
 	page( "/intro", this._binds.onIntro, this._binds.onIntro )
     page( "/about", this._binds.onChange, this._binds.onAbout )
-	page( "/xps/:day/:name/", this._binds.onChange, this._binds.onXP )
+	page( "/xps/:day/:name/", this._binds.onXP )
     page()
   }
 
   _onChange( ctx, next ) {
     if( this._current ) {
-      this._current.unbindEvents()
-      this._current.hide( next )
+		this._current.unbindEvents()
+		this._current.hide( next )
     } else {
       next()
     }
@@ -72,7 +72,7 @@ class Xmas {
     }
 
 	_onXP(e) {
-		if(!this.xp){
+		if(!this._xp){
 			if(this.status=="notLoaded"){
 				loader.loadConfig(()=>{
 					this._xp = new XPView()
@@ -81,7 +81,7 @@ class Xmas {
 					this._current.show(e.params.day,e.params.name)
 				})
 				return
-			}else{
+			} else {
 				this._xp = new XPView()
 			}
 		}

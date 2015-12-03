@@ -1062,7 +1062,7 @@ var Xmas = (function () {
 		page("/", this._binds.onChange, this._binds.onHome);
 		page("/intro", this._binds.onIntro, this._binds.onIntro);
 		page("/about", this._binds.onChange, this._binds.onAbout);
-		page("/xps/:day/:name/", this._binds.onChange, this._binds.onXP);
+		page("/xps/:day/:name/", this._binds.onXP);
 		page();
 	}
 
@@ -1114,7 +1114,7 @@ var Xmas = (function () {
 		value: function _onXP(e) {
 			var _this = this;
 
-			if (!this.xp) {
+			if (!this._xp) {
 				if (this.status == "notLoaded") {
 					loader.loadConfig(function () {
 						_this._xp = new XPView();
@@ -4164,6 +4164,8 @@ var XPView = (function () {
 	_createClass(XPView, [{
 		key: "show",
 		value: function show(day, title) {
+			if (this.isActive) return;
+			this.isActive = true;
 			this.open(this.getID(day, title));
 		}
 	}, {
@@ -4171,6 +4173,7 @@ var XPView = (function () {
 		value: function hide(cb) {
 			var _this = this;
 
+			this.isActive = false;
 			this.transitioning = true;
 			TweenMax.killTweensOf(this.mask);
 			if (!this.mask) this.createMask();
@@ -4201,6 +4204,7 @@ var XPView = (function () {
 			for (var i = 0; i < days.length; i++) {
 				var d = days[i];
 				if (d.folder.replace(/\//gi, "") == title) {
+					this.xpDay = day;
 					return d.uid;
 				}
 			}
@@ -4219,10 +4223,30 @@ var XPView = (function () {
 				}
 			}
 		}
+
+		// XP MANAGEMENT
+
+	}, {
+		key: "getDay",
+		value: function getDay(id) {
+			var days = config.data.days;
+			for (var j = 1; j <= 24; j++) {
+				var day = days[j];
+				for (var i = 0; i < day.length; i++) {
+					var d = day[i];
+					if (d.uid == id) {
+						return j;
+					}
+				}
+			}
+		}
 	}, {
 		key: "open",
 		value: function open(id) {
 			this.xpIndex = id;
+			var day = this.getDay(this.xpIndex);
+			if (day < 10) day = '0' + day;
+			this.xpDay = day;
 			this.xp = this.getXP(id);
 			this.xpTransitionIn();
 		}
@@ -4382,11 +4406,15 @@ var XPView = (function () {
 		key: "onNextClick",
 		value: function onNextClick() {
 			this.prev();
+			var folder = this.xp.folder;
+			page('/xps/' + this.xpDay + folder);
 		}
 	}, {
 		key: "onPrevClick",
 		value: function onPrevClick() {
 			this.next();
+			var folder = this.xp.folder;
+			page('/xps/' + this.xpDay + folder);
 		}
 	}, {
 		key: "onLogoClick",
