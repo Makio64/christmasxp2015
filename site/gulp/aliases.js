@@ -13,3 +13,10 @@ gulp.task( "build", function( cb ) {
   runSequence( [ "scripts", "styles-build" ], cb );
 
 })
+
+
+gulp.task( "optimize", function( cb ) {
+
+  runSequence( "copyToDist", [ "html", "json", "imagemin" ], cb );
+
+})
