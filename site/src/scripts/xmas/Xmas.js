@@ -19,18 +19,18 @@ class Xmas {
 
     this._binds = {}
     this._binds.onChange = this._onChange.bind( this )
-	this._binds.onHome = this._onHome.bind( this )
-	this._binds.onIntro = this._onIntro.bind( this )
+    this._binds.onHome = this._onHome.bind( this )
+    this._binds.onIntro = this._onIntro.bind( this )
     this._binds.onAbout = this._onAbout.bind( this )
-	this._binds.onXP = this._onXP.bind( this )
-	this.onStart = this.onStart.bind( this )
+    this._binds.onXP = this._onXP.bind( this )
+    this.onStart = this.onStart.bind( this )
 
-	page( "/home", this._binds.onChange, this._binds.onHome )
-	page( "/intro", this._binds.onIntro, this._binds.onIntro )
+  	page( "/home", this._binds.onChange, this._binds.onHome )
+  	page( "/intro", this._binds.onIntro, this._binds.onIntro )
     page( "/about", this._binds.onChange, this._binds.onAbout )
-	page( "/xps/:day/:name/", this._binds.onXP )
+    page( "/xps/:day/:name/", this._binds.onXP )
     page( "/", this.onStart )
-	page()
+    page()
   }
 
   onStart(){
