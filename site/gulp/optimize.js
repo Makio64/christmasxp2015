@@ -14,7 +14,7 @@ gulp.task('imagemin', function(cb) {
     return gulp.src('build/**/*.+(jpg|jpeg|png|gif|svg)')
         .pipe(imagemin({
             progressive: true,
-			optimizationLevel: 1
+			optimizationLevel: 3
         }))
         .pipe(gulp.dest('dist/'));
 });

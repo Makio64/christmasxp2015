@@ -1,0 +1,12 @@
+{
+	"author":"Ilmari Heikkinen",
+	"nickname":"",
+	"website":"http://fhtr.org",
+	"twitter":"ilmarihei",
+	"title":"Light a candle",
+    "technology":"Three.js",
+	"description":"Light a candle and make the world a brighter place.",
+    "casestudy":"",
+	"source":"https://github.com/kig/candles",
+	"mobileFriendly":"1"
+}
