@@ -13,18 +13,22 @@ class Bts extends PIXI.Container {
   }
 
   _onMouseOver( e ) {
-    const target = e.target
-    TweenLite.to( target.children[ 1 ], .25, {
-      alpha: 1,
+    const target = e.target.children[ 0 ]
+    target.alpha = 1
+    TweenLite.to( target, .25, {
+      x: 5,
       ease: Quart.easeOut
     })
   }
 
   _onMouseOut( e ) {
-    const target = e.target
-    TweenLite.to( target.children[ 1 ], .25, {
-      alpha: 0,
-      ease: Quart.easeOut
+    const target = e.target.children[ 0 ]
+    TweenLite.to( target, .25, {
+      x: 0,
+      ease: Quart.easeOut,
+      onComplete: () => {
+        target.alpha = 0
+      }
     })
   }
 
@@ -54,30 +58,31 @@ class Bts extends PIXI.Container {
 
   _initTop() {
     this._cntTop = new PIXI.Container()
+    this._cntTop.x = 22
     this.addChild( this._cntTop )
 
     this._btSubmit = this._createBt( "bt_submitxp" )
-    this._btSubmit.x = -2
+    this._btSubmit.x = -2 * 1.5 >> 0
     this._cntTop.addChild( this._btSubmit )
 
     this._btAbout = this._createBt( "bt_about" )
-    this._btAbout.x = 125
-    this._btAbout.y = 17
+    this._btAbout.x = 170
+    this._btAbout.y = 25
     this._cntTop.addChild( this._btAbout )
   }
 
   _initShare() {
     this._cntShare = new PIXI.Container()
-    this._cntShare.x = 134
-    this._cntShare.y = 180
+    this._cntShare.x = 134 * 1.5 >> 0
+    this._cntShare.y = 180 * 1.5 >> 0
     this.addChild( this._cntShare )
 
     this._btFB = this._createBt( "bt_fb" )
     this._cntShare.addChild( this._btFB )
 
     this._btTwitter = this._createBt( "bt_twitter" )
-    this._btTwitter.x = 27
-    this._btTwitter.y = 17
+    this._btTwitter.x = 27 * 1.5 >> 0
+    this._btTwitter.y = 17 * 1.5 >> 0
     this._cntShare.addChild( this._btTwitter )
   }
 
@@ -89,16 +94,16 @@ class Bts extends PIXI.Container {
     cnt.on( "mouseover", this._binds.onMouseOver )
     cnt.on( "mouseout", this._binds.onMouseOut )
     cnt.on( "click", this._binds.onClick )
-	cnt.on("touchend", this._binds.onClick )
-
-    const normal = new PIXI.Sprite( PIXI.Texture.fromFrame( name + ".png" ) )
-    normal.scale.set( .5, .5 )
-    cnt.addChild( normal )
+    cnt.on("touchend", this._binds.onClick )
 
     const hover = new PIXI.Sprite( PIXI.Texture.fromFrame( name + "_hover.png" ) )
-    hover.scale.set( .5, .5 )
+    hover.scale.set( .33, .33 )
     hover.alpha = 0
     cnt.addChild( hover )
+
+    const normal = new PIXI.Sprite( PIXI.Texture.fromFrame( name + ".png" ) )
+    normal.scale.set( .33, .33 )
+    cnt.addChild( normal )
 
     return cnt
   }

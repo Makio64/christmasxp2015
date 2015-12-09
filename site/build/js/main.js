@@ -1047,154 +1047,156 @@ var cookie = require("xmas/utils/cookie");
 var loader = require("loader");
 
 var Xmas = (function () {
-	function Xmas() {
-		_classCallCheck(this, Xmas);
+  function Xmas() {
+    _classCallCheck(this, Xmas);
 
-		this._current = null;
-		this.status = "notLoaded";
+    this._current = null;
+    this.status = "notLoaded";
 
-		this._binds = {};
-		this._binds.onChange = this._onChange.bind(this);
-		this._binds.onHome = this._onHome.bind(this);
-		this._binds.onIntro = this._onIntro.bind(this);
-		this._binds.onAbout = this._onAbout.bind(this);
-		this._binds.onXP = this._onXP.bind(this);
-		this.onStart = this.onStart.bind(this);
+    this._binds = {};
+    this._binds.onChange = this._onChange.bind(this);
+    this._binds.onHome = this._onHome.bind(this);
+    this._binds.onIntro = this._onIntro.bind(this);
+    this._binds.onAbout = this._onAbout.bind(this);
+    this._binds.onXP = this._onXP.bind(this);
+    this.onStart = this.onStart.bind(this);
 
-		page("/home", this._binds.onChange, this._binds.onHome);
-		page("/intro", this._binds.onIntro, this._binds.onIntro);
-		page("/about", this._binds.onChange, this._binds.onAbout);
-		page("/xps/:day/:name/", this._binds.onXP);
-		page("/", this.onStart);
-		page();
-	}
+    page("/home", this._binds.onChange, this._binds.onHome);
+    page("/intro", this._binds.onIntro, this._binds.onIntro);
+    page("/about", this._binds.onChange, this._binds.onAbout);
+    page("/xps/:day/:name/", this._binds.onXP);
+    page("/", this.onStart);
+    page();
+  }
 
-	_createClass(Xmas, [{
-		key: "onStart",
-		value: function onStart() {
-			console.log('test');
-			if (cookie.getCookie("intro") == "") {
-				console.log('intro');
-				cookie.createCookie("intro", Date.now(), 1);
-				page("/intro");
-			} else {
-				console.log('home');
-				page("/home");
-			}
-		}
-	}, {
-		key: "_onChange",
-		value: function _onChange(ctx, next) {
-			if (this._current) {
-				this._current.unbindEvents();
-				this._current.hide(next);
-			} else {
-				next();
-			}
-		}
-	}, {
-		key: "_onIntro",
-		value: function _onIntro() {
-			if (this.status != "loaded") {
-				this.init(this._binds._onIntro);
-				return;
-			}
-			var storyline = new Storyline();
-			storyline.x = window.innerWidth / 2 - 200;
-			storyline.y = window.innerHeight / 2;
-			storyline.show(.6);
-			storyline.hide(2.7);
-			pixi.stage.addChild(storyline);
-			TweenLite.set(this, { delay: 3.4, onComplete: function onComplete() {
-					page("/home");
-				} });
-		}
-	}, {
-		key: "_onHome",
-		value: function _onHome() {
-			if (this.status != "loaded") {
-				this.init(this._binds.onHome);
-			} else {
-				if (!this._home) this._home = new Home();
-				this._current = this._home;
-				this._displayCurrent();
-			}
-		}
-	}, {
-		key: "_onAbout",
-		value: function _onAbout() {
-			if (this.status != "loaded") {
-				this.init(this._binds.onAbout);
-			} else {
-				if (!this._about) this._about = new About();
-				this._current = this._about;
-				this._displayCurrent();
-			}
-		}
-	}, {
-		key: "_onXP",
-		value: function _onXP(e) {
-			var _this = this;
+  _createClass(Xmas, [{
+    key: "onStart",
+    value: function onStart() {
+      console.log('test');
+      if (cookie.getCookie("intro") == "") {
+        console.log('intro');
+        cookie.createCookie("intro", Date.now(), 1);
+        // page("/intro")
+        this._onIntro();
+      } else {
+        console.log('home');
+        // page("/home")
+        this._onHome();
+      }
+    }
+  }, {
+    key: "_onChange",
+    value: function _onChange(ctx, next) {
+      if (this._current) {
+        this._current.unbindEvents();
+        this._current.hide(next);
+      } else {
+        next();
+      }
+    }
+  }, {
+    key: "_onIntro",
+    value: function _onIntro() {
+      if (this.status != "loaded") {
+        this.init(this._binds._onIntro);
+        return;
+      }
+      var storyline = new Storyline();
+      storyline.x = window.innerWidth / 2 - 200;
+      storyline.y = window.innerHeight / 2;
+      storyline.show(.6);
+      storyline.hide(2.7);
+      pixi.stage.addChild(storyline);
+      TweenLite.set(this, { delay: 3.4, onComplete: function onComplete() {
+          page("/home");
+        } });
+    }
+  }, {
+    key: "_onHome",
+    value: function _onHome() {
+      if (this.status != "loaded") {
+        this.init(this._binds.onHome);
+      } else {
+        if (!this._home) this._home = new Home();
+        this._current = this._home;
+        this._displayCurrent();
+      }
+    }
+  }, {
+    key: "_onAbout",
+    value: function _onAbout() {
+      if (this.status != "loaded") {
+        this.init(this._binds.onAbout);
+      } else {
+        if (!this._about) this._about = new About();
+        this._current = this._about;
+        this._displayCurrent();
+      }
+    }
+  }, {
+    key: "_onXP",
+    value: function _onXP(e) {
+      var _this = this;
 
-			if (!this._xp) {
-				if (this.status == "notLoaded") {
-					loader.loadConfig(function () {
-						_this._xp = new XPView();
-						_this._current = _this._xp;
-						_this._current.bindEvents();
-						_this._current.show(e.params.day, e.params.name);
-					});
-					return;
-				} else {
-					this._xp = new XPView();
-				}
-			}
-			this._current = this._xp;
-			this._current.bindEvents();
-			this._current.show(e.params.day, e.params.name);
-		}
-	}, {
-		key: "_displayCurrent",
-		value: function _displayCurrent() {
-			this._current.bindEvents();
-			this._current.show();
-		}
-	}, {
-		key: "init",
-		value: function init(cb) {
-			var _this2 = this;
+      if (!this._xp) {
+        if (this.status == "notLoaded") {
+          loader.loadConfig(function () {
+            _this._xp = new XPView();
+            _this._current = _this._xp;
+            _this._current.bindEvents();
+            _this._current.show(e.params.day, e.params.name);
+          });
+          return;
+        } else {
+          this._xp = new XPView();
+        }
+      }
+      this._current = this._xp;
+      this._current.bindEvents();
+      this._current.show(e.params.day, e.params.name);
+    }
+  }, {
+    key: "_displayCurrent",
+    value: function _displayCurrent() {
+      this._current.bindEvents();
+      this._current.show();
+    }
+  }, {
+    key: "init",
+    value: function init(cb) {
+      var _this2 = this;
 
-			if (this.status == "loading") {
-				return;
-			} else if (this.status == "loaded") {
-				cb();
-				return;
-			}
+      if (this.status == "loading") {
+        return;
+      } else if (this.status == "loaded") {
+        cb();
+        return;
+      }
 
-			this.status = "loading";
-			stage.init();
-			pixi.init();
+      this.status = "loading";
+      stage.init();
+      pixi.init();
 
-			var ui = null;
-			loader.on("ready", function () {
-				ui = new Ui();
-				ui.bindEvents();
-				ui.showLoading();
-			});
-			loader.on("complete", function () {
-				_this2.status = "loaded";
-				ui.hideLoading();
-				ui.showBts();
-			});
-			loader.load();
-			loop.start();
-			scrollEmul.bindElements();
-			scrollEmul.bindEvents();
-			document.getElementById("main").appendChild(pixi.dom);
-		}
-	}]);
+      var ui = null;
+      loader.on("ready", function () {
+        ui = new Ui();
+        ui.bindEvents();
+        ui.showLoading();
+      });
+      loader.on("complete", function () {
+        _this2.status = "loaded";
+        ui.hideLoading();
+        ui.showBts();
+      });
+      loader.load();
+      loop.start();
+      scrollEmul.bindElements();
+      scrollEmul.bindEvents();
+      document.getElementById("main").appendChild(pixi.dom);
+    }
+  }]);
 
-	return Xmas;
+  return Xmas;
 })();
 
 module.exports = Xmas;
@@ -1250,8 +1252,10 @@ config.colors = {
 
 config.sizes = {
   entry: {
-    w: 139,
-    h: 160
+    // w: 139,
+    // h: 160
+    w: 210,
+    h: 240
   }
 };
 
@@ -1335,6 +1339,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var config = require("xmas/core/config");
 var stage = require("fz/core/stage");
 var pixi = require("fz/core/pixi");
 var loop = require("fz/core/loop");
@@ -1359,7 +1364,7 @@ var Home = (function (_PIXI$Container) {
 
     _this._yLast = 0;
 
-    _this._hLine = 220;
+    _this._hLine = config.sizes.entry.h + 75;
 
     if (browsers.mobile) {
       _this.scale.set(.7, .7);
@@ -1410,7 +1415,7 @@ var Home = (function (_PIXI$Container) {
       // if( stage.width < 1000 ) {
       // w = 880
       // }
-      var w = 880;
+      var w = 1320;
       this._cntLines.x = stage.width - w >> 1;
       if (browsers.tablet || browsers.mobile) {
         this._cntLines.x = 10;
@@ -1603,7 +1608,7 @@ var Home = (function (_PIXI$Container) {
 
 module.exports = Home;
 
-},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"fz/events/interactions":5,"fz/utils/browsers":6,"fz/utils/maths":8,"xmas/core/scrollEmul":16,"xmas/home/Line":18}],18:[function(require,module,exports){
+},{"fz/core/loop":1,"fz/core/pixi":2,"fz/core/stage":3,"fz/events/interactions":5,"fz/utils/browsers":6,"fz/utils/maths":8,"xmas/core/config":15,"xmas/core/scrollEmul":16,"xmas/home/Line":18}],18:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -1637,7 +1642,7 @@ var Line = (function (_PIXI$Container) {
     _this._createTitle();
 
     _this._cntEntries = new PIXI.Container();
-    _this._cntEntries.x = 145;
+    _this._cntEntries.x = 218;
     _this.addChild(_this._cntEntries);
     if (_this._count > 0) {
       _this._createEntries();
@@ -1659,22 +1664,22 @@ var Line = (function (_PIXI$Container) {
       this._cntTitle.addChild(cntLeft);
 
       if (this._idx == 1) {
-        this._cntTfDay = uXmasTexts.create("DAY", { font: "20px " + config.fonts.bold, fill: config.colors.red }, 1);
+        this._cntTfDay = uXmasTexts.create("DAY", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 1);
         this._cntTfDay.alpha = 0;
         cntLeft.addChild(this._cntTfDay);
       }
 
       this._line = new PIXI.Graphics();
-      this._line.x = 20;
-      this._line.y = 26;
+      this._line.x = 30;
+      this._line.y = 39;
       this._line.lineStyle(1, config.colors.blue);
-      this._line.moveTo(-20, 0);
+      this._line.moveTo(-30, 0);
       this._line.lineTo(0, 0);
       this._line.scale.x = 0;
       cntLeft.addChild(this._line);
 
-      this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "120px " + config.fonts.bold, fill: config.colors.red });
-      this._cntTfNumber.x = 36;
+      this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "180px " + config.fonts.bold, fill: config.colors.red });
+      this._cntTfNumber.x = 54;
       this._cntTfNumber.alpha = 0;
       this._cntTitle.addChild(this._cntTfNumber);
 
@@ -1691,10 +1696,10 @@ var Line = (function (_PIXI$Container) {
       for (var i = 0; i < this._count; i++) {
         entry = new Entry(i + 1, this._dataEntries[i]);
         entry.x += px;
-        entry.y = Math.sin(as[i]) * 25 >> 0;
+        entry.y = Math.sin(as[i]) * 38 >> 0;
         this._cntEntries.addChild(entry);
 
-        px += 180;
+        px += config.sizes.entry.w + 60;
 
         yTime += Math.PI * .75;
       }
@@ -1801,17 +1806,17 @@ var Line = (function (_PIXI$Container) {
         var _n = this._cntTfDay.children.length;
         for (var i = 0; i < _n; i++) {
           letter = this._cntTfDay.children[i];
-          letter.alpha = 0;
-          TweenLite.to(letter, .6, {
+          // letter.alpha = 0
+          TweenLite.to(letter, .4, {
             delay: delay + .1 + (_n - i) * .1,
             alpha: 0,
             ease: Cubic.easeInOut
           });
         }
-        TweenLite.set(this._cntTfDay, {
-          delay: delay + .04,
-          alpha: 0
-        });
+        // TweenLite.set( this._cntTfDay, {
+        //   delay: delay + 1,
+        //   alpha: 0,
+        // })
       }
       TweenLite.to(this._line.scale, .6, {
         delay: delay + .04,
@@ -1863,6 +1868,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var timeout = require("fz/utils/timeout");
 
+var config = require("xmas/core/config");
+
 var EntryContentPreview = require("xmas/home/entry/EntryContentPreview");
 var EntryNumber = require("xmas/home/entry/EntryNumber");
 var EntryComingSoon = require("xmas/home/entry/EntryComingSoon");
@@ -1888,16 +1895,16 @@ var Entry = (function (_PIXI$Container) {
       _this.addChild(_this._content);
 
       _this._circle = new EntryNumber(idx);
-      _this._circle.x = 133;
-      _this._circle.y = 124;
+      _this._circle.x = config.sizes.entry.w;
+      _this._circle.y = config.sizes.entry.h - 55;
       _this.addChild(_this._circle);
     } else {
       _this._content = new EntryComingSoon();
       _this.addChild(_this._content);
 
       _this._circle = new EntrySmiley();
-      _this._circle.x = 133;
-      _this._circle.y = 124;
+      _this._circle.x = config.sizes.entry.w;
+      _this._circle.y = config.sizes.entry.h - 55;
       _this.addChild(_this._circle);
     }
 
@@ -2006,7 +2013,7 @@ var Entry = (function (_PIXI$Container) {
 
 module.exports = Entry;
 
-},{"fz/utils/timeout":10,"xmas/home/entry/EntryComingSoon":20,"xmas/home/entry/EntryContentPreview":21,"xmas/home/entry/EntryNumber":22,"xmas/home/entry/EntrySmiley":23}],20:[function(require,module,exports){
+},{"fz/utils/timeout":10,"xmas/core/config":15,"xmas/home/entry/EntryComingSoon":20,"xmas/home/entry/EntryContentPreview":21,"xmas/home/entry/EntryNumber":22,"xmas/home/entry/EntrySmiley":23}],20:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2054,13 +2061,13 @@ var EntryComingSoon = (function (_PIXI$Container) {
     value: function _createContent() {
       var cnt = new PIXI.Container();
 
-      var tfTmp = uXmasTexts.create("more fun", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2);
+      var tfTmp = uXmasTexts.create("more fun", { font: "45px " + config.fonts.bold, fill: config.colors.red });
       var tex = tfTmp.generateTexture(pixi.renderer, stage.resolution);
       this._cntTfTop = new PIXI.Sprite(tex);
       this._cntTfTop.x = config.sizes.entry.w - this._cntTfTop.width >> 1;
       cnt.addChild(this._cntTfTop);
 
-      tfTmp = uXmasTexts.create("coming soon", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2);
+      tfTmp = uXmasTexts.create("coming soon", { font: "45px " + config.fonts.bold, fill: config.colors.red });
       tex = tfTmp.generateTexture(pixi.renderer, stage.resolution);
       this._cntTfBottom = new PIXI.Sprite(tex);
       this._cntTfBottom.x = config.sizes.entry.w - this._cntTfBottom.width >> 1;
@@ -2294,6 +2301,8 @@ var DefaultShape = (function (_PIXI$Container) {
     _this._shapeOver = new PIXI.Graphics();
     _this._shapeOver.beginFill(0xe5f2ff);
     _this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
+    // this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
+    // this._shapeOver.anchor.set( .5, .5 )
     _this._shapeOver.x = _this._polyShape.x;
     _this._shapeOver.y = _this._polyShape.y;
     _this._shapeOver.scale.x = _this._shapeOver.scale.y = 0;
@@ -2301,6 +2310,8 @@ var DefaultShape = (function (_PIXI$Container) {
     _this._mskCircle = new PIXI.Graphics();
     _this._mskCircle.beginFill(0xff00ff);
     _this._mskCircle.drawCircle(0, 0, config.sizes.entry.h >> 1);
+    // this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
+    // this._shapeOver.anchor.set( .5, .5 )
     _this._mskCircle.x = _this._polyShape.x;
     _this._mskCircle.y = _this._polyShape.y;
     _this._mskCircle.scale.x = _this._mskCircle.scale.y = 0;
@@ -2452,6 +2463,8 @@ var HoverShape = (function (_PIXI$Container2) {
     _this3._shapeOver.y = _this3._msk.y;
     _this3._shapeOver.scale.x = _this3._shapeOver.scale.y = 0;
 
+    // this._isOver = false
+
     _this3._binds = {};
     _this3._binds.updateMsk = _this3._updateMsk.bind(_this3);
     return _this3;
@@ -2490,6 +2503,8 @@ var HoverShape = (function (_PIXI$Container2) {
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._shapeOver.scale);
 
+      // this._isOver = true
+
       this.scale.x = this.scale.y = 1;
       this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
       this._percent = 0.0001;
@@ -2516,6 +2531,10 @@ var HoverShape = (function (_PIXI$Container2) {
   }, {
     key: "out",
     value: function out(cb) {
+      // if( !this._isOver ) {
+      //   return
+      // }
+      // this._isOver = false
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._shapeOver.scale);
 
@@ -2527,8 +2546,8 @@ var HoverShape = (function (_PIXI$Container2) {
       });
       TweenLite.to(this._shapeOver.scale, .4, {
         delay: .175,
-        x: 1.2,
-        y: 1.2,
+        x: 1.3,
+        y: 1.3,
         ease: Quart.easeOut
       });
 
@@ -2566,25 +2585,29 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     // this.addChild( this._hover )
 
     _this4.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this4.hoverZone.scale.set(.5, .5);
+    // this.hoverZone.scale.set( .5, .5 )
+    _this4.hoverZone.width = config.sizes.entry.w;
+    _this4.hoverZone.height = config.sizes.entry.h;
     _this4.hoverZone.tint = Math.random() * 0xffffff;
     _this4.hoverZone.alpha = 0;
     _this4.addChild(_this4.hoverZone);
 
     _this4._cntTf = new PIXI.Container();
-    _this4._cntTf.x = 63;
-    _this4._cntTf.y = 170;
+    _this4._cntTf.x = 100;
+    _this4._cntTf.y = 255;
     _this4.addChild(_this4._cntTf);
 
-    _this4._tfTitle = uTexts.create(data.title, { font: "15px " + config.fonts.medium, fill: config.colors.blue });
+    _this4._tfTitle = uTexts.create(data.title, { font: "22px " + config.fonts.medium, fill: config.colors.blue });
     _this4._cntTf.addChild(_this4._tfTitle);
     _this4._initLetters(_this4._tfTitle);
 
-    _this4._tfAuthor = uTexts.create(data.author, { font: "18px " + config.fonts.medium, fill: config.colors.blue });
-    _this4._tfAuthor.x = 10;
-    _this4._tfAuthor.y = 15;
+    _this4._tfAuthor = uTexts.create(data.author, { font: "27px " + config.fonts.medium, fill: config.colors.blue });
+    _this4._tfAuthor.x = 15;
+    _this4._tfAuthor.y = 20;
     _this4._cntTf.addChild(_this4._tfAuthor);
     _this4._initLetters(_this4._tfAuthor);
+
+    _this4._isShown = false;
     return _this4;
   }
 
@@ -2607,14 +2630,12 @@ var EntryContentPreview = (function (_PIXI$Container3) {
   }, {
     key: "out",
     value: function out() {
+      var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
       this._default.out();
       this.addChild(this._default);
 
       this._hover.out();
-      // this._hover.out( () => {
-      //   this.removeChild( this._hover )
-      // })
-      // this.removeChild( this._hover )
     }
   }, {
     key: "show",
@@ -2622,35 +2643,12 @@ var EntryContentPreview = (function (_PIXI$Container3) {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
       var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-      // this.x = -60
-      // this.y = 40
-      // TweenLite.to( this, .7, {
-      //   delay: delay,
-      //   x: 0,
-      //   y: 0,
-      //   ease: Cubic.easeOut
-      // })
-      // TweenLite.to( this._default.scale, .25, {
-      //   delay: delay,
-      //   x: 0.35,
-      //   y: 0.35,
-      //   ease: Sine.easeIn,
-      // } )
-      // TweenLite.set( this._default.scale, {
-      //   delay: delay + .25,
-      //   x: .6,
-      //   y: .6
-      // } )
-      // TweenLite.to( this._default.scale, .6, {
-      //   delay: delay + .25,
-      //   x: 1,
-      //   y: 1,
-      //   ease: Cubic.easeOut,
-      // } )
+      this._isShown = true;
 
       var timing = fast ? .4 : .8;
       var ratio = fast ? .5 : 1;
 
+      TweenLite.killTweensOf(this._default.scale);
       TweenLite.to(this._default.scale, timing, {
         delay: delay, // + .25,
         x: 1,
@@ -2679,6 +2677,9 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     value: function hide() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
+      // this._hover.out()
+
+      TweenLite.killTweensOf(this._default.scale);
       TweenLite.to(this._default.scale, .6, {
         delay: delay, // + .25,
         x: 0,
@@ -2734,15 +2735,16 @@ var EntryNumber = (function (_PIXI$Container) {
     _this._percentArrowLine = 0;
     _this._percentArrowEnd = 0;
 
-    _this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
-    _this._bg.scale.set(.5, .5);
+    _this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("circle_2x.png"));
+    _this._bg.tint = config.colors.red;
+    _this._bg.scale.set(.33, .33);
     _this.addChild(_this._bg);
 
-    _this._cntText = uXmasTexts.create("0" + idx, { font: "20px " + config.fonts.bold, fill: 0xffffff });
+    _this._cntText = uXmasTexts.create("0" + idx, { font: "30px " + config.fonts.bold, fill: 0xffffff });
     _this._cntText.x = _this._bg.width - _this._cntText.width >> 1;
     _this._cntText.y = _this._bg.height - _this._cntText.height >> 1;
     _this._cntText.x -= 1;
-    _this._cntText.y -= 1;
+    _this._cntText.y -= 3;
     _this._initLetters();
     _this.addChild(_this._cntText);
 
@@ -2766,7 +2768,7 @@ var EntryNumber = (function (_PIXI$Container) {
       for (var i = 0; i < n; i++) {
         letter = this._cntText.children[i];
         letter.alpha = 0;
-        letter.y = 10;
+        letter.y = 15;
       }
     }
   }, {
@@ -2777,8 +2779,8 @@ var EntryNumber = (function (_PIXI$Container) {
       this._cntArrow.y = this._bg.height >> 1;
       // this.addChild( this._cntArrow )
 
-      this._wArrowLine = 22;
-      this._sizeArrowEnd = 5;
+      this._wArrowLine = 22 * 1.5;
+      this._sizeArrowEnd = 5 * 1.5;
 
       this._arrowLine = new PIXI.Graphics();
       this._cntArrow.addChild(this._arrowLine);
@@ -2822,7 +2824,7 @@ var EntryNumber = (function (_PIXI$Container) {
 
       this.addChild(this._cntArrow);
 
-      this._cntArrow.x = -4;
+      this._cntArrow.x = -30;
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._cntArrow);
       TweenLite.to(this, .4, {
@@ -2968,6 +2970,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var config = require("xmas/core/config");
+
 var EntrySmiley = (function (_PIXI$Container) {
   _inherits(EntrySmiley, _PIXI$Container);
 
@@ -2976,13 +2980,14 @@ var EntrySmiley = (function (_PIXI$Container) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntrySmiley).call(this));
 
-    _this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("bg-entry-number_2x.png"));
-    _this._bg.scale.set(.5, .5);
+    _this._bg = new PIXI.Sprite(PIXI.Texture.fromFrame("circle_2x.png"));
+    _this._bg.tint = config.colors.red;
+    _this._bg.scale.set(.33, .33);
     _this.addChild(_this._bg);
 
     _this._cntSmiley = _this._createSmiley();
-    _this._cntSmiley.x = _this._bg.width >> 1;
-    _this._cntSmiley.y = _this._bg.height * .5 + 7;
+    _this._cntSmiley.x = _this._bg.width * .5 + 1 >> 0;
+    _this._cntSmiley.y = _this._bg.height * .5 + 9;
     _this.addChild(_this._cntSmiley);
 
     _this.scale.x = _this.scale.y = 0;
@@ -2996,18 +3001,18 @@ var EntrySmiley = (function (_PIXI$Container) {
     value: function _createSmiley() {
       var cnt = new PIXI.Container();
 
-      this._wSmiley = 5;
-      this._hSmileyMouth = 6;
+      this._wSmiley = 7;
+      this._hSmileyMouth = 9;
 
       this._eyeLeft = new PIXI.Graphics();
       this._eyeLeft.x = -this._wSmiley;
-      this._eyeLeft.y = -this._hSmileyMouth - 4;
+      this._eyeLeft.y = -this._hSmileyMouth - 6;
       this._drawEye(this._eyeLeft);
       cnt.addChild(this._eyeLeft);
 
       this._eyeRight = new PIXI.Graphics();
       this._eyeRight.x = this._wSmiley;
-      this._eyeRight.y = -this._hSmileyMouth - 4;
+      this._eyeRight.y = -this._hSmileyMouth - 6;
       this._drawEye(this._eyeRight);
       cnt.addChild(this._eyeRight);
 
@@ -3022,13 +3027,13 @@ var EntrySmiley = (function (_PIXI$Container) {
     value: function _drawEye(g) {
       g.clear();
       g.beginFill(0xffffff);
-      g.drawCircle(0, 0, 1);
+      g.drawCircle(0, 0, 1.5);
     }
   }, {
     key: "_drawMouth",
     value: function _drawMouth() {
       this._mouth.clear();
-      this._mouth.lineStyle(1, 0xffffff);
+      this._mouth.lineStyle(2, 0xffffff);
       this._mouth.moveTo(0, 0);
       this._mouth.quadraticCurveTo(-this._wSmiley, 0, -this._wSmiley, -this._hSmileyMouth);
       this._mouth.moveTo(0, 0);
@@ -3092,7 +3097,7 @@ var EntrySmiley = (function (_PIXI$Container) {
 
 module.exports = EntrySmiley;
 
-},{}],24:[function(require,module,exports){
+},{"xmas/core/config":15}],24:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -3253,19 +3258,23 @@ var Bts = (function (_PIXI$Container) {
   _createClass(Bts, [{
     key: "_onMouseOver",
     value: function _onMouseOver(e) {
-      var target = e.target;
-      TweenLite.to(target.children[1], .25, {
-        alpha: 1,
+      var target = e.target.children[0];
+      target.alpha = 1;
+      TweenLite.to(target, .25, {
+        x: 5,
         ease: Quart.easeOut
       });
     }
   }, {
     key: "_onMouseOut",
     value: function _onMouseOut(e) {
-      var target = e.target;
-      TweenLite.to(target.children[1], .25, {
-        alpha: 0,
-        ease: Quart.easeOut
+      var target = e.target.children[0];
+      TweenLite.to(target, .25, {
+        x: 0,
+        ease: Quart.easeOut,
+        onComplete: function onComplete() {
+          target.alpha = 0;
+        }
       });
     }
   }, {
@@ -3297,31 +3306,32 @@ var Bts = (function (_PIXI$Container) {
     key: "_initTop",
     value: function _initTop() {
       this._cntTop = new PIXI.Container();
+      this._cntTop.x = 22;
       this.addChild(this._cntTop);
 
       this._btSubmit = this._createBt("bt_submitxp");
-      this._btSubmit.x = -2;
+      this._btSubmit.x = -2 * 1.5 >> 0;
       this._cntTop.addChild(this._btSubmit);
 
       this._btAbout = this._createBt("bt_about");
-      this._btAbout.x = 125;
-      this._btAbout.y = 17;
+      this._btAbout.x = 170;
+      this._btAbout.y = 25;
       this._cntTop.addChild(this._btAbout);
     }
   }, {
     key: "_initShare",
     value: function _initShare() {
       this._cntShare = new PIXI.Container();
-      this._cntShare.x = 134;
-      this._cntShare.y = 180;
+      this._cntShare.x = 134 * 1.5 >> 0;
+      this._cntShare.y = 180 * 1.5 >> 0;
       this.addChild(this._cntShare);
 
       this._btFB = this._createBt("bt_fb");
       this._cntShare.addChild(this._btFB);
 
       this._btTwitter = this._createBt("bt_twitter");
-      this._btTwitter.x = 27;
-      this._btTwitter.y = 17;
+      this._btTwitter.x = 27 * 1.5 >> 0;
+      this._btTwitter.y = 17 * 1.5 >> 0;
       this._cntShare.addChild(this._btTwitter);
     }
   }, {
@@ -3336,14 +3346,14 @@ var Bts = (function (_PIXI$Container) {
       cnt.on("click", this._binds.onClick);
       cnt.on("touchend", this._binds.onClick);
 
-      var normal = new PIXI.Sprite(PIXI.Texture.fromFrame(name + ".png"));
-      normal.scale.set(.5, .5);
-      cnt.addChild(normal);
-
       var hover = new PIXI.Sprite(PIXI.Texture.fromFrame(name + "_hover.png"));
-      hover.scale.set(.5, .5);
+      hover.scale.set(.33, .33);
       hover.alpha = 0;
       cnt.addChild(hover);
+
+      var normal = new PIXI.Sprite(PIXI.Texture.fromFrame(name + ".png"));
+      normal.scale.set(.33, .33);
+      cnt.addChild(normal);
 
       return cnt;
     }
@@ -4056,8 +4066,8 @@ var Ui = (function (_PIXI$Container) {
       this._logo.x = stage.width >> 1;
 
       if (this._bts) {
-        this._bts.x = stage.width - 215;
-        this._bts.y = 20;
+        this._bts.x = stage.width - 215 * 1.5 >> 0;
+        this._bts.y = 20 * 1.5 >> 0;
       }
     }
   }, {
@@ -4127,7 +4137,7 @@ module.exports.getCookie = function (name) {
 var stage = require("fz/core/stage");
 
 module.exports.create = function (text, style) {
-  var letterSpacing = arguments.length <= 2 || arguments[2] === undefined ? 2 : arguments[2];
+  var letterSpacing = arguments.length <= 2 || arguments[2] === undefined ? 3 : arguments[2];
 
   var cnt = new PIXI.Container();
 
@@ -4152,7 +4162,7 @@ module.exports.create = function (text, style) {
 };
 
 module.exports.createWithWords = function (text, style) {
-  var letterSpacing = arguments.length <= 2 || arguments[2] === undefined ? 2 : arguments[2];
+  var letterSpacing = arguments.length <= 2 || arguments[2] === undefined ? 3 : arguments[2];
   var wordSpacing = arguments.length <= 3 || arguments[3] === undefined ? 2 : arguments[3];
 
   var cntGlobal = new PIXI.Container();

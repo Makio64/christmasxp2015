@@ -13,8 +13,10 @@ config.colors = {
 
 config.sizes = {
   entry: {
-    w: 139,
-    h: 160
+    // w: 139,
+    // h: 160
+    w: 210,
+    h: 240
   }
 }
 

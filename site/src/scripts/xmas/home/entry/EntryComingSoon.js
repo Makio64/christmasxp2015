@@ -29,13 +29,13 @@ class EntryComingSoon extends PIXI.Container {
   _createContent() {
     const cnt = new PIXI.Container()
 
-    let tfTmp = uXmasTexts.create( "more fun", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2 )
+    let tfTmp = uXmasTexts.create( "more fun", { font: "45px " + config.fonts.bold, fill: config.colors.red } )
     let tex = tfTmp.generateTexture( pixi.renderer, stage.resolution )
     this._cntTfTop = new PIXI.Sprite( tex )
     this._cntTfTop.x = config.sizes.entry.w - this._cntTfTop.width >> 1
     cnt.addChild( this._cntTfTop )
 
-    tfTmp = uXmasTexts.create( "coming soon", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 2 )
+    tfTmp = uXmasTexts.create( "coming soon", { font: "45px " + config.fonts.bold, fill: config.colors.red } )
     tex = tfTmp.generateTexture( pixi.renderer, stage.resolution )
     this._cntTfBottom = new PIXI.Sprite( tex )
     this._cntTfBottom.x = config.sizes.entry.w - this._cntTfBottom.width >> 1

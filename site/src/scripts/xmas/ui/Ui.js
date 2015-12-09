@@ -39,8 +39,8 @@ class Ui extends PIXI.Container {
     this._logo.x = stage.width >> 1
 
     if( this._bts ) {
-      this._bts.x = stage.width - 215
-      this._bts.y = 20
+      this._bts.x = stage.width - 215 * 1.5 >> 0
+      this._bts.y = 20 * 1.5 >> 0
     }
   }
 
