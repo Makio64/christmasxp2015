@@ -26,7 +26,7 @@ class Xmas {
     this.onXP = this.onXP.bind( this )
     this.onStart = this.onStart.bind( this )
 
-    // page( "/home", this.onChange, this.onHome )
+    page( "/home", this.onChange, this.onHome )
     // page( "/intro", this.onIntro, this.onIntro )
     page( "/about", this.onChange, this.onAbout )
     page( "/xps/:day/:name/", this.onXP )
