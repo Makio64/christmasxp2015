@@ -77,11 +77,20 @@ class Home extends PIXI.Container {
       scrollEmul.setHeight( -this._yMin )
     }
 
+    this._updateLines()
+
 
     this._countLinesVisible = Math.ceil( ( stage.height - this._yMax ) / this._hLine )
     this._countLinesVisible += 1
 
     this._updateVisibles()
+  }
+
+  _updateLines() {
+    const n = this._lines.length
+    for( let i = 0; i < n; i++ ) {
+      this._lines[ i ].updateBgLine( this._cntLines.x )
+    }
   }
 
   // _onMouseScroll( e ) {

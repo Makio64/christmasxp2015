@@ -271,13 +271,18 @@ class HoverShape extends PIXI.Container {
     TweenLite.set( this._shapeOver.scale, {
       delay: .175,
       x: .6,
-      y: .6
+      y: .6,
     } )
     TweenLite.to( this._shapeOver.scale, .4, {
       delay: .175,
       x: 1.3,
       y: 1.3,
-      ease: Quart.easeOut
+      ease: Quart.easeOut,
+      onComplete: () => {
+        this.removeChild( this._shapeOver )
+        this._percent = 0.0001
+        this._updateMsk()
+      }
     } )
 
     TweenLite.to( this, .4, {

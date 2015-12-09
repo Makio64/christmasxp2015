@@ -1426,10 +1426,20 @@ var Home = (function (_PIXI$Container) {
         scrollEmul.setHeight(-this._yMin);
       }
 
+      this._updateLines();
+
       this._countLinesVisible = Math.ceil((stage.height - this._yMax) / this._hLine);
       this._countLinesVisible += 1;
 
       this._updateVisibles();
+    }
+  }, {
+    key: "_updateLines",
+    value: function _updateLines() {
+      var n = this._lines.length;
+      for (var i = 0; i < n; i++) {
+        this._lines[i].updateBgLine(this._cntLines.x);
+      }
     }
 
     // _onMouseScroll( e ) {
@@ -1620,6 +1630,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var stage = require("fz/core/stage");
+
 var config = require("xmas/core/config");
 var Entry = require("xmas/home/entry/Entry");
 var uXmasTexts = require("xmas/utils/texts");
@@ -1640,6 +1652,7 @@ var Line = (function (_PIXI$Container) {
 
     _this.isShown = false;
 
+    _this._createBgLine();
     _this._createTitle();
 
     _this._cntEntries = new PIXI.Container();
@@ -1654,6 +1667,41 @@ var Line = (function (_PIXI$Container) {
   }
 
   _createClass(Line, [{
+    key: "_createBgLine",
+    value: function _createBgLine() {
+      this._bgLine = new PIXI.Graphics();
+      this._bgLine.y = 25;
+      this._bgLine.alpha = 0;
+      this.addChild(this._bgLine);
+
+      this._isBgLineSet = false;
+    }
+  }, {
+    key: "updateBgLine",
+    value: function updateBgLine(x) {
+      var w = stage.width;
+      this._bgLine.clear();
+      this._bgLine.lineStyle(1, 0xffffff);
+      if (this._idx % 2) {
+        if (!this._isBgLineSet) {
+          this._y0 = -25 + Math.random() * 50 >> 0;
+          this._y1 = 175 + Math.random() * 50 >> 0;
+          this._y2 = 50 + Math.random() * 50 >> 0;
+        }
+        this._bgLine.moveTo(-x, this._y0);
+        this._bgLine.quadraticCurveTo(w * .25, this._y1, w, this._y2);
+      } else {
+        if (!this._isBgLineSet) {
+          this._y0 = 100 + Math.random() * 40 >> 0;
+          this._y1 = -50 - Math.random() * 40 >> 0;
+          this._y2 = 175 + Math.random() * 75 >> 0;
+        }
+        this._bgLine.moveTo(-x, this._y0);
+        this._bgLine.quadraticCurveTo(w * .75, this._y1, w, this._y2);
+      }
+      this._isBgLineSet = true;
+    }
+  }, {
     key: "_createTitle",
     value: function _createTitle() {
       this._cntTitle = new PIXI.Container();
@@ -1763,6 +1811,12 @@ var Line = (function (_PIXI$Container) {
         ease: Cubic.easeInOut
       });
 
+      TweenLite.to(this._bgLine, 2 * timing, {
+        delay: delay,
+        alpha: 1,
+        ease: Cubic.easeInOut
+      });
+
       TweenLite.to(this._cntTfNumber, timing, {
         delay: delay,
         alpha: 1,
@@ -1825,6 +1879,11 @@ var Line = (function (_PIXI$Container) {
         ease: Cubic.easeInOut
       });
 
+      TweenLite.to(this._bgLine, 1, {
+        alpha: 0,
+        ease: Cubic.easeInOut
+      });
+
       TweenLite.to(this._cntTfNumber, .6, {
         delay: delay,
         alpha: 0,
@@ -1856,7 +1915,7 @@ var Line = (function (_PIXI$Container) {
 
 module.exports = Line;
 
-},{"xmas/core/config":15,"xmas/home/entry/Entry":19,"xmas/utils/texts":32}],19:[function(require,module,exports){
+},{"fz/core/stage":3,"xmas/core/config":15,"xmas/home/entry/Entry":19,"xmas/utils/texts":32}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2532,6 +2591,8 @@ var HoverShape = (function (_PIXI$Container2) {
   }, {
     key: "out",
     value: function out(cb) {
+      var _this4 = this;
+
       // if( !this._isOver ) {
       //   return
       // }
@@ -2549,7 +2610,12 @@ var HoverShape = (function (_PIXI$Container2) {
         delay: .175,
         x: 1.3,
         y: 1.3,
-        ease: Quart.easeOut
+        ease: Quart.easeOut,
+        onComplete: function onComplete() {
+          _this4.removeChild(_this4._shapeOver);
+          _this4._percent = 0.0001;
+          _this4._updateMsk();
+        }
       });
 
       TweenLite.to(this, .4, {
@@ -2572,46 +2638,46 @@ var EntryContentPreview = (function (_PIXI$Container3) {
   function EntryContentPreview(data) {
     _classCallCheck(this, EntryContentPreview);
 
-    var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryContentPreview).call(this));
+    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryContentPreview).call(this));
 
-    _this4._default = new DefaultShape(data);
-    _this4._default.x = config.sizes.entry.w >> 1;
-    _this4._default.y = config.sizes.entry.h >> 1;
-    _this4._default.scale.x = _this4._default.scale.y = 0;
-    _this4.addChild(_this4._default);
+    _this5._default = new DefaultShape(data);
+    _this5._default.x = config.sizes.entry.w >> 1;
+    _this5._default.y = config.sizes.entry.h >> 1;
+    _this5._default.scale.x = _this5._default.scale.y = 0;
+    _this5.addChild(_this5._default);
 
-    _this4._hover = new HoverShape(data);
-    _this4._hover.x = config.sizes.entry.w >> 1;
-    _this4._hover.y = config.sizes.entry.h >> 1;
+    _this5._hover = new HoverShape(data);
+    _this5._hover.x = config.sizes.entry.w >> 1;
+    _this5._hover.y = config.sizes.entry.h >> 1;
     // this.addChild( this._hover )
 
-    _this4.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+    _this5.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
     // this.hoverZone.scale.set( .5, .5 )
-    _this4.hoverZone.width = config.sizes.entry.w;
-    _this4.hoverZone.height = config.sizes.entry.h;
-    _this4.hoverZone.tint = Math.random() * 0xffffff;
-    _this4.hoverZone.alpha = 0;
-    _this4.addChild(_this4.hoverZone);
+    _this5.hoverZone.width = config.sizes.entry.w;
+    _this5.hoverZone.height = config.sizes.entry.h;
+    _this5.hoverZone.tint = Math.random() * 0xffffff;
+    _this5.hoverZone.alpha = 0;
+    _this5.addChild(_this5.hoverZone);
 
-    _this4._cntTf = new PIXI.Container();
-    _this4._cntTf.x = 100;
-    _this4._cntTf.y = 255;
-    _this4.addChild(_this4._cntTf);
+    _this5._cntTf = new PIXI.Container();
+    _this5._cntTf.x = 100;
+    _this5._cntTf.y = 255;
+    _this5.addChild(_this5._cntTf);
 
-    _this4._tfTitle = uTexts.create(data.title, { font: "22px " + config.fonts.medium, fill: config.colors.blue });
-    _this4._cntTf.addChild(_this4._tfTitle);
-    _this4._initLetters(_this4._tfTitle);
+    _this5._tfTitle = uTexts.create(data.title, { font: "22px " + config.fonts.medium, fill: config.colors.blue });
+    _this5._cntTf.addChild(_this5._tfTitle);
+    _this5._initLetters(_this5._tfTitle);
 
-    _this4._tfAuthor = uTexts.create(data.author, { font: "27px " + config.fonts.medium, fill: config.colors.blue });
-    _this4._tfAuthor.x = 15;
-    _this4._tfAuthor.y = 20;
-    _this4._cntTf.addChild(_this4._tfAuthor);
-    _this4._initLetters(_this4._tfAuthor);
+    _this5._tfAuthor = uTexts.create(data.author, { font: "27px " + config.fonts.medium, fill: config.colors.blue });
+    _this5._tfAuthor.x = 15;
+    _this5._tfAuthor.y = 20;
+    _this5._cntTf.addChild(_this5._tfAuthor);
+    _this5._initLetters(_this5._tfAuthor);
 
-    _this4._isShown = false;
+    _this5._isShown = false;
 
-    _this4._isOver = false;
-    return _this4;
+    _this5._isOver = false;
+    return _this5;
   }
 
   _createClass(EntryContentPreview, [{

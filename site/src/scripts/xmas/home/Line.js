@@ -1,3 +1,5 @@
+const stage = require( "fz/core/stage" )
+
 const config = require( "xmas/core/config" )
 const Entry = require( "xmas/home/entry/Entry" )
 const uXmasTexts = require( "xmas/utils/texts" )
@@ -13,6 +15,7 @@ class Line extends PIXI.Container {
 
     this.isShown = false
 
+    this._createBgLine()
     this._createTitle()
 
     this._cntEntries = new PIXI.Container()
@@ -23,6 +26,39 @@ class Line extends PIXI.Container {
     } else {
       this._createDummy()
     }
+  }
+
+  _createBgLine() {
+    this._bgLine = new PIXI.Graphics()
+    this._bgLine.y = 25
+    this._bgLine.alpha = 0
+    this.addChild( this._bgLine )
+
+    this._isBgLineSet = false
+  }
+
+  updateBgLine( x ) {
+    const w = stage.width
+    this._bgLine.clear()
+    this._bgLine.lineStyle( 1, 0xffffff )
+    if( this._idx % 2 ) {
+      if( !this._isBgLineSet ) {
+        this._y0 = -25 + Math.random() * 50 >> 0
+        this._y1 = 175 + Math.random() * 50 >> 0
+        this._y2 = 50 + Math.random() * 50 >> 0
+      }
+      this._bgLine.moveTo( -x, this._y0 )
+      this._bgLine.quadraticCurveTo( w * .25, this._y1, w, this._y2 )
+    } else {
+      if( !this._isBgLineSet ) {
+        this._y0 = 100 + Math.random() * 40 >> 0
+        this._y1 = -50 - Math.random() * 40 >> 0
+        this._y2 = 175 + Math.random() * 75 >> 0
+      }
+      this._bgLine.moveTo( -x, this._y0 )
+      this._bgLine.quadraticCurveTo( w * .75, this._y1, w, this._y2 )
+    }
+    this._isBgLineSet = true
   }
 
   _createTitle() {
@@ -126,6 +162,12 @@ class Line extends PIXI.Container {
       ease: Cubic.easeInOut
     })
 
+    TweenLite.to( this._bgLine, 2 * timing, {
+      delay: delay,
+      alpha: 1,
+      ease: Cubic.easeInOut
+    } )
+
     TweenLite.to( this._cntTfNumber, timing, {
       delay: delay,
       alpha: 1,
@@ -184,6 +226,11 @@ class Line extends PIXI.Container {
       x: 0,
       ease: Cubic.easeInOut
     })
+
+    TweenLite.to( this._bgLine, 1, {
+      alpha: 0,
+      ease: Cubic.easeInOut
+    } )
 
     TweenLite.to( this._cntTfNumber, .6, {
       delay: delay,
