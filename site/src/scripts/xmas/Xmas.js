@@ -14,21 +14,22 @@ const loader = require( "loader" )
 class Xmas {
 
   constructor() {
-    this._current = null
+    this.current = null
+    this.home = null
+    this.xp = null
     this.status = "notLoaded"
 
-    this._binds = {}
-    this._binds.onChange = this._onChange.bind( this )
-    this._binds.onHome = this._onHome.bind( this )
-    this._binds.onIntro = this._onIntro.bind( this )
-    this._binds.onAbout = this._onAbout.bind( this )
-    this._binds.onXP = this._onXP.bind( this )
+    this.onChange = this.onChange.bind( this )
+    this.onHome = this.onHome.bind( this )
+    this.onIntro = this.onIntro.bind( this )
+    this.onAbout = this.onAbout.bind( this )
+    this.onXP = this.onXP.bind( this )
     this.onStart = this.onStart.bind( this )
 
-    page( "/home", this._binds.onChange, this._binds.onHome )
-    page( "/intro", this._binds.onIntro, this._binds.onIntro )
-    page( "/about", this._binds.onChange, this._binds.onAbout )
-    page( "/xps/:day/:name/", this._binds.onXP )
+    // page( "/home", this.onChange, this.onHome )
+    // page( "/intro", this.onIntro, this.onIntro )
+    page( "/about", this.onChange, this.onAbout )
+    page( "/xps/:day/:name/", this.onXP )
     page( "/", this.onStart )
     page()
   }
@@ -39,26 +40,26 @@ class Xmas {
       console.log('intro')
       cookie.createCookie("intro", Date.now(), 1)
       // page("/intro")
-      this._onIntro()
+      this.onIntro()
     }else{
       console.log('home')
       // page("/home")
-      this._onHome()
+      this.onHome()
     }
   }
 
-  _onChange( ctx, next ) {
-    if( this._current ) {
-    this._current.unbindEvents()
-    this._current.hide( next )
+  onChange( ctx, next ) {
+    if( this.current ) {
+    this.current.unbindEvents()
+    this.current.hide( next )
     } else {
       next()
     }
   }
 
-  _onIntro(){
+  onIntro(){
     if(this.status!="loaded"){
-      this.init(this._binds._onIntro)
+      this.init(this.onIntro)
     return
       }
     var storyline = new Storyline()
@@ -70,50 +71,50 @@ class Xmas {
     TweenLite.set( this, { delay: 3.4,onComplete: () => {page("/home")}})
   }
 
-  _onHome() {
+  onHome() {
     if(this.status!="loaded"){
-      this.init(this._binds.onHome)
+      this.init(this.onHome)
     } else {
-      if(!this._home)
-        this._home = new Home()
-      this._current = this._home
-        this._displayCurrent()
+      if(!this.home)
+        this.home = new Home()
+      this.current = this.home
+        this.displayCurrent()
     }
   }
 
-    _onAbout() {
-      if(this.status!="loaded"){
-      this.init(this._binds.onAbout)
+  onAbout() {
+    if(this.status!="loaded"){
+      this.init(this.onAbout)
     } else {
-      if(!this._about)
-        this._about = new About()
-      this._current = this._about
-      this._displayCurrent()
+      if(!this.about)
+        this.about = new About()
+      this.current = this.about
+      this.displayCurrent()
     }
-    }
+  }
 
-  _onXP(e) {
-    if(!this._xp){
+  onXP(e) {
+    if(!this.xp){
       if(this.status=="notLoaded"){
         loader.loadConfig(()=>{
-          this._xp = new XPView()
-          this._current = this._xp
-          this._current.bindEvents()
-          this._current.show(e.params.day,e.params.name)
+          this.xp = new XPView()
+          this.current = this.xp
+          this.current.bindEvents()
+          this.current.show(e.params.day,e.params.name)
         })
         return
       } else {
-        this._xp = new XPView()
+        this.xp = new XPView()
       }
     }
-    this._current = this._xp
-    this._current.bindEvents()
-    this._current.show(e.params.day,e.params.name)
+    this.current = this.xp
+    this.current.bindEvents()
+    this.current.show(e.params.day,e.params.name)
   }
 
-  _displayCurrent() {
-    this._current.bindEvents()
-    this._current.show()
+  displayCurrent() {
+    this.current.bindEvents()
+    this.current.show()
   }
 
   init(cb){

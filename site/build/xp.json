@@ -1,5 +1,5 @@
 {
-    "totalDay": 2,
+    "totalDay": 7,
     "days": {
         "1": [
             {
@@ -31,7 +31,62 @@
                 "folder": "/juggernaut/",
                 "path": "/02/juggernaut/"
             }
+        ],
+        "3": [
+            {
+                "uid": 3,
+                "title": "Growth",
+                "author": "Isaac Cohen",
+                "website": "http://tree.is",
+                "twitter": "vrtree",
+                "folder": "/Growth/",
+                "path": "/03/Growth/"
+            }
+        ],
+        "4": [
+            {
+                "uid": 4,
+                "title": "Light a candle",
+                "author": "Ilmari Heikkinen",
+                "website": "http://fhtr.org",
+                "twitter": "ilmarihei",
+                "folder": "/candles/",
+                "path": "/04/candles/"
+            }
+        ],
+        "5": [
+            {
+                "uid": 5,
+                "title": "Flocon",
+                "author": "Robin Delaporte",
+                "website": "http://robindelaporte.fr",
+                "twitter": "https://twitter.com/not__robin",
+                "folder": "/flocon/",
+                "path": "/05/flocon/"
+            }
+        ],
+        "6": [
+            {
+                "uid": 6,
+                "title": "Journey",
+                "author": "David Ronai",
+                "website": "http://makiopolis.com",
+                "twitter": "makio64",
+                "folder": "/journey/",
+                "path": "/06/journey/"
+            }
+        ],
+        "7": [
+            {
+                "uid": 7,
+                "title": "Neve",
+                "author": "Michael Anthony",
+                "website": "http://activetheory.net",
+                "twitter": "michaeltheory",
+                "folder": "/neve/",
+                "path": "/07/neve/"
+            }
         ]
     },
-    "totalXP": 3
+    "totalXP": 8
 }

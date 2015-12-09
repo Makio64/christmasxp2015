@@ -1050,21 +1050,22 @@ var Xmas = (function () {
   function Xmas() {
     _classCallCheck(this, Xmas);
 
-    this._current = null;
+    this.current = null;
+    this.home = null;
+    this.xp = null;
     this.status = "notLoaded";
 
-    this._binds = {};
-    this._binds.onChange = this._onChange.bind(this);
-    this._binds.onHome = this._onHome.bind(this);
-    this._binds.onIntro = this._onIntro.bind(this);
-    this._binds.onAbout = this._onAbout.bind(this);
-    this._binds.onXP = this._onXP.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onHome = this.onHome.bind(this);
+    this.onIntro = this.onIntro.bind(this);
+    this.onAbout = this.onAbout.bind(this);
+    this.onXP = this.onXP.bind(this);
     this.onStart = this.onStart.bind(this);
 
-    page("/home", this._binds.onChange, this._binds.onHome);
-    page("/intro", this._binds.onIntro, this._binds.onIntro);
-    page("/about", this._binds.onChange, this._binds.onAbout);
-    page("/xps/:day/:name/", this._binds.onXP);
+    // page( "/home", this.onChange, this.onHome )
+    // page( "/intro", this.onIntro, this.onIntro )
+    page("/about", this.onChange, this.onAbout);
+    page("/xps/:day/:name/", this.onXP);
     page("/", this.onStart);
     page();
   }
@@ -1077,28 +1078,28 @@ var Xmas = (function () {
         console.log('intro');
         cookie.createCookie("intro", Date.now(), 1);
         // page("/intro")
-        this._onIntro();
+        this.onIntro();
       } else {
         console.log('home');
         // page("/home")
-        this._onHome();
+        this.onHome();
       }
     }
   }, {
-    key: "_onChange",
-    value: function _onChange(ctx, next) {
-      if (this._current) {
-        this._current.unbindEvents();
-        this._current.hide(next);
+    key: "onChange",
+    value: function onChange(ctx, next) {
+      if (this.current) {
+        this.current.unbindEvents();
+        this.current.hide(next);
       } else {
         next();
       }
     }
   }, {
-    key: "_onIntro",
-    value: function _onIntro() {
+    key: "onIntro",
+    value: function onIntro() {
       if (this.status != "loaded") {
-        this.init(this._binds._onIntro);
+        this.init(this.onIntro);
         return;
       }
       var storyline = new Storyline();
@@ -1112,54 +1113,54 @@ var Xmas = (function () {
         } });
     }
   }, {
-    key: "_onHome",
-    value: function _onHome() {
+    key: "onHome",
+    value: function onHome() {
       if (this.status != "loaded") {
-        this.init(this._binds.onHome);
+        this.init(this.onHome);
       } else {
-        if (!this._home) this._home = new Home();
-        this._current = this._home;
-        this._displayCurrent();
+        if (!this.home) this.home = new Home();
+        this.current = this.home;
+        this.displayCurrent();
       }
     }
   }, {
-    key: "_onAbout",
-    value: function _onAbout() {
+    key: "onAbout",
+    value: function onAbout() {
       if (this.status != "loaded") {
-        this.init(this._binds.onAbout);
+        this.init(this.onAbout);
       } else {
-        if (!this._about) this._about = new About();
-        this._current = this._about;
-        this._displayCurrent();
+        if (!this.about) this.about = new About();
+        this.current = this.about;
+        this.displayCurrent();
       }
     }
   }, {
-    key: "_onXP",
-    value: function _onXP(e) {
+    key: "onXP",
+    value: function onXP(e) {
       var _this = this;
 
-      if (!this._xp) {
+      if (!this.xp) {
         if (this.status == "notLoaded") {
           loader.loadConfig(function () {
-            _this._xp = new XPView();
-            _this._current = _this._xp;
-            _this._current.bindEvents();
-            _this._current.show(e.params.day, e.params.name);
+            _this.xp = new XPView();
+            _this.current = _this.xp;
+            _this.current.bindEvents();
+            _this.current.show(e.params.day, e.params.name);
           });
           return;
         } else {
-          this._xp = new XPView();
+          this.xp = new XPView();
         }
       }
-      this._current = this._xp;
-      this._current.bindEvents();
-      this._current.show(e.params.day, e.params.name);
+      this.current = this.xp;
+      this.current.bindEvents();
+      this.current.show(e.params.day, e.params.name);
     }
   }, {
-    key: "_displayCurrent",
-    value: function _displayCurrent() {
-      this._current.bindEvents();
-      this._current.show();
+    key: "displayCurrent",
+    value: function displayCurrent() {
+      this.current.bindEvents();
+      this.current.show();
     }
   }, {
     key: "init",
