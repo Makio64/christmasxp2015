@@ -1,7 +1,13 @@
+const browsers = require( "fz/utils/browsers" )
+
 class Bts extends PIXI.Container {
 
   constructor() {
     super()
+
+    if( browsers.mobile ) {
+      this.scale.set( .5, .5 )
+    }
 
     this._binds = {}
     this._binds.onMouseOver = this._onMouseOver.bind( this )
@@ -75,6 +81,9 @@ class Bts extends PIXI.Container {
     this._cntShare = new PIXI.Container()
     this._cntShare.x = 134 * 1.5 >> 0
     this._cntShare.y = 180 * 1.5 >> 0
+    if( browsers.mobile ) {
+      this._cntShare.y -= 170
+    }
     this.addChild( this._cntShare )
 
     this._btFB = this._createBt( "bt_fb" )

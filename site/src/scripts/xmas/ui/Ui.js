@@ -16,7 +16,7 @@ class Ui extends PIXI.Container {
     this.addChild( this._logo )
 
     if( browsers.mobile ) {
-      this._logo.scale.set( .7, .7 )
+      this._logo.scale.set( .5, .5 )
     }
 
     this._binds = {}
@@ -37,9 +37,15 @@ class Ui extends PIXI.Container {
     // this._logo.y = this._title.y + 142
 
     this._logo.x = stage.width >> 1
+    if( browsers.mobile ) {
+      this._logo.x += 10
+    }
 
     if( this._bts ) {
-      this._bts.x = stage.width - 215 * 1.5 >> 0
+      this._bts.x = stage.width - 215 * 1.5 * this._bts.scale.x >> 0
+      if( browsers.mobile ) {
+        this._bts.x += 15
+      }
       this._bts.y = 20 * 1.5 >> 0
     }
   }

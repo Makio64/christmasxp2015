@@ -23,7 +23,7 @@ class Home extends PIXI.Container {
     this._hLine = config.sizes.entry.h + 75
 
     if( browsers.mobile ) {
-      this.scale.set( .7, .7 )
+      this.scale.set( .5, .5 )
     }
 
     this._yMin = 0

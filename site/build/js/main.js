@@ -1368,7 +1368,7 @@ var Home = (function (_PIXI$Container) {
     _this._hLine = config.sizes.entry.h + 75;
 
     if (browsers.mobile) {
-      _this.scale.set(.7, .7);
+      _this.scale.set(.5, .5);
     }
 
     _this._yMin = 0;
@@ -3261,6 +3261,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var browsers = require("fz/utils/browsers");
+
 var Bts = (function (_PIXI$Container) {
   _inherits(Bts, _PIXI$Container);
 
@@ -3268,6 +3270,10 @@ var Bts = (function (_PIXI$Container) {
     _classCallCheck(this, Bts);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Bts).call(this));
+
+    if (browsers.mobile) {
+      _this.scale.set(.5, .5);
+    }
 
     _this._binds = {};
     _this._binds.onMouseOver = _this._onMouseOver.bind(_this);
@@ -3348,6 +3354,9 @@ var Bts = (function (_PIXI$Container) {
       this._cntShare = new PIXI.Container();
       this._cntShare.x = 134 * 1.5 >> 0;
       this._cntShare.y = 180 * 1.5 >> 0;
+      if (browsers.mobile) {
+        this._cntShare.y -= 170;
+      }
       this.addChild(this._cntShare);
 
       this._btFB = this._createBt("bt_fb");
@@ -3417,7 +3426,7 @@ var Bts = (function (_PIXI$Container) {
 
 module.exports = Bts;
 
-},{}],26:[function(require,module,exports){
+},{"fz/utils/browsers":6}],26:[function(require,module,exports){
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -4064,7 +4073,7 @@ var Ui = (function (_PIXI$Container) {
     _this.addChild(_this._logo);
 
     if (browsers.mobile) {
-      _this._logo.scale.set(.7, .7);
+      _this._logo.scale.set(.5, .5);
     }
 
     _this._binds = {};
@@ -4088,9 +4097,15 @@ var Ui = (function (_PIXI$Container) {
       // this._logo.y = this._title.y + 142
 
       this._logo.x = stage.width >> 1;
+      if (browsers.mobile) {
+        this._logo.x += 10;
+      }
 
       if (this._bts) {
-        this._bts.x = stage.width - 215 * 1.5 >> 0;
+        this._bts.x = stage.width - 215 * 1.5 * this._bts.scale.x >> 0;
+        if (browsers.mobile) {
+          this._bts.x += 15;
+        }
         this._bts.y = 20 * 1.5 >> 0;
       }
     }
