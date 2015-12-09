@@ -332,6 +332,8 @@ class EntryContentPreview extends PIXI.Container {
     this._initLetters( this._tfAuthor )
 
     this._isShown = false
+
+    this._isOver = false
   }
 
   _initLetters( cnt ) {
@@ -342,6 +344,8 @@ class EntryContentPreview extends PIXI.Container {
   }
 
   over() {
+    this._isOver = true
+
     this._default.over()
 
     this.addChild( this._hover )
@@ -349,6 +353,10 @@ class EntryContentPreview extends PIXI.Container {
   }
 
   out( force = false ) {
+    if( !this._isOver ) {
+      return
+    }
+    this._isOver = false
     this._default.out()
     this.addChild( this._default )
 
@@ -386,7 +394,7 @@ class EntryContentPreview extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
-    // this._hover.out()
+    this.out()
     
     TweenLite.killTweensOf( this._default.scale )
     TweenLite.to( this._default.scale, .6, {

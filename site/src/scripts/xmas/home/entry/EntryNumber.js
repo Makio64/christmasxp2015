@@ -29,6 +29,8 @@ class EntryNumber extends PIXI.Container {
     this.alpha = 0
     this.pivot.set( this._bg.width >> 1, this._bg.height >> 1 )
 
+    this._isOver = false
+
     this._binds = {}
     this._binds.drawArrowLine = this._drawArrowLine.bind( this )
     this._binds.drawArrowEnd = this._drawArrowEnd.bind( this )
@@ -77,6 +79,8 @@ class EntryNumber extends PIXI.Container {
   }
 
   over() {
+    this._isOver = true
+
     let letter = null
     const n = this._cntText.children.length
     for( let i = 0; i < n; i++ ) {
@@ -93,6 +97,10 @@ class EntryNumber extends PIXI.Container {
     this.addChild( this._cntArrow )
 
     this._cntArrow.x = -30
+    this._percentArrowLine = 0
+    this._percentArrowEnd = 0
+    this._drawArrowLine()
+    this._drawArrowEnd()
     TweenLite.killTweensOf( this )
     TweenLite.killTweensOf( this._cntArrow )
     TweenLite.to( this, .4, {
@@ -115,6 +123,11 @@ class EntryNumber extends PIXI.Container {
   }
 
   out() {
+    if( !this._isOver ) {
+      return
+    }
+    this._isOver = false
+
     let letter = null
     const n = this._cntText.children.length
     for( let i = 0; i < n; i++ ) {
@@ -195,6 +208,8 @@ class EntryNumber extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
+    this.out()
+
     TweenLite.killTweensOf( this )
     TweenLite.killTweensOf( this.scale )
     

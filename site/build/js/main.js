@@ -2609,6 +2609,8 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     _this4._initLetters(_this4._tfAuthor);
 
     _this4._isShown = false;
+
+    _this4._isOver = false;
     return _this4;
   }
 
@@ -2623,6 +2625,8 @@ var EntryContentPreview = (function (_PIXI$Container3) {
   }, {
     key: "over",
     value: function over() {
+      this._isOver = true;
+
       this._default.over();
 
       this.addChild(this._hover);
@@ -2633,6 +2637,10 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     value: function out() {
       var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
+      if (!this._isOver) {
+        return;
+      }
+      this._isOver = false;
       this._default.out();
       this.addChild(this._default);
 
@@ -2678,7 +2686,7 @@ var EntryContentPreview = (function (_PIXI$Container3) {
     value: function hide() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      // this._hover.out()
+      this.out();
 
       TweenLite.killTweensOf(this._default.scale);
       TweenLite.to(this._default.scale, .6, {
@@ -2755,6 +2763,8 @@ var EntryNumber = (function (_PIXI$Container) {
     _this.alpha = 0;
     _this.pivot.set(_this._bg.width >> 1, _this._bg.height >> 1);
 
+    _this._isOver = false;
+
     _this._binds = {};
     _this._binds.drawArrowLine = _this._drawArrowLine.bind(_this);
     _this._binds.drawArrowEnd = _this._drawArrowEnd.bind(_this);
@@ -2810,6 +2820,8 @@ var EntryNumber = (function (_PIXI$Container) {
   }, {
     key: "over",
     value: function over() {
+      this._isOver = true;
+
       var letter = null;
       var n = this._cntText.children.length;
       for (var i = 0; i < n; i++) {
@@ -2826,6 +2838,10 @@ var EntryNumber = (function (_PIXI$Container) {
       this.addChild(this._cntArrow);
 
       this._cntArrow.x = -30;
+      this._percentArrowLine = 0;
+      this._percentArrowEnd = 0;
+      this._drawArrowLine();
+      this._drawArrowEnd();
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this._cntArrow);
       TweenLite.to(this, .4, {
@@ -2850,6 +2866,11 @@ var EntryNumber = (function (_PIXI$Container) {
     key: "out",
     value: function out() {
       var _this2 = this;
+
+      if (!this._isOver) {
+        return;
+      }
+      this._isOver = false;
 
       var letter = null;
       var n = this._cntText.children.length;
@@ -2937,6 +2958,8 @@ var EntryNumber = (function (_PIXI$Container) {
     key: "hide",
     value: function hide() {
       var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+      this.out();
 
       TweenLite.killTweensOf(this);
       TweenLite.killTweensOf(this.scale);
