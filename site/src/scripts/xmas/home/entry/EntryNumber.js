@@ -9,15 +9,16 @@ class EntryNumber extends PIXI.Container {
     this._percentArrowLine = 0
     this._percentArrowEnd = 0
 
-    this._bg = new PIXI.Sprite( PIXI.Texture.fromFrame( "bg-entry-number_2x.png" ) )
-    this._bg.scale.set( .5, .5 )
+    this._bg = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_2x.png" ) )
+    this._bg.tint = config.colors.red
+    this._bg.scale.set( .33, .33 )
     this.addChild( this._bg )
 
-    this._cntText = uXmasTexts.create( "0" + idx,  { font: "20px " + config.fonts.bold, fill: 0xffffff } )
+    this._cntText = uXmasTexts.create( "0" + idx,  { font: "30px " + config.fonts.bold, fill: 0xffffff } )
     this._cntText.x = this._bg.width - this._cntText.width >> 1
     this._cntText.y = this._bg.height - this._cntText.height >> 1
     this._cntText.x -= 1
-    this._cntText.y -= 1
+    this._cntText.y -= 3
     this._initLetters()
     this.addChild( this._cntText )
 
@@ -39,7 +40,7 @@ class EntryNumber extends PIXI.Container {
     for( let i = 0; i < n; i++ ) {
       letter = this._cntText.children[ i ]
       letter.alpha = 0
-      letter.y = 10
+      letter.y = 15
     }
   }
 
@@ -49,8 +50,8 @@ class EntryNumber extends PIXI.Container {
     this._cntArrow.y = this._bg.height >> 1
     // this.addChild( this._cntArrow )
 
-    this._wArrowLine = 22
-    this._sizeArrowEnd = 5
+    this._wArrowLine = 22 * 1.5
+    this._sizeArrowEnd = 5 * 1.5
 
     this._arrowLine = new PIXI.Graphics()
     this._cntArrow.addChild( this._arrowLine )
@@ -91,7 +92,7 @@ class EntryNumber extends PIXI.Container {
 
     this.addChild( this._cntArrow )
 
-    this._cntArrow.x = -4
+    this._cntArrow.x = -30
     TweenLite.killTweensOf( this )
     TweenLite.killTweensOf( this._cntArrow )
     TweenLite.to( this, .4, {

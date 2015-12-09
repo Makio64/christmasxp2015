@@ -1,3 +1,4 @@
+const config = require( "xmas/core/config" )
 const stage = require( "fz/core/stage" )
 const pixi = require( "fz/core/pixi" )
 const loop = require( "fz/core/loop" )
@@ -19,7 +20,7 @@ class Home extends PIXI.Container {
 
     this._yLast = 0
 
-    this._hLine = 220
+    this._hLine = config.sizes.entry.h + 75
 
     if( browsers.mobile ) {
       this.scale.set( .7, .7 )
@@ -66,7 +67,7 @@ class Home extends PIXI.Container {
     // if( stage.width < 1000 ) {
       // w = 880
     // }
-    let w = 880
+    let w = 1320
     this._cntLines.x = stage.width - w >> 1
     if( browsers.tablet || browsers.mobile ) {
       this._cntLines.x = 10

@@ -16,7 +16,7 @@ class Line extends PIXI.Container {
     this._createTitle()
 
     this._cntEntries = new PIXI.Container()
-    this._cntEntries.x = 145
+    this._cntEntries.x = 218
     this.addChild( this._cntEntries )
     if( this._count > 0 ) {
       this._createEntries()
@@ -35,22 +35,22 @@ class Line extends PIXI.Container {
     this._cntTitle.addChild( cntLeft )
 
     if( this._idx == 1 ) {
-      this._cntTfDay = uXmasTexts.create( "DAY", { font: "20px " + config.fonts.bold, fill: config.colors.red }, 1 )
+      this._cntTfDay = uXmasTexts.create( "DAY", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 1 )
       this._cntTfDay.alpha = 0
       cntLeft.addChild( this._cntTfDay )
     }
 
     this._line = new PIXI.Graphics()
-    this._line.x = 20
-    this._line.y = 26
+    this._line.x = 30
+    this._line.y = 39
     this._line.lineStyle( 1, config.colors.blue )
-    this._line.moveTo( -20, 0 )
+    this._line.moveTo( -30, 0 )
     this._line.lineTo( 0, 0 )
     this._line.scale.x = 0
     cntLeft.addChild( this._line )
 
-    this._cntTfNumber = uXmasTexts.create( this._idx + "", { font: "120px " + config.fonts.bold, fill: config.colors.red } )
-    this._cntTfNumber.x = 36
+    this._cntTfNumber = uXmasTexts.create( this._idx + "", { font: "180px " + config.fonts.bold, fill: config.colors.red } )
+    this._cntTfNumber.x = 54
     this._cntTfNumber.alpha = 0
     this._cntTitle.addChild( this._cntTfNumber )
 
@@ -67,10 +67,10 @@ class Line extends PIXI.Container {
     for( let i = 0; i < this._count; i++ ) {
       entry = new Entry( i + 1, this._dataEntries[ i ] )
       entry.x += px
-      entry.y = Math.sin( as[ i ] ) * 25 >> 0
+      entry.y = Math.sin( as[ i ] ) * 38 >> 0
       this._cntEntries.addChild( entry )
 
-      px += 180
+      px += config.sizes.entry.w + 60
 
       yTime += Math.PI * .75
     }
@@ -167,17 +167,17 @@ class Line extends PIXI.Container {
       const  n = this._cntTfDay.children.length
       for( let i = 0; i < n; i++ ) {
         letter = this._cntTfDay.children[ i ]
-        letter.alpha = 0
-        TweenLite.to( letter, .6, {
+        // letter.alpha = 0
+        TweenLite.to( letter, .4, {
           delay: delay + .1 + ( n - i ) * .1,
           alpha: 0,
           ease: Cubic.easeInOut
         } )
       }
-      TweenLite.set( this._cntTfDay, {
-        delay: delay + .04,
-        alpha: 0,
-      })
+      // TweenLite.set( this._cntTfDay, {
+      //   delay: delay + 1,
+      //   alpha: 0,
+      // })
     }
     TweenLite.to( this._line.scale, .6, {
       delay: delay + .04,

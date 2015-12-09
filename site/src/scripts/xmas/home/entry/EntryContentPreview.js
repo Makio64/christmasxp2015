@@ -37,6 +37,8 @@ class DefaultShape extends PIXI.Container {
     this._shapeOver = new PIXI.Graphics()
     this._shapeOver.beginFill( 0xe5f2ff )
     this._shapeOver.drawCircle( 0, 0, ( config.sizes.entry.h >> 1 ) )
+    // this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
+    // this._shapeOver.anchor.set( .5, .5 )
     this._shapeOver.x = this._polyShape.x
     this._shapeOver.y = this._polyShape.y
     this._shapeOver.scale.x = this._shapeOver.scale.y = 0
@@ -44,6 +46,8 @@ class DefaultShape extends PIXI.Container {
     this._mskCircle = new PIXI.Graphics()
     this._mskCircle.beginFill( 0xff00ff )
     this._mskCircle.drawCircle( 0, 0, ( config.sizes.entry.h >> 1 ) )
+    // this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
+    // this._shapeOver.anchor.set( .5, .5 )
     this._mskCircle.x = this._polyShape.x
     this._mskCircle.y = this._polyShape.y
     this._mskCircle.scale.x = 
@@ -193,6 +197,8 @@ class HoverShape extends PIXI.Container {
     this._shapeOver.scale.x = 
     this._shapeOver.scale.y = 0
 
+    // this._isOver = false
+
     this._binds = {}
     this._binds.updateMsk = this._updateMsk.bind( this )
   }
@@ -225,6 +231,8 @@ class HoverShape extends PIXI.Container {
     TweenLite.killTweensOf( this )
     TweenLite.killTweensOf( this._shapeOver.scale )
 
+    // this._isOver = true
+
     this.scale.x =
     this.scale.y = 1
     this._shapeOver.scale.x = 
@@ -252,6 +260,10 @@ class HoverShape extends PIXI.Container {
   }
 
   out( cb ) {
+    // if( !this._isOver ) {
+    //   return
+    // }
+    // this._isOver = false
     TweenLite.killTweensOf( this )
     TweenLite.killTweensOf( this._shapeOver.scale )
 
@@ -263,8 +275,8 @@ class HoverShape extends PIXI.Container {
     } )
     TweenLite.to( this._shapeOver.scale, .4, {
       delay: .175,
-      x: 1.2,
-      y: 1.2,
+      x: 1.3,
+      y: 1.3,
       ease: Quart.easeOut
     } )
 
@@ -297,25 +309,29 @@ class EntryContentPreview extends PIXI.Container {
     // this.addChild( this._hover )
 
     this.hoverZone = new PIXI.Sprite( PIXI.Texture.fromFrame( "layer-blue.png" ) )
-    this.hoverZone.scale.set( .5, .5 )
+    // this.hoverZone.scale.set( .5, .5 )
+    this.hoverZone.width = config.sizes.entry.w
+    this.hoverZone.height = config.sizes.entry.h
     this.hoverZone.tint = Math.random() * 0xffffff
     this.hoverZone.alpha = 0
     this.addChild( this.hoverZone )
 
     this._cntTf = new PIXI.Container()
-    this._cntTf.x = 63
-    this._cntTf.y = 170
+    this._cntTf.x = 100
+    this._cntTf.y = 255
     this.addChild( this._cntTf )
 
-    this._tfTitle = uTexts.create( data.title, { font: "15px " + config.fonts.medium, fill: config.colors.blue } )
+    this._tfTitle = uTexts.create( data.title, { font: "22px " + config.fonts.medium, fill: config.colors.blue } )
     this._cntTf.addChild( this._tfTitle )
     this._initLetters( this._tfTitle )
 
-    this._tfAuthor = uTexts.create( data.author, { font: "18px " + config.fonts.medium, fill: config.colors.blue } )
-    this._tfAuthor.x = 10
-    this._tfAuthor.y = 15
+    this._tfAuthor = uTexts.create( data.author, { font: "27px " + config.fonts.medium, fill: config.colors.blue } )
+    this._tfAuthor.x = 15
+    this._tfAuthor.y = 20
     this._cntTf.addChild( this._tfAuthor )
     this._initLetters( this._tfAuthor )
+
+    this._isShown = false
   }
 
   _initLetters( cnt ) {
@@ -332,47 +348,20 @@ class EntryContentPreview extends PIXI.Container {
     this._hover.over()
   }
 
-  out() {
+  out( force = false ) {
     this._default.out()
     this.addChild( this._default )
 
     this._hover.out()
-    // this._hover.out( () => {
-    //   this.removeChild( this._hover )
-    // })
-    // this.removeChild( this._hover )
   }
 
   show( delay = 0, fast = false ) {
-    // this.x = -60
-    // this.y = 40
-    // TweenLite.to( this, .7, {
-    //   delay: delay,
-    //   x: 0,
-    //   y: 0,
-    //   ease: Cubic.easeOut
-    // })
-    // TweenLite.to( this._default.scale, .25, {
-    //   delay: delay,
-    //   x: 0.35,
-    //   y: 0.35,
-    //   ease: Sine.easeIn,
-    // } )
-    // TweenLite.set( this._default.scale, {
-    //   delay: delay + .25,
-    //   x: .6,
-    //   y: .6
-    // } )
-    // TweenLite.to( this._default.scale, .6, {
-    //   delay: delay + .25,
-    //   x: 1,
-    //   y: 1,
-    //   ease: Cubic.easeOut,
-    // } )
+    this._isShown = true
     
     const timing = fast ? .4 : .8
     const ratio = fast ? .5 : 1
 
+    TweenLite.killTweensOf( this._default.scale )
     TweenLite.to( this._default.scale, timing, {
       delay: delay,// + .25,
       x: 1,
@@ -397,6 +386,9 @@ class EntryContentPreview extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
+    // this._hover.out()
+    
+    TweenLite.killTweensOf( this._default.scale )
     TweenLite.to( this._default.scale, .6, {
       delay: delay,// + .25,
       x: 0,

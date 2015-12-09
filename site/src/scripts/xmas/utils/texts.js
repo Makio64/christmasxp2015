@@ -1,6 +1,6 @@
 const stage = require( "fz/core/stage" )
 
-module.exports.create = ( text, style, letterSpacing = 2 ) => {
+module.exports.create = ( text, style, letterSpacing = 3 ) => {
   const cnt = new PIXI.Container()
 
   let px = 0
@@ -23,7 +23,7 @@ module.exports.create = ( text, style, letterSpacing = 2 ) => {
   return cnt
 }
 
-module.exports.createWithWords = ( text, style, letterSpacing = 2, wordSpacing = 2 ) => {
+module.exports.createWithWords = ( text, style, letterSpacing = 3, wordSpacing = 2 ) => {
   const cntGlobal = new PIXI.Container()
 
   let px = 0 

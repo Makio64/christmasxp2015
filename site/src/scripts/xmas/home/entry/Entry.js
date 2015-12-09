@@ -1,5 +1,7 @@
 const timeout = require( "fz/utils/timeout" )
 
+const config = require( "xmas/core/config" )
+
 const EntryContentPreview = require( "xmas/home/entry/EntryContentPreview" )
 const EntryNumber = require( "xmas/home/entry/EntryNumber" )
 const EntryComingSoon = require( "xmas/home/entry/EntryComingSoon" )
@@ -19,16 +21,16 @@ class Entry extends PIXI.Container {
       this.addChild( this._content )
 
       this._circle = new EntryNumber( idx )
-      this._circle.x = 133
-      this._circle.y = 124
+      this._circle.x = config.sizes.entry.w
+      this._circle.y = config.sizes.entry.h - 55
       this.addChild( this._circle )
     } else {
       this._content = new EntryComingSoon()
       this.addChild( this._content )
 
       this._circle = new EntrySmiley()
-      this._circle.x = 133
-      this._circle.y = 124
+      this._circle.x = config.sizes.entry.w
+      this._circle.y = config.sizes.entry.h - 55
       this.addChild( this._circle )
     }
 
