@@ -1674,7 +1674,15 @@ var Line = (function (_PIXI$Container) {
       this._bgLine.alpha = 0;
       this.addChild(this._bgLine);
 
-      this._isBgLineSet = false;
+      if (this._idx % 2) {
+        this._y0 = -25 + Math.random() * 50 >> 0;
+        this._y1 = 175 + Math.random() * 50 >> 0;
+        this._y2 = 50 + Math.random() * 50 >> 0;
+      } else {
+        this._y0 = 100 + Math.random() * 40 >> 0;
+        this._y1 = -50 - Math.random() * 40 >> 0;
+        this._y2 = 175 + Math.random() * 75 >> 0;
+      }
     }
   }, {
     key: "updateBgLine",
@@ -1683,23 +1691,12 @@ var Line = (function (_PIXI$Container) {
       this._bgLine.clear();
       this._bgLine.lineStyle(1, 0xffffff);
       if (this._idx % 2) {
-        if (!this._isBgLineSet) {
-          this._y0 = -25 + Math.random() * 50 >> 0;
-          this._y1 = 175 + Math.random() * 50 >> 0;
-          this._y2 = 50 + Math.random() * 50 >> 0;
-        }
         this._bgLine.moveTo(-x, this._y0);
         this._bgLine.quadraticCurveTo(w * .25, this._y1, w, this._y2);
       } else {
-        if (!this._isBgLineSet) {
-          this._y0 = 100 + Math.random() * 40 >> 0;
-          this._y1 = -50 - Math.random() * 40 >> 0;
-          this._y2 = 175 + Math.random() * 75 >> 0;
-        }
         this._bgLine.moveTo(-x, this._y0);
         this._bgLine.quadraticCurveTo(w * .75, this._y1, w, this._y2);
       }
-      this._isBgLineSet = true;
     }
   }, {
     key: "_createTitle",
