@@ -1047,157 +1047,157 @@ var cookie = require("xmas/utils/cookie");
 var loader = require("loader");
 
 var Xmas = (function () {
-  function Xmas() {
-    _classCallCheck(this, Xmas);
+	function Xmas() {
+		_classCallCheck(this, Xmas);
 
-    this.current = null;
-    this.home = null;
-    this.xp = null;
-    this.status = "notLoaded";
+		this.current = null;
+		this.home = null;
+		this.xp = null;
+		this.status = "notLoaded";
 
-    this.onChange = this.onChange.bind(this);
-    this.onHome = this.onHome.bind(this);
-    this.onIntro = this.onIntro.bind(this);
-    this.onAbout = this.onAbout.bind(this);
-    this.onXP = this.onXP.bind(this);
-    this.onStart = this.onStart.bind(this);
+		this.onChange = this.onChange.bind(this);
+		this.onHome = this.onHome.bind(this);
+		this.onIntro = this.onIntro.bind(this);
+		this.onAbout = this.onAbout.bind(this);
+		this.onXP = this.onXP.bind(this);
+		this.onStart = this.onStart.bind(this);
 
-    // page( "/home", this.onChange, this.onHome )
-    // page( "/intro", this.onIntro, this.onIntro )
-    page("/about", this.onChange, this.onAbout);
-    page("/xps/:day/:name/", this.onXP);
-    page("/", this.onStart);
-    page();
-  }
+		page("/home", this.onChange, this.onHome);
+		// page( "/intro", this.onIntro, this.onIntro )
+		page("/about", this.onChange, this.onAbout);
+		page("/xps/:day/:name/", this.onXP);
+		page("/", this.onStart);
+		page();
+	}
 
-  _createClass(Xmas, [{
-    key: "onStart",
-    value: function onStart() {
-      console.log('test');
-      if (cookie.getCookie("intro") == "") {
-        console.log('intro');
-        cookie.createCookie("intro", Date.now(), 1);
-        // page("/intro")
-        this.onIntro();
-      } else {
-        console.log('home');
-        // page("/home")
-        this.onHome();
-      }
-    }
-  }, {
-    key: "onChange",
-    value: function onChange(ctx, next) {
-      if (this.current) {
-        this.current.unbindEvents();
-        this.current.hide(next);
-      } else {
-        next();
-      }
-    }
-  }, {
-    key: "onIntro",
-    value: function onIntro() {
-      if (this.status != "loaded") {
-        this.init(this.onIntro);
-        return;
-      }
-      var storyline = new Storyline();
-      storyline.x = window.innerWidth / 2 - 200;
-      storyline.y = window.innerHeight / 2;
-      storyline.show(.6);
-      storyline.hide(2.7);
-      pixi.stage.addChild(storyline);
-      TweenLite.set(this, { delay: 3.4, onComplete: function onComplete() {
-          page("/home");
-        } });
-    }
-  }, {
-    key: "onHome",
-    value: function onHome() {
-      if (this.status != "loaded") {
-        this.init(this.onHome);
-      } else {
-        if (!this.home) this.home = new Home();
-        this.current = this.home;
-        this.displayCurrent();
-      }
-    }
-  }, {
-    key: "onAbout",
-    value: function onAbout() {
-      if (this.status != "loaded") {
-        this.init(this.onAbout);
-      } else {
-        if (!this.about) this.about = new About();
-        this.current = this.about;
-        this.displayCurrent();
-      }
-    }
-  }, {
-    key: "onXP",
-    value: function onXP(e) {
-      var _this = this;
+	_createClass(Xmas, [{
+		key: "onStart",
+		value: function onStart() {
+			console.log('test');
+			if (cookie.getCookie("intro") == "") {
+				console.log('intro');
+				cookie.createCookie("intro", Date.now(), 1);
+				// page("/intro")
+				this.onIntro();
+			} else {
+				console.log('home');
+				// page("/home")
+				this.onHome();
+			}
+		}
+	}, {
+		key: "onChange",
+		value: function onChange(ctx, next) {
+			if (this.current) {
+				this.current.unbindEvents();
+				this.current.hide(next);
+			} else {
+				next();
+			}
+		}
+	}, {
+		key: "onIntro",
+		value: function onIntro() {
+			if (this.status != "loaded") {
+				this.init(this.onIntro);
+				return;
+			}
+			var storyline = new Storyline();
+			storyline.x = window.innerWidth / 2 - 200;
+			storyline.y = window.innerHeight / 2;
+			storyline.show(.6);
+			storyline.hide(2.7);
+			pixi.stage.addChild(storyline);
+			TweenLite.set(this, { delay: 3.4, onComplete: function onComplete() {
+					page("/home");
+				} });
+		}
+	}, {
+		key: "onHome",
+		value: function onHome() {
+			if (this.status != "loaded") {
+				this.init(this.onHome);
+			} else {
+				if (!this.home) this.home = new Home();
+				this.current = this.home;
+				this.displayCurrent();
+			}
+		}
+	}, {
+		key: "onAbout",
+		value: function onAbout() {
+			if (this.status != "loaded") {
+				this.init(this.onAbout);
+			} else {
+				if (!this.about) this.about = new About();
+				this.current = this.about;
+				this.displayCurrent();
+			}
+		}
+	}, {
+		key: "onXP",
+		value: function onXP(e) {
+			var _this = this;
 
-      if (!this.xp) {
-        if (this.status == "notLoaded") {
-          loader.loadConfig(function () {
-            _this.xp = new XPView();
-            _this.current = _this.xp;
-            _this.current.bindEvents();
-            _this.current.show(e.params.day, e.params.name);
-          });
-          return;
-        } else {
-          this.xp = new XPView();
-        }
-      }
-      this.current = this.xp;
-      this.current.bindEvents();
-      this.current.show(e.params.day, e.params.name);
-    }
-  }, {
-    key: "displayCurrent",
-    value: function displayCurrent() {
-      this.current.bindEvents();
-      this.current.show();
-    }
-  }, {
-    key: "init",
-    value: function init(cb) {
-      var _this2 = this;
+			if (!this.xp) {
+				if (this.status == "notLoaded") {
+					loader.loadConfig(function () {
+						_this.xp = new XPView();
+						_this.current = _this.xp;
+						_this.current.bindEvents();
+						_this.current.show(e.params.day, e.params.name);
+					});
+					return;
+				} else {
+					this.xp = new XPView();
+				}
+			}
+			this.current = this.xp;
+			this.current.bindEvents();
+			this.current.show(e.params.day, e.params.name);
+		}
+	}, {
+		key: "displayCurrent",
+		value: function displayCurrent() {
+			this.current.bindEvents();
+			this.current.show();
+		}
+	}, {
+		key: "init",
+		value: function init(cb) {
+			var _this2 = this;
 
-      if (this.status == "loading") {
-        return;
-      } else if (this.status == "loaded") {
-        cb();
-        return;
-      }
+			if (this.status == "loading") {
+				return;
+			} else if (this.status == "loaded") {
+				cb();
+				return;
+			}
 
-      this.status = "loading";
-      stage.init();
-      pixi.init();
+			this.status = "loading";
+			stage.init();
+			pixi.init();
 
-      var ui = null;
-      loader.on("ready", function () {
-        ui = new Ui();
-        ui.bindEvents();
-        ui.showLoading();
-      });
-      loader.on("complete", function () {
-        _this2.status = "loaded";
-        ui.hideLoading();
-        ui.showBts();
-      });
-      loader.load();
-      loop.start();
-      scrollEmul.bindElements();
-      scrollEmul.bindEvents();
-      document.getElementById("main").appendChild(pixi.dom);
-    }
-  }]);
+			var ui = null;
+			loader.on("ready", function () {
+				ui = new Ui();
+				ui.bindEvents();
+				ui.showLoading();
+			});
+			loader.on("complete", function () {
+				_this2.status = "loaded";
+				ui.hideLoading();
+				ui.showBts();
+			});
+			loader.load();
+			loop.start();
+			scrollEmul.bindElements();
+			scrollEmul.bindEvents();
+			document.getElementById("main").appendChild(pixi.dom);
+		}
+	}]);
 
-  return Xmas;
+	return Xmas;
 })();
 
 module.exports = Xmas;
@@ -1652,7 +1652,15 @@ var Line = (function (_PIXI$Container) {
 			this._bgLine.alpha = 0;
 			this.addChild(this._bgLine);
 
-			this._isBgLineSet = false;
+			if (this._idx % 2) {
+				this._y0 = -25 + Math.random() * 50 >> 0;
+				this._y1 = 175 + Math.random() * 50 >> 0;
+				this._y2 = 50 + Math.random() * 50 >> 0;
+			} else {
+				this._y0 = 100 + Math.random() * 40 >> 0;
+				this._y1 = -50 - Math.random() * 40 >> 0;
+				this._y2 = 175 + Math.random() * 75 >> 0;
+			}
 		}
 	}, {
 		key: "updateBgLine",
@@ -1661,23 +1669,12 @@ var Line = (function (_PIXI$Container) {
 			this._bgLine.clear();
 			this._bgLine.lineStyle(1, 0xffffff);
 			if (this._idx % 2) {
-				if (!this._isBgLineSet) {
-					this._y0 = -25 + Math.random() * 50 >> 0;
-					this._y1 = 175 + Math.random() * 50 >> 0;
-					this._y2 = 50 + Math.random() * 50 >> 0;
-				}
 				this._bgLine.moveTo(-x, this._y0);
 				this._bgLine.quadraticCurveTo(w * .25, this._y1, w, this._y2);
 			} else {
-				if (!this._isBgLineSet) {
-					this._y0 = 100 + Math.random() * 40 >> 0;
-					this._y1 = -50 - Math.random() * 40 >> 0;
-					this._y2 = 175 + Math.random() * 75 >> 0;
-				}
 				this._bgLine.moveTo(-x, this._y0);
 				this._bgLine.quadraticCurveTo(w * .75, this._y1, w, this._y2);
 			}
-			this._isBgLineSet = true;
 		}
 	}, {
 		key: "_createTitle",
@@ -1828,8 +1825,6 @@ var Line = (function (_PIXI$Container) {
 	}, {
 		key: "hide",
 		value: function hide() {
-			var _this2 = this;
-
 			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
 			if (!this.isShown) {
@@ -1869,10 +1864,7 @@ var Line = (function (_PIXI$Container) {
 			TweenLite.to(this._cntTfNumber, .6, {
 				delay: delay,
 				alpha: 0,
-				ease: Cubic.easeInOut,
-				onComplete: function onComplete(e) {
-					_this2.parent.removeChild(_this2);
-				}
+				ease: Cubic.easeInOut
 			});
 
 			var d = 0;

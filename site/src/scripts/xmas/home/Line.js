@@ -34,7 +34,15 @@ class Line extends PIXI.Container {
 		this._bgLine.alpha = 0
 		this.addChild( this._bgLine )
 
-		this._isBgLineSet = false
+		if( this._idx % 2 ) {
+			this._y0 = -25 + Math.random() * 50 >> 0
+			this._y1 = 175 + Math.random() * 50 >> 0
+			this._y2 = 50 + Math.random() * 50 >> 0
+		} else {
+			this._y0 = 100 + Math.random() * 40 >> 0
+			this._y1 = -50 - Math.random() * 40 >> 0
+			this._y2 = 175 + Math.random() * 75 >> 0
+		}
 	}
 
 	updateBgLine( x ) {
@@ -42,23 +50,12 @@ class Line extends PIXI.Container {
 		this._bgLine.clear()
 		this._bgLine.lineStyle( 1, 0xffffff )
 		if( this._idx % 2 ) {
-			if( !this._isBgLineSet ) {
-				this._y0 = -25 + Math.random() * 50 >> 0
-				this._y1 = 175 + Math.random() * 50 >> 0
-				this._y2 = 50 + Math.random() * 50 >> 0
-			}
 			this._bgLine.moveTo( -x, this._y0 )
 			this._bgLine.quadraticCurveTo( w * .25, this._y1, w, this._y2 )
 		} else {
-			if( !this._isBgLineSet ) {
-				this._y0 = 100 + Math.random() * 40 >> 0
-				this._y1 = -50 - Math.random() * 40 >> 0
-				this._y2 = 175 + Math.random() * 75 >> 0
-			}
 			this._bgLine.moveTo( -x, this._y0 )
 			this._bgLine.quadraticCurveTo( w * .75, this._y1, w, this._y2 )
 		}
-		this._isBgLineSet = true
 	}
 
 	_createTitle() {
@@ -237,9 +234,9 @@ class Line extends PIXI.Container {
 		TweenLite.to( this._cntTfNumber, .6, {
 			delay: delay,
 			alpha: 0,
-			ease: Cubic.easeInOut,
-			onComplete:(e)=>{this.parent.removeChild( this )}
+			ease: Cubic.easeInOut
 		})
+
 
 		let d = 0
 		let dAdd = .06
@@ -259,7 +256,6 @@ class Line extends PIXI.Container {
 			}
 		}
 	}
-
 }
 
 module.exports = Line
