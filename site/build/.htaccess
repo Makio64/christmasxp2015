@@ -1,6 +1,8 @@
 SetEnv PHP_VER 5_3
 SetEnv REGISTER_GLOBALS 0
 
+AddDefaultCharset utf-8
+
 Redirect permanent /25/index.html http://christmasexperiments.com
 
 # Mistake of the first year

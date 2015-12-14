@@ -7,68 +7,52 @@ const Bts = require( "xmas/ui/Bts" )
 
 class Ui extends PIXI.Container {
 
-  constructor() {
-    super()
+	constructor() {
+		super()
 
-    pixi.stage.addChild( this )
+		pixi.stage.addChild( this )
 
-    this._logo = new Logo()
-    this.addChild( this._logo )
+		this._logo = new Logo()
+		this.addChild( this._logo )
 
-    if( browsers.mobile ) {
-      this._logo.scale.set( .5, .5 )
-    }
+		this._binds = {}
+		this._binds.onResize = this._onResize.bind( this )
 
-    this._binds = {}
-    this._binds.onResize = this._onResize.bind( this )
+		this._onResize()
+		this._logo.y = stage.height >> 1
+	}
 
-    this._onResize()
-    this._logo.y = stage.height >> 1
-  }
+	_onResize() {
+		if( 1320 > stage.width ) {
+			this._logo.scale.set( stage.width/1320, stage.width/1320 )
+		}
+		this._logo.x = stage.width >> 1
+		if( this._bts ) {
+			this._bts.x = stage.width - 215 * 1.5 * this._bts.scale.x >> 0
+			this._bts.y = 20 * 1.5 >> 0
+			this._bts.visible = 640 < stage.width?true:false
+		}
+	}
 
-  _onResize() {
-    // this._title.x = stage.width - this._title.width >> 1
-    // this._title.y = stage.height - this._title.height >> 1
-    // this._title.y += -100
+	showLoading() {
+		this._logo.show()
+	}
 
-    // this._progressBar.y = this._title.y - 50
+	hideLoading(  ) {
+		this._logo.hideLoading(  )
+	}
 
-    // this._logo.x = this._title.x + 270
-    // this._logo.y = this._title.y + 142
+	showBts() {
+		this._bts = new Bts()
+		this.addChild( this._bts )
+		this._onResize()
 
-    this._logo.x = stage.width >> 1
-    if( browsers.mobile ) {
-      this._logo.x += 10
-    }
+		this._bts.show( 5 )
+	}
 
-    if( this._bts ) {
-      this._bts.x = stage.width - 215 * 1.5 * this._bts.scale.x >> 0
-      if( browsers.mobile ) {
-        this._bts.x += 15
-      }
-      this._bts.y = 20 * 1.5 >> 0
-    }
-  }
-
-  showLoading() {
-    this._logo.show()
-  }
-
-  hideLoading(  ) {
-    this._logo.hideLoading(  )
-  }
-
-  showBts() {
-    this._bts = new Bts()
-    this.addChild( this._bts )
-    this._onResize()
-
-    this._bts.show( 5 )
-  }
-
-  bindEvents() {
-    stage.on( "resize", this._binds.onResize )
-  }
+	bindEvents() {
+		stage.on( "resize", this._binds.onResize )
+	}
 
 }
 

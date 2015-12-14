@@ -4,8 +4,7 @@ const stage = require( "fz/core/stage" )
 
 class Point {
 
-	constructor() {
-	}
+	constructor() {}
 
 	set( a, radDefault, radOver ) {
 		const cos = Math.cos( a )

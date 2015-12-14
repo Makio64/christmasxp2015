@@ -13,7 +13,6 @@ class Entry extends PIXI.Container {
 		super()
 
 		this._data = data
-
 		this._isShown = false
 
 		if( idx >= 0 ) {
@@ -56,7 +55,6 @@ class Entry extends PIXI.Container {
 		if( !this._isShown ) {
 			return
 		}
-
 		if( this._content.out ) {
 			this._content.out()
 		}
@@ -76,15 +74,6 @@ class Entry extends PIXI.Container {
 		timeout( () => {
 			this._isShown = true
 		}, delay * 1000 + 1200 )
-		// this._circle.x = 113
-		// TweenLite.to( this._circle, .6, {
-		//   delay: delay + .3,
-		//   x: 133,
-		//   ease: Quart.easeOut,
-		//   onComplete: () => {
-		//     this._isShown = true
-		//   }
-		// })
 	}
 
 	hide( delay = 0 ) {

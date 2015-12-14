@@ -2,6 +2,7 @@ const stage = require( "fz/core/stage" )
 
 const config = require( "xmas/core/config" )
 const Entry = require( "xmas/home/entry/Entry" )
+const EntrySexy = require( "xmas/home/entry/EntrySexy" )
 const uXmasTexts = require( "xmas/utils/texts" )
 
 class Line extends PIXI.Container {
@@ -87,7 +88,6 @@ class Line extends PIXI.Container {
 		this._cntTfNumber.alpha = 0
 		this._cntTitle.addChild( this._cntTfNumber )
 
-
 		this.addChild( this._cntTitle )
 	}
 
@@ -97,21 +97,40 @@ class Line extends PIXI.Container {
 		let px = 0
 		let yTime = 0
 		let entry = null
-		for( let i = 0; i < this._count; i++ ) {
-			entry = new Entry( i + 1, this._dataEntries[ i ] )
-			entry.x += px
-			entry.y = Math.sin( as[ i ] ) * 38 >> 0
-			this._cntEntries.addChild( entry )
-
+		for( let i = 0; i < 4; i++ ) {
+			if(i<this._count){
+				entry = new Entry( i + 1, this._dataEntries[ i ] )
+				entry.x += px
+				entry.y = Math.sin( as[ i ] ) * 38 >> 0
+				this._cntEntries.addChild( entry )
+			} else {
+				entry = new EntrySexy()
+				entry.x += px
+				entry.y = Math.sin( as[ i ] ) * 38 >> 0
+				this._cntEntries.addChild( entry )
+			}
 			px += config.sizes.entry.w + 60
-
 			yTime += Math.PI * .75
 		}
 	}
 
 	_createDummy() {
-		const entry = new Entry()
-		this._cntEntries.addChild( entry )
+		let px = 0
+		let yTime = 0
+		let entry = null
+		for( let i = 0; i < 4; i++ ) {
+			if(i==0){
+				entry = new Entry()
+			}
+			else{
+				entry = new EntrySexy()
+			}
+			entry.x += px
+			entry.y = Math.sin( i ) * 38 >> 0
+			this._cntEntries.addChild( entry )
+			px += config.sizes.entry.w + 60
+			yTime += Math.PI * .75
+		}
 	}
 
 	bindEvents() {
@@ -215,10 +234,6 @@ class Line extends PIXI.Container {
 					ease: Cubic.easeInOut
 				} )
 			}
-			// TweenLite.set( this._cntTfDay, {
-			//   delay: delay + 1,
-			//   alpha: 0,
-			// })
 		}
 		TweenLite.to( this._line.scale, .6, {
 			delay: delay + .04,

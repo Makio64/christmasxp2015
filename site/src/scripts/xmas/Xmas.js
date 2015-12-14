@@ -27,7 +27,6 @@ class Xmas {
 		this.onStart = this.onStart.bind( this )
 
 		page( "/home", this.onChange, this.onHome )
-		// page( "/intro", this.onIntro, this.onIntro )
 		page( "/about", this.onChange, this.onAbout )
 		page( "/xps/:day/:name/", this.onXP )
 		page( "/", this.onStart )
@@ -35,15 +34,10 @@ class Xmas {
 	}
 
 	onStart(){
-		console.log('test')
 		if(cookie.getCookie("intro") == ""){
-			console.log('intro')
 			cookie.createCookie("intro", Date.now(), 1)
-			// page("/intro")
 			this.onIntro()
 		}else{
-			console.log('home')
-			// page("/home")
 			this.onHome()
 		}
 	}
