@@ -1351,248 +1351,253 @@ var Line = require("xmas/home/Line");
 var scrollEmul = require("xmas/core/scrollEmul");
 
 var Home = (function (_PIXI$Container) {
-	_inherits(Home, _PIXI$Container);
+  _inherits(Home, _PIXI$Container);
 
-	function Home() {
-		_classCallCheck(this, Home);
+  function Home() {
+    _classCallCheck(this, Home);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Home).call(this));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Home).call(this));
 
-		_this._idx = 0;
-		_this._idxToHide = 0;
-		_this.accelerationY = 0;
+    _this._idx = 0;
+    _this._idxToHide = 0;
+    _this.accelerationY = 0;
 
-		_this._isShown = false;
+    _this._isShown = false;
 
-		_this._yLast = 0;
+    _this._yLast = 0;
 
-		_this._hLine = config.sizes.entry.h + 75;
+    _this._hLine = config.sizes.entry.h + 75;
 
-		if (browsers.mobile) {
-			_this.scale.set(.5, .5);
-		}
+    if (browsers.mobile) {
+      _this.scale.set(.5, .5);
+    }
 
-		_this._yMin = 0;
-		_this._yMax = 205;
-		_this._yTo = _this._yMax;
-		scrollEmul.setHeight(_this._yMin);
+    _this._yMin = 0;
+    _this._yMax = 205;
+    _this._yTo = _this._yMax;
+    scrollEmul.setHeight(_this._yMin);
 
-		_this._cntLines = new PIXI.Container();
-		_this._cntLines.y = _this._yTo;
-		_this.addChild(_this._cntLines);
+    _this._cntLines = new PIXI.Container();
+    _this._cntLines.y = _this._yTo;
+    _this.addChild(_this._cntLines);
 
-		_this._createLines();
+    _this._createLines();
 
-		_this._binds = {};
-		_this._binds.onResize = _this._onResize.bind(_this);
-		_this._binds.onTouchDown = _this._onTouchDown.bind(_this);
-		_this._binds.onTouchMove = _this._onTouchMove.bind(_this);
-		_this._binds.onTouchUp = _this._onTouchUp.bind(_this);
-		_this._binds.onScroll = _this._onScroll.bind(_this);
-		_this._binds.onUpdate = _this._onUpdate.bind(_this);
-		return _this;
-	}
+    _this._binds = {};
+    _this._binds.onResize = _this._onResize.bind(_this);
+    _this._binds.onTouchDown = _this._onTouchDown.bind(_this);
+    _this._binds.onTouchMove = _this._onTouchMove.bind(_this);
+    _this._binds.onTouchUp = _this._onTouchUp.bind(_this);
+    _this._binds.onScroll = _this._onScroll.bind(_this);
+    _this._binds.onUpdate = _this._onUpdate.bind(_this);
+    return _this;
+  }
 
-	_createClass(Home, [{
-		key: "_onTouchDown",
-		value: function _onTouchDown(e) {
-			this._yLast = e.y;
-		}
-	}, {
-		key: "_onTouchMove",
-		value: function _onTouchMove(e) {
-			var dy = e.y - this._yLast;
-			this.accelerationY += Math.max(-15, Math.min(15, dy));
-			this._yLast = e.y;
-		}
-	}, {
-		key: "_onTouchUp",
-		value: function _onTouchUp(e) {}
-	}, {
-		key: "_onResize",
-		value: function _onResize() {
-			var w = 1320;
-			this._cntLines.x = stage.width - w >> 1;
-			if (w > window.innerWidth || browsers.tablet || browsers.mobile) {
-				this._cntLines.x = 10;
-				this._yMin = -26 * this._hLine + stage.height;
-			}
+  _createClass(Home, [{
+    key: "_onTouchDown",
+    value: function _onTouchDown(e) {
+      this._yLast = e.y;
+    }
+  }, {
+    key: "_onTouchMove",
+    value: function _onTouchMove(e) {
+      var dy = e.y - this._yLast;
+      this.accelerationY += Math.max(-15, Math.min(15, dy));
+      this._yLast = e.y;
+    }
+  }, {
+    key: "_onTouchUp",
+    value: function _onTouchUp(e) {}
+  }, {
+    key: "_onResize",
+    value: function _onResize() {
+      var w = 1320;
+      this._cntLines.x = stage.width - w >> 1;
+      if (w > stage.width || browsers.tablet || browsers.mobile) {
+        this._cntLines.x = 10;
+      }
+      if (browsers.tablet || browsers.mobile) {
+        this._yMin = -26 * this._hLine + stage.height;
+      } else {
+        this._yMin = -26 * this._hLine - this._yMax;
+        scrollEmul.setHeight(-this._yMin);
+      }
 
-			if (!browsers.tablet && !browsers.mobile) {
-				scrollEmul.setHeight(-this._yMin);
-			}
+      if (!browsers.tablet && !browsers.mobile) {
+        scrollEmul.setHeight(-this._yMin);
+      }
 
-			this._updateLines();
+      this._updateLines();
 
-			this._countLinesVisible = Math.ceil(stage.height / this._hLine);
-			this._countLinesVisible += 1;
+      this._countLinesVisible = Math.ceil(stage.height / this._hLine);
+      this._countLinesVisible += 1;
 
-			this._updateVisibles();
-		}
-	}, {
-		key: "_updateLines",
-		value: function _updateLines() {
-			var n = this._lines.length;
-			for (var i = 0; i < n; i++) {
-				this._lines[i].updateBgLine(this._cntLines.x);
-			}
-		}
+      this._updateVisibles();
+    }
+  }, {
+    key: "_updateLines",
+    value: function _updateLines() {
+      var n = this._lines.length;
+      for (var i = 0; i < n; i++) {
+        this._lines[i].updateBgLine(this._cntLines.x);
+      }
+    }
 
-		// _onMouseScroll( e ) {
-		//   e.preventDefault()
+    // _onMouseScroll( e ) {
+    //   e.preventDefault()
 
-		//   this._isDragDrop = false
-		//   this._yTo += -e.deltaY * .4
-		//   this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
-		// }
+    //   this._isDragDrop = false
+    //   this._yTo += -e.deltaY * .4
+    //   this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
+    // }
 
-	}, {
-		key: "_onScroll",
-		value: function _onScroll(yTo) {
-			this._isDragDrop = false;
-			this._yTo = -yTo + this._yMax;
-			// this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
-		}
-	}, {
-		key: "_onUpdate",
-		value: function _onUpdate() {
-			var dy = this._yTo - this._cntLines.y;
-			this._cntLines.y += dy * .25;
+  }, {
+    key: "_onScroll",
+    value: function _onScroll(yTo) {
+      this._isDragDrop = false;
+      this._yTo = -yTo + this._yMax;
+      // this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
+    }
+  }, {
+    key: "_onUpdate",
+    value: function _onUpdate() {
+      var dy = this._yTo - this._cntLines.y;
+      this._cntLines.y += dy * .25;
 
-			this._yTo += this.accelerationY;
-			this._yTo = uMaths.clamp(this._yTo, this._yMin + this._hLine + 50, this._yMax);
-			this.accelerationY *= .9;
+      this._yTo += this.accelerationY;
+      this._yTo = uMaths.clamp(this._yTo, this._yMin + this._hLine + 50, this._yMax);
+      this.accelerationY *= .9;
 
-			this._idx = Math.floor((this._yMax - this._cntLines.y) / this._hLine);
-			this._updateVisibles();
-		}
-	}, {
-		key: "_hideLine",
-		value: function _hideLine(idx) {
-			this._lines[idx - 1].hide();
-		}
-	}, {
-		key: "_showLine",
-		value: function _showLine(idx, fast) {
-			this._lines[idx].show(0, fast);
-		}
-	}, {
-		key: "_updateVisibles",
-		value: function _updateVisibles() {
-			var line = null;
-			var start = this._idx;
-			var end = this._idx + this._countLinesVisible;
-			for (var i = 0; i < 25; i++) {
-				line = this._lines[i];
-				if (i >= start && i < end) {
-					if (!line.parent) {
-						this._cntLines.addChild(line);
-					}
-					if (this._isShown && !line.isShown && (i == start || i == end - 1)) {
-						line.show(.2, true);
-					}
-				} else {
-					if (line.parent) {
-						// TODO should be call only when needed
-						line.hide();
-					}
-				}
-			}
-		}
-	}, {
-		key: "_createLines",
-		value: function _createLines() {
-			var tmpData = [4, 3];
+      this._idx = Math.floor((this._yMax - this._cntLines.y) / this._hLine);
+      this._updateVisibles();
+    }
+  }, {
+    key: "_hideLine",
+    value: function _hideLine(idx) {
+      this._lines[idx - 1].hide();
+    }
+  }, {
+    key: "_showLine",
+    value: function _showLine(idx, fast) {
+      this._lines[idx].show(0, fast);
+    }
+  }, {
+    key: "_updateVisibles",
+    value: function _updateVisibles() {
+      var line = null;
+      var start = this._idx;
+      var end = this._idx + this._countLinesVisible;
+      for (var i = 0; i < 25; i++) {
+        line = this._lines[i];
+        if (i >= start && i < end) {
+          if (!line.parent) {
+            this._cntLines.addChild(line);
+          }
+          if (this._isShown && !line.isShown && (i == start || i == end - 1)) {
+            line.show(.2, true);
+          }
+        } else {
+          if (line.parent) {
+            // TODO should be call only when needed
+            line.hide();
+          }
+        }
+      }
+    }
+  }, {
+    key: "_createLines",
+    value: function _createLines() {
+      var tmpData = [4, 3];
 
-			var yAdd = this._hLine;
+      var yAdd = this._hLine;
 
-			this._lines = [];
-			var line = null;
+      this._lines = [];
+      var line = null;
 
-			var py = 0;
-			var i = 0;
-			var n = tmpData.length;
-			for (; i < n; i++) {
-				line = new Line(i + 1, tmpData[i]);
-				line.y = py;
-				this._lines.push(line);
-				// this._cntLines.addChild( line )
+      var py = 0;
+      var i = 0;
+      var n = tmpData.length;
+      for (; i < n; i++) {
+        line = new Line(i + 1, tmpData[i]);
+        line.y = py;
+        this._lines.push(line);
+        // this._cntLines.addChild( line )
 
-				py += yAdd;
-			}
+        py += yAdd;
+      }
 
-			for (i = n; i < 25; i++) {
-				line = new Line(i + 1);
-				line.y = py;
-				this._lines.push(line);
-				// this._cntLines.addChild( line )
+      for (i = n; i < 25; i++) {
+        line = new Line(i + 1);
+        line.y = py;
+        this._lines.push(line);
+        // this._cntLines.addChild( line )
 
-				py += yAdd;
-			}
-		}
-	}, {
-		key: "bindEvents",
-		value: function bindEvents() {
-			stage.on("resize", this._binds.onResize);
-			this._onResize();
+        py += yAdd;
+      }
+    }
+  }, {
+    key: "bindEvents",
+    value: function bindEvents() {
+      stage.on("resize", this._binds.onResize);
+      this._onResize();
 
-			if (browsers.mobile || browsers.tablet) {
-				interactions.on(document.body, "down", this._binds.onTouchDown);
-				interactions.on(document.body, "move", this._binds.onTouchMove);
-				interactions.on(document.body, "up", this._binds.onTouchUp);
-			} else {
-				scrollEmul.on("change", this._binds.onScroll);
-			}
+      if (browsers.mobile || browsers.tablet) {
+        interactions.on(document.body, "down", this._binds.onTouchDown);
+        interactions.on(document.body, "move", this._binds.onTouchMove);
+        interactions.on(document.body, "up", this._binds.onTouchUp);
+      } else {
+        scrollEmul.on("change", this._binds.onScroll);
+      }
 
-			// window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
+      // window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
-			loop.add(this._binds.onUpdate);
-		}
-	}, {
-		key: "unbindEvents",
-		value: function unbindEvents() {
-			stage.off("resize", this._binds.onResize);
+      loop.add(this._binds.onUpdate);
+    }
+  }, {
+    key: "unbindEvents",
+    value: function unbindEvents() {
+      stage.off("resize", this._binds.onResize);
 
-			if (browsers.mobile || browsers.tablet) {
-				interactions.off(document.body, "down", this._binds.onTouchDown);
-				interactions.off(document.body, "move", this._binds.onTouchMove);
-				interactions.off(document.body, "up", this._binds.onTouchUp);
-			} else {
-				scrollEmul.off("change", this._binds.onScroll);
-			}
+      if (browsers.mobile || browsers.tablet) {
+        interactions.off(document.body, "down", this._binds.onTouchDown);
+        interactions.off(document.body, "move", this._binds.onTouchMove);
+        interactions.off(document.body, "up", this._binds.onTouchUp);
+      } else {
+        scrollEmul.off("change", this._binds.onScroll);
+      }
 
-			// window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
+      // window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
-			loop.remove(this._binds.onUpdate);
-		}
-	}, {
-		key: "show",
-		value: function show() {
-			this._isShown = true;
+      loop.remove(this._binds.onUpdate);
+    }
+  }, {
+    key: "show",
+    value: function show() {
+      this._isShown = true;
 
-			pixi.stage.addChildAt(this, 0);
+      pixi.stage.addChildAt(this, 0);
 
-			var n = this._lines.length;
-			for (var i = 0; i < this._countLinesVisible; i++) {
-				this._lines[i].show(i * .08);
-			}
+      var n = this._lines.length;
+      for (var i = 0; i < this._countLinesVisible; i++) {
+        this._lines[i].show(i * .08);
+      }
 
-			TweenLite.set(this, {
-				delay: 2,
-				onComplete: this.bindEvents.bind(this)
-			});
+      TweenLite.set(this, {
+        delay: 2,
+        onComplete: this.bindEvents.bind(this)
+      });
 
-			this._onResize();
-		}
-	}, {
-		key: "hide",
-		value: function hide(cb) {
-			pixi.stage.removeChild(this);
-			cb();
-		}
-	}]);
+      this._onResize();
+    }
+  }, {
+    key: "hide",
+    value: function hide(cb) {
+      pixi.stage.removeChild(this);
+      cb();
+    }
+  }]);
 
-	return Home;
+  return Home;
 })(PIXI.Container);
 
 module.exports = Home;
