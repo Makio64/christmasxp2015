@@ -20,6 +20,8 @@ config.sizes = {
   }
 }
 
+config.texShape = null
+
 config.data = null
 
 module.exports = config

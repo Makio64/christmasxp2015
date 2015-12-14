@@ -35,6 +35,7 @@ class Loader extends Emitter {
 	}
 
 	_onPixiComplete() {
+    config.texShape = PIXI.Texture.fromFrame( "img/poly_mask.png" )
 		this.emit( "complete" )
 	}
 

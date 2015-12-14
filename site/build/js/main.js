@@ -948,6 +948,7 @@ var Loader = (function (_Emitter) {
 	}, {
 		key: "_onPixiComplete",
 		value: function _onPixiComplete() {
+			config.texShape = PIXI.Texture.fromFrame("img/poly_mask.png");
 			this.emit("complete");
 		}
 	}, {
@@ -1254,6 +1255,8 @@ config.sizes = {
     h: 240
   }
 };
+
+config.texShape = null;
 
 config.data = null;
 
@@ -2284,15 +2287,15 @@ var DefaultShape = (function (_PIXI$Container) {
 			});
 			TweenLite.to(this._shapeOver.scale, .4, {
 				delay: .175,
-				x: 1.12,
-				y: 1.12,
+				x: 1.1,
+				y: 1.1,
 				ease: Quart.easeOut
 			});
 
 			TweenLite.to(this._polyShape.scale, .4, {
 				delay: .1,
-				x: 1.12,
-				y: 1.12,
+				x: 1.1,
+				y: 1.1,
 				ease: Quart.easeOut
 			});
 		}
@@ -3174,18 +3177,15 @@ var Point = (function () {
 	return Point;
 })();
 
-// class PolyShapeGraphics extends PIXI.Graphics {
+var PolyShapeGraphicsSprite = (function (_PIXI$Sprite) {
+	_inherits(PolyShapeGraphicsSprite, _PIXI$Sprite);
 
-var PolyShapeGraphics = (function (_PIXI$Sprite) {
-	_inherits(PolyShapeGraphics, _PIXI$Sprite);
-
-	function PolyShapeGraphics() {
+	function PolyShapeGraphicsSprite() {
 		var color = arguments.length <= 0 || arguments[0] === undefined ? 0xff00ff : arguments[0];
 
-		_classCallCheck(this, PolyShapeGraphics);
+		_classCallCheck(this, PolyShapeGraphicsSprite);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this, PIXI.Texture.fromFrame("img/poly_mask.png")));
-		// super()
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphicsSprite).call(this, config.texShape));
 
 		_this._color = color;
 		_this.tint = _this._color;
@@ -3193,45 +3193,73 @@ var PolyShapeGraphics = (function (_PIXI$Sprite) {
 		return _this;
 	}
 
-	// 	_update() {
-	// 		this.clear()
+	return PolyShapeGraphicsSprite;
+})(PIXI.Sprite);
 
-	// 		this.beginFill( this._color )
-	// 		this._draw()
-	// 	}
+var PolyShapeGraphics = (function (_PIXI$Graphics) {
+	_inherits(PolyShapeGraphics, _PIXI$Graphics);
 
-	// 	_init() {
-	// 		let a = 0
-	// 		let radDefault = config.sizes.entry.h >> 1
-	// 		let radOver = config.sizes.entry.w >> 1
-	// 		let p = null
+	function PolyShapeGraphics() {
+		var color = arguments.length <= 0 || arguments[0] === undefined ? 0xff00ff : arguments[0];
 
-	// 		this._points = []
+		_classCallCheck(this, PolyShapeGraphics);
 
-	// 		const aAdd = 2 * Math.PI / this._countMaskPoints
-	// 		for( let i = 0; i < this._countMaskPoints; i++ ) {
-	// 			p = new Point()
-	// 			p.set( a, radDefault, radOver)
-	// 			this._points.push( p )
+		var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this));
 
-	// 			a += aAdd
-	// 		}
-	// 	}
+		_this2._color = color;
+		_this2._countMaskPoints = 6;
 
-	// 	_draw() {
-	// 		let p = null
-	// 		for( let i = 0; i < this._countMaskPoints; i++ ) {
-	// 			p = this._points[ i ]
-	// 			if( i != 0 ) {
-	// 				this.lineTo( p.x, p.y )
-	// 			} else {
-	// 				this.moveTo( p.x, p.y )
-	// 			}
-	// 		}
-	// 	}
+		_this2.rotation = Math.PI / 6;
+
+		_this2._init();
+		_this2._update();
+		return _this2;
+	}
+
+	_createClass(PolyShapeGraphics, [{
+		key: "_update",
+		value: function _update() {
+			this.clear();
+
+			this.beginFill(this._color);
+			this._draw();
+		}
+	}, {
+		key: "_init",
+		value: function _init() {
+			var a = 0;
+			var radDefault = config.sizes.entry.h >> 1;
+			var radOver = config.sizes.entry.w >> 1;
+			var p = null;
+
+			this._points = [];
+
+			var aAdd = 2 * Math.PI / this._countMaskPoints;
+			for (var i = 0; i < this._countMaskPoints; i++) {
+				p = new Point();
+				p.set(a, radDefault, radOver);
+				this._points.push(p);
+
+				a += aAdd;
+			}
+		}
+	}, {
+		key: "_draw",
+		value: function _draw() {
+			var p = null;
+			for (var i = 0; i < this._countMaskPoints; i++) {
+				p = this._points[i];
+				if (i != 0) {
+					this.lineTo(p.x, p.y);
+				} else {
+					this.moveTo(p.x, p.y);
+				}
+			}
+		}
+	}]);
 
 	return PolyShapeGraphics;
-})(PIXI.Sprite);
+})(PIXI.Graphics);
 
 // let tex = null
 
