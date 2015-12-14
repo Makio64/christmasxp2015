@@ -1,1 +1,599 @@
-THREE.TrackballControls=function(e,t){function n(e){d.enabled!==!1&&(window.removeEventListener("keydown",n),m=E,E===u.NONE&&(e.keyCode!==d.keys[u.ROTATE]||d.noRotate?e.keyCode!==d.keys[u.ZOOM]||d.noZoom?e.keyCode!==d.keys[u.PAN]||d.noPan||(E=u.PAN):E=u.ZOOM:E=u.ROTATE))}function o(e){d.enabled!==!1&&(E=m,window.addEventListener("keydown",n,!1))}function a(e){d.enabled!==!1&&(e.preventDefault(),e.stopPropagation(),E===u.NONE&&(E=e.button),E!==u.ROTATE||d.noRotate?E!==u.ZOOM||d.noZoom?E!==u.PAN||d.noPan||(d.getMouseOnScreen(e.pageX,e.pageY,R),M.copy(R)):(d.getMouseOnScreen(e.pageX,e.pageY,f),w.copy(f)):(d.getMouseProjectionOnBall(e.pageX,e.pageY,O),v.copy(O)),document.addEventListener("mousemove",s,!1),document.addEventListener("mouseup",i,!1),d.dispatchEvent(N))}function s(e){d.enabled!==!1&&(e.preventDefault(),e.stopPropagation(),E!==u.ROTATE||d.noRotate?E!==u.ZOOM||d.noZoom?E!==u.PAN||d.noPan||d.getMouseOnScreen(e.pageX,e.pageY,M):d.getMouseOnScreen(e.pageX,e.pageY,w):d.getMouseProjectionOnBall(e.pageX,e.pageY,v))}function i(e){d.enabled!==!1&&(e.preventDefault(),e.stopPropagation(),E=u.NONE,document.removeEventListener("mousemove",s),document.removeEventListener("mouseup",i),d.dispatchEvent(H))}function c(e){if(d.enabled!==!1){e.preventDefault(),e.stopPropagation();var t=0;e.wheelDelta?t=e.wheelDelta/40:e.detail&&(t=-e.detail/3),f.y+=.01*t,d.dispatchEvent(N),d.dispatchEvent(H)}}function r(e){if(d.enabled!==!1){switch(e.touches.length){case 1:E=u.TOUCH_ROTATE,v.copy(d.getMouseProjectionOnBall(e.touches[0].pageX,e.touches[0].pageY,O));break;case 2:E=u.TOUCH_ZOOM;var t=e.touches[0].pageX-e.touches[1].pageX,n=e.touches[0].pageY-e.touches[1].pageY;T=b=Math.sqrt(t*t+n*n);break;case 3:E=u.TOUCH_PAN,M.copy(d.getMouseOnScreen(e.touches[0].pageX,e.touches[0].pageY,R));break;default:E=u.NONE}d.dispatchEvent(N)}}function p(e){if(d.enabled!==!1)switch(e.preventDefault(),e.stopPropagation(),e.touches.length){case 1:d.getMouseProjectionOnBall(e.touches[0].pageX,e.touches[0].pageY,v);break;case 2:var t=e.touches[0].pageX-e.touches[1].pageX,n=e.touches[0].pageY-e.touches[1].pageY;T=Math.sqrt(t*t+n*n);break;case 3:d.getMouseOnScreen(e.touches[0].pageX,e.touches[0].pageY,M);break;default:E=u.NONE}}function h(e){if(d.enabled!==!1){switch(e.touches.length){case 1:O.copy(d.getMouseProjectionOnBall(e.touches[0].pageX,e.touches[0].pageY,v));break;case 2:b=T=0;break;case 3:R.copy(d.getMouseOnScreen(e.touches[0].pageX,e.touches[0].pageY,M))}E=u.NONE,d.dispatchEvent(H)}}var d=this,u={NONE:-1,ROTATE:0,ZOOM:1,PAN:2,TOUCH_ROTATE:3,TOUCH_ZOOM:4,TOUCH_PAN:5};this.object=e,this.domElement=void 0!==t?t:document,this.enabled=!0,this.screen={left:0,top:0,width:0,height:0},this.rotateSpeed=1,this.zoomSpeed=1.2,this.panSpeed=.3,this.noRotate=!1,this.noZoom=!1,this.noPan=!1,this.noRoll=!1,this.staticMoving=!1,this.dynamicDampingFactor=.2,this.minDistance=0,this.maxDistance=1/0,this.keys=[65,83,68],this.target=new THREE.Vector3;var l=1e-6,g=new THREE.Vector3,E=u.NONE,m=u.NONE,y=new THREE.Vector3,O=new THREE.Vector3,v=new THREE.Vector3,f=new THREE.Vector2,w=new THREE.Vector2,b=0,T=0,R=new THREE.Vector2,M=new THREE.Vector2;this.target0=this.target.clone(),this.position0=this.object.position.clone(),this.up0=this.object.up.clone();var j={type:"change"},N={type:"start"},H={type:"end"};this.handleResize=function(){if(this.domElement===document)this.screen.left=0,this.screen.top=0,this.screen.width=window.innerWidth,this.screen.height=window.innerHeight;else{var e=this.domElement.getBoundingClientRect(),t=this.domElement.ownerDocument.documentElement;this.screen.left=e.left+window.pageXOffset-t.clientLeft,this.screen.top=e.top+window.pageYOffset-t.clientTop,this.screen.width=e.width,this.screen.height=e.height}},this.handleEvent=function(e){"function"==typeof this[e.type]&&this[e.type](e)},this.getMouseOnScreen=function(e,t,n){return n.set((e-d.screen.left)/d.screen.width,(t-d.screen.top)/d.screen.height)},this.getMouseProjectionOnBall=function(){var e=new THREE.Vector3,t=new THREE.Vector3;return function(n,o,a){t.set((n-.5*d.screen.width-d.screen.left)/(.5*d.screen.width),(.5*d.screen.height+d.screen.top-o)/(.5*d.screen.height),0);var s=t.length();return d.noRoll?s<Math.SQRT1_2?t.z=Math.sqrt(1-s*s):t.z=.5/s:s>1?t.normalize():t.z=Math.sqrt(1-s*s),y.copy(d.object.position).sub(d.target),a.copy(d.object.up).setLength(t.y),a.add(e.copy(d.object.up).cross(y).setLength(t.x)),a.add(y.setLength(t.z)),a}}(),this.rotateCamera=function(){var e=new THREE.Vector3,t=new THREE.Quaternion;return function(){var n=Math.acos(O.dot(v)/O.length()/v.length());n&&(e.crossVectors(O,v).normalize(),n*=d.rotateSpeed,t.setFromAxisAngle(e,-n),y.applyQuaternion(t),d.object.up.applyQuaternion(t),v.applyQuaternion(t),d.staticMoving?O.copy(v):(t.setFromAxisAngle(e,n*(d.dynamicDampingFactor-1)),O.applyQuaternion(t)))}}(),this.zoomCamera=function(){if(E===u.TOUCH_ZOOM){var e=b/T;b=T,y.multiplyScalar(e)}else{var e=1+(w.y-f.y)*d.zoomSpeed;1!==e&&e>0&&(y.multiplyScalar(e),d.staticMoving?f.copy(w):f.y+=(w.y-f.y)*this.dynamicDampingFactor)}},this.panCamera=function(){var e=new THREE.Vector2,t=new THREE.Vector3,n=new THREE.Vector3;return function(){e.copy(M).sub(R),e.lengthSq()&&(e.multiplyScalar(y.length()*d.panSpeed),n.copy(y).cross(d.object.up).setLength(e.x),n.add(t.copy(d.object.up).setLength(e.y)),d.object.position.add(n),d.target.add(n),d.staticMoving?R.copy(M):R.add(e.subVectors(M,R).multiplyScalar(d.dynamicDampingFactor)))}}(),this.checkDistances=function(){d.noZoom&&d.noPan||(y.lengthSq()>d.maxDistance*d.maxDistance&&d.object.position.addVectors(d.target,y.setLength(d.maxDistance)),y.lengthSq()<d.minDistance*d.minDistance&&d.object.position.addVectors(d.target,y.setLength(d.minDistance)))},this.update=function(){y.subVectors(d.object.position,d.target),d.noRotate||d.rotateCamera(),d.noZoom||d.zoomCamera(),d.noPan||d.panCamera(),d.object.position.addVectors(d.target,y),d.checkDistances(),d.object.lookAt(d.target),g.distanceToSquared(d.object.position)>l&&(d.dispatchEvent(j),g.copy(d.object.position))},this.reset=function(){E=u.NONE,m=u.NONE,d.target.copy(d.target0),d.object.position.copy(d.position0),d.object.up.copy(d.up0),y.subVectors(d.object.position,d.target),d.object.lookAt(d.target),d.dispatchEvent(j),g.copy(d.object.position)},this.domElement.addEventListener("contextmenu",function(e){e.preventDefault()},!1),this.domElement.addEventListener("mousedown",a,!1),this.domElement.addEventListener("mousewheel",c,!1),this.domElement.addEventListener("DOMMouseScroll",c,!1),this.domElement.addEventListener("touchstart",r,!1),this.domElement.addEventListener("touchend",h,!1),this.domElement.addEventListener("touchmove",p,!1),window.addEventListener("keydown",n,!1),window.addEventListener("keyup",o,!1),this.handleResize(),this.update()},THREE.TrackballControls.prototype=Object.create(THREE.EventDispatcher.prototype);
+/**
+ * @author Eberhard Graether / http://egraether.com/
+ * @author Mark Lundin 	/ http://mark-lundin.com
+ */
+
+THREE.TrackballControls = function ( object, domElement ) {
+
+	var _this = this;
+	var STATE = { NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM: 4, TOUCH_PAN: 5 };
+
+	this.object = object;
+	this.domElement = ( domElement !== undefined ) ? domElement : document;
+
+	// API
+
+	this.enabled = true;
+
+	this.screen = { left: 0, top: 0, width: 0, height: 0 };
+
+	this.rotateSpeed = 1.0;
+	this.zoomSpeed = 1.2;
+	this.panSpeed = 0.3;
+
+	this.noRotate = false;
+	this.noZoom = false;
+	this.noPan = false;
+	this.noRoll = false;
+
+	this.staticMoving = false;
+	this.dynamicDampingFactor = 0.2;
+
+	this.minDistance = 0;
+	this.maxDistance = Infinity;
+
+	this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+
+	// internals
+
+	this.target = new THREE.Vector3();
+
+	var EPS = 0.000001;
+
+	var lastPosition = new THREE.Vector3();
+
+	var _state = STATE.NONE,
+	_prevState = STATE.NONE,
+
+	_eye = new THREE.Vector3(),
+
+	_rotateStart = new THREE.Vector3(),
+	_rotateEnd = new THREE.Vector3(),
+
+	_zoomStart = new THREE.Vector2(),
+	_zoomEnd = new THREE.Vector2(),
+
+	_touchZoomDistanceStart = 0,
+	_touchZoomDistanceEnd = 0,
+
+	_panStart = new THREE.Vector2(),
+	_panEnd = new THREE.Vector2();
+
+	// for reset
+
+	this.target0 = this.target.clone();
+	this.position0 = this.object.position.clone();
+	this.up0 = this.object.up.clone();
+
+	// events
+
+	var changeEvent = { type: 'change' };
+	var startEvent = { type: 'start'};
+	var endEvent = { type: 'end'};
+
+
+	// methods
+
+	this.handleResize = function () {
+
+		if ( this.domElement === document ) {
+
+			this.screen.left = 0;
+			this.screen.top = 0;
+			this.screen.width = window.innerWidth;
+			this.screen.height = window.innerHeight;
+
+		} else {
+
+			var box = this.domElement.getBoundingClientRect();
+			// adjustments come from similar code in the jquery offset() function
+			var d = this.domElement.ownerDocument.documentElement;
+			this.screen.left = box.left + window.pageXOffset - d.clientLeft;
+			this.screen.top = box.top + window.pageYOffset - d.clientTop;
+			this.screen.width = box.width;
+			this.screen.height = box.height;
+
+		}
+
+	};
+
+	this.handleEvent = function ( event ) {
+
+		if ( typeof this[ event.type ] == 'function' ) {
+
+			this[ event.type ]( event );
+
+		}
+
+	};
+
+	this.getMouseOnScreen = function ( pageX, pageY, vector ) {
+
+		return vector.set(
+			( pageX - _this.screen.left ) / _this.screen.width,
+			( pageY - _this.screen.top ) / _this.screen.height
+		);
+
+	};
+
+	this.getMouseProjectionOnBall = (function(){
+
+		var objectUp = new THREE.Vector3(),
+		    mouseOnBall = new THREE.Vector3();
+
+
+		return function ( pageX, pageY, projection ) {
+
+			mouseOnBall.set(
+				( pageX - _this.screen.width * 0.5 - _this.screen.left ) / (_this.screen.width*.5),
+				( _this.screen.height * 0.5 + _this.screen.top - pageY ) / (_this.screen.height*.5),
+				0.0
+			);
+
+			var length = mouseOnBall.length();
+
+			if ( _this.noRoll ) {
+
+				if ( length < Math.SQRT1_2 ) {
+
+					mouseOnBall.z = Math.sqrt( 1.0 - length*length );
+
+				} else {
+
+					mouseOnBall.z = .5 / length;
+					
+				}
+
+			} else if ( length > 1.0 ) {
+
+				mouseOnBall.normalize();
+
+			} else {
+
+				mouseOnBall.z = Math.sqrt( 1.0 - length * length );
+
+			}
+
+			_eye.copy( _this.object.position ).sub( _this.target );
+
+			projection.copy( _this.object.up ).setLength( mouseOnBall.y )
+			projection.add( objectUp.copy( _this.object.up ).cross( _eye ).setLength( mouseOnBall.x ) );
+			projection.add( _eye.setLength( mouseOnBall.z ) );
+
+			return projection;
+		}
+
+	}());
+
+	this.rotateCamera = (function(){
+
+		var axis = new THREE.Vector3(),
+			quaternion = new THREE.Quaternion();
+
+
+		return function () {
+
+			var angle = Math.acos( _rotateStart.dot( _rotateEnd ) / _rotateStart.length() / _rotateEnd.length() );
+
+			if ( angle ) {
+
+				axis.crossVectors( _rotateStart, _rotateEnd ).normalize();
+
+				angle *= _this.rotateSpeed;
+
+				quaternion.setFromAxisAngle( axis, -angle );
+
+				_eye.applyQuaternion( quaternion );
+				_this.object.up.applyQuaternion( quaternion );
+
+				_rotateEnd.applyQuaternion( quaternion );
+
+				if ( _this.staticMoving ) {
+
+					_rotateStart.copy( _rotateEnd );
+
+				} else {
+
+					quaternion.setFromAxisAngle( axis, angle * ( _this.dynamicDampingFactor - 1.0 ) );
+					_rotateStart.applyQuaternion( quaternion );
+
+				}
+
+			}
+		}
+
+	}());
+
+	this.zoomCamera = function () {
+
+		if ( _state === STATE.TOUCH_ZOOM ) {
+
+			var factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+			_touchZoomDistanceStart = _touchZoomDistanceEnd;
+			_eye.multiplyScalar( factor );
+
+		} else {
+
+			var factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
+
+			if ( factor !== 1.0 && factor > 0.0 ) {
+
+				_eye.multiplyScalar( factor );
+
+				if ( _this.staticMoving ) {
+
+					_zoomStart.copy( _zoomEnd );
+
+				} else {
+
+					_zoomStart.y += ( _zoomEnd.y - _zoomStart.y ) * this.dynamicDampingFactor;
+
+				}
+
+			}
+
+		}
+
+	};
+
+	this.panCamera = (function(){
+
+		var mouseChange = new THREE.Vector2(),
+			objectUp = new THREE.Vector3(),
+			pan = new THREE.Vector3();
+
+		return function () {
+
+			mouseChange.copy( _panEnd ).sub( _panStart );
+
+			if ( mouseChange.lengthSq() ) {
+
+				mouseChange.multiplyScalar( _eye.length() * _this.panSpeed );
+
+				pan.copy( _eye ).cross( _this.object.up ).setLength( mouseChange.x );
+				pan.add( objectUp.copy( _this.object.up ).setLength( mouseChange.y ) );
+
+				_this.object.position.add( pan );
+				_this.target.add( pan );
+
+				if ( _this.staticMoving ) {
+
+					_panStart.copy( _panEnd );
+
+				} else {
+
+					_panStart.add( mouseChange.subVectors( _panEnd, _panStart ).multiplyScalar( _this.dynamicDampingFactor ) );
+
+				}
+
+			}
+		}
+
+	}());
+
+	this.checkDistances = function () {
+
+		if ( !_this.noZoom || !_this.noPan ) {
+
+			if ( _eye.lengthSq() > _this.maxDistance * _this.maxDistance ) {
+
+				_this.object.position.addVectors( _this.target, _eye.setLength( _this.maxDistance ) );
+
+			}
+
+			if ( _eye.lengthSq() < _this.minDistance * _this.minDistance ) {
+
+				_this.object.position.addVectors( _this.target, _eye.setLength( _this.minDistance ) );
+
+			}
+
+		}
+
+	};
+
+	this.update = function () {
+
+		_eye.subVectors( _this.object.position, _this.target );
+
+		if ( !_this.noRotate ) {
+
+			_this.rotateCamera();
+
+		}
+
+		if ( !_this.noZoom ) {
+
+			_this.zoomCamera();
+
+		}
+
+		if ( !_this.noPan ) {
+
+			_this.panCamera();
+
+		}
+
+		_this.object.position.addVectors( _this.target, _eye );
+
+		_this.checkDistances();
+
+		_this.object.lookAt( _this.target );
+
+		if ( lastPosition.distanceToSquared( _this.object.position ) > EPS ) {
+
+			_this.dispatchEvent( changeEvent );
+
+			lastPosition.copy( _this.object.position );
+
+		}
+
+	};
+
+	this.reset = function () {
+
+		_state = STATE.NONE;
+		_prevState = STATE.NONE;
+
+		_this.target.copy( _this.target0 );
+		_this.object.position.copy( _this.position0 );
+		_this.object.up.copy( _this.up0 );
+
+		_eye.subVectors( _this.object.position, _this.target );
+
+		_this.object.lookAt( _this.target );
+
+		_this.dispatchEvent( changeEvent );
+
+		lastPosition.copy( _this.object.position );
+
+	};
+
+	// listeners
+
+	function keydown( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		window.removeEventListener( 'keydown', keydown );
+
+		_prevState = _state;
+
+		if ( _state !== STATE.NONE ) {
+
+			return;
+
+		} else if ( event.keyCode === _this.keys[ STATE.ROTATE ] && !_this.noRotate ) {
+
+			_state = STATE.ROTATE;
+
+		} else if ( event.keyCode === _this.keys[ STATE.ZOOM ] && !_this.noZoom ) {
+
+			_state = STATE.ZOOM;
+
+		} else if ( event.keyCode === _this.keys[ STATE.PAN ] && !_this.noPan ) {
+
+			_state = STATE.PAN;
+
+		}
+
+	}
+
+	function keyup( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		_state = _prevState;
+
+		window.addEventListener( 'keydown', keydown, false );
+
+	}
+
+	function mousedown( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		if ( _state === STATE.NONE ) {
+
+			_state = event.button;
+
+		}
+
+		if ( _state === STATE.ROTATE && !_this.noRotate ) {
+
+			_this.getMouseProjectionOnBall( event.pageX, event.pageY, _rotateStart );
+			_rotateEnd.copy(_rotateStart)
+
+		} else if ( _state === STATE.ZOOM && !_this.noZoom ) {
+
+			_this.getMouseOnScreen( event.pageX, event.pageY, _zoomStart );
+			_zoomEnd.copy(_zoomStart);
+
+		} else if ( _state === STATE.PAN && !_this.noPan ) {
+
+			_this.getMouseOnScreen( event.pageX, event.pageY, _panStart );
+			_panEnd.copy(_panStart)
+
+		}
+
+		document.addEventListener( 'mousemove', mousemove, false );
+		document.addEventListener( 'mouseup', mouseup, false );
+		_this.dispatchEvent( startEvent );
+
+
+	}
+
+	function mousemove( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		if ( _state === STATE.ROTATE && !_this.noRotate ) {
+
+			_this.getMouseProjectionOnBall( event.pageX, event.pageY, _rotateEnd );
+
+		} else if ( _state === STATE.ZOOM && !_this.noZoom ) {
+
+			_this.getMouseOnScreen( event.pageX, event.pageY, _zoomEnd );
+
+		} else if ( _state === STATE.PAN && !_this.noPan ) {
+
+			_this.getMouseOnScreen( event.pageX, event.pageY, _panEnd );
+
+		}
+
+	}
+
+	function mouseup( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		_state = STATE.NONE;
+
+		document.removeEventListener( 'mousemove', mousemove );
+		document.removeEventListener( 'mouseup', mouseup );
+		_this.dispatchEvent( endEvent );
+
+	}
+
+	function mousewheel( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		var delta = 0;
+
+		if ( event.wheelDelta ) { // WebKit / Opera / Explorer 9
+
+			delta = event.wheelDelta / 40;
+
+		} else if ( event.detail ) { // Firefox
+
+			delta = - event.detail / 3;
+
+		}
+
+		_zoomStart.y += delta * 0.01;
+		_this.dispatchEvent( startEvent );
+		_this.dispatchEvent( endEvent );
+
+	}
+
+	function touchstart( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		switch ( event.touches.length ) {
+
+			case 1:
+				_state = STATE.TOUCH_ROTATE;
+				_rotateEnd.copy( _this.getMouseProjectionOnBall( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _rotateStart ));
+				break;
+
+			case 2:
+				_state = STATE.TOUCH_ZOOM;
+				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+				_touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
+				break;
+
+			case 3:
+				_state = STATE.TOUCH_PAN;
+				_panEnd.copy( _this.getMouseOnScreen( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _panStart ));
+				break;
+
+			default:
+				_state = STATE.NONE;
+
+		}
+		_this.dispatchEvent( startEvent );
+
+
+	}
+
+	function touchmove( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		switch ( event.touches.length ) {
+
+			case 1:
+				_this.getMouseProjectionOnBall( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _rotateEnd );
+				break;
+
+			case 2:
+				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+				_touchZoomDistanceEnd = Math.sqrt( dx * dx + dy * dy )
+				break;
+
+			case 3:
+				_this.getMouseOnScreen( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _panEnd );
+				break;
+
+			default:
+				_state = STATE.NONE;
+
+		}
+
+	}
+
+	function touchend( event ) {
+
+		if ( _this.enabled === false ) return;
+
+		switch ( event.touches.length ) {
+
+			case 1:
+				_rotateStart.copy( _this.getMouseProjectionOnBall( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _rotateEnd ));
+				break;
+
+			case 2:
+				_touchZoomDistanceStart = _touchZoomDistanceEnd = 0;
+				break;
+
+			case 3:
+				_panStart.copy( _this.getMouseOnScreen( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _panEnd ));
+				break;
+
+		}
+
+		_state = STATE.NONE;
+		_this.dispatchEvent( endEvent );
+
+	}
+
+	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+
+	this.domElement.addEventListener( 'mousedown', mousedown, false );
+
+	this.domElement.addEventListener( 'mousewheel', mousewheel, false );
+	this.domElement.addEventListener( 'DOMMouseScroll', mousewheel, false ); // firefox
+
+	this.domElement.addEventListener( 'touchstart', touchstart, false );
+	this.domElement.addEventListener( 'touchend', touchend, false );
+	this.domElement.addEventListener( 'touchmove', touchmove, false );
+
+	window.addEventListener( 'keydown', keydown, false );
+	window.addEventListener( 'keyup', keyup, false );
+
+	this.handleResize();
+
+	// force an update at start
+	this.update();
+
+};
+
+THREE.TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );

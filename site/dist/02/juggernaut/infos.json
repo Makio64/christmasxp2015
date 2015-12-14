@@ -1,1 +1,12 @@
-{"author":"Nicolas Barradeau","nickname":"nicoptere","website":"http://www.barradeau.com","twitter":"nicoptere","title":"XMAS Juggernaut","technology":"THREE & raymarching","description":"an endless walk with a touch of ice cubes, at some point, a gift will be delivered","casestudy":"","source":"","mobileFriendly":"0"}
+{
+	"author":"Nicolas Barradeau",
+	"nickname":"nicoptere",
+	"website":"http://www.barradeau.com",
+	"twitter":"nicoptere",
+	"title":"XMAS Juggernaut",
+    "technology":"THREE & raymarching",
+	"description":"an endless walk with a touch of ice cubes, at some point, a gift will be delivered",
+    "casestudy":"",
+	"source":"",
+	"mobileFriendly":"0"
+}

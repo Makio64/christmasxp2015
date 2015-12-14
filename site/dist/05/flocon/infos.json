@@ -1,1 +1,12 @@
-{"author":"Robin Delaporte","nickname":"robin-dela","website":"http://robindelaporte.fr","twitter":"https://twitter.com/not__robin","title":"Flocon","technology":"three.js","description":"Drag to rotate the snowflake and click to explode it","casestudy":"","source":"https://github.com/robin-dela/christmas-xp","mobileFriendly":"1"}
+{
+  "author":"Robin Delaporte",
+  "nickname":"robin-dela",
+  "website":"http://robindelaporte.fr",
+  "twitter":"https://twitter.com/not__robin",
+  "title":"Flocon",
+  "technology":"three.js",
+  "description":"Drag to rotate the snowflake and click to explode it",
+  "casestudy":"",
+  "source":"https://github.com/robin-dela/christmas-xp",
+  "mobileFriendly":"1"
+}

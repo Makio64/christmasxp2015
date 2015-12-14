@@ -1,1 +1,22 @@
-function Stream(t,i,e){this.audio=new Audio,this.file=t,this.ctx=i,this.output=e,this.audio.src=this.file,this.source=this.ctx.createMediaElementSource(this.audio),this.source.connect(this.output)}Stream.prototype.play=function(){this.audio.play()};
+function Stream( file , ctx , output ){
+
+
+  this.audio = new Audio();
+
+  this.file = file;
+  this.ctx = ctx;
+  this.output = output;
+
+  this.audio.src = this.file;
+ 
+  this.source = this.ctx.createMediaElementSource( this.audio );
+  this.source.connect( this.output );
+
+}
+
+Stream.prototype.play = function(){
+
+  this.audio.play();
+
+}
+

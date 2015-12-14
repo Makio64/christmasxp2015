@@ -908,114 +908,114 @@ var config = require("xmas/core/config");
 var Emitter = require("fz/events/Emitter");
 
 var Loader = (function (_Emitter) {
-  _inherits(Loader, _Emitter);
+	_inherits(Loader, _Emitter);
 
-  function Loader() {
-    _classCallCheck(this, Loader);
+	function Loader() {
+		_classCallCheck(this, Loader);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Loader).call(this));
 
-    _this._countComplete = 0;
+		_this._countComplete = 0;
 
-    // this._pxLoader = new PxLoader()
-    // this._pxLoader.addFont( config.fonts.medium )
-    // this._pxLoader.addFont( config.fonts.bold )
+		// this._pxLoader = new PxLoader()
+		// this._pxLoader.addFont( config.fonts.medium )
+		// this._pxLoader.addFont( config.fonts.bold )
 
-    _this._pixiLoader = new PIXI.loaders.Loader();
-    _this._pixiLoader.add("img/default.jpg");
-    _this._pixiLoader.add("img/sprites/sprites.json");
-    _this._pixiLoader.add("img/sprites/roboto_regular.fnt");
-    _this._pixiLoader.add("img/sprites/roboto_medium.fnt");
+		_this._pixiLoader = new PIXI.loaders.Loader();
+		_this._pixiLoader.add("img/default.jpg");
+		_this._pixiLoader.add("img/sprites/sprites.json");
+		_this._pixiLoader.add("img/sprites/roboto_regular.fnt");
+		_this._pixiLoader.add("img/sprites/roboto_medium.fnt");
 
-    _this._loaderOfLoader = new PIXI.loaders.Loader();
-    _this._loaderOfLoader.add("img/logo.png");
-    _this._loaderOfLoader.add("img/sprites/advent_bold.fnt");
+		_this._loaderOfLoader = new PIXI.loaders.Loader();
+		_this._loaderOfLoader.add("img/logo.png");
+		_this._loaderOfLoader.add("img/sprites/advent_bold.fnt");
 
-    _this._binds = {};
-    _this._binds.onProgress = _this._onProgress.bind(_this);
-    _this._binds.onPixiComplete = _this._onPixiComplete.bind(_this);
-    _this._binds.onLoaderOfLoaderComplete = _this._onLoaderOfLoaderComplete.bind(_this);
-    return _this;
-  }
+		_this._binds = {};
+		_this._binds.onProgress = _this._onProgress.bind(_this);
+		_this._binds.onPixiComplete = _this._onPixiComplete.bind(_this);
+		_this._binds.onLoaderOfLoaderComplete = _this._onLoaderOfLoaderComplete.bind(_this);
+		return _this;
+	}
 
-  _createClass(Loader, [{
-    key: "_onProgress",
-    value: function _onProgress(e) {
-      console.log(e.completedCount, e.totalCount, e.completedCount / e.totalCount);
-      // this.emit( "progress", e.completedCount / e.totalCount )
-    }
-  }, {
-    key: "_onPixiComplete",
-    value: function _onPixiComplete() {
-      this.emit("complete");
-    }
-  }, {
-    key: "_onLoaderOfLoaderComplete",
-    value: function _onLoaderOfLoaderComplete() {
-      this.emit("ready");
+	_createClass(Loader, [{
+		key: "_onProgress",
+		value: function _onProgress(e) {
+			console.log(e.completedCount, e.totalCount, e.completedCount / e.totalCount);
+			// this.emit( "progress", e.completedCount / e.totalCount )
+		}
+	}, {
+		key: "_onPixiComplete",
+		value: function _onPixiComplete() {
+			this.emit("complete");
+		}
+	}, {
+		key: "_onLoaderOfLoaderComplete",
+		value: function _onLoaderOfLoaderComplete() {
+			this.emit("ready");
 
-      this._pixiLoader.once("complete", this._binds.onPixiComplete);
-      this._pixiLoader.load();
-    }
-  }, {
-    key: "load",
-    value: function load() {
-      var _this2 = this;
+			this._pixiLoader.once("complete", this._binds.onPixiComplete);
+			this._pixiLoader.load();
+		}
+	}, {
+		key: "load",
+		value: function load() {
+			var _this2 = this;
 
-      // this._pxLoader.addProgressListener( this._binds.onProgress )
-      // this._pxLoader.start()
+			// this._pxLoader.addProgressListener( this._binds.onProgress )
+			// this._pxLoader.start()
 
-      this.loadConfig(function () {
-        console.log('load');
-        _this2._addImages();
-        _this2._loaderOfLoader.once("complete", _this2._binds.onLoaderOfLoaderComplete);
-        _this2._loaderOfLoader.load();
-      });
-    }
-  }, {
-    key: "loadConfig",
-    value: function loadConfig(cb) {
-      var _this3 = this;
+			this.loadConfig(function () {
+				console.log('load');
+				_this2._addImages();
+				_this2._loaderOfLoader.once("complete", _this2._binds.onLoaderOfLoaderComplete);
+				_this2._loaderOfLoader.load();
+			});
+		}
+	}, {
+		key: "loadConfig",
+		value: function loadConfig(cb) {
+			var _this3 = this;
 
-      var xobj = new XMLHttpRequest();
-      xobj.overrideMimeType("application/json");
-      xobj.open("GET", "/xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == "200") {
-          _this3._countComplete++;
-          config.data = JSON.parse(xobj.responseText);
-          if (cb) cb();
-        }
-      };
-      xobj.send(null);
-    }
-  }, {
-    key: "_addImages",
-    value: function _addImages() {
-      var idx = "";
-      var j = 0;
-      var m = 0;
-      var data = null;
-      var dataEntry = null;
-      var n = config.data.totalDay;
-      for (var i = 0; i < n; i++) {
-        data = config.data.days[i + 1];
-        m = data.length;
-        idx = "" + (i + 1);
-        if (i < 10) {
-          idx = "0" + idx;
-        }
-        for (j = 0; j < m; j++) {
-          dataEntry = data[j];
-          dataEntry.path = "./" + idx + dataEntry.folder;
-          dataEntry.pathPreview = dataEntry.path + "preview.jpg";
-          this._pixiLoader.add(dataEntry.pathPreview);
-        }
-      }
-    }
-  }]);
+			var xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", "/xp.json?" + (Math.random() * 10000 >> 0), true); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					_this3._countComplete++;
+					config.data = JSON.parse(xobj.responseText);
+					if (cb) cb();
+				}
+			};
+			xobj.send(null);
+		}
+	}, {
+		key: "_addImages",
+		value: function _addImages() {
+			var idx = "";
+			var j = 0;
+			var m = 0;
+			var data = null;
+			var dataEntry = null;
+			var n = config.data.totalDay;
+			for (var i = 0; i < n; i++) {
+				data = config.data.days[i + 1];
+				m = data.length;
+				idx = "" + (i + 1);
+				if (i < 9) {
+					idx = "0" + idx;
+				}
+				for (j = 0; j < m; j++) {
+					dataEntry = data[j];
+					dataEntry.path = "./" + idx + dataEntry.folder;
+					dataEntry.pathPreview = dataEntry.path + "preview.jpg";
+					this._pixiLoader.add(dataEntry.pathPreview);
+				}
+			}
+		}
+	}]);
 
-  return Loader;
+	return Loader;
 })(Emitter);
 
 module.exports = new Loader();
