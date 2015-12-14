@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<title>Winter</title>
+        <meta charset="utf-8">
+        <meta name="author" content="AUTHOR">
+        <meta name="description" content="DESCRIPTION">
+        <meta property="og:title" content="TITLE"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="URL"/>
+        <meta property="og:image" content="FACEBOOK_IMG"/>
+        <meta property="og:site_name" content="WEBSITE"/>
+        <meta property="og:description" content="DESCRIPTION"/>
+  		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+
+		<style type="text/css">
+			body { background:#000000; }
+			canvas { z-index: 1; position: absolute; overflow: hidden; }
+			#end_credits { text-align:center; font-family: Verdana, Arial, Helvetica, Sans-Serif, cursive; font-size: 10px; color:#ddd; overflow: hidden; margin: auto; position: absolute; display: none; top: 0; left: 0; bottom: 0; right: 0; z-index:10; width: 256px; height: 256px; }
+			#touch_start { text-align:center; font-family: Verdana, Arial, Helvetica, Sans-Serif, cursive; font-size: 10px; color:#ddd; opacity: 1.0; overflow: hidden; margin: auto; position: absolute; display: none; top: 0; left: 0; bottom: 0; right: 0; z-index:11; width: 300px; height: 240px; }
+			#logo { text-align:center; overflow: hidden; margin: auto; position: absolute; display: block; top: 0; left: 0; bottom: 0; right: 0; z-index:8; width: 256px; height: 256px; }
+			#winter { text-align:center; overflow: hidden; margin: auto; position: absolute; opacity: 1, display: block; top: 0; left: 0; bottom: 0; right: 0; z-index:10; width: 301px; height: 89px; }
+
+			a:link {color: #fff; text-decoration: none;}
+			a:visited {color: #fff; text-decoration: none;}
+			a:active {color: #fff; text-decoration: none;}
+
+			.loader {
+			  width: 20px;
+			  height: 20px;
+			  opacity: 1;
+			  border-style: solid;
+			  border-color: rgba(0,0,0,0);
+			  border-top-color: #ffffff;
+			  border-width: 1px 1px 0px 0px;
+			  
+			  overflow: hidden;
+			  margin: auto;
+			  position: absolute;
+			  top: 25%; left: 0; bottom: 0; right: 0;
+			  z-index:9;
+
+			  -webkit-border-radius: 50%;
+			     -moz-border-radius: 50%;
+			          border-radius: 50%;
+			  
+			  -webkit-animation: spin 1.0s infinite linear;
+			     -moz-animation: spin 1.0s infinite linear;
+			       -o-animation: spin 1.0s infinite linear;
+			          animation: spin 1.0s infinite linear;
+			}
+
+			@-webkit-keyframes spin {
+			  from {-webkit-transform: rotate(0deg);}
+			  to   {-webkit-transform: rotate(359deg);}
+			}
+
+			@-moz-keyframes spin {
+			  from {-moz-transform: rotate(0deg);}
+			  to   {-moz-transform: rotate(359deg);}
+			}
+
+			@-o-keyframes spin {
+			  from {-o-transform: rotate(0deg);}
+			  to   {-o-transform: rotate(359deg);}
+			}
+
+			@keyframes spin{
+			  from {transform: rotate(0deg);}
+			  to   {transform: rotate(359deg);}
+			}
+
+		</style>
+
+ </head>
+
+<body>
+
+	<!-- shaders -->
+
+	<script type="x-shader/x-vertex" id="vertexShaderDepth">
+
+		varying vec2 vUV;
+
+		void main() {
+
+			vUV = uv;
+
+			vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+			gl_Position = projectionMatrix * mvPosition;
+
+		}
+
+	</script>
+
+	<script type="x-shader/x-fragment" id="fragmentShaderDepth">
+
+		uniform sampler2D texture;
+		varying vec2 vUV;
+
+		vec4 pack_depth( const in float depth ) {
+
+			const vec4 bit_shift = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
+			const vec4 bit_mask  = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
+			vec4 res = fract( depth * bit_shift );
+			res -= res.xxyz * bit_mask;
+			return res;
+
+		}
+
+		void main() {
+
+			vec4 pixel = texture2D( texture, vUV );
+
+			if ( pixel.a < 0.6 ) discard;
+
+			gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
+
+		}
+	</script>
+
+	<div id="end_credits">
+		<p>
+		<br><a href="https://open.spotify.com/album/2gougRWOUo6RZ39ioJp0gV" target="_blank">Music by:
+		<p><b>Hank Williams</b><br>
+		The song <b>"Alone and Forsaken"</b>.<br>
+		From the album <b>"Honky Tonk Man"</b>.</a></p>
+		</p>
+		<div id="logo">
+			<a href="https://open.spotify.com/album/2gougRWOUo6RZ39ioJp0gV" target="_blank"><img src="assets/spotify.png" width="110" height="110" border="0" /></a>
+		</div>
+
+
+	</div>
+
+	<div id="touch_start">
+		<img src="assets/touch.png" width="110" height="110" border="0" style="opacity:0.25;" />
+		<p>This might <b>not</b> be a very <b>mobile friendly</b> experiment.<br>But <b>touch</b> somewhere <b>to try anyway</b>!</p>
+		<p>(Runs ok on an iphone6)</p>
+		<p>Otherwise try it on dekstop.</p>
+	</div>
+
+	<div id="winter">
+		<img src="assets/winter.png" border="0" style="width:60%; height:60%;" />
+	</div>
+
+	<div id="loading_spinner" class="loader">
+	</div>
+	
+	<script src="assets/winter.min.js"></script>
+
+
+</body>
+</html>

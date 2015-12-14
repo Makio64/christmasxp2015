@@ -1,1 +1,1885 @@
-!function(t,e){"use strict";var i=t.GreenSockGlobals=t.GreenSockGlobals||t;if(!i.TweenLite){var s,r,n,a,o,l=function(t){var e,s=t.split("."),r=i;for(e=0;e<s.length;e++)r[s[e]]=r=r[s[e]]||{};return r},h=l("com.greensock"),_=1e-10,u=function(t){var e,i=[],s=t.length;for(e=0;e!==s;i.push(t[e++]));return i},f=function(){},c=function(){var t=Object.prototype.toString,e=t.call([]);return function(i){return null!=i&&(i instanceof Array||"object"==typeof i&&!!i.push&&t.call(i)===e)}}(),m={},p=function(s,r,n,a){this.sc=m[s]?m[s].sc:[],m[s]=this,this.gsClass=null,this.func=n;var o=[];this.check=function(h){for(var _,u,f,c,d,v=r.length,g=v;--v>-1;)(_=m[r[v]]||new p(r[v],[])).gsClass?(o[v]=_.gsClass,g--):h&&_.sc.push(this);if(0===g&&n)for(u=("com.greensock."+s).split("."),f=u.pop(),c=l(u.join("."))[f]=this.gsClass=n.apply(n,o),a&&(i[f]=c,d="undefined"!=typeof module&&module.exports,!d&&"function"==typeof define&&define.amd?define((t.GreenSockAMDPath?t.GreenSockAMDPath+"/":"")+s.split(".").pop(),[],function(){return c}):s===e&&d&&(module.exports=c)),v=0;v<this.sc.length;v++)this.sc[v].check()},this.check(!0)},d=t._gsDefine=function(t,e,i,s){return new p(t,e,i,s)},v=h._class=function(t,e,i){return e=e||function(){},d(t,[],function(){return e},i),e};d.globals=i;var g=[0,0,1,1],T=[],y=v("easing.Ease",function(t,e,i,s){this._func=t,this._type=i||0,this._power=s||0,this._params=e?g.concat(e):g},!0),w=y.map={},P=y.register=function(t,e,i,s){for(var r,n,a,o,l=e.split(","),_=l.length,u=(i||"easeIn,easeOut,easeInOut").split(",");--_>-1;)for(n=l[_],r=s?v("easing."+n,null,!0):h.easing[n]||{},a=u.length;--a>-1;)o=u[a],w[n+"."+o]=w[o+n]=r[o]=t.getRatio?t:t[o]||new t};for(n=y.prototype,n._calcEnd=!1,n.getRatio=function(t){if(this._func)return this._params[0]=t,this._func.apply(null,this._params);var e=this._type,i=this._power,s=1===e?1-t:2===e?t:.5>t?2*t:2*(1-t);return 1===i?s*=s:2===i?s*=s*s:3===i?s*=s*s*s:4===i&&(s*=s*s*s*s),1===e?1-s:2===e?s:.5>t?s/2:1-s/2},s=["Linear","Quad","Cubic","Quart","Quint,Strong"],r=s.length;--r>-1;)n=s[r]+",Power"+r,P(new y(null,null,1,r),n,"easeOut",!0),P(new y(null,null,2,r),n,"easeIn"+(0===r?",easeNone":"")),P(new y(null,null,3,r),n,"easeInOut");w.linear=h.easing.Linear.easeIn,w.swing=h.easing.Quad.easeInOut;var b=v("events.EventDispatcher",function(t){this._listeners={},this._eventTarget=t||this});n=b.prototype,n.addEventListener=function(t,e,i,s,r){r=r||0;var n,l,h=this._listeners[t],_=0;for(null==h&&(this._listeners[t]=h=[]),l=h.length;--l>-1;)n=h[l],n.c===e&&n.s===i?h.splice(l,1):0===_&&n.pr<r&&(_=l+1);h.splice(_,0,{c:e,s:i,up:s,pr:r}),this!==a||o||a.wake()},n.removeEventListener=function(t,e){var i,s=this._listeners[t];if(s)for(i=s.length;--i>-1;)if(s[i].c===e)return void s.splice(i,1)},n.dispatchEvent=function(t){var e,i,s,r=this._listeners[t];if(r)for(e=r.length,i=this._eventTarget;--e>-1;)s=r[e],s&&(s.up?s.c.call(s.s||i,{type:t,target:i}):s.c.call(s.s||i))};var k=t.requestAnimationFrame,A=t.cancelAnimationFrame,S=Date.now||function(){return(new Date).getTime()},x=S();for(s=["ms","moz","webkit","o"],r=s.length;--r>-1&&!k;)k=t[s[r]+"RequestAnimationFrame"],A=t[s[r]+"CancelAnimationFrame"]||t[s[r]+"CancelRequestAnimationFrame"];v("Ticker",function(t,e){var i,s,r,n,l,h=this,u=S(),c=e!==!1&&k,m=500,p=33,d="tick",v=function(t){var e,a,o=S()-x;o>m&&(u+=o-p),x+=o,h.time=(x-u)/1e3,e=h.time-l,(!i||e>0||t===!0)&&(h.frame++,l+=e+(e>=n?.004:n-e),a=!0),t!==!0&&(r=s(v)),a&&h.dispatchEvent(d)};b.call(h),h.time=h.frame=0,h.tick=function(){v(!0)},h.lagSmoothing=function(t,e){m=t||1/_,p=Math.min(e,m,0)},h.sleep=function(){null!=r&&(c&&A?A(r):clearTimeout(r),s=f,r=null,h===a&&(o=!1))},h.wake=function(){null!==r?h.sleep():h.frame>10&&(x=S()-m+5),s=0===i?f:c&&k?k:function(t){return setTimeout(t,1e3*(l-h.time)+1|0)},h===a&&(o=!0),v(2)},h.fps=function(t){return arguments.length?(i=t,n=1/(i||60),l=this.time+n,void h.wake()):i},h.useRAF=function(t){return arguments.length?(h.sleep(),c=t,void h.fps(i)):c},h.fps(t),setTimeout(function(){c&&h.frame<5&&h.useRAF(!1)},1500)}),n=h.Ticker.prototype=new h.events.EventDispatcher,n.constructor=h.Ticker;var R=v("core.Animation",function(t,e){if(this.vars=e=e||{},this._duration=this._totalDuration=t||0,this._delay=Number(e.delay)||0,this._timeScale=1,this._active=e.immediateRender===!0,this.data=e.data,this._reversed=e.reversed===!0,H){o||a.wake();var i=this.vars.useFrames?K:H;i.add(this,i._time),this.vars.paused&&this.paused(!0)}});a=R.ticker=new h.Ticker,n=R.prototype,n._dirty=n._gc=n._initted=n._paused=!1,n._totalTime=n._time=0,n._rawPrevTime=-1,n._next=n._last=n._onUpdate=n._timeline=n.timeline=null,n._paused=!1;var C=function(){o&&S()-x>2e3&&a.wake(),setTimeout(C,2e3)};C(),n.play=function(t,e){return null!=t&&this.seek(t,e),this.reversed(!1).paused(!1)},n.pause=function(t,e){return null!=t&&this.seek(t,e),this.paused(!0)},n.resume=function(t,e){return null!=t&&this.seek(t,e),this.paused(!1)},n.seek=function(t,e){return this.totalTime(Number(t),e!==!1)},n.restart=function(t,e){return this.reversed(!1).paused(!1).totalTime(t?-this._delay:0,e!==!1,!0)},n.reverse=function(t,e){return null!=t&&this.seek(t||this.totalDuration(),e),this.reversed(!0).paused(!1)},n.render=function(t,e,i){},n.invalidate=function(){return this._time=this._totalTime=0,this._initted=this._gc=!1,this._rawPrevTime=-1,(this._gc||!this.timeline)&&this._enabled(!0),this},n.isActive=function(){var t,e=this._timeline,i=this._startTime;return!e||!this._gc&&!this._paused&&e.isActive()&&(t=e.rawTime())>=i&&t<i+this.totalDuration()/this._timeScale},n._enabled=function(t,e){return o||a.wake(),this._gc=!t,this._active=this.isActive(),e!==!0&&(t&&!this.timeline?this._timeline.add(this,this._startTime-this._delay):!t&&this.timeline&&this._timeline._remove(this,!0)),!1},n._kill=function(t,e){return this._enabled(!1,!1)},n.kill=function(t,e){return this._kill(t,e),this},n._uncache=function(t){for(var e=t?this:this.timeline;e;)e._dirty=!0,e=e.timeline;return this},n._swapSelfInParams=function(t){for(var e=t.length,i=t.concat();--e>-1;)"{self}"===t[e]&&(i[e]=this);return i},n._callback=function(t){var e=this.vars;e[t].apply(e[t+"Scope"]||e.callbackScope||this,e[t+"Params"]||T)},n.eventCallback=function(t,e,i,s){if("on"===(t||"").substr(0,2)){var r=this.vars;if(1===arguments.length)return r[t];null==e?delete r[t]:(r[t]=e,r[t+"Params"]=c(i)&&-1!==i.join("").indexOf("{self}")?this._swapSelfInParams(i):i,r[t+"Scope"]=s),"onUpdate"===t&&(this._onUpdate=e)}return this},n.delay=function(t){return arguments.length?(this._timeline.smoothChildTiming&&this.startTime(this._startTime+t-this._delay),this._delay=t,this):this._delay},n.duration=function(t){return arguments.length?(this._duration=this._totalDuration=t,this._uncache(!0),this._timeline.smoothChildTiming&&this._time>0&&this._time<this._duration&&0!==t&&this.totalTime(this._totalTime*(t/this._duration),!0),this):(this._dirty=!1,this._duration)},n.totalDuration=function(t){return this._dirty=!1,arguments.length?this.duration(t):this._totalDuration},n.time=function(t,e){return arguments.length?(this._dirty&&this.totalDuration(),this.totalTime(t>this._duration?this._duration:t,e)):this._time},n.totalTime=function(t,e,i){if(o||a.wake(),!arguments.length)return this._totalTime;if(this._timeline){if(0>t&&!i&&(t+=this.totalDuration()),this._timeline.smoothChildTiming){this._dirty&&this.totalDuration();var s=this._totalDuration,r=this._timeline;if(t>s&&!i&&(t=s),this._startTime=(this._paused?this._pauseTime:r._time)-(this._reversed?s-t:t)/this._timeScale,r._dirty||this._uncache(!1),r._timeline)for(;r._timeline;)r._timeline._time!==(r._startTime+r._totalTime)/r._timeScale&&r.totalTime(r._totalTime,!0),r=r._timeline}this._gc&&this._enabled(!0,!1),(this._totalTime!==t||0===this._duration)&&(z.length&&V(),this.render(t,e,!1),z.length&&V())}return this},n.progress=n.totalProgress=function(t,e){var i=this.duration();return arguments.length?this.totalTime(i*t,e):i?this._time/i:this.ratio},n.startTime=function(t){return arguments.length?(t!==this._startTime&&(this._startTime=t,this.timeline&&this.timeline._sortChildren&&this.timeline.add(this,t-this._delay)),this):this._startTime},n.endTime=function(t){return this._startTime+(0!=t?this.totalDuration():this.duration())/this._timeScale},n.timeScale=function(t){if(!arguments.length)return this._timeScale;if(t=t||_,this._timeline&&this._timeline.smoothChildTiming){var e=this._pauseTime,i=e||0===e?e:this._timeline.totalTime();this._startTime=i-(i-this._startTime)*this._timeScale/t}return this._timeScale=t,this._uncache(!1)},n.reversed=function(t){return arguments.length?(t!=this._reversed&&(this._reversed=t,this.totalTime(this._timeline&&!this._timeline.smoothChildTiming?this.totalDuration()-this._totalTime:this._totalTime,!0)),this):this._reversed},n.paused=function(t){if(!arguments.length)return this._paused;var e,i,s=this._timeline;return t!=this._paused&&s&&(o||t||a.wake(),e=s.rawTime(),i=e-this._pauseTime,!t&&s.smoothChildTiming&&(this._startTime+=i,this._uncache(!1)),this._pauseTime=t?e:null,this._paused=t,this._active=this.isActive(),!t&&0!==i&&this._initted&&this.duration()&&(e=s.smoothChildTiming?this._totalTime:(e-this._startTime)/this._timeScale,this.render(e,e===this._totalTime,!0))),this._gc&&!t&&this._enabled(!0,!1),this};var D=v("core.SimpleTimeline",function(t){R.call(this,0,t),this.autoRemoveChildren=this.smoothChildTiming=!0});n=D.prototype=new R,n.constructor=D,n.kill()._gc=!1,n._first=n._last=n._recent=null,n._sortChildren=!1,n.add=n.insert=function(t,e,i,s){var r,n;if(t._startTime=Number(e||0)+t._delay,t._paused&&this!==t._timeline&&(t._pauseTime=t._startTime+(this.rawTime()-t._startTime)/t._timeScale),t.timeline&&t.timeline._remove(t,!0),t.timeline=t._timeline=this,t._gc&&t._enabled(!0,!0),r=this._last,this._sortChildren)for(n=t._startTime;r&&r._startTime>n;)r=r._prev;return r?(t._next=r._next,r._next=t):(t._next=this._first,this._first=t),t._next?t._next._prev=t:this._last=t,t._prev=r,this._recent=t,this._timeline&&this._uncache(!0),this},n._remove=function(t,e){return t.timeline===this&&(e||t._enabled(!1,!0),t._prev?t._prev._next=t._next:this._first===t&&(this._first=t._next),t._next?t._next._prev=t._prev:this._last===t&&(this._last=t._prev),t._next=t._prev=t.timeline=null,t===this._recent&&(this._recent=this._last),this._timeline&&this._uncache(!0)),this},n.render=function(t,e,i){var s,r=this._first;for(this._totalTime=this._time=this._rawPrevTime=t;r;)s=r._next,(r._active||t>=r._startTime&&!r._paused)&&(r._reversed?r.render((r._dirty?r.totalDuration():r._totalDuration)-(t-r._startTime)*r._timeScale,e,i):r.render((t-r._startTime)*r._timeScale,e,i)),r=s},n.rawTime=function(){return o||a.wake(),this._totalTime};var I=v("TweenLite",function(e,i,s){if(R.call(this,i,s),this.render=I.prototype.render,null==e)throw"Cannot tween a null target.";this.target=e="string"!=typeof e?e:I.selector(e)||e;var r,n,a,o=e.jquery||e.length&&e!==t&&e[0]&&(e[0]===t||e[0].nodeType&&e[0].style&&!e.nodeType),l=this.vars.overwrite;if(this._overwrite=l=null==l?$[I.defaultOverwrite]:"number"==typeof l?l>>0:$[l],(o||e instanceof Array||e.push&&c(e))&&"number"!=typeof e[0])for(this._targets=a=u(e),this._propLookup=[],this._siblings=[],r=0;r<a.length;r++)n=a[r],n?"string"!=typeof n?n.length&&n!==t&&n[0]&&(n[0]===t||n[0].nodeType&&n[0].style&&!n.nodeType)?(a.splice(r--,1),this._targets=a=a.concat(u(n))):(this._siblings[r]=W(n,this,!1),1===l&&this._siblings[r].length>1&&Y(n,this,null,1,this._siblings[r])):(n=a[r--]=I.selector(n),"string"==typeof n&&a.splice(r+1,1)):a.splice(r--,1);else this._propLookup={},this._siblings=W(e,this,!1),1===l&&this._siblings.length>1&&Y(e,this,null,1,this._siblings);(this.vars.immediateRender||0===i&&0===this._delay&&this.vars.immediateRender!==!1)&&(this._time=-_,this.render(-this._delay))},!0),E=function(e){return e&&e.length&&e!==t&&e[0]&&(e[0]===t||e[0].nodeType&&e[0].style&&!e.nodeType)},O=function(t,e){var i,s={};for(i in t)M[i]||i in e&&"transform"!==i&&"x"!==i&&"y"!==i&&"width"!==i&&"height"!==i&&"className"!==i&&"border"!==i||!(!Q[i]||Q[i]&&Q[i]._autoCSS)||(s[i]=t[i],delete t[i]);t.css=s};n=I.prototype=new R,n.constructor=I,n.kill()._gc=!1,n.ratio=0,n._firstPT=n._targets=n._overwrittenProps=n._startAt=null,n._notifyPluginsOfEnabled=n._lazy=!1,I.version="1.18.0",I.defaultEase=n._ease=new y(null,null,1,1),I.defaultOverwrite="auto",I.ticker=a,I.autoSleep=120,I.lagSmoothing=function(t,e){a.lagSmoothing(t,e)},I.selector=t.$||t.jQuery||function(e){var i=t.$||t.jQuery;return i?(I.selector=i,i(e)):"undefined"==typeof document?e:document.querySelectorAll?document.querySelectorAll(e):document.getElementById("#"===e.charAt(0)?e.substr(1):e)};var z=[],F={},L=/(?:(-|-=|\+=)?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/gi,N=function(t){for(var e,i=this._firstPT,s=1e-6;i;)e=i.blob?t?this.join(""):this.start:i.c*t+i.s,i.r?e=Math.round(e):s>e&&e>-s&&(e=0),i.f?i.fp?i.t[i.p](i.fp,e):i.t[i.p](e):i.t[i.p]=e,i=i._next},U=function(t,e,i,s){var r,n,a,o,l,h,_,u=[t,e],f=0,c="",m=0;for(u.start=t,i&&(i(u),t=u[0],e=u[1]),u.length=0,r=t.match(L)||[],n=e.match(L)||[],s&&(s._next=null,s.blob=1,u._firstPT=s),l=n.length,o=0;l>o;o++)_=n[o],h=e.substr(f,e.indexOf(_,f)-f),c+=h||!o?h:",",f+=h.length,m?m=(m+1)%5:"rgba("===h.substr(-5)&&(m=1),_===r[o]||r.length<=o?c+=_:(c&&(u.push(c),c=""),a=parseFloat(r[o]),u.push(a),u._firstPT={_next:u._firstPT,t:u,p:u.length-1,s:a,c:("="===_.charAt(1)?parseInt(_.charAt(0)+"1",10)*parseFloat(_.substr(2)):parseFloat(_)-a)||0,f:0,r:m&&4>m}),f+=_.length;return c+=e.substr(f),c&&u.push(c),u.setRatio=N,u},j=function(t,e,i,s,r,n,a,o){var l,h,_="get"===i?t[e]:i,u=typeof t[e],f="string"==typeof s&&"="===s.charAt(1),c={t:t,p:e,s:_,f:"function"===u,pg:0,n:r||e,r:n,pr:0,c:f?parseInt(s.charAt(0)+"1",10)*parseFloat(s.substr(2)):parseFloat(s)-_||0};return"number"!==u&&("function"===u&&"get"===i&&(h=e.indexOf("set")||"function"!=typeof t["get"+e.substr(3)]?e:"get"+e.substr(3),c.s=_=a?t[h](a):t[h]()),"string"==typeof _&&(a||isNaN(_))?(c.fp=a,l=U(_,s,o||I.defaultStringFilter,c),c={t:l,p:"setRatio",s:0,c:1,f:2,pg:0,n:r||e,pr:0}):f||(c.c=parseFloat(s)-parseFloat(_)||0)),c.c?((c._next=this._firstPT)&&(c._next._prev=c),this._firstPT=c,c):void 0},G=I._internals={isArray:c,isSelector:E,lazyTweens:z,blobDif:U},Q=I._plugins={},q=G.tweenLookup={},B=0,M=G.reservedProps={ease:1,delay:1,overwrite:1,onComplete:1,onCompleteParams:1,onCompleteScope:1,useFrames:1,runBackwards:1,startAt:1,onUpdate:1,onUpdateParams:1,onUpdateScope:1,onStart:1,onStartParams:1,onStartScope:1,onReverseComplete:1,onReverseCompleteParams:1,onReverseCompleteScope:1,onRepeat:1,onRepeatParams:1,onRepeatScope:1,easeParams:1,yoyo:1,immediateRender:1,repeat:1,repeatDelay:1,data:1,paused:1,reversed:1,autoCSS:1,lazy:1,onOverwrite:1,callbackScope:1,stringFilter:1},$={none:0,all:1,auto:2,concurrent:3,allOnStart:4,preexisting:5,"true":1,"false":0},K=R._rootFramesTimeline=new D,H=R._rootTimeline=new D,J=30,V=G.lazyRender=function(){var t,e=z.length;for(F={};--e>-1;)t=z[e],t&&t._lazy!==!1&&(t.render(t._lazy[0],t._lazy[1],!0),t._lazy=!1);z.length=0};H._startTime=a.time,K._startTime=a.frame,H._active=K._active=!0,setTimeout(V,1),R._updateRoot=I.render=function(){var t,e,i;if(z.length&&V(),H.render((a.time-H._startTime)*H._timeScale,!1,!1),K.render((a.frame-K._startTime)*K._timeScale,!1,!1),z.length&&V(),a.frame>=J){J=a.frame+(parseInt(I.autoSleep,10)||120);for(i in q){for(e=q[i].tweens,t=e.length;--t>-1;)e[t]._gc&&e.splice(t,1);0===e.length&&delete q[i]}if(i=H._first,(!i||i._paused)&&I.autoSleep&&!K._first&&1===a._listeners.tick.length){for(;i&&i._paused;)i=i._next;i||a.sleep()}}},a.addEventListener("tick",R._updateRoot);var W=function(t,e,i){var s,r,n=t._gsTweenID;if(q[n||(t._gsTweenID=n="t"+B++)]||(q[n]={target:t,tweens:[]}),e&&(s=q[n].tweens,s[r=s.length]=e,i))for(;--r>-1;)s[r]===e&&s.splice(r,1);return q[n].tweens},X=function(t,e,i,s){var r,n,a=t.vars.onOverwrite;return a&&(r=a(t,e,i,s)),a=I.onOverwrite,a&&(n=a(t,e,i,s)),r!==!1&&n!==!1},Y=function(t,e,i,s,r){var n,a,o,l;if(1===s||s>=4){for(l=r.length,n=0;l>n;n++)if((o=r[n])!==e)o._gc||o._kill(null,t,e)&&(a=!0);else if(5===s)break;return a}var h,u=e._startTime+_,f=[],c=0,m=0===e._duration;for(n=r.length;--n>-1;)(o=r[n])===e||o._gc||o._paused||(o._timeline!==e._timeline?(h=h||Z(e,0,m),0===Z(o,h,m)&&(f[c++]=o)):o._startTime<=u&&o._startTime+o.totalDuration()/o._timeScale>u&&((m||!o._initted)&&u-o._startTime<=2e-10||(f[c++]=o)));for(n=c;--n>-1;)if(o=f[n],2===s&&o._kill(i,t,e)&&(a=!0),2!==s||!o._firstPT&&o._initted){if(2!==s&&!X(o,e))continue;o._enabled(!1,!1)&&(a=!0)}return a},Z=function(t,e,i){for(var s=t._timeline,r=s._timeScale,n=t._startTime;s._timeline;){if(n+=s._startTime,r*=s._timeScale,s._paused)return-100;s=s._timeline}return n/=r,n>e?n-e:i&&n===e||!t._initted&&2*_>n-e?_:(n+=t.totalDuration()/t._timeScale/r)>e+_?0:n-e-_};n._init=function(){var t,e,i,s,r,n=this.vars,a=this._overwrittenProps,o=this._duration,l=!!n.immediateRender,h=n.ease;if(n.startAt){this._startAt&&(this._startAt.render(-1,!0),this._startAt.kill()),r={};for(s in n.startAt)r[s]=n.startAt[s];if(r.overwrite=!1,r.immediateRender=!0,r.lazy=l&&n.lazy!==!1,r.startAt=r.delay=null,this._startAt=I.to(this.target,0,r),l)if(this._time>0)this._startAt=null;else if(0!==o)return}else if(n.runBackwards&&0!==o)if(this._startAt)this._startAt.render(-1,!0),this._startAt.kill(),this._startAt=null;else{0!==this._time&&(l=!1),i={};for(s in n)M[s]&&"autoCSS"!==s||(i[s]=n[s]);if(i.overwrite=0,i.data="isFromStart",i.lazy=l&&n.lazy!==!1,i.immediateRender=l,this._startAt=I.to(this.target,0,i),l){if(0===this._time)return}else this._startAt._init(),this._startAt._enabled(!1),this.vars.immediateRender&&(this._startAt=null)}if(this._ease=h=h?h instanceof y?h:"function"==typeof h?new y(h,n.easeParams):w[h]||I.defaultEase:I.defaultEase,n.easeParams instanceof Array&&h.config&&(this._ease=h.config.apply(h,n.easeParams)),this._easeType=this._ease._type,this._easePower=this._ease._power,this._firstPT=null,this._targets)for(t=this._targets.length;--t>-1;)this._initProps(this._targets[t],this._propLookup[t]={},this._siblings[t],a?a[t]:null)&&(e=!0);else e=this._initProps(this.target,this._propLookup,this._siblings,a);if(e&&I._onPluginEvent("_onInitAllProps",this),a&&(this._firstPT||"function"!=typeof this.target&&this._enabled(!1,!1)),n.runBackwards)for(i=this._firstPT;i;)i.s+=i.c,i.c=-i.c,i=i._next;this._onUpdate=n.onUpdate,this._initted=!0},n._initProps=function(e,i,s,r){var n,a,o,l,h,_;if(null==e)return!1;F[e._gsTweenID]&&V(),this.vars.css||e.style&&e!==t&&e.nodeType&&Q.css&&this.vars.autoCSS!==!1&&O(this.vars,e);for(n in this.vars)if(_=this.vars[n],M[n])_&&(_ instanceof Array||_.push&&c(_))&&-1!==_.join("").indexOf("{self}")&&(this.vars[n]=_=this._swapSelfInParams(_,this));else if(Q[n]&&(l=new Q[n])._onInitTween(e,this.vars[n],this)){for(this._firstPT=h={_next:this._firstPT,t:l,p:"setRatio",s:0,c:1,f:1,n:n,pg:1,pr:l._priority},a=l._overwriteProps.length;--a>-1;)i[l._overwriteProps[a]]=this._firstPT;(l._priority||l._onInitAllProps)&&(o=!0),(l._onDisable||l._onEnable)&&(this._notifyPluginsOfEnabled=!0),h._next&&(h._next._prev=h)}else i[n]=j.call(this,e,n,"get",_,n,0,null,this.vars.stringFilter);return r&&this._kill(r,e)?this._initProps(e,i,s,r):this._overwrite>1&&this._firstPT&&s.length>1&&Y(e,this,i,this._overwrite,s)?(this._kill(i,e),this._initProps(e,i,s,r)):(this._firstPT&&(this.vars.lazy!==!1&&this._duration||this.vars.lazy&&!this._duration)&&(F[e._gsTweenID]=!0),o)},n.render=function(t,e,i){var s,r,n,a,o=this._time,l=this._duration,h=this._rawPrevTime;if(t>=l)this._totalTime=this._time=l,this.ratio=this._ease._calcEnd?this._ease.getRatio(1):1,this._reversed||(s=!0,r="onComplete",i=i||this._timeline.autoRemoveChildren),0===l&&(this._initted||!this.vars.lazy||i)&&(this._startTime===this._timeline._duration&&(t=0),(0===t||0>h||h===_&&"isPause"!==this.data)&&h!==t&&(i=!0,h>_&&(r="onReverseComplete")),this._rawPrevTime=a=!e||t||h===t?t:_);else if(1e-7>t)this._totalTime=this._time=0,this.ratio=this._ease._calcEnd?this._ease.getRatio(0):0,(0!==o||0===l&&h>0)&&(r="onReverseComplete",s=this._reversed),0>t&&(this._active=!1,0===l&&(this._initted||!this.vars.lazy||i)&&(h>=0&&(h!==_||"isPause"!==this.data)&&(i=!0),this._rawPrevTime=a=!e||t||h===t?t:_)),this._initted||(i=!0);else if(this._totalTime=this._time=t,this._easeType){var u=t/l,f=this._easeType,c=this._easePower;(1===f||3===f&&u>=.5)&&(u=1-u),3===f&&(u*=2),1===c?u*=u:2===c?u*=u*u:3===c?u*=u*u*u:4===c&&(u*=u*u*u*u),1===f?this.ratio=1-u:2===f?this.ratio=u:.5>t/l?this.ratio=u/2:this.ratio=1-u/2}else this.ratio=this._ease.getRatio(t/l);if(this._time!==o||i){if(!this._initted){if(this._init(),!this._initted||this._gc)return;if(!i&&this._firstPT&&(this.vars.lazy!==!1&&this._duration||this.vars.lazy&&!this._duration))return this._time=this._totalTime=o,this._rawPrevTime=h,z.push(this),void(this._lazy=[t,e]);this._time&&!s?this.ratio=this._ease.getRatio(this._time/l):s&&this._ease._calcEnd&&(this.ratio=this._ease.getRatio(0===this._time?0:1))}for(this._lazy!==!1&&(this._lazy=!1),this._active||!this._paused&&this._time!==o&&t>=0&&(this._active=!0),0===o&&(this._startAt&&(t>=0?this._startAt.render(t,e,i):r||(r="_dummyGS")),this.vars.onStart&&(0!==this._time||0===l)&&(e||this._callback("onStart"))),n=this._firstPT;n;)n.f?n.t[n.p](n.c*this.ratio+n.s):n.t[n.p]=n.c*this.ratio+n.s,n=n._next;this._onUpdate&&(0>t&&this._startAt&&t!==-1e-4&&this._startAt.render(t,e,i),e||(this._time!==o||s)&&this._callback("onUpdate")),r&&(!this._gc||i)&&(0>t&&this._startAt&&!this._onUpdate&&t!==-1e-4&&this._startAt.render(t,e,i),s&&(this._timeline.autoRemoveChildren&&this._enabled(!1,!1),this._active=!1),!e&&this.vars[r]&&this._callback(r),0===l&&this._rawPrevTime===_&&a!==_&&(this._rawPrevTime=0))}},n._kill=function(t,e,i){if("all"===t&&(t=null),null==t&&(null==e||e===this.target))return this._lazy=!1,this._enabled(!1,!1);e="string"!=typeof e?e||this._targets||this.target:I.selector(e)||e;var s,r,n,a,o,l,h,_,u,f=i&&this._time&&i._startTime===this._startTime&&this._timeline===i._timeline;if((c(e)||E(e))&&"number"!=typeof e[0])for(s=e.length;--s>-1;)this._kill(t,e[s],i)&&(l=!0);else{if(this._targets){for(s=this._targets.length;--s>-1;)if(e===this._targets[s]){o=this._propLookup[s]||{},this._overwrittenProps=this._overwrittenProps||[],r=this._overwrittenProps[s]=t?this._overwrittenProps[s]||{}:"all";break}}else{if(e!==this.target)return!1;o=this._propLookup,r=this._overwrittenProps=t?this._overwrittenProps||{}:"all"}if(o){if(h=t||o,_=t!==r&&"all"!==r&&t!==o&&("object"!=typeof t||!t._tempKill),i&&(I.onOverwrite||this.vars.onOverwrite)){for(n in h)o[n]&&(u||(u=[]),u.push(n));if((u||!t)&&!X(this,i,e,u))return!1}for(n in h)(a=o[n])&&(f&&(a.f?a.t[a.p](a.s):a.t[a.p]=a.s,l=!0),a.pg&&a.t._kill(h)&&(l=!0),a.pg&&0!==a.t._overwriteProps.length||(a._prev?a._prev._next=a._next:a===this._firstPT&&(this._firstPT=a._next),a._next&&(a._next._prev=a._prev),a._next=a._prev=null),delete o[n]),_&&(r[n]=1);!this._firstPT&&this._initted&&this._enabled(!1,!1)}}return l},n.invalidate=function(){return this._notifyPluginsOfEnabled&&I._onPluginEvent("_onDisable",this),this._firstPT=this._overwrittenProps=this._startAt=this._onUpdate=null,this._notifyPluginsOfEnabled=this._active=this._lazy=!1,this._propLookup=this._targets?{}:[],R.prototype.invalidate.call(this),this.vars.immediateRender&&(this._time=-_,this.render(-this._delay)),this},n._enabled=function(t,e){if(o||a.wake(),t&&this._gc){var i,s=this._targets;if(s)for(i=s.length;--i>-1;)this._siblings[i]=W(s[i],this,!0);else this._siblings=W(this.target,this,!0)}return R.prototype._enabled.call(this,t,e),this._notifyPluginsOfEnabled&&this._firstPT?I._onPluginEvent(t?"_onEnable":"_onDisable",this):!1},I.to=function(t,e,i){return new I(t,e,i)},I.from=function(t,e,i){return i.runBackwards=!0,i.immediateRender=0!=i.immediateRender,new I(t,e,i)},I.fromTo=function(t,e,i,s){return s.startAt=i,s.immediateRender=0!=s.immediateRender&&0!=i.immediateRender,new I(t,e,s)},I.delayedCall=function(t,e,i,s,r){return new I(e,0,{delay:t,onComplete:e,onCompleteParams:i,callbackScope:s,onReverseComplete:e,onReverseCompleteParams:i,immediateRender:!1,lazy:!1,useFrames:r,overwrite:0})},I.set=function(t,e){return new I(t,0,e)},I.getTweensOf=function(t,e){if(null==t)return[];t="string"!=typeof t?t:I.selector(t)||t;var i,s,r,n;if((c(t)||E(t))&&"number"!=typeof t[0]){for(i=t.length,s=[];--i>-1;)s=s.concat(I.getTweensOf(t[i],e));for(i=s.length;--i>-1;)for(n=s[i],r=i;--r>-1;)n===s[r]&&s.splice(i,1)}else for(s=W(t).concat(),i=s.length;--i>-1;)(s[i]._gc||e&&!s[i].isActive())&&s.splice(i,1);return s},I.killTweensOf=I.killDelayedCallsTo=function(t,e,i){"object"==typeof e&&(i=e,e=!1);for(var s=I.getTweensOf(t,e),r=s.length;--r>-1;)s[r]._kill(i,t)};var tt=v("plugins.TweenPlugin",function(t,e){this._overwriteProps=(t||"").split(","),this._propName=this._overwriteProps[0],this._priority=e||0,this._super=tt.prototype},!0);if(n=tt.prototype,tt.version="1.18.0",tt.API=2,n._firstPT=null,n._addTween=j,n.setRatio=N,n._kill=function(t){var e,i=this._overwriteProps,s=this._firstPT;if(null!=t[this._propName])this._overwriteProps=[];else for(e=i.length;--e>-1;)null!=t[i[e]]&&i.splice(e,1);for(;s;)null!=t[s.n]&&(s._next&&(s._next._prev=s._prev),s._prev?(s._prev._next=s._next,s._prev=null):this._firstPT===s&&(this._firstPT=s._next)),s=s._next;return!1},n._roundProps=function(t,e){for(var i=this._firstPT;i;)(t[this._propName]||null!=i.n&&t[i.n.split(this._propName+"_").join("")])&&(i.r=e),i=i._next},I._onPluginEvent=function(t,e){var i,s,r,n,a,o=e._firstPT;if("_onInitAllProps"===t){for(;o;){for(a=o._next,s=r;s&&s.pr>o.pr;)s=s._next;(o._prev=s?s._prev:n)?o._prev._next=o:r=o,(o._next=s)?s._prev=o:n=o,o=a}o=e._firstPT=r}for(;o;)o.pg&&"function"==typeof o.t[t]&&o.t[t]()&&(i=!0),o=o._next;return i},tt.activate=function(t){for(var e=t.length;--e>-1;)t[e].API===tt.API&&(Q[(new t[e])._propName]=t[e]);return!0},d.plugin=function(t){if(!(t&&t.propName&&t.init&&t.API))throw"illegal plugin definition.";var e,i=t.propName,s=t.priority||0,r=t.overwriteProps,n={init:"_onInitTween",set:"setRatio",kill:"_kill",round:"_roundProps",initAll:"_onInitAllProps"},a=v("plugins."+i.charAt(0).toUpperCase()+i.substr(1)+"Plugin",function(){tt.call(this,i,s),this._overwriteProps=r||[]},t.global===!0),o=a.prototype=new tt(i);o.constructor=a,a.API=t.API;for(e in n)"function"==typeof t[e]&&(o[n[e]]=t[e]);return a.version=t.version,tt.activate([a]),a},s=t._gsQueue){for(r=0;r<s.length;r++)s[r]();for(n in m)m[n].func||t.console.log("GSAP encountered missing dependency: com.greensock."+n)}o=!1}}("undefined"!=typeof module&&module.exports&&"undefined"!=typeof global?global:this||window,"TweenLite");
+/*!
+ * VERSION: 1.18.0
+ * DATE: 2015-09-03
+ * UPDATES AND DOCS AT: http://greensock.com
+ *
+ * @license Copyright (c) 2008-2015, GreenSock. All rights reserved.
+ * This work is subject to the terms at http://greensock.com/standard-license or for
+ * Club GreenSock members, the software agreement that was issued with your membership.
+ * 
+ * @author: Jack Doyle, jack@greensock.com
+ */
+(function(window, moduleName) {
+
+		"use strict";
+		var _globals = window.GreenSockGlobals = window.GreenSockGlobals || window;
+		if (_globals.TweenLite) {
+			return; //in case the core set of classes is already loaded, don't instantiate twice.
+		}
+		var _namespace = function(ns) {
+				var a = ns.split("."),
+					p = _globals, i;
+				for (i = 0; i < a.length; i++) {
+					p[a[i]] = p = p[a[i]] || {};
+				}
+				return p;
+			},
+			gs = _namespace("com.greensock"),
+			_tinyNum = 0.0000000001,
+			_slice = function(a) { //don't use Array.prototype.slice.call(target, 0) because that doesn't work in IE8 with a NodeList that's returned by querySelectorAll()
+				var b = [],
+					l = a.length,
+					i;
+				for (i = 0; i !== l; b.push(a[i++])) {}
+				return b;
+			},
+			_emptyFunc = function() {},
+			_isArray = (function() { //works around issues in iframe environments where the Array global isn't shared, thus if the object originates in a different window/iframe, "(obj instanceof Array)" will evaluate false. We added some speed optimizations to avoid Object.prototype.toString.call() unless it's absolutely necessary because it's VERY slow (like 20x slower)
+				var toString = Object.prototype.toString,
+					array = toString.call([]);
+				return function(obj) {
+					return obj != null && (obj instanceof Array || (typeof(obj) === "object" && !!obj.push && toString.call(obj) === array));
+				};
+			}()),
+			a, i, p, _ticker, _tickerActive,
+			_defLookup = {},
+
+			/**
+			 * @constructor
+			 * Defines a GreenSock class, optionally with an array of dependencies that must be instantiated first and passed into the definition.
+			 * This allows users to load GreenSock JS files in any order even if they have interdependencies (like CSSPlugin extends TweenPlugin which is
+			 * inside TweenLite.js, but if CSSPlugin is loaded first, it should wait to run its code until TweenLite.js loads and instantiates TweenPlugin
+			 * and then pass TweenPlugin to CSSPlugin's definition). This is all done automatically and internally.
+			 *
+			 * Every definition will be added to a "com.greensock" global object (typically window, but if a window.GreenSockGlobals object is found,
+			 * it will go there as of v1.7). For example, TweenLite will be found at window.com.greensock.TweenLite and since it's a global class that should be available anywhere,
+			 * it is ALSO referenced at window.TweenLite. However some classes aren't considered global, like the base com.greensock.core.Animation class, so
+			 * those will only be at the package like window.com.greensock.core.Animation. Again, if you define a GreenSockGlobals object on the window, everything
+			 * gets tucked neatly inside there instead of on the window directly. This allows you to do advanced things like load multiple versions of GreenSock
+			 * files and put them into distinct objects (imagine a banner ad uses a newer version but the main site uses an older one). In that case, you could
+			 * sandbox the banner one like:
+			 *
+			 * <script>
+			 *     var gs = window.GreenSockGlobals = {}; //the newer version we're about to load could now be referenced in a "gs" object, like gs.TweenLite.to(...). Use whatever alias you want as long as it's unique, "gs" or "banner" or whatever.
+			 * </script>
+			 * <script src="js/greensock/v1.7/TweenMax.js"></script>
+			 * <script>
+			 *     window.GreenSockGlobals = window._gsQueue = window._gsDefine = null; //reset it back to null (along with the special _gsQueue variable) so that the next load of TweenMax affects the window and we can reference things directly like TweenLite.to(...)
+			 * </script>
+			 * <script src="js/greensock/v1.6/TweenMax.js"></script>
+			 * <script>
+			 *     gs.TweenLite.to(...); //would use v1.7
+			 *     TweenLite.to(...); //would use v1.6
+			 * </script>
+			 *
+			 * @param {!string} ns The namespace of the class definition, leaving off "com.greensock." as that's assumed. For example, "TweenLite" or "plugins.CSSPlugin" or "easing.Back".
+			 * @param {!Array.<string>} dependencies An array of dependencies (described as their namespaces minus "com.greensock." prefix). For example ["TweenLite","plugins.TweenPlugin","core.Animation"]
+			 * @param {!function():Object} func The function that should be called and passed the resolved dependencies which will return the actual class for this definition.
+			 * @param {boolean=} global If true, the class will be added to the global scope (typically window unless you define a window.GreenSockGlobals object)
+			 */
+			Definition = function(ns, dependencies, func, global) {
+				this.sc = (_defLookup[ns]) ? _defLookup[ns].sc : []; //subclasses
+				_defLookup[ns] = this;
+				this.gsClass = null;
+				this.func = func;
+				var _classes = [];
+				this.check = function(init) {
+					var i = dependencies.length,
+						missing = i,
+						cur, a, n, cl, hasModule;
+					while (--i > -1) {
+						if ((cur = _defLookup[dependencies[i]] || new Definition(dependencies[i], [])).gsClass) {
+							_classes[i] = cur.gsClass;
+							missing--;
+						} else if (init) {
+							cur.sc.push(this);
+						}
+					}
+					if (missing === 0 && func) {
+						a = ("com.greensock." + ns).split(".");
+						n = a.pop();
+						cl = _namespace(a.join("."))[n] = this.gsClass = func.apply(func, _classes);
+
+						//exports to multiple environments
+						if (global) {
+							_globals[n] = cl; //provides a way to avoid global namespace pollution. By default, the main classes like TweenLite, Power1, Strong, etc. are added to window unless a GreenSockGlobals is defined. So if you want to have things added to a custom object instead, just do something like window.GreenSockGlobals = {} before loading any GreenSock files. You can even set up an alias like window.GreenSockGlobals = windows.gs = {} so that you can access everything like gs.TweenLite. Also remember that ALL classes are added to the window.com.greensock object (in their respective packages, like com.greensock.easing.Power1, com.greensock.TweenLite, etc.)
+							hasModule = (typeof(module) !== "undefined" && module.exports);
+							if (!hasModule && typeof(define) === "function" && define.amd){ //AMD
+								define((window.GreenSockAMDPath ? window.GreenSockAMDPath + "/" : "") + ns.split(".").pop(), [], function() { return cl; });
+							} else if (ns === moduleName && hasModule){ //node
+								module.exports = cl;
+							}
+						}
+						for (i = 0; i < this.sc.length; i++) {
+							this.sc[i].check();
+						}
+					}
+				};
+				this.check(true);
+			},
+
+			//used to create Definition instances (which basically registers a class that has dependencies).
+			_gsDefine = window._gsDefine = function(ns, dependencies, func, global) {
+				return new Definition(ns, dependencies, func, global);
+			},
+
+			//a quick way to create a class that doesn't have any dependencies. Returns the class, but first registers it in the GreenSock namespace so that other classes can grab it (other classes might be dependent on the class).
+			_class = gs._class = function(ns, func, global) {
+				func = func || function() {};
+				_gsDefine(ns, [], function(){ return func; }, global);
+				return func;
+			};
+
+		_gsDefine.globals = _globals;
+
+
+
+/*
+ * ----------------------------------------------------------------
+ * Ease
+ * ----------------------------------------------------------------
+ */
+		var _baseParams = [0, 0, 1, 1],
+			_blankArray = [],
+			Ease = _class("easing.Ease", function(func, extraParams, type, power) {
+				this._func = func;
+				this._type = type || 0;
+				this._power = power || 0;
+				this._params = extraParams ? _baseParams.concat(extraParams) : _baseParams;
+			}, true),
+			_easeMap = Ease.map = {},
+			_easeReg = Ease.register = function(ease, names, types, create) {
+				var na = names.split(","),
+					i = na.length,
+					ta = (types || "easeIn,easeOut,easeInOut").split(","),
+					e, name, j, type;
+				while (--i > -1) {
+					name = na[i];
+					e = create ? _class("easing."+name, null, true) : gs.easing[name] || {};
+					j = ta.length;
+					while (--j > -1) {
+						type = ta[j];
+						_easeMap[name + "." + type] = _easeMap[type + name] = e[type] = ease.getRatio ? ease : ease[type] || new ease();
+					}
+				}
+			};
+
+		p = Ease.prototype;
+		p._calcEnd = false;
+		p.getRatio = function(p) {
+			if (this._func) {
+				this._params[0] = p;
+				return this._func.apply(null, this._params);
+			}
+			var t = this._type,
+				pw = this._power,
+				r = (t === 1) ? 1 - p : (t === 2) ? p : (p < 0.5) ? p * 2 : (1 - p) * 2;
+			if (pw === 1) {
+				r *= r;
+			} else if (pw === 2) {
+				r *= r * r;
+			} else if (pw === 3) {
+				r *= r * r * r;
+			} else if (pw === 4) {
+				r *= r * r * r * r;
+			}
+			return (t === 1) ? 1 - r : (t === 2) ? r : (p < 0.5) ? r / 2 : 1 - (r / 2);
+		};
+
+		//create all the standard eases like Linear, Quad, Cubic, Quart, Quint, Strong, Power0, Power1, Power2, Power3, and Power4 (each with easeIn, easeOut, and easeInOut)
+		a = ["Linear","Quad","Cubic","Quart","Quint,Strong"];
+		i = a.length;
+		while (--i > -1) {
+			p = a[i]+",Power"+i;
+			_easeReg(new Ease(null,null,1,i), p, "easeOut", true);
+			_easeReg(new Ease(null,null,2,i), p, "easeIn" + ((i === 0) ? ",easeNone" : ""));
+			_easeReg(new Ease(null,null,3,i), p, "easeInOut");
+		}
+		_easeMap.linear = gs.easing.Linear.easeIn;
+		_easeMap.swing = gs.easing.Quad.easeInOut; //for jQuery folks
+
+
+/*
+ * ----------------------------------------------------------------
+ * EventDispatcher
+ * ----------------------------------------------------------------
+ */
+		var EventDispatcher = _class("events.EventDispatcher", function(target) {
+			this._listeners = {};
+			this._eventTarget = target || this;
+		});
+		p = EventDispatcher.prototype;
+
+		p.addEventListener = function(type, callback, scope, useParam, priority) {
+			priority = priority || 0;
+			var list = this._listeners[type],
+				index = 0,
+				listener, i;
+			if (list == null) {
+				this._listeners[type] = list = [];
+			}
+			i = list.length;
+			while (--i > -1) {
+				listener = list[i];
+				if (listener.c === callback && listener.s === scope) {
+					list.splice(i, 1);
+				} else if (index === 0 && listener.pr < priority) {
+					index = i + 1;
+				}
+			}
+			list.splice(index, 0, {c:callback, s:scope, up:useParam, pr:priority});
+			if (this === _ticker && !_tickerActive) {
+				_ticker.wake();
+			}
+		};
+
+		p.removeEventListener = function(type, callback) {
+			var list = this._listeners[type], i;
+			if (list) {
+				i = list.length;
+				while (--i > -1) {
+					if (list[i].c === callback) {
+						list.splice(i, 1);
+						return;
+					}
+				}
+			}
+		};
+
+		p.dispatchEvent = function(type) {
+			var list = this._listeners[type],
+				i, t, listener;
+			if (list) {
+				i = list.length;
+				t = this._eventTarget;
+				while (--i > -1) {
+					listener = list[i];
+					if (listener) {
+						if (listener.up) {
+							listener.c.call(listener.s || t, {type:type, target:t});
+						} else {
+							listener.c.call(listener.s || t);
+						}
+					}
+				}
+			}
+		};
+
+
+/*
+ * ----------------------------------------------------------------
+ * Ticker
+ * ----------------------------------------------------------------
+ */
+ 		var _reqAnimFrame = window.requestAnimationFrame,
+			_cancelAnimFrame = window.cancelAnimationFrame,
+			_getTime = Date.now || function() {return new Date().getTime();},
+			_lastUpdate = _getTime();
+
+		//now try to determine the requestAnimationFrame and cancelAnimationFrame functions and if none are found, we'll use a setTimeout()/clearTimeout() polyfill.
+		a = ["ms","moz","webkit","o"];
+		i = a.length;
+		while (--i > -1 && !_reqAnimFrame) {
+			_reqAnimFrame = window[a[i] + "RequestAnimationFrame"];
+			_cancelAnimFrame = window[a[i] + "CancelAnimationFrame"] || window[a[i] + "CancelRequestAnimationFrame"];
+		}
+
+		_class("Ticker", function(fps, useRAF) {
+			var _self = this,
+				_startTime = _getTime(),
+				_useRAF = (useRAF !== false && _reqAnimFrame),
+				_lagThreshold = 500,
+				_adjustedLag = 33,
+				_tickWord = "tick", //helps reduce gc burden
+				_fps, _req, _id, _gap, _nextTime,
+				_tick = function(manual) {
+					var elapsed = _getTime() - _lastUpdate,
+						overlap, dispatch;
+					if (elapsed > _lagThreshold) {
+						_startTime += elapsed - _adjustedLag;
+					}
+					_lastUpdate += elapsed;
+					_self.time = (_lastUpdate - _startTime) / 1000;
+					overlap = _self.time - _nextTime;
+					if (!_fps || overlap > 0 || manual === true) {
+						_self.frame++;
+						_nextTime += overlap + (overlap >= _gap ? 0.004 : _gap - overlap);
+						dispatch = true;
+					}
+					if (manual !== true) { //make sure the request is made before we dispatch the "tick" event so that timing is maintained. Otherwise, if processing the "tick" requires a bunch of time (like 15ms) and we're using a setTimeout() that's based on 16.7ms, it'd technically take 31.7ms between frames otherwise.
+						_id = _req(_tick);
+					}
+					if (dispatch) {
+						_self.dispatchEvent(_tickWord);
+					}
+				};
+
+			EventDispatcher.call(_self);
+			_self.time = _self.frame = 0;
+			_self.tick = function() {
+				_tick(true);
+			};
+
+			_self.lagSmoothing = function(threshold, adjustedLag) {
+				_lagThreshold = threshold || (1 / _tinyNum); //zero should be interpreted as basically unlimited
+				_adjustedLag = Math.min(adjustedLag, _lagThreshold, 0);
+			};
+
+			_self.sleep = function() {
+				if (_id == null) {
+					return;
+				}
+				if (!_useRAF || !_cancelAnimFrame) {
+					clearTimeout(_id);
+				} else {
+					_cancelAnimFrame(_id);
+				}
+				_req = _emptyFunc;
+				_id = null;
+				if (_self === _ticker) {
+					_tickerActive = false;
+				}
+			};
+
+			_self.wake = function() {
+				if (_id !== null) {
+					_self.sleep();
+				} else if (_self.frame > 10) { //don't trigger lagSmoothing if we're just waking up, and make sure that at least 10 frames have elapsed because of the iOS bug that we work around below with the 1.5-second setTimout().
+					_lastUpdate = _getTime() - _lagThreshold + 5;
+				}
+				_req = (_fps === 0) ? _emptyFunc : (!_useRAF || !_reqAnimFrame) ? function(f) { return setTimeout(f, ((_nextTime - _self.time) * 1000 + 1) | 0); } : _reqAnimFrame;
+				if (_self === _ticker) {
+					_tickerActive = true;
+				}
+				_tick(2);
+			};
+
+			_self.fps = function(value) {
+				if (!arguments.length) {
+					return _fps;
+				}
+				_fps = value;
+				_gap = 1 / (_fps || 60);
+				_nextTime = this.time + _gap;
+				_self.wake();
+			};
+
+			_self.useRAF = function(value) {
+				if (!arguments.length) {
+					return _useRAF;
+				}
+				_self.sleep();
+				_useRAF = value;
+				_self.fps(_fps);
+			};
+			_self.fps(fps);
+
+			//a bug in iOS 6 Safari occasionally prevents the requestAnimationFrame from working initially, so we use a 1.5-second timeout that automatically falls back to setTimeout() if it senses this condition.
+			setTimeout(function() {
+				if (_useRAF && _self.frame < 5) {
+					_self.useRAF(false);
+				}
+			}, 1500);
+		});
+
+		p = gs.Ticker.prototype = new gs.events.EventDispatcher();
+		p.constructor = gs.Ticker;
+
+
+/*
+ * ----------------------------------------------------------------
+ * Animation
+ * ----------------------------------------------------------------
+ */
+		var Animation = _class("core.Animation", function(duration, vars) {
+				this.vars = vars = vars || {};
+				this._duration = this._totalDuration = duration || 0;
+				this._delay = Number(vars.delay) || 0;
+				this._timeScale = 1;
+				this._active = (vars.immediateRender === true);
+				this.data = vars.data;
+				this._reversed = (vars.reversed === true);
+
+				if (!_rootTimeline) {
+					return;
+				}
+				if (!_tickerActive) { //some browsers (like iOS 6 Safari) shut down JavaScript execution when the tab is disabled and they [occasionally] neglect to start up requestAnimationFrame again when returning - this code ensures that the engine starts up again properly.
+					_ticker.wake();
+				}
+
+				var tl = this.vars.useFrames ? _rootFramesTimeline : _rootTimeline;
+				tl.add(this, tl._time);
+
+				if (this.vars.paused) {
+					this.paused(true);
+				}
+			});
+
+		_ticker = Animation.ticker = new gs.Ticker();
+		p = Animation.prototype;
+		p._dirty = p._gc = p._initted = p._paused = false;
+		p._totalTime = p._time = 0;
+		p._rawPrevTime = -1;
+		p._next = p._last = p._onUpdate = p._timeline = p.timeline = null;
+		p._paused = false;
+
+
+		//some browsers (like iOS) occasionally drop the requestAnimationFrame event when the user switches to a different tab and then comes back again, so we use a 2-second setTimeout() to sense if/when that condition occurs and then wake() the ticker.
+		var _checkTimeout = function() {
+				if (_tickerActive && _getTime() - _lastUpdate > 2000) {
+					_ticker.wake();
+				}
+				setTimeout(_checkTimeout, 2000);
+			};
+		_checkTimeout();
+
+
+		p.play = function(from, suppressEvents) {
+			if (from != null) {
+				this.seek(from, suppressEvents);
+			}
+			return this.reversed(false).paused(false);
+		};
+
+		p.pause = function(atTime, suppressEvents) {
+			if (atTime != null) {
+				this.seek(atTime, suppressEvents);
+			}
+			return this.paused(true);
+		};
+
+		p.resume = function(from, suppressEvents) {
+			if (from != null) {
+				this.seek(from, suppressEvents);
+			}
+			return this.paused(false);
+		};
+
+		p.seek = function(time, suppressEvents) {
+			return this.totalTime(Number(time), suppressEvents !== false);
+		};
+
+		p.restart = function(includeDelay, suppressEvents) {
+			return this.reversed(false).paused(false).totalTime(includeDelay ? -this._delay : 0, (suppressEvents !== false), true);
+		};
+
+		p.reverse = function(from, suppressEvents) {
+			if (from != null) {
+				this.seek((from || this.totalDuration()), suppressEvents);
+			}
+			return this.reversed(true).paused(false);
+		};
+
+		p.render = function(time, suppressEvents, force) {
+			//stub - we override this method in subclasses.
+		};
+
+		p.invalidate = function() {
+			this._time = this._totalTime = 0;
+			this._initted = this._gc = false;
+			this._rawPrevTime = -1;
+			if (this._gc || !this.timeline) {
+				this._enabled(true);
+			}
+			return this;
+		};
+
+		p.isActive = function() {
+			var tl = this._timeline, //the 2 root timelines won't have a _timeline; they're always active.
+				startTime = this._startTime,
+				rawTime;
+			return (!tl || (!this._gc && !this._paused && tl.isActive() && (rawTime = tl.rawTime()) >= startTime && rawTime < startTime + this.totalDuration() / this._timeScale));
+		};
+
+		p._enabled = function (enabled, ignoreTimeline) {
+			if (!_tickerActive) {
+				_ticker.wake();
+			}
+			this._gc = !enabled;
+			this._active = this.isActive();
+			if (ignoreTimeline !== true) {
+				if (enabled && !this.timeline) {
+					this._timeline.add(this, this._startTime - this._delay);
+				} else if (!enabled && this.timeline) {
+					this._timeline._remove(this, true);
+				}
+			}
+			return false;
+		};
+
+
+		p._kill = function(vars, target) {
+			return this._enabled(false, false);
+		};
+
+		p.kill = function(vars, target) {
+			this._kill(vars, target);
+			return this;
+		};
+
+		p._uncache = function(includeSelf) {
+			var tween = includeSelf ? this : this.timeline;
+			while (tween) {
+				tween._dirty = true;
+				tween = tween.timeline;
+			}
+			return this;
+		};
+
+		p._swapSelfInParams = function(params) {
+			var i = params.length,
+				copy = params.concat();
+			while (--i > -1) {
+				if (params[i] === "{self}") {
+					copy[i] = this;
+				}
+			}
+			return copy;
+		};
+
+		p._callback = function(type) {
+			var v = this.vars;
+			v[type].apply(v[type + "Scope"] || v.callbackScope || this, v[type + "Params"] || _blankArray);
+		};
+
+//----Animation getters/setters --------------------------------------------------------
+
+		p.eventCallback = function(type, callback, params, scope) {
+			if ((type || "").substr(0,2) === "on") {
+				var v = this.vars;
+				if (arguments.length === 1) {
+					return v[type];
+				}
+				if (callback == null) {
+					delete v[type];
+				} else {
+					v[type] = callback;
+					v[type + "Params"] = (_isArray(params) && params.join("").indexOf("{self}") !== -1) ? this._swapSelfInParams(params) : params;
+					v[type + "Scope"] = scope;
+				}
+				if (type === "onUpdate") {
+					this._onUpdate = callback;
+				}
+			}
+			return this;
+		};
+
+		p.delay = function(value) {
+			if (!arguments.length) {
+				return this._delay;
+			}
+			if (this._timeline.smoothChildTiming) {
+				this.startTime( this._startTime + value - this._delay );
+			}
+			this._delay = value;
+			return this;
+		};
+
+		p.duration = function(value) {
+			if (!arguments.length) {
+				this._dirty = false;
+				return this._duration;
+			}
+			this._duration = this._totalDuration = value;
+			this._uncache(true); //true in case it's a TweenMax or TimelineMax that has a repeat - we'll need to refresh the totalDuration.
+			if (this._timeline.smoothChildTiming) if (this._time > 0) if (this._time < this._duration) if (value !== 0) {
+				this.totalTime(this._totalTime * (value / this._duration), true);
+			}
+			return this;
+		};
+
+		p.totalDuration = function(value) {
+			this._dirty = false;
+			return (!arguments.length) ? this._totalDuration : this.duration(value);
+		};
+
+		p.time = function(value, suppressEvents) {
+			if (!arguments.length) {
+				return this._time;
+			}
+			if (this._dirty) {
+				this.totalDuration();
+			}
+			return this.totalTime((value > this._duration) ? this._duration : value, suppressEvents);
+		};
+
+		p.totalTime = function(time, suppressEvents, uncapped) {
+			if (!_tickerActive) {
+				_ticker.wake();
+			}
+			if (!arguments.length) {
+				return this._totalTime;
+			}
+			if (this._timeline) {
+				if (time < 0 && !uncapped) {
+					time += this.totalDuration();
+				}
+				if (this._timeline.smoothChildTiming) {
+					if (this._dirty) {
+						this.totalDuration();
+					}
+					var totalDuration = this._totalDuration,
+						tl = this._timeline;
+					if (time > totalDuration && !uncapped) {
+						time = totalDuration;
+					}
+					this._startTime = (this._paused ? this._pauseTime : tl._time) - ((!this._reversed ? time : totalDuration - time) / this._timeScale);
+					if (!tl._dirty) { //for performance improvement. If the parent's cache is already dirty, it already took care of marking the ancestors as dirty too, so skip the function call here.
+						this._uncache(false);
+					}
+					//in case any of the ancestor timelines had completed but should now be enabled, we should reset their totalTime() which will also ensure that they're lined up properly and enabled. Skip for animations that are on the root (wasteful). Example: a TimelineLite.exportRoot() is performed when there's a paused tween on the root, the export will not complete until that tween is unpaused, but imagine a child gets restarted later, after all [unpaused] tweens have completed. The startTime of that child would get pushed out, but one of the ancestors may have completed.
+					if (tl._timeline) {
+						while (tl._timeline) {
+							if (tl._timeline._time !== (tl._startTime + tl._totalTime) / tl._timeScale) {
+								tl.totalTime(tl._totalTime, true);
+							}
+							tl = tl._timeline;
+						}
+					}
+				}
+				if (this._gc) {
+					this._enabled(true, false);
+				}
+				if (this._totalTime !== time || this._duration === 0) {
+					if (_lazyTweens.length) {
+						_lazyRender();
+					}
+					this.render(time, suppressEvents, false);
+					if (_lazyTweens.length) { //in case rendering caused any tweens to lazy-init, we should render them because typically when someone calls seek() or time() or progress(), they expect an immediate render.
+						_lazyRender();
+					}
+				}
+			}
+			return this;
+		};
+
+		p.progress = p.totalProgress = function(value, suppressEvents) {
+			var duration = this.duration();
+			return (!arguments.length) ? (duration ? this._time / duration : this.ratio) : this.totalTime(duration * value, suppressEvents);
+		};
+
+		p.startTime = function(value) {
+			if (!arguments.length) {
+				return this._startTime;
+			}
+			if (value !== this._startTime) {
+				this._startTime = value;
+				if (this.timeline) if (this.timeline._sortChildren) {
+					this.timeline.add(this, value - this._delay); //ensures that any necessary re-sequencing of Animations in the timeline occurs to make sure the rendering order is correct.
+				}
+			}
+			return this;
+		};
+
+		p.endTime = function(includeRepeats) {
+			return this._startTime + ((includeRepeats != false) ? this.totalDuration() : this.duration()) / this._timeScale;
+		};
+
+		p.timeScale = function(value) {
+			if (!arguments.length) {
+				return this._timeScale;
+			}
+			value = value || _tinyNum; //can't allow zero because it'll throw the math off
+			if (this._timeline && this._timeline.smoothChildTiming) {
+				var pauseTime = this._pauseTime,
+					t = (pauseTime || pauseTime === 0) ? pauseTime : this._timeline.totalTime();
+				this._startTime = t - ((t - this._startTime) * this._timeScale / value);
+			}
+			this._timeScale = value;
+			return this._uncache(false);
+		};
+
+		p.reversed = function(value) {
+			if (!arguments.length) {
+				return this._reversed;
+			}
+			if (value != this._reversed) {
+				this._reversed = value;
+				this.totalTime(((this._timeline && !this._timeline.smoothChildTiming) ? this.totalDuration() - this._totalTime : this._totalTime), true);
+			}
+			return this;
+		};
+
+		p.paused = function(value) {
+			if (!arguments.length) {
+				return this._paused;
+			}
+			var tl = this._timeline,
+				raw, elapsed;
+			if (value != this._paused) if (tl) {
+				if (!_tickerActive && !value) {
+					_ticker.wake();
+				}
+				raw = tl.rawTime();
+				elapsed = raw - this._pauseTime;
+				if (!value && tl.smoothChildTiming) {
+					this._startTime += elapsed;
+					this._uncache(false);
+				}
+				this._pauseTime = value ? raw : null;
+				this._paused = value;
+				this._active = this.isActive();
+				if (!value && elapsed !== 0 && this._initted && this.duration()) {
+					raw = tl.smoothChildTiming ? this._totalTime : (raw - this._startTime) / this._timeScale;
+					this.render(raw, (raw === this._totalTime), true); //in case the target's properties changed via some other tween or manual update by the user, we should force a render.
+				}
+			}
+			if (this._gc && !value) {
+				this._enabled(true, false);
+			}
+			return this;
+		};
+
+
+/*
+ * ----------------------------------------------------------------
+ * SimpleTimeline
+ * ----------------------------------------------------------------
+ */
+		var SimpleTimeline = _class("core.SimpleTimeline", function(vars) {
+			Animation.call(this, 0, vars);
+			this.autoRemoveChildren = this.smoothChildTiming = true;
+		});
+
+		p = SimpleTimeline.prototype = new Animation();
+		p.constructor = SimpleTimeline;
+		p.kill()._gc = false;
+		p._first = p._last = p._recent = null;
+		p._sortChildren = false;
+
+		p.add = p.insert = function(child, position, align, stagger) {
+			var prevTween, st;
+			child._startTime = Number(position || 0) + child._delay;
+			if (child._paused) if (this !== child._timeline) { //we only adjust the _pauseTime if it wasn't in this timeline already. Remember, sometimes a tween will be inserted again into the same timeline when its startTime is changed so that the tweens in the TimelineLite/Max are re-ordered properly in the linked list (so everything renders in the proper order).
+				child._pauseTime = child._startTime + ((this.rawTime() - child._startTime) / child._timeScale);
+			}
+			if (child.timeline) {
+				child.timeline._remove(child, true); //removes from existing timeline so that it can be properly added to this one.
+			}
+			child.timeline = child._timeline = this;
+			if (child._gc) {
+				child._enabled(true, true);
+			}
+			prevTween = this._last;
+			if (this._sortChildren) {
+				st = child._startTime;
+				while (prevTween && prevTween._startTime > st) {
+					prevTween = prevTween._prev;
+				}
+			}
+			if (prevTween) {
+				child._next = prevTween._next;
+				prevTween._next = child;
+			} else {
+				child._next = this._first;
+				this._first = child;
+			}
+			if (child._next) {
+				child._next._prev = child;
+			} else {
+				this._last = child;
+			}
+			child._prev = prevTween;
+			this._recent = child;
+			if (this._timeline) {
+				this._uncache(true);
+			}
+			return this;
+		};
+
+		p._remove = function(tween, skipDisable) {
+			if (tween.timeline === this) {
+				if (!skipDisable) {
+					tween._enabled(false, true);
+				}
+
+				if (tween._prev) {
+					tween._prev._next = tween._next;
+				} else if (this._first === tween) {
+					this._first = tween._next;
+				}
+				if (tween._next) {
+					tween._next._prev = tween._prev;
+				} else if (this._last === tween) {
+					this._last = tween._prev;
+				}
+				tween._next = tween._prev = tween.timeline = null;
+				if (tween === this._recent) {
+					this._recent = this._last;
+				}
+
+				if (this._timeline) {
+					this._uncache(true);
+				}
+			}
+			return this;
+		};
+
+		p.render = function(time, suppressEvents, force) {
+			var tween = this._first,
+				next;
+			this._totalTime = this._time = this._rawPrevTime = time;
+			while (tween) {
+				next = tween._next; //record it here because the value could change after rendering...
+				if (tween._active || (time >= tween._startTime && !tween._paused)) {
+					if (!tween._reversed) {
+						tween.render((time - tween._startTime) * tween._timeScale, suppressEvents, force);
+					} else {
+						tween.render(((!tween._dirty) ? tween._totalDuration : tween.totalDuration()) - ((time - tween._startTime) * tween._timeScale), suppressEvents, force);
+					}
+				}
+				tween = next;
+			}
+		};
+
+		p.rawTime = function() {
+			if (!_tickerActive) {
+				_ticker.wake();
+			}
+			return this._totalTime;
+		};
+
+/*
+ * ----------------------------------------------------------------
+ * TweenLite
+ * ----------------------------------------------------------------
+ */
+		var TweenLite = _class("TweenLite", function(target, duration, vars) {
+				Animation.call(this, duration, vars);
+				this.render = TweenLite.prototype.render; //speed optimization (avoid prototype lookup on this "hot" method)
+
+				if (target == null) {
+					throw "Cannot tween a null target.";
+				}
+
+				this.target = target = (typeof(target) !== "string") ? target : TweenLite.selector(target) || target;
+
+				var isSelector = (target.jquery || (target.length && target !== window && target[0] && (target[0] === window || (target[0].nodeType && target[0].style && !target.nodeType)))),
+					overwrite = this.vars.overwrite,
+					i, targ, targets;
+
+				this._overwrite = overwrite = (overwrite == null) ? _overwriteLookup[TweenLite.defaultOverwrite] : (typeof(overwrite) === "number") ? overwrite >> 0 : _overwriteLookup[overwrite];
+
+				if ((isSelector || target instanceof Array || (target.push && _isArray(target))) && typeof(target[0]) !== "number") {
+					this._targets = targets = _slice(target);  //don't use Array.prototype.slice.call(target, 0) because that doesn't work in IE8 with a NodeList that's returned by querySelectorAll()
+					this._propLookup = [];
+					this._siblings = [];
+					for (i = 0; i < targets.length; i++) {
+						targ = targets[i];
+						if (!targ) {
+							targets.splice(i--, 1);
+							continue;
+						} else if (typeof(targ) === "string") {
+							targ = targets[i--] = TweenLite.selector(targ); //in case it's an array of strings
+							if (typeof(targ) === "string") {
+								targets.splice(i+1, 1); //to avoid an endless loop (can't imagine why the selector would return a string, but just in case)
+							}
+							continue;
+						} else if (targ.length && targ !== window && targ[0] && (targ[0] === window || (targ[0].nodeType && targ[0].style && !targ.nodeType))) { //in case the user is passing in an array of selector objects (like jQuery objects), we need to check one more level and pull things out if necessary. Also note that <select> elements pass all the criteria regarding length and the first child having style, so we must also check to ensure the target isn't an HTML node itself.
+							targets.splice(i--, 1);
+							this._targets = targets = targets.concat(_slice(targ));
+							continue;
+						}
+						this._siblings[i] = _register(targ, this, false);
+						if (overwrite === 1) if (this._siblings[i].length > 1) {
+							_applyOverwrite(targ, this, null, 1, this._siblings[i]);
+						}
+					}
+
+				} else {
+					this._propLookup = {};
+					this._siblings = _register(target, this, false);
+					if (overwrite === 1) if (this._siblings.length > 1) {
+						_applyOverwrite(target, this, null, 1, this._siblings);
+					}
+				}
+				if (this.vars.immediateRender || (duration === 0 && this._delay === 0 && this.vars.immediateRender !== false)) {
+					this._time = -_tinyNum; //forces a render without having to set the render() "force" parameter to true because we want to allow lazying by default (using the "force" parameter always forces an immediate full render)
+					this.render(-this._delay);
+				}
+			}, true),
+			_isSelector = function(v) {
+				return (v && v.length && v !== window && v[0] && (v[0] === window || (v[0].nodeType && v[0].style && !v.nodeType))); //we cannot check "nodeType" if the target is window from within an iframe, otherwise it will trigger a security error in some browsers like Firefox.
+			},
+			_autoCSS = function(vars, target) {
+				var css = {},
+					p;
+				for (p in vars) {
+					if (!_reservedProps[p] && (!(p in target) || p === "transform" || p === "x" || p === "y" || p === "width" || p === "height" || p === "className" || p === "border") && (!_plugins[p] || (_plugins[p] && _plugins[p]._autoCSS))) { //note: <img> elements contain read-only "x" and "y" properties. We should also prioritize editing css width/height rather than the element's properties.
+						css[p] = vars[p];
+						delete vars[p];
+					}
+				}
+				vars.css = css;
+			};
+
+		p = TweenLite.prototype = new Animation();
+		p.constructor = TweenLite;
+		p.kill()._gc = false;
+
+//----TweenLite defaults, overwrite management, and root updates ----------------------------------------------------
+
+		p.ratio = 0;
+		p._firstPT = p._targets = p._overwrittenProps = p._startAt = null;
+		p._notifyPluginsOfEnabled = p._lazy = false;
+
+		TweenLite.version = "1.18.0";
+		TweenLite.defaultEase = p._ease = new Ease(null, null, 1, 1);
+		TweenLite.defaultOverwrite = "auto";
+		TweenLite.ticker = _ticker;
+		TweenLite.autoSleep = 120;
+		TweenLite.lagSmoothing = function(threshold, adjustedLag) {
+			_ticker.lagSmoothing(threshold, adjustedLag);
+		};
+
+		TweenLite.selector = window.$ || window.jQuery || function(e) {
+			var selector = window.$ || window.jQuery;
+			if (selector) {
+				TweenLite.selector = selector;
+				return selector(e);
+			}
+			return (typeof(document) === "undefined") ? e : (document.querySelectorAll ? document.querySelectorAll(e) : document.getElementById((e.charAt(0) === "#") ? e.substr(1) : e));
+		};
+
+		var _lazyTweens = [],
+			_lazyLookup = {},
+			_numbersExp = /(?:(-|-=|\+=)?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/ig,
+			//_nonNumbersExp = /(?:([\-+](?!(\d|=)))|[^\d\-+=e]|(e(?![\-+][\d])))+/ig,
+			_setRatio = function(v) {
+				var pt = this._firstPT,
+					min = 0.000001,
+					val;
+				while (pt) {
+					val = !pt.blob ? pt.c * v + pt.s : v ? this.join("") : this.start;
+					if (pt.r) {
+						val = Math.round(val);
+					} else if (val < min) if (val > -min) { //prevents issues with converting very small numbers to strings in the browser
+						val = 0;
+					}
+					if (!pt.f) {
+						pt.t[pt.p] = val;
+					} else if (pt.fp) {
+						pt.t[pt.p](pt.fp, val);
+					} else {
+						pt.t[pt.p](val);
+					}
+					pt = pt._next;
+				}
+			},
+			//compares two strings (start/end), finds the numbers that are different and spits back an array representing the whole value but with the changing values isolated as elements. For example, "rgb(0,0,0)" and "rgb(100,50,0)" would become ["rgb(", 0, ",", 50, ",0)"]. Notice it merges the parts that are identical (performance optimization). The array also has a linked list of PropTweens attached starting with _firstPT that contain the tweening data (t, p, s, c, f, etc.). It also stores the starting value as a "start" property so that we can revert to it if/when necessary, like when a tween rewinds fully. If the quantity of numbers differs between the start and end, it will always prioritize the end value(s). The pt parameter is optional - it's for a PropTween that will be appended to the end of the linked list and is typically for actually setting the value after all of the elements have been updated (with array.join("")).
+			_blobDif = function(start, end, filter, pt) {
+				var a = [start, end],
+					charIndex = 0,
+					s = "",
+					color = 0,
+					startNums, endNums, num, i, l, nonNumbers, currentNum;
+				a.start = start;
+				if (filter) {
+					filter(a); //pass an array with the starting and ending values and let the filter do whatever it needs to the values.
+					start = a[0];
+					end = a[1];
+				}
+				a.length = 0;
+				startNums = start.match(_numbersExp) || [];
+				endNums = end.match(_numbersExp) || [];
+				if (pt) {
+					pt._next = null;
+					pt.blob = 1;
+					a._firstPT = pt; //apply last in the linked list (which means inserting it first)
+				}
+				l = endNums.length;
+				for (i = 0; i < l; i++) {
+					currentNum = endNums[i];
+					nonNumbers = end.substr(charIndex, end.indexOf(currentNum, charIndex)-charIndex);
+					s += (nonNumbers || !i) ? nonNumbers : ","; //note: SVG spec allows omission of comma/space when a negative sign is wedged between two numbers, like 2.5-5.3 instead of 2.5,-5.3 but when tweening, the negative value may switch to positive, so we insert the comma just in case.
+					charIndex += nonNumbers.length;
+					if (color) { //sense rgba() values and round them.
+						color = (color + 1) % 5;
+					} else if (nonNumbers.substr(-5) === "rgba(") {
+						color = 1;
+					}
+					if (currentNum === startNums[i] || startNums.length <= i) {
+						s += currentNum;
+					} else {
+						if (s) {
+							a.push(s);
+							s = "";
+						}
+						num = parseFloat(startNums[i]);
+						a.push(num);
+						a._firstPT = {_next: a._firstPT, t:a, p: a.length-1, s:num, c:((currentNum.charAt(1) === "=") ? parseInt(currentNum.charAt(0) + "1", 10) * parseFloat(currentNum.substr(2)) : (parseFloat(currentNum) - num)) || 0, f:0, r:(color && color < 4)};
+						//note: we don't set _prev because we'll never need to remove individual PropTweens from this list.
+					}
+					charIndex += currentNum.length;
+				}
+				s += end.substr(charIndex);
+				if (s) {
+					a.push(s);
+				}
+				a.setRatio = _setRatio;
+				return a;
+			},
+			//note: "funcParam" is only necessary for function-based getters/setters that require an extra parameter like getAttribute("width") and setAttribute("width", value). In this example, funcParam would be "width". Used by AttrPlugin for example.
+			_addPropTween = function(target, prop, start, end, overwriteProp, round, funcParam, stringFilter) {
+				var s = (start === "get") ? target[prop] : start,
+					type = typeof(target[prop]),
+					isRelative = (typeof(end) === "string" && end.charAt(1) === "="),
+					pt = {t:target, p:prop, s:s, f:(type === "function"), pg:0, n:overwriteProp || prop, r:round, pr:0, c:isRelative ? parseInt(end.charAt(0) + "1", 10) * parseFloat(end.substr(2)) : (parseFloat(end) - s) || 0},
+					blob, getterName;
+				if (type !== "number") {
+					if (type === "function" && start === "get") {
+						getterName = ((prop.indexOf("set") || typeof(target["get" + prop.substr(3)]) !== "function") ? prop : "get" + prop.substr(3));
+						pt.s = s = funcParam ? target[getterName](funcParam) : target[getterName]();
+					}
+					if (typeof(s) === "string" && (funcParam || isNaN(s))) {
+						//a blob (string that has multiple numbers in it)
+						pt.fp = funcParam;
+						blob = _blobDif(s, end, stringFilter || TweenLite.defaultStringFilter, pt);
+						pt = {t:blob, p:"setRatio", s:0, c:1, f:2, pg:0, n:overwriteProp || prop, pr:0}; //"2" indicates it's a Blob property tween. Needed for RoundPropsPlugin for example.
+					} else if (!isRelative) {
+						pt.c = (parseFloat(end) - parseFloat(s)) || 0;
+					}
+				}
+				if (pt.c) { //only add it to the linked list if there's a change.
+					if ((pt._next = this._firstPT)) {
+						pt._next._prev = pt;
+					}
+					this._firstPT = pt;
+					return pt;
+				}
+			},
+			_internals = TweenLite._internals = {isArray:_isArray, isSelector:_isSelector, lazyTweens:_lazyTweens, blobDif:_blobDif}, //gives us a way to expose certain private values to other GreenSock classes without contaminating tha main TweenLite object.
+			_plugins = TweenLite._plugins = {},
+			_tweenLookup = _internals.tweenLookup = {},
+			_tweenLookupNum = 0,
+			_reservedProps = _internals.reservedProps = {ease:1, delay:1, overwrite:1, onComplete:1, onCompleteParams:1, onCompleteScope:1, useFrames:1, runBackwards:1, startAt:1, onUpdate:1, onUpdateParams:1, onUpdateScope:1, onStart:1, onStartParams:1, onStartScope:1, onReverseComplete:1, onReverseCompleteParams:1, onReverseCompleteScope:1, onRepeat:1, onRepeatParams:1, onRepeatScope:1, easeParams:1, yoyo:1, immediateRender:1, repeat:1, repeatDelay:1, data:1, paused:1, reversed:1, autoCSS:1, lazy:1, onOverwrite:1, callbackScope:1, stringFilter:1},
+			_overwriteLookup = {none:0, all:1, auto:2, concurrent:3, allOnStart:4, preexisting:5, "true":1, "false":0},
+			_rootFramesTimeline = Animation._rootFramesTimeline = new SimpleTimeline(),
+			_rootTimeline = Animation._rootTimeline = new SimpleTimeline(),
+			_nextGCFrame = 30,
+			_lazyRender = _internals.lazyRender = function() {
+				var i = _lazyTweens.length,
+					tween;
+				_lazyLookup = {};
+				while (--i > -1) {
+					tween = _lazyTweens[i];
+					if (tween && tween._lazy !== false) {
+						tween.render(tween._lazy[0], tween._lazy[1], true);
+						tween._lazy = false;
+					}
+				}
+				_lazyTweens.length = 0;
+			};
+
+		_rootTimeline._startTime = _ticker.time;
+		_rootFramesTimeline._startTime = _ticker.frame;
+		_rootTimeline._active = _rootFramesTimeline._active = true;
+		setTimeout(_lazyRender, 1); //on some mobile devices, there isn't a "tick" before code runs which means any lazy renders wouldn't run before the next official "tick".
+
+		Animation._updateRoot = TweenLite.render = function() {
+				var i, a, p;
+				if (_lazyTweens.length) { //if code is run outside of the requestAnimationFrame loop, there may be tweens queued AFTER the engine refreshed, so we need to ensure any pending renders occur before we refresh again.
+					_lazyRender();
+				}
+				_rootTimeline.render((_ticker.time - _rootTimeline._startTime) * _rootTimeline._timeScale, false, false);
+				_rootFramesTimeline.render((_ticker.frame - _rootFramesTimeline._startTime) * _rootFramesTimeline._timeScale, false, false);
+				if (_lazyTweens.length) {
+					_lazyRender();
+				}
+				if (_ticker.frame >= _nextGCFrame) { //dump garbage every 120 frames or whatever the user sets TweenLite.autoSleep to
+					_nextGCFrame = _ticker.frame + (parseInt(TweenLite.autoSleep, 10) || 120);
+					for (p in _tweenLookup) {
+						a = _tweenLookup[p].tweens;
+						i = a.length;
+						while (--i > -1) {
+							if (a[i]._gc) {
+								a.splice(i, 1);
+							}
+						}
+						if (a.length === 0) {
+							delete _tweenLookup[p];
+						}
+					}
+					//if there are no more tweens in the root timelines, or if they're all paused, make the _timer sleep to reduce load on the CPU slightly
+					p = _rootTimeline._first;
+					if (!p || p._paused) if (TweenLite.autoSleep && !_rootFramesTimeline._first && _ticker._listeners.tick.length === 1) {
+						while (p && p._paused) {
+							p = p._next;
+						}
+						if (!p) {
+							_ticker.sleep();
+						}
+					}
+				}
+			};
+
+		_ticker.addEventListener("tick", Animation._updateRoot);
+
+		var _register = function(target, tween, scrub) {
+				var id = target._gsTweenID, a, i;
+				if (!_tweenLookup[id || (target._gsTweenID = id = "t" + (_tweenLookupNum++))]) {
+					_tweenLookup[id] = {target:target, tweens:[]};
+				}
+				if (tween) {
+					a = _tweenLookup[id].tweens;
+					a[(i = a.length)] = tween;
+					if (scrub) {
+						while (--i > -1) {
+							if (a[i] === tween) {
+								a.splice(i, 1);
+							}
+						}
+					}
+				}
+				return _tweenLookup[id].tweens;
+			},
+			_onOverwrite = function(overwrittenTween, overwritingTween, target, killedProps) {
+				var func = overwrittenTween.vars.onOverwrite, r1, r2;
+				if (func) {
+					r1 = func(overwrittenTween, overwritingTween, target, killedProps);
+				}
+				func = TweenLite.onOverwrite;
+				if (func) {
+					r2 = func(overwrittenTween, overwritingTween, target, killedProps);
+				}
+				return (r1 !== false && r2 !== false);
+			},
+			_applyOverwrite = function(target, tween, props, mode, siblings) {
+				var i, changed, curTween, l;
+				if (mode === 1 || mode >= 4) {
+					l = siblings.length;
+					for (i = 0; i < l; i++) {
+						if ((curTween = siblings[i]) !== tween) {
+							if (!curTween._gc) {
+								if (curTween._kill(null, target, tween)) {
+									changed = true;
+								}
+							}
+						} else if (mode === 5) {
+							break;
+						}
+					}
+					return changed;
+				}
+				//NOTE: Add 0.0000000001 to overcome floating point errors that can cause the startTime to be VERY slightly off (when a tween's time() is set for example)
+				var startTime = tween._startTime + _tinyNum,
+					overlaps = [],
+					oCount = 0,
+					zeroDur = (tween._duration === 0),
+					globalStart;
+				i = siblings.length;
+				while (--i > -1) {
+					if ((curTween = siblings[i]) === tween || curTween._gc || curTween._paused) {
+						//ignore
+					} else if (curTween._timeline !== tween._timeline) {
+						globalStart = globalStart || _checkOverlap(tween, 0, zeroDur);
+						if (_checkOverlap(curTween, globalStart, zeroDur) === 0) {
+							overlaps[oCount++] = curTween;
+						}
+					} else if (curTween._startTime <= startTime) if (curTween._startTime + curTween.totalDuration() / curTween._timeScale > startTime) if (!((zeroDur || !curTween._initted) && startTime - curTween._startTime <= 0.0000000002)) {
+						overlaps[oCount++] = curTween;
+					}
+				}
+
+				i = oCount;
+				while (--i > -1) {
+					curTween = overlaps[i];
+					if (mode === 2) if (curTween._kill(props, target, tween)) {
+						changed = true;
+					}
+					if (mode !== 2 || (!curTween._firstPT && curTween._initted)) {
+						if (mode !== 2 && !_onOverwrite(curTween, tween)) {
+							continue;
+						}
+						if (curTween._enabled(false, false)) { //if all property tweens have been overwritten, kill the tween.
+							changed = true;
+						}
+					}
+				}
+				return changed;
+			},
+			_checkOverlap = function(tween, reference, zeroDur) {
+				var tl = tween._timeline,
+					ts = tl._timeScale,
+					t = tween._startTime;
+				while (tl._timeline) {
+					t += tl._startTime;
+					ts *= tl._timeScale;
+					if (tl._paused) {
+						return -100;
+					}
+					tl = tl._timeline;
+				}
+				t /= ts;
+				return (t > reference) ? t - reference : ((zeroDur && t === reference) || (!tween._initted && t - reference < 2 * _tinyNum)) ? _tinyNum : ((t += tween.totalDuration() / tween._timeScale / ts) > reference + _tinyNum) ? 0 : t - reference - _tinyNum;
+			};
+
+
+//---- TweenLite instance methods -----------------------------------------------------------------------------
+
+		p._init = function() {
+			var v = this.vars,
+				op = this._overwrittenProps,
+				dur = this._duration,
+				immediate = !!v.immediateRender,
+				ease = v.ease,
+				i, initPlugins, pt, p, startVars;
+			if (v.startAt) {
+				if (this._startAt) {
+					this._startAt.render(-1, true); //if we've run a startAt previously (when the tween instantiated), we should revert it so that the values re-instantiate correctly particularly for relative tweens. Without this, a TweenLite.fromTo(obj, 1, {x:"+=100"}, {x:"-=100"}), for example, would actually jump to +=200 because the startAt would run twice, doubling the relative change.
+					this._startAt.kill();
+				}
+				startVars = {};
+				for (p in v.startAt) { //copy the properties/values into a new object to avoid collisions, like var to = {x:0}, from = {x:500}; timeline.fromTo(e, 1, from, to).fromTo(e, 1, to, from);
+					startVars[p] = v.startAt[p];
+				}
+				startVars.overwrite = false;
+				startVars.immediateRender = true;
+				startVars.lazy = (immediate && v.lazy !== false);
+				startVars.startAt = startVars.delay = null; //no nesting of startAt objects allowed (otherwise it could cause an infinite loop).
+				this._startAt = TweenLite.to(this.target, 0, startVars);
+				if (immediate) {
+					if (this._time > 0) {
+						this._startAt = null; //tweens that render immediately (like most from() and fromTo() tweens) shouldn't revert when their parent timeline's playhead goes backward past the startTime because the initial render could have happened anytime and it shouldn't be directly correlated to this tween's startTime. Imagine setting up a complex animation where the beginning states of various objects are rendered immediately but the tween doesn't happen for quite some time - if we revert to the starting values as soon as the playhead goes backward past the tween's startTime, it will throw things off visually. Reversion should only happen in TimelineLite/Max instances where immediateRender was false (which is the default in the convenience methods like from()).
+					} else if (dur !== 0) {
+						return; //we skip initialization here so that overwriting doesn't occur until the tween actually begins. Otherwise, if you create several immediateRender:true tweens of the same target/properties to drop into a TimelineLite or TimelineMax, the last one created would overwrite the first ones because they didn't get placed into the timeline yet before the first render occurs and kicks in overwriting.
+					}
+				}
+			} else if (v.runBackwards && dur !== 0) {
+				//from() tweens must be handled uniquely: their beginning values must be rendered but we don't want overwriting to occur yet (when time is still 0). Wait until the tween actually begins before doing all the routines like overwriting. At that time, we should render at the END of the tween to ensure that things initialize correctly (remember, from() tweens go backwards)
+				if (this._startAt) {
+					this._startAt.render(-1, true);
+					this._startAt.kill();
+					this._startAt = null;
+				} else {
+					if (this._time !== 0) { //in rare cases (like if a from() tween runs and then is invalidate()-ed), immediateRender could be true but the initial forced-render gets skipped, so there's no need to force the render in this context when the _time is greater than 0
+						immediate = false;
+					}
+					pt = {};
+					for (p in v) { //copy props into a new object and skip any reserved props, otherwise onComplete or onUpdate or onStart could fire. We should, however, permit autoCSS to go through.
+						if (!_reservedProps[p] || p === "autoCSS") {
+							pt[p] = v[p];
+						}
+					}
+					pt.overwrite = 0;
+					pt.data = "isFromStart"; //we tag the tween with as "isFromStart" so that if [inside a plugin] we need to only do something at the very END of a tween, we have a way of identifying this tween as merely the one that's setting the beginning values for a "from()" tween. For example, clearProps in CSSPlugin should only get applied at the very END of a tween and without this tag, from(...{height:100, clearProps:"height", delay:1}) would wipe the height at the beginning of the tween and after 1 second, it'd kick back in.
+					pt.lazy = (immediate && v.lazy !== false);
+					pt.immediateRender = immediate; //zero-duration tweens render immediately by default, but if we're not specifically instructed to render this tween immediately, we should skip this and merely _init() to record the starting values (rendering them immediately would push them to completion which is wasteful in that case - we'd have to render(-1) immediately after)
+					this._startAt = TweenLite.to(this.target, 0, pt);
+					if (!immediate) {
+						this._startAt._init(); //ensures that the initial values are recorded
+						this._startAt._enabled(false); //no need to have the tween render on the next cycle. Disable it because we'll always manually control the renders of the _startAt tween.
+						if (this.vars.immediateRender) {
+							this._startAt = null;
+						}
+					} else if (this._time === 0) {
+						return;
+					}
+				}
+			}
+			this._ease = ease = (!ease) ? TweenLite.defaultEase : (ease instanceof Ease) ? ease : (typeof(ease) === "function") ? new Ease(ease, v.easeParams) : _easeMap[ease] || TweenLite.defaultEase;
+			if (v.easeParams instanceof Array && ease.config) {
+				this._ease = ease.config.apply(ease, v.easeParams);
+			}
+			this._easeType = this._ease._type;
+			this._easePower = this._ease._power;
+			this._firstPT = null;
+
+			if (this._targets) {
+				i = this._targets.length;
+				while (--i > -1) {
+					if ( this._initProps( this._targets[i], (this._propLookup[i] = {}), this._siblings[i], (op ? op[i] : null)) ) {
+						initPlugins = true;
+					}
+				}
+			} else {
+				initPlugins = this._initProps(this.target, this._propLookup, this._siblings, op);
+			}
+
+			if (initPlugins) {
+				TweenLite._onPluginEvent("_onInitAllProps", this); //reorders the array in order of priority. Uses a static TweenPlugin method in order to minimize file size in TweenLite
+			}
+			if (op) if (!this._firstPT) if (typeof(this.target) !== "function") { //if all tweening properties have been overwritten, kill the tween. If the target is a function, it's probably a delayedCall so let it live.
+				this._enabled(false, false);
+			}
+			if (v.runBackwards) {
+				pt = this._firstPT;
+				while (pt) {
+					pt.s += pt.c;
+					pt.c = -pt.c;
+					pt = pt._next;
+				}
+			}
+			this._onUpdate = v.onUpdate;
+			this._initted = true;
+		};
+
+		p._initProps = function(target, propLookup, siblings, overwrittenProps) {
+			var p, i, initPlugins, plugin, pt, v;
+			if (target == null) {
+				return false;
+			}
+
+			if (_lazyLookup[target._gsTweenID]) {
+				_lazyRender(); //if other tweens of the same target have recently initted but haven't rendered yet, we've got to force the render so that the starting values are correct (imagine populating a timeline with a bunch of sequential tweens and then jumping to the end)
+			}
+
+			if (!this.vars.css) if (target.style) if (target !== window && target.nodeType) if (_plugins.css) if (this.vars.autoCSS !== false) { //it's so common to use TweenLite/Max to animate the css of DOM elements, we assume that if the target is a DOM element, that's what is intended (a convenience so that users don't have to wrap things in css:{}, although we still recommend it for a slight performance boost and better specificity). Note: we cannot check "nodeType" on the window inside an iframe.
+				_autoCSS(this.vars, target);
+			}
+			for (p in this.vars) {
+				v = this.vars[p];
+				if (_reservedProps[p]) {
+					if (v) if ((v instanceof Array) || (v.push && _isArray(v))) if (v.join("").indexOf("{self}") !== -1) {
+						this.vars[p] = v = this._swapSelfInParams(v, this);
+					}
+
+				} else if (_plugins[p] && (plugin = new _plugins[p]())._onInitTween(target, this.vars[p], this)) {
+
+					//t - target 		[object]
+					//p - property 		[string]
+					//s - start			[number]
+					//c - change		[number]
+					//f - isFunction	[boolean]
+					//n - name			[string]
+					//pg - isPlugin 	[boolean]
+					//pr - priority		[number]
+					this._firstPT = pt = {_next:this._firstPT, t:plugin, p:"setRatio", s:0, c:1, f:1, n:p, pg:1, pr:plugin._priority};
+					i = plugin._overwriteProps.length;
+					while (--i > -1) {
+						propLookup[plugin._overwriteProps[i]] = this._firstPT;
+					}
+					if (plugin._priority || plugin._onInitAllProps) {
+						initPlugins = true;
+					}
+					if (plugin._onDisable || plugin._onEnable) {
+						this._notifyPluginsOfEnabled = true;
+					}
+					if (pt._next) {
+						pt._next._prev = pt;
+					}
+
+				} else {
+					propLookup[p] = _addPropTween.call(this, target, p, "get", v, p, 0, null, this.vars.stringFilter);
+				}
+			}
+
+			if (overwrittenProps) if (this._kill(overwrittenProps, target)) { //another tween may have tried to overwrite properties of this tween before init() was called (like if two tweens start at the same time, the one created second will run first)
+				return this._initProps(target, propLookup, siblings, overwrittenProps);
+			}
+			if (this._overwrite > 1) if (this._firstPT) if (siblings.length > 1) if (_applyOverwrite(target, this, propLookup, this._overwrite, siblings)) {
+				this._kill(propLookup, target);
+				return this._initProps(target, propLookup, siblings, overwrittenProps);
+			}
+			if (this._firstPT) if ((this.vars.lazy !== false && this._duration) || (this.vars.lazy && !this._duration)) { //zero duration tweens don't lazy render by default; everything else does.
+				_lazyLookup[target._gsTweenID] = true;
+			}
+			return initPlugins;
+		};
+
+		p.render = function(time, suppressEvents, force) {
+			var prevTime = this._time,
+				duration = this._duration,
+				prevRawPrevTime = this._rawPrevTime,
+				isComplete, callback, pt, rawPrevTime;
+			if (time >= duration) {
+				this._totalTime = this._time = duration;
+				this.ratio = this._ease._calcEnd ? this._ease.getRatio(1) : 1;
+				if (!this._reversed ) {
+					isComplete = true;
+					callback = "onComplete";
+					force = (force || this._timeline.autoRemoveChildren); //otherwise, if the animation is unpaused/activated after it's already finished, it doesn't get removed from the parent timeline.
+				}
+				if (duration === 0) if (this._initted || !this.vars.lazy || force) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
+					if (this._startTime === this._timeline._duration) { //if a zero-duration tween is at the VERY end of a timeline and that timeline renders at its end, it will typically add a tiny bit of cushion to the render time to prevent rounding errors from getting in the way of tweens rendering their VERY end. If we then reverse() that timeline, the zero-duration tween will trigger its onReverseComplete even though technically the playhead didn't pass over it again. It's a very specific edge case we must accommodate.
+						time = 0;
+					}
+					if (time === 0 || prevRawPrevTime < 0 || (prevRawPrevTime === _tinyNum && this.data !== "isPause")) if (prevRawPrevTime !== time) { //note: when this.data is "isPause", it's a callback added by addPause() on a timeline that we should not be triggered when LEAVING its exact start time. In other words, tl.addPause(1).play(1) shouldn't pause.
+						force = true;
+						if (prevRawPrevTime > _tinyNum) {
+							callback = "onReverseComplete";
+						}
+					}
+					this._rawPrevTime = rawPrevTime = (!suppressEvents || time || prevRawPrevTime === time) ? time : _tinyNum; //when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration tween, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect. We set the _rawPrevTime to be a precise tiny number to indicate this scenario rather than using another property/variable which would increase memory usage. This technique is less readable, but more efficient.
+				}
+
+			} else if (time < 0.0000001) { //to work around occasional floating point math artifacts, round super small values to 0.
+				this._totalTime = this._time = 0;
+				this.ratio = this._ease._calcEnd ? this._ease.getRatio(0) : 0;
+				if (prevTime !== 0 || (duration === 0 && prevRawPrevTime > 0)) {
+					callback = "onReverseComplete";
+					isComplete = this._reversed;
+				}
+				if (time < 0) {
+					this._active = false;
+					if (duration === 0) if (this._initted || !this.vars.lazy || force) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
+						if (prevRawPrevTime >= 0 && !(prevRawPrevTime === _tinyNum && this.data === "isPause")) {
+							force = true;
+						}
+						this._rawPrevTime = rawPrevTime = (!suppressEvents || time || prevRawPrevTime === time) ? time : _tinyNum; //when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration tween, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect. We set the _rawPrevTime to be a precise tiny number to indicate this scenario rather than using another property/variable which would increase memory usage. This technique is less readable, but more efficient.
+					}
+				}
+				if (!this._initted) { //if we render the very beginning (time == 0) of a fromTo(), we must force the render (normal tweens wouldn't need to render at a time of 0 when the prevTime was also 0). This is also mandatory to make sure overwriting kicks in immediately.
+					force = true;
+				}
+			} else {
+				this._totalTime = this._time = time;
+
+				if (this._easeType) {
+					var r = time / duration, type = this._easeType, pow = this._easePower;
+					if (type === 1 || (type === 3 && r >= 0.5)) {
+						r = 1 - r;
+					}
+					if (type === 3) {
+						r *= 2;
+					}
+					if (pow === 1) {
+						r *= r;
+					} else if (pow === 2) {
+						r *= r * r;
+					} else if (pow === 3) {
+						r *= r * r * r;
+					} else if (pow === 4) {
+						r *= r * r * r * r;
+					}
+
+					if (type === 1) {
+						this.ratio = 1 - r;
+					} else if (type === 2) {
+						this.ratio = r;
+					} else if (time / duration < 0.5) {
+						this.ratio = r / 2;
+					} else {
+						this.ratio = 1 - (r / 2);
+					}
+
+				} else {
+					this.ratio = this._ease.getRatio(time / duration);
+				}
+			}
+
+			if (this._time === prevTime && !force) {
+				return;
+			} else if (!this._initted) {
+				this._init();
+				if (!this._initted || this._gc) { //immediateRender tweens typically won't initialize until the playhead advances (_time is greater than 0) in order to ensure that overwriting occurs properly. Also, if all of the tweening properties have been overwritten (which would cause _gc to be true, as set in _init()), we shouldn't continue otherwise an onStart callback could be called for example.
+					return;
+				} else if (!force && this._firstPT && ((this.vars.lazy !== false && this._duration) || (this.vars.lazy && !this._duration))) {
+					this._time = this._totalTime = prevTime;
+					this._rawPrevTime = prevRawPrevTime;
+					_lazyTweens.push(this);
+					this._lazy = [time, suppressEvents];
+					return;
+				}
+				//_ease is initially set to defaultEase, so now that init() has run, _ease is set properly and we need to recalculate the ratio. Overall this is faster than using conditional logic earlier in the method to avoid having to set ratio twice because we only init() once but renderTime() gets called VERY frequently.
+				if (this._time && !isComplete) {
+					this.ratio = this._ease.getRatio(this._time / duration);
+				} else if (isComplete && this._ease._calcEnd) {
+					this.ratio = this._ease.getRatio((this._time === 0) ? 0 : 1);
+				}
+			}
+			if (this._lazy !== false) { //in case a lazy render is pending, we should flush it because the new render is occurring now (imagine a lazy tween instantiating and then immediately the user calls tween.seek(tween.duration()), skipping to the end - the end render would be forced, and then if we didn't flush the lazy render, it'd fire AFTER the seek(), rendering it at the wrong time.
+				this._lazy = false;
+			}
+			if (!this._active) if (!this._paused && this._time !== prevTime && time >= 0) {
+				this._active = true;  //so that if the user renders a tween (as opposed to the timeline rendering it), the timeline is forced to re-render and align it with the proper time/frame on the next rendering cycle. Maybe the tween already finished but the user manually re-renders it as halfway done.
+			}
+			if (prevTime === 0) {
+				if (this._startAt) {
+					if (time >= 0) {
+						this._startAt.render(time, suppressEvents, force);
+					} else if (!callback) {
+						callback = "_dummyGS"; //if no callback is defined, use a dummy value just so that the condition at the end evaluates as true because _startAt should render AFTER the normal render loop when the time is negative. We could handle this in a more intuitive way, of course, but the render loop is the MOST important thing to optimize, so this technique allows us to avoid adding extra conditional logic in a high-frequency area.
+					}
+				}
+				if (this.vars.onStart) if (this._time !== 0 || duration === 0) if (!suppressEvents) {
+					this._callback("onStart");
+				}
+			}
+			pt = this._firstPT;
+			while (pt) {
+				if (pt.f) {
+					pt.t[pt.p](pt.c * this.ratio + pt.s);
+				} else {
+					pt.t[pt.p] = pt.c * this.ratio + pt.s;
+				}
+				pt = pt._next;
+			}
+
+			if (this._onUpdate) {
+				if (time < 0) if (this._startAt && time !== -0.0001) { //if the tween is positioned at the VERY beginning (_startTime 0) of its parent timeline, it's illegal for the playhead to go back further, so we should not render the recorded startAt values.
+					this._startAt.render(time, suppressEvents, force); //note: for performance reasons, we tuck this conditional logic inside less traveled areas (most tweens don't have an onUpdate). We'd just have it at the end before the onComplete, but the values should be updated before any onUpdate is called, so we ALSO put it here and then if it's not called, we do so later near the onComplete.
+				}
+				if (!suppressEvents) if (this._time !== prevTime || isComplete) {
+					this._callback("onUpdate");
+				}
+			}
+			if (callback) if (!this._gc || force) { //check _gc because there's a chance that kill() could be called in an onUpdate
+				if (time < 0 && this._startAt && !this._onUpdate && time !== -0.0001) { //-0.0001 is a special value that we use when looping back to the beginning of a repeated TimelineMax, in which case we shouldn't render the _startAt values.
+					this._startAt.render(time, suppressEvents, force);
+				}
+				if (isComplete) {
+					if (this._timeline.autoRemoveChildren) {
+						this._enabled(false, false);
+					}
+					this._active = false;
+				}
+				if (!suppressEvents && this.vars[callback]) {
+					this._callback(callback);
+				}
+				if (duration === 0 && this._rawPrevTime === _tinyNum && rawPrevTime !== _tinyNum) { //the onComplete or onReverseComplete could trigger movement of the playhead and for zero-duration tweens (which must discern direction) that land directly back on their start time, we don't want to fire again on the next render. Think of several addPause()'s in a timeline that forces the playhead to a certain spot, but what if it's already paused and another tween is tweening the "time" of the timeline? Each time it moves [forward] past that spot, it would move back, and since suppressEvents is true, it'd reset _rawPrevTime to _tinyNum so that when it begins again, the callback would fire (so ultimately it could bounce back and forth during that tween). Again, this is a very uncommon scenario, but possible nonetheless.
+					this._rawPrevTime = 0;
+				}
+			}
+		};
+
+		p._kill = function(vars, target, overwritingTween) {
+			if (vars === "all") {
+				vars = null;
+			}
+			if (vars == null) if (target == null || target === this.target) {
+				this._lazy = false;
+				return this._enabled(false, false);
+			}
+			target = (typeof(target) !== "string") ? (target || this._targets || this.target) : TweenLite.selector(target) || target;
+			var simultaneousOverwrite = (overwritingTween && this._time && overwritingTween._startTime === this._startTime && this._timeline === overwritingTween._timeline),
+				i, overwrittenProps, p, pt, propLookup, changed, killProps, record, killed;
+			if ((_isArray(target) || _isSelector(target)) && typeof(target[0]) !== "number") {
+				i = target.length;
+				while (--i > -1) {
+					if (this._kill(vars, target[i], overwritingTween)) {
+						changed = true;
+					}
+				}
+			} else {
+				if (this._targets) {
+					i = this._targets.length;
+					while (--i > -1) {
+						if (target === this._targets[i]) {
+							propLookup = this._propLookup[i] || {};
+							this._overwrittenProps = this._overwrittenProps || [];
+							overwrittenProps = this._overwrittenProps[i] = vars ? this._overwrittenProps[i] || {} : "all";
+							break;
+						}
+					}
+				} else if (target !== this.target) {
+					return false;
+				} else {
+					propLookup = this._propLookup;
+					overwrittenProps = this._overwrittenProps = vars ? this._overwrittenProps || {} : "all";
+				}
+
+				if (propLookup) {
+					killProps = vars || propLookup;
+					record = (vars !== overwrittenProps && overwrittenProps !== "all" && vars !== propLookup && (typeof(vars) !== "object" || !vars._tempKill)); //_tempKill is a super-secret way to delete a particular tweening property but NOT have it remembered as an official overwritten property (like in BezierPlugin)
+					if (overwritingTween && (TweenLite.onOverwrite || this.vars.onOverwrite)) {
+						for (p in killProps) {
+							if (propLookup[p]) {
+								if (!killed) {
+									killed = [];
+								}
+								killed.push(p);
+							}
+						}
+						if ((killed || !vars) && !_onOverwrite(this, overwritingTween, target, killed)) { //if the onOverwrite returned false, that means the user wants to override the overwriting (cancel it).
+							return false;
+						}
+					}
+
+					for (p in killProps) {
+						if ((pt = propLookup[p])) {
+							if (simultaneousOverwrite) { //if another tween overwrites this one and they both start at exactly the same time, yet this tween has already rendered once (for example, at 0.001) because it's first in the queue, we should revert the values to where they were at 0 so that the starting values aren't contaminated on the overwriting tween.
+								if (pt.f) {
+									pt.t[pt.p](pt.s);
+								} else {
+									pt.t[pt.p] = pt.s;
+								}
+								changed = true;
+							}
+							if (pt.pg && pt.t._kill(killProps)) {
+								changed = true; //some plugins need to be notified so they can perform cleanup tasks first
+							}
+							if (!pt.pg || pt.t._overwriteProps.length === 0) {
+								if (pt._prev) {
+									pt._prev._next = pt._next;
+								} else if (pt === this._firstPT) {
+									this._firstPT = pt._next;
+								}
+								if (pt._next) {
+									pt._next._prev = pt._prev;
+								}
+								pt._next = pt._prev = null;
+							}
+							delete propLookup[p];
+						}
+						if (record) {
+							overwrittenProps[p] = 1;
+						}
+					}
+					if (!this._firstPT && this._initted) { //if all tweening properties are killed, kill the tween. Without this line, if there's a tween with multiple targets and then you killTweensOf() each target individually, the tween would technically still remain active and fire its onComplete even though there aren't any more properties tweening.
+						this._enabled(false, false);
+					}
+				}
+			}
+			return changed;
+		};
+
+		p.invalidate = function() {
+			if (this._notifyPluginsOfEnabled) {
+				TweenLite._onPluginEvent("_onDisable", this);
+			}
+			this._firstPT = this._overwrittenProps = this._startAt = this._onUpdate = null;
+			this._notifyPluginsOfEnabled = this._active = this._lazy = false;
+			this._propLookup = (this._targets) ? {} : [];
+			Animation.prototype.invalidate.call(this);
+			if (this.vars.immediateRender) {
+				this._time = -_tinyNum; //forces a render without having to set the render() "force" parameter to true because we want to allow lazying by default (using the "force" parameter always forces an immediate full render)
+				this.render(-this._delay);
+			}
+			return this;
+		};
+
+		p._enabled = function(enabled, ignoreTimeline) {
+			if (!_tickerActive) {
+				_ticker.wake();
+			}
+			if (enabled && this._gc) {
+				var targets = this._targets,
+					i;
+				if (targets) {
+					i = targets.length;
+					while (--i > -1) {
+						this._siblings[i] = _register(targets[i], this, true);
+					}
+				} else {
+					this._siblings = _register(this.target, this, true);
+				}
+			}
+			Animation.prototype._enabled.call(this, enabled, ignoreTimeline);
+			if (this._notifyPluginsOfEnabled) if (this._firstPT) {
+				return TweenLite._onPluginEvent((enabled ? "_onEnable" : "_onDisable"), this);
+			}
+			return false;
+		};
+
+
+//----TweenLite static methods -----------------------------------------------------
+
+		TweenLite.to = function(target, duration, vars) {
+			return new TweenLite(target, duration, vars);
+		};
+
+		TweenLite.from = function(target, duration, vars) {
+			vars.runBackwards = true;
+			vars.immediateRender = (vars.immediateRender != false);
+			return new TweenLite(target, duration, vars);
+		};
+
+		TweenLite.fromTo = function(target, duration, fromVars, toVars) {
+			toVars.startAt = fromVars;
+			toVars.immediateRender = (toVars.immediateRender != false && fromVars.immediateRender != false);
+			return new TweenLite(target, duration, toVars);
+		};
+
+		TweenLite.delayedCall = function(delay, callback, params, scope, useFrames) {
+			return new TweenLite(callback, 0, {delay:delay, onComplete:callback, onCompleteParams:params, callbackScope:scope, onReverseComplete:callback, onReverseCompleteParams:params, immediateRender:false, lazy:false, useFrames:useFrames, overwrite:0});
+		};
+
+		TweenLite.set = function(target, vars) {
+			return new TweenLite(target, 0, vars);
+		};
+
+		TweenLite.getTweensOf = function(target, onlyActive) {
+			if (target == null) { return []; }
+			target = (typeof(target) !== "string") ? target : TweenLite.selector(target) || target;
+			var i, a, j, t;
+			if ((_isArray(target) || _isSelector(target)) && typeof(target[0]) !== "number") {
+				i = target.length;
+				a = [];
+				while (--i > -1) {
+					a = a.concat(TweenLite.getTweensOf(target[i], onlyActive));
+				}
+				i = a.length;
+				//now get rid of any duplicates (tweens of arrays of objects could cause duplicates)
+				while (--i > -1) {
+					t = a[i];
+					j = i;
+					while (--j > -1) {
+						if (t === a[j]) {
+							a.splice(i, 1);
+						}
+					}
+				}
+			} else {
+				a = _register(target).concat();
+				i = a.length;
+				while (--i > -1) {
+					if (a[i]._gc || (onlyActive && !a[i].isActive())) {
+						a.splice(i, 1);
+					}
+				}
+			}
+			return a;
+		};
+
+		TweenLite.killTweensOf = TweenLite.killDelayedCallsTo = function(target, onlyActive, vars) {
+			if (typeof(onlyActive) === "object") {
+				vars = onlyActive; //for backwards compatibility (before "onlyActive" parameter was inserted)
+				onlyActive = false;
+			}
+			var a = TweenLite.getTweensOf(target, onlyActive),
+				i = a.length;
+			while (--i > -1) {
+				a[i]._kill(vars, target);
+			}
+		};
+
+
+
+/*
+ * ----------------------------------------------------------------
+ * TweenPlugin   (could easily be split out as a separate file/class, but included for ease of use (so that people don't need to include another script call before loading plugins which is easy to forget)
+ * ----------------------------------------------------------------
+ */
+		var TweenPlugin = _class("plugins.TweenPlugin", function(props, priority) {
+					this._overwriteProps = (props || "").split(",");
+					this._propName = this._overwriteProps[0];
+					this._priority = priority || 0;
+					this._super = TweenPlugin.prototype;
+				}, true);
+
+		p = TweenPlugin.prototype;
+		TweenPlugin.version = "1.18.0";
+		TweenPlugin.API = 2;
+		p._firstPT = null;
+		p._addTween = _addPropTween;
+		p.setRatio = _setRatio;
+
+		p._kill = function(lookup) {
+			var a = this._overwriteProps,
+				pt = this._firstPT,
+				i;
+			if (lookup[this._propName] != null) {
+				this._overwriteProps = [];
+			} else {
+				i = a.length;
+				while (--i > -1) {
+					if (lookup[a[i]] != null) {
+						a.splice(i, 1);
+					}
+				}
+			}
+			while (pt) {
+				if (lookup[pt.n] != null) {
+					if (pt._next) {
+						pt._next._prev = pt._prev;
+					}
+					if (pt._prev) {
+						pt._prev._next = pt._next;
+						pt._prev = null;
+					} else if (this._firstPT === pt) {
+						this._firstPT = pt._next;
+					}
+				}
+				pt = pt._next;
+			}
+			return false;
+		};
+
+		p._roundProps = function(lookup, value) {
+			var pt = this._firstPT;
+			while (pt) {
+				if (lookup[this._propName] || (pt.n != null && lookup[ pt.n.split(this._propName + "_").join("") ])) { //some properties that are very plugin-specific add a prefix named after the _propName plus an underscore, so we need to ignore that extra stuff here.
+					pt.r = value;
+				}
+				pt = pt._next;
+			}
+		};
+
+		TweenLite._onPluginEvent = function(type, tween) {
+			var pt = tween._firstPT,
+				changed, pt2, first, last, next;
+			if (type === "_onInitAllProps") {
+				//sorts the PropTween linked list in order of priority because some plugins need to render earlier/later than others, like MotionBlurPlugin applies its effects after all x/y/alpha tweens have rendered on each frame.
+				while (pt) {
+					next = pt._next;
+					pt2 = first;
+					while (pt2 && pt2.pr > pt.pr) {
+						pt2 = pt2._next;
+					}
+					if ((pt._prev = pt2 ? pt2._prev : last)) {
+						pt._prev._next = pt;
+					} else {
+						first = pt;
+					}
+					if ((pt._next = pt2)) {
+						pt2._prev = pt;
+					} else {
+						last = pt;
+					}
+					pt = next;
+				}
+				pt = tween._firstPT = first;
+			}
+			while (pt) {
+				if (pt.pg) if (typeof(pt.t[type]) === "function") if (pt.t[type]()) {
+					changed = true;
+				}
+				pt = pt._next;
+			}
+			return changed;
+		};
+
+		TweenPlugin.activate = function(plugins) {
+			var i = plugins.length;
+			while (--i > -1) {
+				if (plugins[i].API === TweenPlugin.API) {
+					_plugins[(new plugins[i]())._propName] = plugins[i];
+				}
+			}
+			return true;
+		};
+
+		//provides a more concise way to define plugins that have no dependencies besides TweenPlugin and TweenLite, wrapping common boilerplate stuff into one function (added in 1.9.0). You don't NEED to use this to define a plugin - the old way still works and can be useful in certain (rare) situations.
+		_gsDefine.plugin = function(config) {
+			if (!config || !config.propName || !config.init || !config.API) { throw "illegal plugin definition."; }
+			var propName = config.propName,
+				priority = config.priority || 0,
+				overwriteProps = config.overwriteProps,
+				map = {init:"_onInitTween", set:"setRatio", kill:"_kill", round:"_roundProps", initAll:"_onInitAllProps"},
+				Plugin = _class("plugins." + propName.charAt(0).toUpperCase() + propName.substr(1) + "Plugin",
+					function() {
+						TweenPlugin.call(this, propName, priority);
+						this._overwriteProps = overwriteProps || [];
+					}, (config.global === true)),
+				p = Plugin.prototype = new TweenPlugin(propName),
+				prop;
+			p.constructor = Plugin;
+			Plugin.API = config.API;
+			for (prop in map) {
+				if (typeof(config[prop]) === "function") {
+					p[map[prop]] = config[prop];
+				}
+			}
+			Plugin.version = config.version;
+			TweenPlugin.activate([Plugin]);
+			return Plugin;
+		};
+
+
+		//now run through all the dependencies discovered and if any are missing, log that to the console as a warning. This is why it's best to have TweenLite load last - it can check all the dependencies for you.
+		a = window._gsQueue;
+		if (a) {
+			for (i = 0; i < a.length; i++) {
+				a[i]();
+			}
+			for (p in _defLookup) {
+				if (!_defLookup[p].func) {
+					window.console.log("GSAP encountered missing dependency: com.greensock." + p);
+				}
+			}
+		}
+
+		_tickerActive = false; //ensures that the first official animation forces a ticker.tick() to update the time when it is instantiated
+
+})((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenLite");

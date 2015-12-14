@@ -1,1 +1,74 @@
-function createTextMesh(e,t){var a=document.createElement("canvas"),n=3e4,i=40,l=a.getContext("2d");l.font=n/100+"pt GeoSans";var r=l.measureText(t).width;a.width=r+i,a.height=n/100+i;var d=new THREE.Texture(a);updateTextTexture(t,a,l,d,r);var h=new THREE.Mesh(new THREE.PlaneBufferGeometry(1,1),new THREE.MeshBasicMaterial({map:d,transparent:!0,blending:THREE.AdditiveBlending,depthWrite:!1}));return h.scale.y=a.height,h.scale.x=a.width,h.scale.multiplyScalar(.1*(e/100)),h.texture=d,h.canvas=a,h.ctx=l,h.textWidth=r,h}function updateTextTexture(e,t,a,n,i){var l=3e4,r=1e6;a.fillStyle="rgba(0,0,0,1)",a.fillRect(t.width/2-i/2-r/2,t.height/2-l/2+r/2,i+r,l+r),a.textAlign="center",a.textBaseline="middle",a.fillStyle="#ffffff",a.font=l/150+"pt Trebuchet MS",a.fillText(e,t.width/2,t.height/2),n.needsUpdate=!0}
+    function createTextMesh( size  ,  text ){
+  
+      var canvas  = document.createElement('canvas');
+
+
+      var fullSize = 30000;
+      var margin = 40;
+
+      var ctx     = canvas.getContext( '2d' ); 
+
+
+      ctx.font      = fullSize / 100 + "pt GeoSans";
+      var textWidth = ctx.measureText( text ).width;
+
+      canvas.width  = textWidth + margin;
+      canvas.height = fullSize / 100 + margin;
+
+     
+      // Creates a texture
+      var texture = new THREE.Texture(canvas);
+
+
+      updateTextTexture( text , canvas , ctx , texture , textWidth )
+
+
+      var mesh = new THREE.Mesh( 
+        new THREE.PlaneBufferGeometry( 1 , 1 ), 
+        new THREE.MeshBasicMaterial({ 
+          map: texture,
+          transparent: true,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false
+
+        })
+      );
+
+      mesh.scale.y = canvas.height;
+      mesh.scale.x = canvas.width;
+      mesh.scale.multiplyScalar( .1  * (size / 100));
+
+      mesh.texture = texture;
+      mesh.canvas = canvas;
+      mesh.ctx = ctx;
+      mesh.textWidth = textWidth;
+
+      return mesh;
+
+
+    }
+
+    function updateTextTexture( string , canvas , ctx , texture , textWidth ){
+
+      var fullSize = 30000;
+      var margin = 1000000;
+
+      ctx.fillStyle = "rgba(0,0,0,1)";
+      ctx.fillRect(
+          canvas.width / 2 - textWidth / 2 - margin / 2, 
+          canvas.height / 2 - fullSize / 2  + margin / 2, 
+          textWidth + margin, 
+          fullSize + margin
+      );
+
+      // Makes sure our text is centered
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#ffffff";
+      ctx.font      = fullSize / 150 + "pt Trebuchet MS";
+      ctx.fillText( string , canvas.width / 2, canvas.height / 2);
+
+
+      texture.needsUpdate = true;
+
+    }

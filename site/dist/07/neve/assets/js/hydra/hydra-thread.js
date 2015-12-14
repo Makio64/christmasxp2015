@@ -1,1 +1,117 @@
-function receiveMessage(e){return e.data.code?void self.eval(e.data.code):e.data.importScript?void importScripts(e.data.path):e.data.fn?void self[e.data.fn](e.data,e.data.id):e.data.message.fn?void self[e.data.message.fn](e.data.message,e.data.id):void 0}function post(e,s){e&&s||(s=e,e=null);var t={post:!0,id:s,message:e};self.postMessage(t)}function emit(e,s,t){if(t)self.postMessage(s,t);else{var a={emit:!0,evt:e,msg:s};self.postMessage(a)}}self.addEventListener("message",receiveMessage),_this=window=self,self.THREAD=!0;var Global={};console={log:function(e){self.postMessage({console:!0,message:e})}},Class=function(e,s){var t=this||self,a=e.toString(),n=a.match(/function ([^\(]+)/)[1],i=null;"function"==typeof s&&(i=s,s=null),s=(s||"").toLowerCase(),e.prototype.__call=function(){this.events&&this.events.scope(this)},s?"static"==s&&(t[n]=new e):(t[n]=e,i&&i())},Inherit=function(e,s,t){"undefined"==typeof t&&(t=e);var a=new s(t,!0),n={};for(var i in a)e[i]=a[i],n[i]=a[i];e.__call&&e.__call();for(i in a)e[i]&&n[i]&&e[i]!==n[i]&&(e["_"+i]=n[i]);a=n=null,e=s=t=null},Namespace=function(e){"string"==typeof e?this[e]={Class:this.Class}:e.Class=this.Class},Interface=function(e){var s=e.toString().match(/function ([^\(]+)/)[1];Hydra.INTERFACES[s]=e},defer=function(e){return setTimeout(e,1)};
+self.addEventListener('message', receiveMessage);
+
+_this = window = self;
+self.THREAD = true;
+
+var Global = {};
+
+function receiveMessage(e) {
+    if (e.data.code) {
+        self.eval(e.data.code);
+        return;
+    }
+    
+    if (e.data.importScript) {
+        importScripts(e.data.path);
+        return;
+    }
+
+    if (e.data.fn) {
+        self[e.data.fn](e.data, e.data.id);
+        return;
+    }
+    
+    if (e.data.message.fn) {
+        self[e.data.message.fn](e.data.message, e.data.id);
+        return;
+    }
+}
+
+function post(data, id) {
+    if (!(data && id)) {
+        id = data;
+        data = null;
+    }
+
+    var message = {post: true, id: id, message: data};
+    self.postMessage(message);
+}
+
+function emit(evt, msg, buffer) {
+    if (buffer) {
+        self.postMessage(msg, buffer);
+    } else {
+        var data = {emit: true, evt: evt, msg: msg};
+        self.postMessage(data);
+    }
+}
+
+console = {
+    log: function(message) {
+        self.postMessage({console: true, message: message});
+    }
+}
+
+Class = function(_class, _type) {
+    var _this = this || self;
+    var _string = _class.toString();
+    var _name = _string.match(/function ([^\(]+)/)[1];
+    var _static = null;
+
+    if (typeof _type === 'function') {
+        _static = _type;
+        _type = null;
+
+    }
+
+    _type = (_type || '').toLowerCase();
+
+    _class.prototype.__call = function() {
+        if (this.events) this.events.scope(this);
+    }
+
+    if (!_type) {
+        _this[_name] = _class;
+        if (_static) _static();
+    } else {
+        if (_type == 'static') {
+            _this[_name] = new _class();
+        }
+    }
+}
+
+Inherit = function(child, parent, param) {
+    if (typeof param === 'undefined') param = child;
+    var p = new parent(param, true);
+
+    var save = {};
+    for (var method in p) {
+        child[method] = p[method];
+        save[method] = p[method];
+    }
+
+    if (child.__call) child.__call();
+
+    for (method in p) {
+        if ((child[method] && save[method]) && child[method] !== save[method]) {
+            child['_'+method] = save[method];
+        }
+    }
+
+    p = save = null;
+    child = parent = param = null;
+}
+
+Namespace = function(name) {
+    if (typeof name === 'string') this[name] = {Class: this.Class};
+    else name.Class = this.Class;
+}
+
+Interface = function(display) {
+    var name = display.toString().match(/function ([^\(]+)/)[1];
+    Hydra.INTERFACES[name] = display;
+}
+
+defer = function(callback) {
+    return setTimeout(callback, 1);
+}

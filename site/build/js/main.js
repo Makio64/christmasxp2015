@@ -1351,270 +1351,248 @@ var Line = require("xmas/home/Line");
 var scrollEmul = require("xmas/core/scrollEmul");
 
 var Home = (function (_PIXI$Container) {
-  _inherits(Home, _PIXI$Container);
+	_inherits(Home, _PIXI$Container);
 
-  function Home() {
-    _classCallCheck(this, Home);
+	function Home() {
+		_classCallCheck(this, Home);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Home).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Home).call(this));
 
-    _this._idx = 0;
-    _this._idxToHide = 0;
+		_this._idx = 0;
+		_this._idxToHide = 0;
+		_this.accelerationY = 0;
 
-    _this._isShown = false;
+		_this._isShown = false;
 
-    _this._yLast = 0;
+		_this._yLast = 0;
 
-    _this._hLine = config.sizes.entry.h + 75;
+		_this._hLine = config.sizes.entry.h + 75;
 
-    if (browsers.mobile) {
-      _this.scale.set(.5, .5);
-    }
+		if (browsers.mobile) {
+			_this.scale.set(.5, .5);
+		}
 
-    _this._yMin = 0;
-    _this._yMax = 205;
-    _this._yTo = _this._yMax;
-    scrollEmul.setHeight(_this._yMin);
+		_this._yMin = 0;
+		_this._yMax = 205;
+		_this._yTo = _this._yMax;
+		scrollEmul.setHeight(_this._yMin);
 
-    _this._cntLines = new PIXI.Container();
-    _this._cntLines.y = _this._yTo;
-    _this.addChild(_this._cntLines);
+		_this._cntLines = new PIXI.Container();
+		_this._cntLines.y = _this._yTo;
+		_this.addChild(_this._cntLines);
 
-    _this._createLines();
+		_this._createLines();
 
-    _this._binds = {};
-    _this._binds.onResize = _this._onResize.bind(_this);
-    // this._binds.onMouseScroll = this._onMouseScroll.bind( this )
-    _this._binds.onTouchDown = _this._onTouchDown.bind(_this);
-    _this._binds.onTouchMove = _this._onTouchMove.bind(_this);
-    _this._binds.onTouchUp = _this._onTouchUp.bind(_this);
-    _this._binds.onScroll = _this._onScroll.bind(_this);
-    _this._binds.onUpdate = _this._onUpdate.bind(_this);
-    return _this;
-  }
+		_this._binds = {};
+		_this._binds.onResize = _this._onResize.bind(_this);
+		_this._binds.onTouchDown = _this._onTouchDown.bind(_this);
+		_this._binds.onTouchMove = _this._onTouchMove.bind(_this);
+		_this._binds.onTouchUp = _this._onTouchUp.bind(_this);
+		_this._binds.onScroll = _this._onScroll.bind(_this);
+		_this._binds.onUpdate = _this._onUpdate.bind(_this);
+		return _this;
+	}
 
-  _createClass(Home, [{
-    key: "_onTouchDown",
-    value: function _onTouchDown(e) {
-      this._yLast = e.y;
-    }
-  }, {
-    key: "_onTouchMove",
-    value: function _onTouchMove(e) {
-      var dy = e.y - this._yLast;
-      this._yTo += dy;
-      this._yTo = uMaths.clamp(this._yTo, this._yMin + this._hLine + 50, this._yMax);
-      this._yLast = e.y;
-    }
-  }, {
-    key: "_onTouchUp",
-    value: function _onTouchUp(e) {}
-  }, {
-    key: "_onResize",
-    value: function _onResize() {
-      // let w = 980
-      // if( stage.width < 1000 ) {
-      // w = 880
-      // }
-      var w = 1320;
-      this._cntLines.x = stage.width - w >> 1;
-      if (browsers.tablet || browsers.mobile) {
-        this._cntLines.x = 10;
-        this._yMin = -26 * this._hLine + stage.height;
-      } else {
-        this._yMin = -26 * this._hLine - this._yMax;
-        scrollEmul.setHeight(-this._yMin);
-      }
+	_createClass(Home, [{
+		key: "_onTouchDown",
+		value: function _onTouchDown(e) {
+			this._yLast = e.y;
+		}
+	}, {
+		key: "_onTouchMove",
+		value: function _onTouchMove(e) {
+			var dy = e.y - this._yLast;
+			this.accelerationY += Math.max(-15, Math.min(15, dy));
+			this._yLast = e.y;
+		}
+	}, {
+		key: "_onTouchUp",
+		value: function _onTouchUp(e) {}
+	}, {
+		key: "_onResize",
+		value: function _onResize() {
+			var w = 1320;
+			this._cntLines.x = stage.width - w >> 1;
+			if (w > window.innerWidth || browsers.tablet || browsers.mobile) {
+				this._cntLines.x = 10;
+				this._yMin = -26 * this._hLine + stage.height;
+			}
 
-      this._updateLines();
+			if (!browsers.tablet && !browsers.mobile) {
+				scrollEmul.setHeight(-this._yMin);
+			}
 
-      this._countLinesVisible = Math.ceil((stage.height - this._yMax) / this._hLine);
-      this._countLinesVisible += 1;
+			this._updateLines();
 
-      this._updateVisibles();
-    }
-  }, {
-    key: "_updateLines",
-    value: function _updateLines() {
-      var n = this._lines.length;
-      for (var i = 0; i < n; i++) {
-        this._lines[i].updateBgLine(this._cntLines.x);
-      }
-    }
+			this._countLinesVisible = Math.ceil(stage.height / this._hLine);
+			this._countLinesVisible += 1;
 
-    // _onMouseScroll( e ) {
-    //   e.preventDefault()
+			this._updateVisibles();
+		}
+	}, {
+		key: "_updateLines",
+		value: function _updateLines() {
+			var n = this._lines.length;
+			for (var i = 0; i < n; i++) {
+				this._lines[i].updateBgLine(this._cntLines.x);
+			}
+		}
 
-    //   this._isDragDrop = false
-    //   this._yTo += -e.deltaY * .4
-    //   this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
-    // }
+		// _onMouseScroll( e ) {
+		//   e.preventDefault()
 
-  }, {
-    key: "_onScroll",
-    value: function _onScroll(yTo) {
-      this._isDragDrop = false;
-      this._yTo = -yTo + this._yMax;
-      // this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
-    }
-  }, {
-    key: "_onUpdate",
-    value: function _onUpdate() {
-      var dy = this._yTo - this._cntLines.y;
-      this._cntLines.y += dy * .25;
+		//   this._isDragDrop = false
+		//   this._yTo += -e.deltaY * .4
+		//   this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
+		// }
 
-      var idxToHide = -((this._cntLines.y - this._hLine * .5 - 25 - this._yMax) / this._hLine >> 0);
-      if (idxToHide != this._idxToHide) {
-        if (this._idxToHide < idxToHide) {
-          this._hideLine(idxToHide);
-        } else {
-          this._showLine(idxToHide, true);
-        }
-        this._idxToHide = idxToHide;
-      }
+	}, {
+		key: "_onScroll",
+		value: function _onScroll(yTo) {
+			this._isDragDrop = false;
+			this._yTo = -yTo + this._yMax;
+			// this._yTo = uMaths.clamp( this._yTo, this._yMin, this._yMax )
+		}
+	}, {
+		key: "_onUpdate",
+		value: function _onUpdate() {
+			var dy = this._yTo - this._cntLines.y;
+			this._cntLines.y += dy * .25;
 
-      var idx = -(this._cntLines.y - this._yMax) / this._hLine >> 0;
-      if (idx != this._idx) {
-        this._idx = idx;
-        this._updateVisibles();
-      }
-    }
-  }, {
-    key: "_hideLine",
-    value: function _hideLine(idx) {
-      this._lines[idx - 1].hide();
-      // TweenLite.to( this._lines[ idx - 1 ], .6, {
-      //   alpha: 0,
-      //   ease: Quart.easeInOut
-      // })
-    }
-  }, {
-    key: "_showLine",
-    value: function _showLine(idx, fast) {
-      this._lines[idx].show(0, fast);
-      // TweenLite.to( this._lines[ idx ], .6, {
-      //   alpha: 1,
-      //   ease: Quart.easeInOut
-      // })
-    }
-  }, {
-    key: "_updateVisibles",
-    value: function _updateVisibles() {
-      var line = null;
-      var start = this._idx - 1;
-      var end = this._idx + this._countLinesVisible;
-      for (var i = 0; i < 25; i++) {
-        line = this._lines[i];
-        if (i >= start && i < end) {
-          if (!line.parent) {
-            line.bindEvents();
-            this._cntLines.addChild(line);
-            if (this._isShown && !line.isShown && (i == start || i == end - 1)) {
-              line.show(.2, true);
-            }
-          }
-        } else {
-          if (line.parent) {
-            line.unbindEvents();
-            this._cntLines.removeChild(line);
-          }
-        }
-      }
-    }
-  }, {
-    key: "_createLines",
-    value: function _createLines() {
-      var tmpData = [4, 3];
+			this._yTo += this.accelerationY;
+			this._yTo = uMaths.clamp(this._yTo, this._yMin + this._hLine + 50, this._yMax);
+			this.accelerationY *= .9;
 
-      var yAdd = this._hLine;
+			this._idx = Math.floor((this._yMax - this._cntLines.y) / this._hLine);
+			this._updateVisibles();
+		}
+	}, {
+		key: "_hideLine",
+		value: function _hideLine(idx) {
+			this._lines[idx - 1].hide();
+		}
+	}, {
+		key: "_showLine",
+		value: function _showLine(idx, fast) {
+			this._lines[idx].show(0, fast);
+		}
+	}, {
+		key: "_updateVisibles",
+		value: function _updateVisibles() {
+			var line = null;
+			var start = this._idx;
+			var end = this._idx + this._countLinesVisible;
+			for (var i = 0; i < 25; i++) {
+				line = this._lines[i];
+				if (i >= start && i < end) {
+					if (!line.parent) {
+						this._cntLines.addChild(line);
+					}
+					if (this._isShown && !line.isShown && (i == start || i == end - 1)) {
+						line.show(.2, true);
+					}
+				} else {
+					if (line.parent) {
+						// TODO should be call only when needed
+						line.hide();
+					}
+				}
+			}
+		}
+	}, {
+		key: "_createLines",
+		value: function _createLines() {
+			var tmpData = [4, 3];
 
-      this._lines = [];
-      var line = null;
+			var yAdd = this._hLine;
 
-      var py = 0;
-      var i = 0;
-      var n = tmpData.length;
-      for (; i < n; i++) {
-        line = new Line(i + 1, tmpData[i]);
-        line.y = py;
-        this._lines.push(line);
-        // this._cntLines.addChild( line )
+			this._lines = [];
+			var line = null;
 
-        py += yAdd;
-      }
+			var py = 0;
+			var i = 0;
+			var n = tmpData.length;
+			for (; i < n; i++) {
+				line = new Line(i + 1, tmpData[i]);
+				line.y = py;
+				this._lines.push(line);
+				// this._cntLines.addChild( line )
 
-      for (i = n; i < 25; i++) {
-        line = new Line(i + 1);
-        line.y = py;
-        this._lines.push(line);
-        // this._cntLines.addChild( line )
+				py += yAdd;
+			}
 
-        py += yAdd;
-      }
-    }
-  }, {
-    key: "bindEvents",
-    value: function bindEvents() {
-      stage.on("resize", this._binds.onResize);
-      this._onResize();
+			for (i = n; i < 25; i++) {
+				line = new Line(i + 1);
+				line.y = py;
+				this._lines.push(line);
+				// this._cntLines.addChild( line )
 
-      if (browsers.mobile || browsers.tablet) {
-        interactions.on(document.body, "down", this._binds.onTouchDown);
-        interactions.on(document.body, "move", this._binds.onTouchMove);
-        interactions.on(document.body, "up", this._binds.onTouchUp);
-      } else {
-        scrollEmul.on("change", this._binds.onScroll);
-      }
+				py += yAdd;
+			}
+		}
+	}, {
+		key: "bindEvents",
+		value: function bindEvents() {
+			stage.on("resize", this._binds.onResize);
+			this._onResize();
 
-      // window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
+			if (browsers.mobile || browsers.tablet) {
+				interactions.on(document.body, "down", this._binds.onTouchDown);
+				interactions.on(document.body, "move", this._binds.onTouchMove);
+				interactions.on(document.body, "up", this._binds.onTouchUp);
+			} else {
+				scrollEmul.on("change", this._binds.onScroll);
+			}
 
-      loop.add(this._binds.onUpdate);
-    }
-  }, {
-    key: "unbindEvents",
-    value: function unbindEvents() {
-      stage.off("resize", this._binds.onResize);
+			// window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
-      if (browsers.mobile || browsers.tablet) {
-        interactions.off(document.body, "down", this._binds.onTouchDown);
-        interactions.off(document.body, "move", this._binds.onTouchMove);
-        interactions.off(document.body, "up", this._binds.onTouchUp);
-      } else {
-        scrollEmul.off("change", this._binds.onScroll);
-      }
+			loop.add(this._binds.onUpdate);
+		}
+	}, {
+		key: "unbindEvents",
+		value: function unbindEvents() {
+			stage.off("resize", this._binds.onResize);
 
-      // window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
+			if (browsers.mobile || browsers.tablet) {
+				interactions.off(document.body, "down", this._binds.onTouchDown);
+				interactions.off(document.body, "move", this._binds.onTouchMove);
+				interactions.off(document.body, "up", this._binds.onTouchUp);
+			} else {
+				scrollEmul.off("change", this._binds.onScroll);
+			}
 
-      loop.remove(this._binds.onUpdate);
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      this._isShown = true;
+			// window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
 
-      pixi.stage.addChildAt(this, 0);
+			loop.remove(this._binds.onUpdate);
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			this._isShown = true;
 
-      var n = this._lines.length;
-      for (var i = 0; i < this._countLinesVisible; i++) {
-        this._lines[i].show(i * .08);
-      }
+			pixi.stage.addChildAt(this, 0);
 
-      TweenLite.set(this, {
-        delay: 2,
-        onComplete: this.bindEvents.bind(this)
-      });
+			var n = this._lines.length;
+			for (var i = 0; i < this._countLinesVisible; i++) {
+				this._lines[i].show(i * .08);
+			}
 
-      this._onResize();
-    }
-  }, {
-    key: "hide",
-    value: function hide(cb) {
-      pixi.stage.removeChild(this);
-      cb();
-    }
-  }]);
+			TweenLite.set(this, {
+				delay: 2,
+				onComplete: this.bindEvents.bind(this)
+			});
 
-  return Home;
+			this._onResize();
+		}
+	}, {
+		key: "hide",
+		value: function hide(cb) {
+			pixi.stage.removeChild(this);
+			cb();
+		}
+	}]);
+
+	return Home;
 })(PIXI.Container);
 
 module.exports = Home;
@@ -1637,280 +1615,287 @@ var Entry = require("xmas/home/entry/Entry");
 var uXmasTexts = require("xmas/utils/texts");
 
 var Line = (function (_PIXI$Container) {
-  _inherits(Line, _PIXI$Container);
+	_inherits(Line, _PIXI$Container);
 
-  function Line(idx) {
-    var count = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+	function Line(idx) {
+		var count = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-    _classCallCheck(this, Line);
+		_classCallCheck(this, Line);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Line).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Line).call(this));
 
-    _this._idx = idx;
-    _this._dataEntries = config.data.days[_this._idx];
-    _this._count = _this._dataEntries ? _this._dataEntries.length : 0;
+		_this._idx = idx;
+		_this._dataEntries = config.data.days[_this._idx];
+		_this._count = _this._dataEntries ? _this._dataEntries.length : 0;
 
-    _this.isShown = false;
+		_this.isShown = false;
 
-    _this._createBgLine();
-    _this._createTitle();
+		_this._createBgLine();
+		_this._createTitle();
 
-    _this._cntEntries = new PIXI.Container();
-    _this._cntEntries.x = 218;
-    _this.addChild(_this._cntEntries);
-    if (_this._count > 0) {
-      _this._createEntries();
-    } else {
-      _this._createDummy();
-    }
-    return _this;
-  }
+		_this._cntEntries = new PIXI.Container();
+		_this._cntEntries.x = 218;
+		_this.addChild(_this._cntEntries);
+		if (_this._count > 0) {
+			_this._createEntries();
+		} else {
+			_this._createDummy();
+		}
+		return _this;
+	}
 
-  _createClass(Line, [{
-    key: "_createBgLine",
-    value: function _createBgLine() {
-      this._bgLine = new PIXI.Graphics();
-      this._bgLine.y = 25;
-      this._bgLine.alpha = 0;
-      this.addChild(this._bgLine);
+	_createClass(Line, [{
+		key: "_createBgLine",
+		value: function _createBgLine() {
+			this._bgLine = new PIXI.Graphics();
+			this._bgLine.y = 25;
+			this._bgLine.alpha = 0;
+			this.addChild(this._bgLine);
 
-      this._isBgLineSet = false;
-    }
-  }, {
-    key: "updateBgLine",
-    value: function updateBgLine(x) {
-      var w = stage.width;
-      this._bgLine.clear();
-      this._bgLine.lineStyle(1, 0xffffff);
-      if (this._idx % 2) {
-        if (!this._isBgLineSet) {
-          this._y0 = -25 + Math.random() * 50 >> 0;
-          this._y1 = 175 + Math.random() * 50 >> 0;
-          this._y2 = 50 + Math.random() * 50 >> 0;
-        }
-        this._bgLine.moveTo(-x, this._y0);
-        this._bgLine.quadraticCurveTo(w * .25, this._y1, w, this._y2);
-      } else {
-        if (!this._isBgLineSet) {
-          this._y0 = 100 + Math.random() * 40 >> 0;
-          this._y1 = -50 - Math.random() * 40 >> 0;
-          this._y2 = 175 + Math.random() * 75 >> 0;
-        }
-        this._bgLine.moveTo(-x, this._y0);
-        this._bgLine.quadraticCurveTo(w * .75, this._y1, w, this._y2);
-      }
-      this._isBgLineSet = true;
-    }
-  }, {
-    key: "_createTitle",
-    value: function _createTitle() {
-      this._cntTitle = new PIXI.Container();
-      this._cntTitle.x = 35;
-      this._cntTitle.y = 60;
+			this._isBgLineSet = false;
+		}
+	}, {
+		key: "updateBgLine",
+		value: function updateBgLine(x) {
+			var w = stage.width;
+			this._bgLine.clear();
+			this._bgLine.lineStyle(1, 0xffffff);
+			if (this._idx % 2) {
+				if (!this._isBgLineSet) {
+					this._y0 = -25 + Math.random() * 50 >> 0;
+					this._y1 = 175 + Math.random() * 50 >> 0;
+					this._y2 = 50 + Math.random() * 50 >> 0;
+				}
+				this._bgLine.moveTo(-x, this._y0);
+				this._bgLine.quadraticCurveTo(w * .25, this._y1, w, this._y2);
+			} else {
+				if (!this._isBgLineSet) {
+					this._y0 = 100 + Math.random() * 40 >> 0;
+					this._y1 = -50 - Math.random() * 40 >> 0;
+					this._y2 = 175 + Math.random() * 75 >> 0;
+				}
+				this._bgLine.moveTo(-x, this._y0);
+				this._bgLine.quadraticCurveTo(w * .75, this._y1, w, this._y2);
+			}
+			this._isBgLineSet = true;
+		}
+	}, {
+		key: "_createTitle",
+		value: function _createTitle() {
+			this._cntTitle = new PIXI.Container();
+			this._cntTitle.x = 35;
+			this._cntTitle.y = 60;
 
-      var cntLeft = new PIXI.Container();
-      cntLeft.y = 31;
-      this._cntTitle.addChild(cntLeft);
+			var cntLeft = new PIXI.Container();
+			cntLeft.y = 31;
+			this._cntTitle.addChild(cntLeft);
 
-      if (this._idx == 1) {
-        this._cntTfDay = uXmasTexts.create("DAY", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 1);
-        this._cntTfDay.alpha = 0;
-        cntLeft.addChild(this._cntTfDay);
-      }
+			if (this._idx == 1) {
+				this._cntTfDay = uXmasTexts.create("DAY", { font: "30px " + config.fonts.bold, fill: config.colors.red }, 1);
+				this._cntTfDay.alpha = 0;
+				cntLeft.addChild(this._cntTfDay);
+			}
 
-      this._line = new PIXI.Graphics();
-      this._line.x = 30;
-      this._line.y = 39;
-      this._line.lineStyle(1, config.colors.blue);
-      this._line.moveTo(-30, 0);
-      this._line.lineTo(0, 0);
-      this._line.scale.x = 0;
-      cntLeft.addChild(this._line);
+			this._line = new PIXI.Graphics();
+			this._line.x = 30;
+			this._line.y = 39;
+			this._line.lineStyle(1, config.colors.blue);
+			this._line.moveTo(-30, 0);
+			this._line.lineTo(0, 0);
+			this._line.scale.x = 0;
+			cntLeft.addChild(this._line);
 
-      this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "180px " + config.fonts.bold, fill: config.colors.red });
-      this._cntTfNumber.x = 54;
-      this._cntTfNumber.alpha = 0;
-      this._cntTitle.addChild(this._cntTfNumber);
+			this._cntTfNumber = uXmasTexts.create(this._idx + "", { font: "180px " + config.fonts.bold, fill: config.colors.red });
+			this._cntTfNumber.x = 54;
+			this._cntTfNumber.alpha = 0;
+			this._cntTitle.addChild(this._cntTfNumber);
 
-      this.addChild(this._cntTitle);
-    }
-  }, {
-    key: "_createEntries",
-    value: function _createEntries() {
-      var as = [0, Math.PI * .5, 0, Math.PI * .5];
+			this.addChild(this._cntTitle);
+		}
+	}, {
+		key: "_createEntries",
+		value: function _createEntries() {
+			var as = [0, Math.PI * .5, 0, Math.PI * .5];
 
-      var px = 0;
-      var yTime = 0;
-      var entry = null;
-      for (var i = 0; i < this._count; i++) {
-        entry = new Entry(i + 1, this._dataEntries[i]);
-        entry.x += px;
-        entry.y = Math.sin(as[i]) * 38 >> 0;
-        this._cntEntries.addChild(entry);
+			var px = 0;
+			var yTime = 0;
+			var entry = null;
+			for (var i = 0; i < this._count; i++) {
+				entry = new Entry(i + 1, this._dataEntries[i]);
+				entry.x += px;
+				entry.y = Math.sin(as[i]) * 38 >> 0;
+				this._cntEntries.addChild(entry);
 
-        px += config.sizes.entry.w + 60;
+				px += config.sizes.entry.w + 60;
 
-        yTime += Math.PI * .75;
-      }
-    }
-  }, {
-    key: "_createDummy",
-    value: function _createDummy() {
-      var entry = new Entry();
-      this._cntEntries.addChild(entry);
-    }
-  }, {
-    key: "bindEvents",
-    value: function bindEvents() {
-      var n = this._cntEntries.children.length;
-      for (var i = 0; i < n; i++) {
-        this._cntEntries.children[i].bindEvents();
-      }
-    }
-  }, {
-    key: "unbindEvents",
-    value: function unbindEvents() {
-      var n = this._cntEntries.children.length;
-      for (var i = 0; i < n; i++) {
-        this._cntEntries.children[i].unbindEvents();
-      }
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-      var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+				yTime += Math.PI * .75;
+			}
+		}
+	}, {
+		key: "_createDummy",
+		value: function _createDummy() {
+			var entry = new Entry();
+			this._cntEntries.addChild(entry);
+		}
+	}, {
+		key: "bindEvents",
+		value: function bindEvents() {
+			var n = this._cntEntries.children.length;
+			for (var i = 0; i < n; i++) {
+				this._cntEntries.children[i].bindEvents();
+			}
+		}
+	}, {
+		key: "unbindEvents",
+		value: function unbindEvents() {
+			var n = this._cntEntries.children.length;
+			for (var i = 0; i < n; i++) {
+				this._cntEntries.children[i].unbindEvents();
+			}
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-      if (this.isShown) {
-        return;
-      }
-      this.isShown = true;
+			if (this.isShown) {
+				return;
+			}
+			this.bindEvents();
+			this.isShown = true;
 
-      var timing = fast ? .6 : .8;
+			var timing = fast ? .6 : .8;
 
-      if (this._idx == 1) {
-        var letter = null;
-        var n = this._cntTfDay.children.length;
-        for (var i = 0; i < n; i++) {
-          letter = this._cntTfDay.children[i];
-          letter.alpha = 0;
-          TweenLite.to(letter, timing, {
-            delay: delay + .1 + (n - i) * .1,
-            alpha: 1,
-            ease: Cubic.easeInOut
-          });
-        }
-        TweenLite.set(this._cntTfDay, {
-          delay: delay + .04,
-          alpha: 1
-        });
-      }
-      TweenLite.to(this._line.scale, timing, {
-        delay: delay + .04,
-        x: 1,
-        ease: Cubic.easeInOut
-      });
+			if (this._idx == 1) {
+				var letter = null;
+				var n = this._cntTfDay.children.length;
+				for (var i = 0; i < n; i++) {
+					letter = this._cntTfDay.children[i];
+					letter.alpha = 0;
+					TweenLite.to(letter, timing, {
+						delay: delay + .1 + (n - i) * .1,
+						alpha: 1,
+						ease: Cubic.easeInOut
+					});
+				}
+				TweenLite.set(this._cntTfDay, {
+					delay: delay + .04,
+					alpha: 1
+				});
+			}
+			TweenLite.to(this._line.scale, timing, {
+				delay: delay + .04,
+				x: 1,
+				ease: Cubic.easeInOut
+			});
 
-      TweenLite.to(this._bgLine, 2 * timing, {
-        delay: delay,
-        alpha: 1,
-        ease: Cubic.easeInOut
-      });
+			TweenLite.to(this._bgLine, 2 * timing, {
+				delay: delay,
+				alpha: 1,
+				ease: Cubic.easeInOut
+			});
 
-      TweenLite.to(this._cntTfNumber, timing, {
-        delay: delay,
-        alpha: 1,
-        ease: Cubic.easeInOut
-      });
+			TweenLite.to(this._cntTfNumber, timing, {
+				delay: delay,
+				alpha: 1,
+				ease: Cubic.easeInOut
+			});
 
-      this._showEntries(delay + .3 * (fast ? .5 : 1), fast);
-    }
-  }, {
-    key: "_showEntries",
-    value: function _showEntries(delay, fast) {
-      var d = 0;
-      var dAdd = .06;
-      var dMin = .01;
-      var dFriction = .85;
+			this._showEntries(delay + .3 * (fast ? .5 : 1), fast);
+		}
+	}, {
+		key: "_showEntries",
+		value: function _showEntries(delay, fast) {
+			var d = 0;
+			var dAdd = .06;
+			var dMin = .01;
+			var dFriction = .85;
 
-      var entry = null;
-      var n = this._cntEntries.children.length;
-      for (var i = 0; i < n; i++) {
-        entry = this._cntEntries.children[i];
-        entry.show(delay + d, fast);
+			var entry = null;
+			var n = this._cntEntries.children.length;
+			for (var i = 0; i < n; i++) {
+				entry = this._cntEntries.children[i];
+				entry.show(delay + d, fast);
 
-        d += dAdd;
-        dAdd *= dFriction;
-        if (dAdd < dMin) {
-          dAdd = dMin;
-        }
-      }
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+				d += dAdd;
+				dAdd *= dFriction;
+				if (dAdd < dMin) {
+					dAdd = dMin;
+				}
+			}
+		}
+	}, {
+		key: "hide",
+		value: function hide() {
+			var _this2 = this;
 
-      if (!this.isShown) {
-        return;
-      }
-      this.isShown = false;
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      if (this._idx == 1) {
-        var letter = null;
-        var _n = this._cntTfDay.children.length;
-        for (var i = 0; i < _n; i++) {
-          letter = this._cntTfDay.children[i];
-          // letter.alpha = 0
-          TweenLite.to(letter, .4, {
-            delay: delay + .1 + (_n - i) * .1,
-            alpha: 0,
-            ease: Cubic.easeInOut
-          });
-        }
-        // TweenLite.set( this._cntTfDay, {
-        //   delay: delay + 1,
-        //   alpha: 0,
-        // })
-      }
-      TweenLite.to(this._line.scale, .6, {
-        delay: delay + .04,
-        x: 0,
-        ease: Cubic.easeInOut
-      });
+			if (!this.isShown) {
+				return;
+			}
+			this.unbindEvents();
+			this.isShown = false;
 
-      TweenLite.to(this._bgLine, 1, {
-        alpha: 0,
-        ease: Cubic.easeInOut
-      });
+			if (this._idx == 1) {
+				var letter = null;
+				var _n = this._cntTfDay.children.length;
+				for (var i = 0; i < _n; i++) {
+					letter = this._cntTfDay.children[i];
+					// letter.alpha = 0
+					TweenLite.to(letter, .4, {
+						delay: delay + .1 + (_n - i) * .1,
+						alpha: 0,
+						ease: Cubic.easeInOut
+					});
+				}
+				// TweenLite.set( this._cntTfDay, {
+				//   delay: delay + 1,
+				//   alpha: 0,
+				// })
+			}
+			TweenLite.to(this._line.scale, .6, {
+				delay: delay + .04,
+				x: 0,
+				ease: Cubic.easeInOut
+			});
 
-      TweenLite.to(this._cntTfNumber, .6, {
-        delay: delay,
-        alpha: 0,
-        ease: Cubic.easeInOut
-      });
+			TweenLite.to(this._bgLine, 1, {
+				alpha: 0,
+				ease: Cubic.easeInOut
+			});
 
-      var d = 0;
-      var dAdd = .06;
-      var dMin = .01;
-      var dFriction = .85;
+			TweenLite.to(this._cntTfNumber, .6, {
+				delay: delay,
+				alpha: 0,
+				ease: Cubic.easeInOut,
+				onComplete: function onComplete(e) {
+					_this2.parent.removeChild(_this2);
+				}
+			});
 
-      var entry = null;
-      var n = this._cntEntries.children.length;
-      for (var i = 0; i < n; i++) {
-        entry = this._cntEntries.children[i];
-        entry.hide(delay + d);
+			var d = 0;
+			var dAdd = .06;
+			var dMin = .01;
+			var dFriction = .85;
 
-        d += dAdd;
-        dAdd *= dFriction;
-        if (dAdd < dMin) {
-          dAdd = dMin;
-        }
-      }
-    }
-  }]);
+			var entry = null;
+			var n = this._cntEntries.children.length;
+			for (var i = 0; i < n; i++) {
+				entry = this._cntEntries.children[i];
+				entry.hide(delay + d);
 
-  return Line;
+				d += dAdd;
+				dAdd *= dFriction;
+				if (dAdd < dMin) {
+					dAdd = dMin;
+				}
+			}
+		}
+	}]);
+
+	return Line;
 })(PIXI.Container);
 
 module.exports = Line;
@@ -1936,139 +1921,139 @@ var EntryComingSoon = require("xmas/home/entry/EntryComingSoon");
 var EntrySmiley = require("xmas/home/entry/EntrySmiley");
 
 var Entry = (function (_PIXI$Container) {
-  _inherits(Entry, _PIXI$Container);
+	_inherits(Entry, _PIXI$Container);
 
-  function Entry() {
-    var idx = arguments.length <= 0 || arguments[0] === undefined ? -1 : arguments[0];
-    var data = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	function Entry() {
+		var idx = arguments.length <= 0 || arguments[0] === undefined ? -1 : arguments[0];
+		var data = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-    _classCallCheck(this, Entry);
+		_classCallCheck(this, Entry);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Entry).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Entry).call(this));
 
-    _this._data = data;
+		_this._data = data;
 
-    _this._isShown = false;
+		_this._isShown = false;
 
-    if (idx >= 0) {
-      _this._content = new EntryContentPreview(data);
-      _this.addChild(_this._content);
+		if (idx >= 0) {
+			_this._content = new EntryContentPreview(data);
+			_this.addChild(_this._content);
 
-      _this._circle = new EntryNumber(idx);
-      _this._circle.x = config.sizes.entry.w;
-      _this._circle.y = config.sizes.entry.h - 55;
-      _this.addChild(_this._circle);
-    } else {
-      _this._content = new EntryComingSoon();
-      _this.addChild(_this._content);
+			_this._circle = new EntryNumber(idx);
+			_this._circle.x = config.sizes.entry.w;
+			_this._circle.y = config.sizes.entry.h - 55;
+			_this.addChild(_this._circle);
+		} else {
+			_this._content = new EntryComingSoon();
+			_this.addChild(_this._content);
 
-      _this._circle = new EntrySmiley();
-      _this._circle.x = config.sizes.entry.w;
-      _this._circle.y = config.sizes.entry.h - 55;
-      _this.addChild(_this._circle);
-    }
+			_this._circle = new EntrySmiley();
+			_this._circle.x = config.sizes.entry.w;
+			_this._circle.y = config.sizes.entry.h - 55;
+			_this.addChild(_this._circle);
+		}
 
-    _this._binds = {};
-    _this._binds.onMouseOver = _this._onMouseOver.bind(_this);
-    _this._binds.onMouseOut = _this._onMouseOut.bind(_this);
-    _this._binds.onClick = _this._onClick.bind(_this);
-    return _this;
-  }
+		_this._binds = {};
+		_this._binds.onMouseOver = _this._onMouseOver.bind(_this);
+		_this._binds.onMouseOut = _this._onMouseOut.bind(_this);
+		_this._binds.onClick = _this._onClick.bind(_this);
+		return _this;
+	}
 
-  _createClass(Entry, [{
-    key: "_onMouseOver",
-    value: function _onMouseOver() {
-      if (!this._isShown) {
-        return;
-      }
-      if (this._content.over) {
-        this._content.over();
-      }
-      if (this._circle.over) {
-        this._circle.over();
-      }
-    }
-  }, {
-    key: "_onMouseOut",
-    value: function _onMouseOut() {
-      if (!this._isShown) {
-        return;
-      }
+	_createClass(Entry, [{
+		key: "_onMouseOver",
+		value: function _onMouseOver() {
+			if (!this._isShown) {
+				return;
+			}
+			if (this._content.over) {
+				this._content.over();
+			}
+			if (this._circle.over) {
+				this._circle.over();
+			}
+		}
+	}, {
+		key: "_onMouseOut",
+		value: function _onMouseOut() {
+			if (!this._isShown) {
+				return;
+			}
 
-      if (this._content.out) {
-        this._content.out();
-      }
-      if (this._circle.out) {
-        this._circle.out();
-      }
-    }
-  }, {
-    key: "_onClick",
-    value: function _onClick() {
-      page("/xps" + this._data.path.replace("./", "/"));
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      var _this2 = this;
+			if (this._content.out) {
+				this._content.out();
+			}
+			if (this._circle.out) {
+				this._circle.out();
+			}
+		}
+	}, {
+		key: "_onClick",
+		value: function _onClick() {
+			page("/xps" + this._data.path.replace("./", "/"));
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			var _this2 = this;
 
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-      var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-      this._content.show(delay, fast);
-      this._circle.show(delay + (.5 + Math.random() * .45) * (fast ? .5 : 1), fast);
+			this._content.show(delay, fast);
+			this._circle.show(delay + (.5 + Math.random() * .45) * (fast ? .5 : 1), fast);
 
-      timeout(function () {
-        _this2._isShown = true;
-      }, delay * 1000 + 1200);
-      // this._circle.x = 113
-      // TweenLite.to( this._circle, .6, {
-      //   delay: delay + .3,
-      //   x: 133,
-      //   ease: Quart.easeOut,
-      //   onComplete: () => {
-      //     this._isShown = true
-      //   }
-      // })
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			timeout(function () {
+				_this2._isShown = true;
+			}, delay * 1000 + 1200);
+			// this._circle.x = 113
+			// TweenLite.to( this._circle, .6, {
+			//   delay: delay + .3,
+			//   x: 133,
+			//   ease: Quart.easeOut,
+			//   onComplete: () => {
+			//     this._isShown = true
+			//   }
+			// })
+		}
+	}, {
+		key: "hide",
+		value: function hide() {
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      this._content.hide(delay + .1);
-      this._circle.hide(delay);
-      this._isShown = false;
-    }
-  }, {
-    key: "bindEvents",
-    value: function bindEvents() {
-      if (this._content.hoverZone) {
-        this._content.hoverZone.interactive = true;
-        this._content.hoverZone.buttonMode = true;
+			this._content.hide(delay + .1);
+			this._circle.hide(delay);
+			this._isShown = false;
+		}
+	}, {
+		key: "bindEvents",
+		value: function bindEvents() {
+			if (this._content.hoverZone) {
+				this._content.hoverZone.interactive = true;
+				this._content.hoverZone.buttonMode = true;
 
-        this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
-        this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
-        this._content.hoverZone.on("click", this._binds.onClick);
-        this._content.hoverZone.on("touchend", this._binds.onClick);
-      }
-    }
-  }, {
-    key: "unbindEvents",
-    value: function unbindEvents() {
-      if (this._content.hoverZone) {
-        this._content.hoverZone.interactive = false;
-        this._content.hoverZone.buttonMode = false;
+				this._content.hoverZone.on("mouseover", this._binds.onMouseOver);
+				this._content.hoverZone.on("mouseout", this._binds.onMouseOut);
+				this._content.hoverZone.on("click", this._binds.onClick);
+				this._content.hoverZone.on("touchstart", this._binds.onClick);
+			}
+		}
+	}, {
+		key: "unbindEvents",
+		value: function unbindEvents() {
+			if (this._content.hoverZone) {
+				this._content.hoverZone.interactive = false;
+				this._content.hoverZone.buttonMode = false;
 
-        this._content.hoverZone.off("mouseover", this._binds.onMouseOver);
-        this._content.hoverZone.off("mouseout", this._binds.onMouseOut);
-        this._content.hoverZone.off("click", this._binds.onClick);
-        this._content.hoverZone.off("touchend", this._binds.onClick);
-      }
-    }
-  }]);
+				this._content.hoverZone.off("mouseover", this._binds.onMouseOver);
+				this._content.hoverZone.off("mouseout", this._binds.onMouseOut);
+				this._content.hoverZone.off("click", this._binds.onClick);
+				this._content.hoverZone.off("touchstart", this._binds.onClick);
+			}
+		}
+	}]);
 
-  return Entry;
+	return Entry;
 })(PIXI.Container);
 
 module.exports = Entry;
@@ -2326,461 +2311,461 @@ var PolyShape = require("xmas/home/entry/PolyShape");
 var uTexts = require("xmas/utils/texts");
 
 var DefaultShape = (function (_PIXI$Container) {
-  _inherits(DefaultShape, _PIXI$Container);
+	_inherits(DefaultShape, _PIXI$Container);
 
-  function DefaultShape(data) {
-    _classCallCheck(this, DefaultShape);
+	function DefaultShape(data) {
+		_classCallCheck(this, DefaultShape);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DefaultShape).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DefaultShape).call(this));
 
-    _this._data = data;
+		_this._data = data;
 
-    _this._cntGlobal = new PIXI.Container();
-    _this.addChild(_this._cntGlobal);
+		_this._cntGlobal = new PIXI.Container();
+		_this.addChild(_this._cntGlobal);
 
-    _this._cntPreview = _this._createPreview();
-    _this._cntGlobal.addChild(_this._cntPreview);
+		_this._cntPreview = _this._createPreview();
+		_this._cntGlobal.addChild(_this._cntPreview);
 
-    _this.pivot.x = config.sizes.entry.w >> 1;
-    _this.pivot.y = config.sizes.entry.h >> 1;
+		_this.pivot.x = config.sizes.entry.w >> 1;
+		_this.pivot.y = config.sizes.entry.h >> 1;
 
-    _this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this._layer.tint = config.colors.blue;
-    _this._layer.alpha = .95;
-    _this._layer.x = -20;
-    _this._layer.y = -20;
-    _this._cntGlobal.addChild(_this._layer);
+		_this._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+		_this._layer.tint = config.colors.blue;
+		_this._layer.alpha = .8;
+		_this._layer.x = -20;
+		_this._layer.y = -20;
+		_this._cntGlobal.addChild(_this._layer);
 
-    _this._polyShape = new PolyShape();
-    _this._polyShape.x = config.sizes.entry.w >> 1;
-    _this._polyShape.y = config.sizes.entry.h >> 1;
-    _this._cntGlobal.addChild(_this._polyShape);
+		_this._polyShape = new PolyShape();
+		_this._polyShape.x = config.sizes.entry.w >> 1;
+		_this._polyShape.y = config.sizes.entry.h >> 1;
+		_this._cntGlobal.addChild(_this._polyShape);
 
-    _this._cntGlobal.mask = _this._polyShape;
+		_this._cntGlobal.mask = _this._polyShape;
 
-    _this._shapeOver = new PIXI.Graphics();
-    _this._shapeOver.beginFill(0xe5f2ff);
-    _this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
-    // this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
-    // this._shapeOver.anchor.set( .5, .5 )
-    _this._shapeOver.x = _this._polyShape.x;
-    _this._shapeOver.y = _this._polyShape.y;
-    _this._shapeOver.scale.x = _this._shapeOver.scale.y = 0;
+		_this._shapeOver = new PIXI.Graphics();
+		_this._shapeOver.beginFill(0xe5f2ff);
+		_this._shapeOver.drawCircle(0, 0, config.sizes.entry.h >> 1);
+		// this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
+		// this._shapeOver.anchor.set( .5, .5 )
+		_this._shapeOver.x = _this._polyShape.x;
+		_this._shapeOver.y = _this._polyShape.y;
+		_this._shapeOver.scale.x = _this._shapeOver.scale.y = 0;
 
-    _this._mskCircle = new PIXI.Graphics();
-    _this._mskCircle.beginFill(0xff00ff);
-    _this._mskCircle.drawCircle(0, 0, config.sizes.entry.h >> 1);
-    // this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
-    // this._shapeOver.anchor.set( .5, .5 )
-    _this._mskCircle.x = _this._polyShape.x;
-    _this._mskCircle.y = _this._polyShape.y;
-    _this._mskCircle.scale.x = _this._mskCircle.scale.y = 0;
-    _this.addChild(_this._mskCircle);
-    return _this;
-  }
+		_this._mskCircle = new PIXI.Graphics();
+		_this._mskCircle.beginFill(0xff00ff);
+		_this._mskCircle.drawCircle(0, 0, config.sizes.entry.h >> 1);
+		// this._shapeOver = new PIXI.Sprite( PIXI.Texture.fromFrame( "circle_preview.png" ) )
+		// this._shapeOver.anchor.set( .5, .5 )
+		_this._mskCircle.x = _this._polyShape.x;
+		_this._mskCircle.y = _this._polyShape.y;
+		_this._mskCircle.scale.x = _this._mskCircle.scale.y = 0;
+		_this.addChild(_this._mskCircle);
+		return _this;
+	}
 
-  _createClass(DefaultShape, [{
-    key: "_createPreview",
-    value: function _createPreview() {
-      var cnt = new PIXI.Container();
+	_createClass(DefaultShape, [{
+		key: "_createPreview",
+		value: function _createPreview() {
+			var cnt = new PIXI.Container();
 
-      this._img = new PIXI.Sprite(PIXI.Texture.fromFrame(this._data.pathPreview));
-      var fit = uImg.fit(this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h);
-      this._img.width = fit.width >> 0;
-      this._img.height = fit.height >> 0;
-      this._img.x = config.sizes.entry.w - fit.width >> 1;
-      this._img.y = config.sizes.entry.h - fit.height >> 1;
-      cnt.addChild(this._img);
+			this._img = new PIXI.Sprite(PIXI.Texture.fromFrame(this._data.pathPreview));
+			var fit = uImg.fit(this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h);
+			this._img.width = fit.width >> 0;
+			this._img.height = fit.height >> 0;
+			this._img.x = config.sizes.entry.w - fit.width >> 1;
+			this._img.y = config.sizes.entry.h - fit.height >> 1;
+			cnt.addChild(this._img);
 
-      return cnt;
-    }
-  }, {
-    key: "over",
-    value: function over() {
-      TweenLite.killTweensOf(this);
-      TweenLite.killTweensOf(this._shapeOver.scale);
-      TweenLite.killTweensOf(this._polyShape.scale);
-      TweenLite.killTweensOf(this._mskCircle.scale);
+			return cnt;
+		}
+	}, {
+		key: "over",
+		value: function over() {
+			TweenLite.killTweensOf(this);
+			TweenLite.killTweensOf(this._shapeOver.scale);
+			TweenLite.killTweensOf(this._polyShape.scale);
+			TweenLite.killTweensOf(this._mskCircle.scale);
 
-      this._polyShape.scale.x = this._polyShape.scale.y = 1;
-      this._shapeOver.scale.x = 0;
-      this._shapeOver.scale.y = 0;
-      this.scale.x = this.scale.y = 1;
+			this._polyShape.scale.x = this._polyShape.scale.y = 1;
+			this._shapeOver.scale.x = 0;
+			this._shapeOver.scale.y = 0;
+			this.scale.x = this.scale.y = 1;
 
-      this.mask = null;
-      this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
+			this.mask = null;
+			this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
 
-      this._cntGlobal.addChild(this._shapeOver);
-      TweenLite.set(this._shapeOver.scale, {
-        delay: .175,
-        x: .675,
-        y: .675
-      });
-      TweenLite.to(this._shapeOver.scale, .4, {
-        delay: .175,
-        x: 1.1,
-        y: 1.1,
-        ease: Quart.easeOut
-      });
+			this._cntGlobal.addChild(this._shapeOver);
+			TweenLite.set(this._shapeOver.scale, {
+				delay: .175,
+				x: .675,
+				y: .675
+			});
+			TweenLite.to(this._shapeOver.scale, .4, {
+				delay: .175,
+				x: 1.1,
+				y: 1.1,
+				ease: Quart.easeOut
+			});
 
-      TweenLite.to(this._polyShape.scale, .4, {
-        delay: .1,
-        x: 1.1,
-        y: 1.1,
-        ease: Quart.easeOut
-      });
-    }
-  }, {
-    key: "out",
-    value: function out() {
-      var _this2 = this;
+			TweenLite.to(this._polyShape.scale, .4, {
+				delay: .1,
+				x: 1.1,
+				y: 1.1,
+				ease: Quart.easeOut
+			});
+		}
+	}, {
+		key: "out",
+		value: function out() {
+			var _this2 = this;
 
-      TweenLite.killTweensOf(this);
-      TweenLite.killTweensOf(this._shapeOver.scale);
-      TweenLite.killTweensOf(this._polyShape.scale);
-      TweenLite.killTweensOf(this._mskCircle.scale);
-      this.rotation = 0;
+			TweenLite.killTweensOf(this);
+			TweenLite.killTweensOf(this._shapeOver.scale);
+			TweenLite.killTweensOf(this._polyShape.scale);
+			TweenLite.killTweensOf(this._mskCircle.scale);
+			this.rotation = 0;
 
-      this._cntGlobal.removeChild(this._shapeOver);
+			this._cntGlobal.removeChild(this._shapeOver);
 
-      this.scale.x = this.scale.y = 1;
-      this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
-      this._polyShape.scale.x = this._polyShape.scale.y = .93;
+			this.scale.x = this.scale.y = 1;
+			this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
+			this._polyShape.scale.x = this._polyShape.scale.y = .93;
 
-      TweenLite.to(this._polyShape.scale, .6, {
-        delay: .2,
-        x: 1,
-        y: 1,
-        ease: Quad.easeOut
-      });
+			TweenLite.to(this._polyShape.scale, .6, {
+				delay: .2,
+				x: 1,
+				y: 1,
+				ease: Quad.easeOut
+			});
 
-      this.mask = this._mskCircle;
-      this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
-      TweenLite.to(this._mskCircle.scale, .155, {
-        x: 0.2,
-        y: 0.2,
-        ease: Quad.easeIn
-      });
-      TweenLite.set(this._mskCircle.scale, {
-        delay: .155,
-        x: .75,
-        y: .75
-      });
-      TweenLite.to(this._mskCircle.scale, .5, {
-        delay: .155,
-        x: 1,
-        y: 1,
-        ease: Quart.easeOut,
-        onComplete: function onComplete() {
-          _this2._mskCircle.scale.x = _this2._mskCircle.scale.y = 0;
-          _this2.mask = null;
-        }
-      });
-    }
-  }]);
+			this.mask = this._mskCircle;
+			this._mskCircle.scale.x = this._mskCircle.scale.y = 0;
+			TweenLite.to(this._mskCircle.scale, .155, {
+				x: 0.2,
+				y: 0.2,
+				ease: Quad.easeIn
+			});
+			TweenLite.set(this._mskCircle.scale, {
+				delay: .155,
+				x: .75,
+				y: .75
+			});
+			TweenLite.to(this._mskCircle.scale, .5, {
+				delay: .155,
+				x: 1,
+				y: 1,
+				ease: Quart.easeOut,
+				onComplete: function onComplete() {
+					_this2._mskCircle.scale.x = _this2._mskCircle.scale.y = 0;
+					_this2.mask = null;
+				}
+			});
+		}
+	}]);
 
-  return DefaultShape;
+	return DefaultShape;
 })(PIXI.Container);
 
 var HoverShape = (function (_PIXI$Container2) {
-  _inherits(HoverShape, _PIXI$Container2);
+	_inherits(HoverShape, _PIXI$Container2);
 
-  function HoverShape(data) {
-    _classCallCheck(this, HoverShape);
+	function HoverShape(data) {
+		_classCallCheck(this, HoverShape);
 
-    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(HoverShape).call(this));
+		var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(HoverShape).call(this));
 
-    _this3._data = data;
+		_this3._data = data;
 
-    _this3._size = config.sizes.entry.w;
+		_this3._size = config.sizes.entry.w;
 
-    _this3._percent = 0.0001;
+		_this3._percent = 0.0001;
 
-    _this3.pivot.x = config.sizes.entry.w >> 1;
-    _this3.pivot.y = config.sizes.entry.h >> 1;
+		_this3.pivot.x = config.sizes.entry.w >> 1;
+		_this3.pivot.y = config.sizes.entry.h >> 1;
 
-    _this3._cntPreview = _this3._createPreview();
-    _this3.addChild(_this3._cntPreview);
+		_this3._cntPreview = _this3._createPreview();
+		_this3.addChild(_this3._cntPreview);
 
-    _this3._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    _this3._layer.tint = config.colors.blue;
-    _this3._layer.x = -20;
-    _this3._layer.y = -20;
-    _this3._layer.alpha = .3;
+		_this3._layer = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+		_this3._layer.tint = config.colors.blue;
+		_this3._layer.x = -20;
+		_this3._layer.y = -20;
+		_this3._layer.alpha = .3;
 
-    _this3.addChild(_this3._layer);
-    _this3._msk = new PIXI.Graphics();
-    _this3._msk.x = config.sizes.entry.w >> 1;
-    _this3._msk.y = config.sizes.entry.h >> 1;
-    _this3.addChild(_this3._msk);
+		_this3.addChild(_this3._layer);
+		_this3._msk = new PIXI.Graphics();
+		_this3._msk.x = config.sizes.entry.w >> 1;
+		_this3._msk.y = config.sizes.entry.h >> 1;
+		_this3.addChild(_this3._msk);
 
-    _this3._updateMsk();
+		_this3._updateMsk();
 
-    _this3.mask = _this3._msk;
+		_this3.mask = _this3._msk;
 
-    _this3._shapeOver = new PolyShape(0xe5f2ff);
-    _this3._shapeOver.x = _this3._msk.x;
-    _this3._shapeOver.y = _this3._msk.y;
-    _this3._shapeOver.scale.x = _this3._shapeOver.scale.y = 0;
+		_this3._shapeOver = new PolyShape(0xe5f2ff);
+		_this3._shapeOver.x = _this3._msk.x;
+		_this3._shapeOver.y = _this3._msk.y;
+		_this3._shapeOver.scale.x = _this3._shapeOver.scale.y = 0;
 
-    // this._isOver = false
+		// this._isOver = false
 
-    _this3._binds = {};
-    _this3._binds.updateMsk = _this3._updateMsk.bind(_this3);
-    return _this3;
-  }
+		_this3._binds = {};
+		_this3._binds.updateMsk = _this3._updateMsk.bind(_this3);
+		return _this3;
+	}
 
-  _createClass(HoverShape, [{
-    key: "_createPreview",
-    value: function _createPreview() {
-      var cnt = new PIXI.Container();
+	_createClass(HoverShape, [{
+		key: "_createPreview",
+		value: function _createPreview() {
+			var cnt = new PIXI.Container();
 
-      this._img = new PIXI.Sprite(PIXI.Texture.fromFrame(this._data.pathPreview));
-      var fit = uImg.fit(this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h);
-      this._img.width = fit.width >> 0;
-      this._img.height = fit.height >> 0;
-      this._img.x = config.sizes.entry.w - fit.width >> 1;
-      this._img.y = config.sizes.entry.h - fit.height >> 1;
-      cnt.addChild(this._img);
+			this._img = new PIXI.Sprite(PIXI.Texture.fromFrame(this._data.pathPreview));
+			var fit = uImg.fit(this._img.width, this._img.height, config.sizes.entry.w, config.sizes.entry.h);
+			this._img.width = fit.width >> 0;
+			this._img.height = fit.height >> 0;
+			this._img.x = config.sizes.entry.w - fit.width >> 1;
+			this._img.y = config.sizes.entry.h - fit.height >> 1;
+			cnt.addChild(this._img);
 
-      return cnt;
-    }
-  }, {
-    key: "_updateMsk",
-    value: function _updateMsk() {
-      this._msk.clear();
-      this._msk.beginFill(0x00ff00);
-      this._drawCircleMask();
-    }
-  }, {
-    key: "_drawCircleMask",
-    value: function _drawCircleMask() {
-      this._msk.drawCircle(0, 0, (config.sizes.entry.w >> 1) * this._percent);
-    }
-  }, {
-    key: "over",
-    value: function over() {
-      TweenLite.killTweensOf(this);
-      TweenLite.killTweensOf(this._shapeOver.scale);
+			return cnt;
+		}
+	}, {
+		key: "_updateMsk",
+		value: function _updateMsk() {
+			this._msk.clear();
+			this._msk.beginFill(0x00ff00);
+			this._drawCircleMask();
+		}
+	}, {
+		key: "_drawCircleMask",
+		value: function _drawCircleMask() {
+			this._msk.drawCircle(0, 0, (config.sizes.entry.w >> 1) * this._percent);
+		}
+	}, {
+		key: "over",
+		value: function over() {
+			TweenLite.killTweensOf(this);
+			TweenLite.killTweensOf(this._shapeOver.scale);
 
-      // this._isOver = true
+			// this._isOver = true
 
-      this.scale.x = this.scale.y = 1;
-      this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
-      this._percent = 0.0001;
-      this._updateMsk();
+			this.scale.x = this.scale.y = 1;
+			this._shapeOver.scale.x = this._shapeOver.scale.y = 0;
+			this._percent = 0.0001;
+			this._updateMsk();
 
-      this.removeChild(this._shapeOver);
+			this.removeChild(this._shapeOver);
 
-      TweenLite.to(this, .155, {
-        _percent: 0.2,
-        ease: Quad.easeIn,
-        onUpdate: this._binds.updateMsk
-      });
-      TweenLite.set(this, {
-        delay: .155,
-        _percent: .75
-      });
-      TweenLite.to(this, .5, {
-        delay: .155,
-        _percent: 1,
-        ease: Quart.easeOut,
-        onUpdate: this._binds.updateMsk
-      });
-    }
-  }, {
-    key: "out",
-    value: function out(cb) {
-      var _this4 = this;
+			TweenLite.to(this, .155, {
+				_percent: 0.2,
+				ease: Quad.easeIn,
+				onUpdate: this._binds.updateMsk
+			});
+			TweenLite.set(this, {
+				delay: .155,
+				_percent: .75
+			});
+			TweenLite.to(this, .5, {
+				delay: .155,
+				_percent: 1,
+				ease: Quart.easeOut,
+				onUpdate: this._binds.updateMsk
+			});
+		}
+	}, {
+		key: "out",
+		value: function out(cb) {
+			var _this4 = this;
 
-      // if( !this._isOver ) {
-      //   return
-      // }
-      // this._isOver = false
-      TweenLite.killTweensOf(this);
-      TweenLite.killTweensOf(this._shapeOver.scale);
+			// if( !this._isOver ) {
+			//   return
+			// }
+			// this._isOver = false
+			TweenLite.killTweensOf(this);
+			TweenLite.killTweensOf(this._shapeOver.scale);
 
-      this.addChild(this._shapeOver);
-      TweenLite.set(this._shapeOver.scale, {
-        delay: .175,
-        x: .6,
-        y: .6
-      });
-      TweenLite.to(this._shapeOver.scale, .4, {
-        delay: .175,
-        x: 1.3,
-        y: 1.3,
-        ease: Quart.easeOut,
-        onComplete: function onComplete() {
-          _this4.removeChild(_this4._shapeOver);
-          _this4._percent = 0.0001;
-          _this4._updateMsk();
-        }
-      });
+			this.addChild(this._shapeOver);
+			TweenLite.set(this._shapeOver.scale, {
+				delay: .175,
+				x: .6,
+				y: .6
+			});
+			TweenLite.to(this._shapeOver.scale, .4, {
+				delay: .175,
+				x: 1.3,
+				y: 1.3,
+				ease: Quart.easeOut,
+				onComplete: function onComplete() {
+					_this4.removeChild(_this4._shapeOver);
+					_this4._percent = 0.0001;
+					_this4._updateMsk();
+				}
+			});
 
-      TweenLite.to(this, .4, {
-        delay: .125,
-        // x: 1.2,
-        // y: 1.2,
-        _percent: 1.2,
-        ease: Quart.easeOut,
-        onUpdate: this._binds.updateMsk
-      });
-    }
-  }]);
+			TweenLite.to(this, .4, {
+				delay: .125,
+				// x: 1.2,
+				// y: 1.2,
+				_percent: 1.2,
+				ease: Quart.easeOut,
+				onUpdate: this._binds.updateMsk
+			});
+		}
+	}]);
 
-  return HoverShape;
+	return HoverShape;
 })(PIXI.Container);
 
 var EntryContentPreview = (function (_PIXI$Container3) {
-  _inherits(EntryContentPreview, _PIXI$Container3);
+	_inherits(EntryContentPreview, _PIXI$Container3);
 
-  function EntryContentPreview(data) {
-    _classCallCheck(this, EntryContentPreview);
+	function EntryContentPreview(data) {
+		_classCallCheck(this, EntryContentPreview);
 
-    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryContentPreview).call(this));
+		var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(EntryContentPreview).call(this));
 
-    _this5._default = new DefaultShape(data);
-    _this5._default.x = config.sizes.entry.w >> 1;
-    _this5._default.y = config.sizes.entry.h >> 1;
-    _this5._default.scale.x = _this5._default.scale.y = 0;
-    _this5.addChild(_this5._default);
+		_this5._default = new DefaultShape(data);
+		_this5._default.x = config.sizes.entry.w >> 1;
+		_this5._default.y = config.sizes.entry.h >> 1;
+		_this5._default.scale.x = _this5._default.scale.y = 0;
+		_this5.addChild(_this5._default);
 
-    _this5._hover = new HoverShape(data);
-    _this5._hover.x = config.sizes.entry.w >> 1;
-    _this5._hover.y = config.sizes.entry.h >> 1;
-    // this.addChild( this._hover )
+		_this5._hover = new HoverShape(data);
+		_this5._hover.x = config.sizes.entry.w >> 1;
+		_this5._hover.y = config.sizes.entry.h >> 1;
+		// this.addChild( this._hover )
 
-    _this5.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
-    // this.hoverZone.scale.set( .5, .5 )
-    _this5.hoverZone.width = config.sizes.entry.w;
-    _this5.hoverZone.height = config.sizes.entry.h;
-    _this5.hoverZone.tint = Math.random() * 0xffffff;
-    _this5.hoverZone.alpha = 0;
-    _this5.addChild(_this5.hoverZone);
+		_this5.hoverZone = new PIXI.Sprite(PIXI.Texture.fromFrame("layer-blue.png"));
+		// this.hoverZone.scale.set( .5, .5 )
+		_this5.hoverZone.width = config.sizes.entry.w;
+		_this5.hoverZone.height = config.sizes.entry.h;
+		_this5.hoverZone.tint = Math.random() * 0xffffff;
+		_this5.hoverZone.alpha = 0;
+		_this5.addChild(_this5.hoverZone);
 
-    _this5._cntTf = new PIXI.Container();
-    _this5._cntTf.x = 100;
-    _this5._cntTf.y = 255;
-    _this5.addChild(_this5._cntTf);
+		_this5._cntTf = new PIXI.Container();
+		_this5._cntTf.x = 100;
+		_this5._cntTf.y = 255;
+		_this5.addChild(_this5._cntTf);
 
-    _this5._tfTitle = uTexts.create(data.title, { font: "22px " + config.fonts.medium, fill: config.colors.blue });
-    _this5._cntTf.addChild(_this5._tfTitle);
-    _this5._initLetters(_this5._tfTitle);
+		_this5._tfTitle = uTexts.create(data.title, { font: "22px " + config.fonts.medium, fill: config.colors.blue });
+		_this5._cntTf.addChild(_this5._tfTitle);
+		_this5._initLetters(_this5._tfTitle);
 
-    _this5._tfAuthor = uTexts.create(data.author, { font: "27px " + config.fonts.medium, fill: config.colors.blue });
-    _this5._tfAuthor.x = 15;
-    _this5._tfAuthor.y = 20;
-    _this5._cntTf.addChild(_this5._tfAuthor);
-    _this5._initLetters(_this5._tfAuthor);
+		_this5._tfAuthor = uTexts.create(data.author, { font: "27px " + config.fonts.medium, fill: config.colors.blue });
+		_this5._tfAuthor.x = 15;
+		_this5._tfAuthor.y = 20;
+		_this5._cntTf.addChild(_this5._tfAuthor);
+		_this5._initLetters(_this5._tfAuthor);
 
-    _this5._isShown = false;
+		_this5._isShown = false;
 
-    _this5._isOver = false;
-    return _this5;
-  }
+		_this5._isOver = false;
+		return _this5;
+	}
 
-  _createClass(EntryContentPreview, [{
-    key: "_initLetters",
-    value: function _initLetters(cnt) {
-      var n = cnt.children.length;
-      for (var i = 0; i < n; i++) {
-        cnt.children[i].alpha = 0;
-      }
-    }
-  }, {
-    key: "over",
-    value: function over() {
-      this._isOver = true;
+	_createClass(EntryContentPreview, [{
+		key: "_initLetters",
+		value: function _initLetters(cnt) {
+			var n = cnt.children.length;
+			for (var i = 0; i < n; i++) {
+				cnt.children[i].alpha = 0;
+			}
+		}
+	}, {
+		key: "over",
+		value: function over() {
+			this._isOver = true;
 
-      this._default.over();
+			this._default.over();
 
-      this.addChild(this._hover);
-      this._hover.over();
-    }
-  }, {
-    key: "out",
-    value: function out() {
-      var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+			this.addChild(this._hover);
+			this._hover.over();
+		}
+	}, {
+		key: "out",
+		value: function out() {
+			var force = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
-      if (!this._isOver) {
-        return;
-      }
-      this._isOver = false;
-      this._default.out();
-      this.addChild(this._default);
+			if (!this._isOver) {
+				return;
+			}
+			this._isOver = false;
+			this._default.out();
+			this.addChild(this._default);
 
-      this._hover.out();
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-      var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+			this._hover.out();
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			var fast = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-      this._isShown = true;
+			this._isShown = true;
 
-      var timing = fast ? .4 : .8;
-      var ratio = fast ? .5 : 1;
+			var timing = fast ? .4 : .8;
+			var ratio = fast ? .5 : 1;
 
-      TweenLite.killTweensOf(this._default.scale);
-      TweenLite.to(this._default.scale, timing, {
-        delay: delay, // + .25,
-        x: 1,
-        y: 1,
-        ease: fast ? Quart.easeOut : Quart.easeInOut
-      });
+			TweenLite.killTweensOf(this._default.scale);
+			TweenLite.to(this._default.scale, timing, {
+				delay: delay, // + .25,
+				x: 1,
+				y: 1,
+				ease: fast ? Quart.easeOut : Quart.easeInOut
+			});
 
-      this._showLetters(this._tfTitle, delay + .8 * ratio, ratio);
-      this._showLetters(this._tfAuthor, delay + 1 * ratio, ratio);
-    }
-  }, {
-    key: "_showLetters",
-    value: function _showLetters(cnt, delay, ratio) {
-      var n = cnt.children.length;
-      for (var i = 0; i < n; i++) {
-        TweenLite.killTweensOf(cnt.children[i]);
-        TweenLite.to(cnt.children[i], .8 * ratio, {
-          delay: delay + Math.random() * .4 * ratio,
-          alpha: 1,
-          ease: Quart.easeInOut
-        });
-      }
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			this._showLetters(this._tfTitle, delay + .8 * ratio, ratio);
+			this._showLetters(this._tfAuthor, delay + 1 * ratio, ratio);
+		}
+	}, {
+		key: "_showLetters",
+		value: function _showLetters(cnt, delay, ratio) {
+			var n = cnt.children.length;
+			for (var i = 0; i < n; i++) {
+				TweenLite.killTweensOf(cnt.children[i]);
+				TweenLite.to(cnt.children[i], .8 * ratio, {
+					delay: delay + Math.random() * .4 * ratio,
+					alpha: 1,
+					ease: Quart.easeInOut
+				});
+			}
+		}
+	}, {
+		key: "hide",
+		value: function hide() {
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      this.out();
+			this.out();
 
-      TweenLite.killTweensOf(this._default.scale);
-      TweenLite.to(this._default.scale, .6, {
-        delay: delay, // + .25,
-        x: 0,
-        y: 0,
-        ease: Quart.easeInOut
-      });
+			TweenLite.killTweensOf(this._default.scale);
+			TweenLite.to(this._default.scale, .6, {
+				delay: delay, // + .25,
+				x: 0,
+				y: 0,
+				ease: Quart.easeInOut
+			});
 
-      this._hideLetters(this._tfTitle, delay);
-      this._hideLetters(this._tfAuthor, delay + .1);
-    }
-  }, {
-    key: "_hideLetters",
-    value: function _hideLetters(cnt, delay) {
-      var n = cnt.children.length;
-      for (var i = 0; i < n; i++) {
-        TweenLite.killTweensOf(cnt.children[i]);
-        TweenLite.to(cnt.children[i], .4, {
-          delay: delay + Math.random() * .2,
-          alpha: 0,
-          ease: Quart.easeInOut
-        });
-      }
-    }
-  }]);
+			this._hideLetters(this._tfTitle, delay);
+			this._hideLetters(this._tfAuthor, delay + .1);
+		}
+	}, {
+		key: "_hideLetters",
+		value: function _hideLetters(cnt, delay) {
+			var n = cnt.children.length;
+			for (var i = 0; i < n; i++) {
+				TweenLite.killTweensOf(cnt.children[i]);
+				TweenLite.to(cnt.children[i], .4, {
+					delay: delay + Math.random() * .2,
+					alpha: 0,
+					ease: Quart.easeInOut
+				});
+			}
+		}
+	}]);
 
-  return EntryContentPreview;
+	return EntryContentPreview;
 })(PIXI.Container);
 
 module.exports = EntryContentPreview;
@@ -3203,93 +3188,93 @@ var pixi = require("fz/core/pixi");
 var stage = require("fz/core/stage");
 
 var Point = (function () {
-  function Point() {
-    _classCallCheck(this, Point);
-  }
+	function Point() {
+		_classCallCheck(this, Point);
+	}
 
-  _createClass(Point, [{
-    key: "set",
-    value: function set(a, radDefault, radOver) {
-      var cos = Math.cos(a);
-      var sin = Math.sin(a);
+	_createClass(Point, [{
+		key: "set",
+		value: function set(a, radDefault, radOver) {
+			var cos = Math.cos(a);
+			var sin = Math.sin(a);
 
-      this._xDefault = cos * radDefault;
-      this._yDefault = sin * radDefault;
+			this._xDefault = cos * radDefault;
+			this._yDefault = sin * radDefault;
 
-      this._xOver = cos * radOver;
-      this._yOver = sin * radOver;
+			this._xOver = cos * radOver;
+			this._yOver = sin * radOver;
 
-      this.x = this._xDefault;
-      this.y = this._yDefault;
-    }
-  }]);
+			this.x = this._xDefault;
+			this.y = this._yDefault;
+		}
+	}]);
 
-  return Point;
+	return Point;
 })();
 
 var PolyShapeGraphics = (function (_PIXI$Graphics) {
-  _inherits(PolyShapeGraphics, _PIXI$Graphics);
+	_inherits(PolyShapeGraphics, _PIXI$Graphics);
 
-  function PolyShapeGraphics() {
-    var color = arguments.length <= 0 || arguments[0] === undefined ? 0xff00ff : arguments[0];
+	function PolyShapeGraphics() {
+		var color = arguments.length <= 0 || arguments[0] === undefined ? 0xff00ff : arguments[0];
 
-    _classCallCheck(this, PolyShapeGraphics);
+		_classCallCheck(this, PolyShapeGraphics);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this));
 
-    _this._color = color;
-    _this._countMaskPoints = 6;
+		_this._color = color;
+		_this._countMaskPoints = 6;
 
-    _this.rotation = Math.PI / 6;
+		_this.rotation = Math.PI / 6;
 
-    _this._init();
-    _this._update();
-    return _this;
-  }
+		_this._init();
+		_this._update();
+		return _this;
+	}
 
-  _createClass(PolyShapeGraphics, [{
-    key: "_update",
-    value: function _update() {
-      this.clear();
+	_createClass(PolyShapeGraphics, [{
+		key: "_update",
+		value: function _update() {
+			this.clear();
 
-      this.beginFill(this._color);
-      this._draw();
-    }
-  }, {
-    key: "_init",
-    value: function _init() {
-      var a = 0;
-      var radDefault = config.sizes.entry.h >> 1;
-      var radOver = config.sizes.entry.w >> 1;
-      var p = null;
+			this.beginFill(this._color);
+			this._draw();
+		}
+	}, {
+		key: "_init",
+		value: function _init() {
+			var a = 0;
+			var radDefault = config.sizes.entry.h >> 1;
+			var radOver = config.sizes.entry.w >> 1;
+			var p = null;
 
-      this._points = [];
+			this._points = [];
 
-      var aAdd = 2 * Math.PI / this._countMaskPoints;
-      for (var i = 0; i < this._countMaskPoints; i++) {
-        p = new Point();
-        p.set(a, radDefault, radOver);
-        this._points.push(p);
+			var aAdd = 2 * Math.PI / this._countMaskPoints;
+			for (var i = 0; i < this._countMaskPoints; i++) {
+				p = new Point();
+				p.set(a, radDefault, radOver);
+				this._points.push(p);
 
-        a += aAdd;
-      }
-    }
-  }, {
-    key: "_draw",
-    value: function _draw() {
-      var p = null;
-      for (var i = 0; i < this._countMaskPoints; i++) {
-        p = this._points[i];
-        if (i != 0) {
-          this.lineTo(p.x, p.y);
-        } else {
-          this.moveTo(p.x, p.y);
-        }
-      }
-    }
-  }]);
+				a += aAdd;
+			}
+		}
+	}, {
+		key: "_draw",
+		value: function _draw() {
+			var p = null;
+			for (var i = 0; i < this._countMaskPoints; i++) {
+				p = this._points[i];
+				if (i != 0) {
+					this.lineTo(p.x, p.y);
+				} else {
+					this.moveTo(p.x, p.y);
+				}
+			}
+		}
+	}]);
 
-  return PolyShapeGraphics;
+	return PolyShapeGraphics;
 })(PIXI.Graphics);
 
 var tex = null;
@@ -3307,7 +3292,7 @@ var tex = null;
 
 //     this.rotation = Math.PI / 6
 
-//     this.texture = tex   
+//     this.texture = tex
 //     this.tint = color
 //     // this.pivot.set( this.width * .5 >> 1, this.height * .5 >> 1 )
 //     this.anchor.set( .5, .5 )
@@ -3330,164 +3315,164 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var browsers = require("fz/utils/browsers");
 
 var Bts = (function (_PIXI$Container) {
-  _inherits(Bts, _PIXI$Container);
+	_inherits(Bts, _PIXI$Container);
 
-  function Bts() {
-    _classCallCheck(this, Bts);
+	function Bts() {
+		_classCallCheck(this, Bts);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Bts).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Bts).call(this));
 
-    if (browsers.mobile) {
-      _this.scale.set(.5, .5);
-    }
+		if (browsers.mobile) {
+			_this.scale.set(.5, .5);
+		}
 
-    _this._binds = {};
-    _this._binds.onMouseOver = _this._onMouseOver.bind(_this);
-    _this._binds.onMouseOut = _this._onMouseOut.bind(_this);
-    _this._binds.onClick = _this._onClick.bind(_this);
+		_this._binds = {};
+		_this._binds.onMouseOver = _this._onMouseOver.bind(_this);
+		_this._binds.onMouseOut = _this._onMouseOut.bind(_this);
+		_this._binds.onClick = _this._onClick.bind(_this);
 
-    _this._initTop();
-    _this._initShare();
-    return _this;
-  }
+		_this._initTop();
+		_this._initShare();
+		return _this;
+	}
 
-  _createClass(Bts, [{
-    key: "_onMouseOver",
-    value: function _onMouseOver(e) {
-      var target = e.target.children[0];
-      target.alpha = 1;
-      TweenLite.to(target, .25, {
-        x: 5,
-        ease: Quart.easeOut
-      });
-    }
-  }, {
-    key: "_onMouseOut",
-    value: function _onMouseOut(e) {
-      var target = e.target.children[0];
-      TweenLite.to(target, .25, {
-        x: 0,
-        ease: Quart.easeOut,
-        onComplete: function onComplete() {
-          target.alpha = 0;
-        }
-      });
-    }
-  }, {
-    key: "_onClick",
-    value: function _onClick(e) {
-      var target = e.target;
-      if (target == this._btSubmit) {
-        window.open("https://github.com/Makio64/christmasxp2015/blob/master/README.md", "_blank");
-      } else if (target == this._btAbout) {
-        window.open("https://github.com/makio64/christmasxp2015", "_blank");
-      } else if (target == this._btFB) {
-        FB.ui({
-          method: 'feed',
-          name: "Christmas Experiments - 2015",
-          caption: "Christmas Experiments 2015, discover the best experiments of the winter!",
-          link: "http://christmasexperiments.com/",
-          picture: "http://christmasexperiments.com/share.jpg"
-        }, function (response) {
-          console.log("response");
-        });
-      } else if (target == this._btTwitter) {
-        var url = "https://twitter.com/share?";
-        url += "text=" + encodeURIComponent("Christmas Experiments 2015, discover the best experiments of the winter!");
-        url += "&url=" + encodeURIComponent("http://christmasexperiments.com/");
-        window.open(url, "", "top=100, left=200, width=600, height = 500");
-      }
-    }
-  }, {
-    key: "_initTop",
-    value: function _initTop() {
-      this._cntTop = new PIXI.Container();
-      this._cntTop.x = 22;
-      this.addChild(this._cntTop);
+	_createClass(Bts, [{
+		key: "_onMouseOver",
+		value: function _onMouseOver(e) {
+			var target = e.target.children[0];
+			target.alpha = 1;
+			TweenLite.to(target, .25, {
+				x: 5,
+				ease: Quart.easeOut
+			});
+		}
+	}, {
+		key: "_onMouseOut",
+		value: function _onMouseOut(e) {
+			var target = e.target.children[0];
+			TweenLite.to(target, .25, {
+				x: 0,
+				ease: Quart.easeOut,
+				onComplete: function onComplete() {
+					target.alpha = 0;
+				}
+			});
+		}
+	}, {
+		key: "_onClick",
+		value: function _onClick(e) {
+			var target = e.target;
+			if (target == this._btSubmit) {
+				window.open("https://github.com/Makio64/christmasxp2015/blob/master/README.md", "_blank");
+			} else if (target == this._btAbout) {
+				window.open("https://github.com/makio64/christmasxp2015", "_blank");
+			} else if (target == this._btFB) {
+				FB.ui({
+					method: 'feed',
+					name: "Christmas Experiments - 2015",
+					caption: "Christmas Experiments 2015, discover the best experiments of the winter!",
+					link: "http://christmasexperiments.com/",
+					picture: "http://christmasexperiments.com/share.jpg"
+				}, function (response) {
+					console.log("response");
+				});
+			} else if (target == this._btTwitter) {
+				var url = "https://twitter.com/share?";
+				url += "text=" + encodeURIComponent("Christmas Experiments 2015, discover the best experiments of the winter!");
+				url += "&url=" + encodeURIComponent("http://christmasexperiments.com/");
+				window.open(url, "", "top=100, left=200, width=600, height = 500");
+			}
+		}
+	}, {
+		key: "_initTop",
+		value: function _initTop() {
+			this._cntTop = new PIXI.Container();
+			this._cntTop.x = 22;
+			this.addChild(this._cntTop);
 
-      this._btSubmit = this._createBt("bt_submitxp");
-      this._btSubmit.x = -2 * 1.5 >> 0;
-      this._cntTop.addChild(this._btSubmit);
+			this._btSubmit = this._createBt("bt_submitxp");
+			this._btSubmit.x = -2 * 1.5 >> 0;
+			this._cntTop.addChild(this._btSubmit);
 
-      this._btAbout = this._createBt("bt_about");
-      this._btAbout.x = 170;
-      this._btAbout.y = 25;
-      this._cntTop.addChild(this._btAbout);
-    }
-  }, {
-    key: "_initShare",
-    value: function _initShare() {
-      this._cntShare = new PIXI.Container();
-      this._cntShare.x = 134 * 1.5 >> 0;
-      this._cntShare.y = 180 * 1.5 >> 0;
-      if (browsers.mobile) {
-        this._cntShare.y -= 170;
-      }
-      this.addChild(this._cntShare);
+			this._btAbout = this._createBt("bt_about");
+			this._btAbout.x = 170;
+			this._btAbout.y = 25;
+			this._cntTop.addChild(this._btAbout);
+		}
+	}, {
+		key: "_initShare",
+		value: function _initShare() {
+			this._cntShare = new PIXI.Container();
+			this._cntShare.x = 134 * 1.5 >> 0;
+			this._cntShare.y = 180 * 1.5 >> 0;
+			if (browsers.mobile) {
+				this._cntShare.y -= 170;
+			}
+			this.addChild(this._cntShare);
 
-      this._btFB = this._createBt("bt_fb");
-      this._cntShare.addChild(this._btFB);
+			this._btFB = this._createBt("bt_fb");
+			this._cntShare.addChild(this._btFB);
 
-      this._btTwitter = this._createBt("bt_twitter");
-      this._btTwitter.x = 27 * 1.5 >> 0;
-      this._btTwitter.y = 17 * 1.5 >> 0;
-      this._cntShare.addChild(this._btTwitter);
-    }
-  }, {
-    key: "_createBt",
-    value: function _createBt(name) {
-      var cnt = new PIXI.Container();
-      cnt.alpha = 0;
-      cnt.interactive = true;
-      cnt.buttonMode = true;
-      cnt.on("mouseover", this._binds.onMouseOver);
-      cnt.on("mouseout", this._binds.onMouseOut);
-      cnt.on("click", this._binds.onClick);
-      cnt.on("touchend", this._binds.onClick);
+			this._btTwitter = this._createBt("bt_twitter");
+			this._btTwitter.x = 27 * 1.5 >> 0;
+			this._btTwitter.y = 17 * 1.5 >> 0;
+			this._cntShare.addChild(this._btTwitter);
+		}
+	}, {
+		key: "_createBt",
+		value: function _createBt(name) {
+			var cnt = new PIXI.Container();
+			cnt.alpha = 0;
+			cnt.interactive = true;
+			cnt.buttonMode = true;
+			cnt.on("mouseover", this._binds.onMouseOver);
+			cnt.on("mouseout", this._binds.onMouseOut);
+			cnt.on("click", this._binds.onClick);
+			cnt.on("touchstart", this._binds.onClick);
 
-      var hover = new PIXI.Sprite(PIXI.Texture.fromFrame(name + "_hover.png"));
-      hover.scale.set(.33, .33);
-      hover.alpha = 0;
-      cnt.addChild(hover);
+			var hover = new PIXI.Sprite(PIXI.Texture.fromFrame(name + "_hover.png"));
+			hover.scale.set(.33, .33);
+			hover.alpha = 0;
+			cnt.addChild(hover);
 
-      var normal = new PIXI.Sprite(PIXI.Texture.fromFrame(name + ".png"));
-      normal.scale.set(.33, .33);
-      cnt.addChild(normal);
+			var normal = new PIXI.Sprite(PIXI.Texture.fromFrame(name + ".png"));
+			normal.scale.set(.33, .33);
+			cnt.addChild(normal);
 
-      return cnt;
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			return cnt;
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      TweenLite.to(this._btSubmit, .8, {
-        delay: delay,
-        alpha: 1,
-        ease: Quart.easeInOut
-      });
+			TweenLite.to(this._btSubmit, .8, {
+				delay: delay,
+				alpha: 1,
+				ease: Quart.easeInOut
+			});
 
-      TweenLite.to(this._btAbout, .8, {
-        delay: delay + .2,
-        alpha: 1,
-        ease: Quart.easeInOut
-      });
+			TweenLite.to(this._btAbout, .8, {
+				delay: delay + .2,
+				alpha: 1,
+				ease: Quart.easeInOut
+			});
 
-      TweenLite.to(this._btFB, .8, {
-        delay: delay + .1,
-        alpha: 1,
-        ease: Quart.easeInOut
-      });
+			TweenLite.to(this._btFB, .8, {
+				delay: delay + .1,
+				alpha: 1,
+				ease: Quart.easeInOut
+			});
 
-      TweenLite.to(this._btTwitter, .8, {
-        delay: delay + .3,
-        alpha: 1,
-        ease: Quart.easeInOut
-      });
-    }
-  }]);
+			TweenLite.to(this._btTwitter, .8, {
+				delay: delay + .3,
+				alpha: 1,
+				ease: Quart.easeInOut
+			});
+		}
+	}]);
 
-  return Bts;
+	return Bts;
 })(PIXI.Container);
 
 module.exports = Bts;
@@ -4452,14 +4437,15 @@ var XPView = (function () {
 			TweenMax.to(this.mask, .6, { scaleX: 1, transformOrigin: origin, ease: Expo.easeOut, onComplete: function onComplete() {
 					_this2.destroyXP();
 					scrollEmul.reset();
-					_this2.createIframe(_this2.xp);
-					origin = "right top";
-					if (_this2.direction == 'prev') {
-						origin = "left top";
-					}
-					TweenMax.to(_this2.mask, .6, { delay: .7, scaleX: 0, transformOrigin: origin, ease: Expo.easeOut, onComplete: function onComplete() {
-							_this2.transitioning = false;
-						} });
+					_this2.createIframe(_this2.xp, function () {
+						origin = "right top";
+						if (_this2.direction == 'prev') {
+							origin = "left top";
+						}
+						TweenMax.to(_this2.mask, .6, { delay: .1, scaleX: 0, transformOrigin: origin, ease: Expo.easeOut, onComplete: function onComplete() {
+								_this2.transitioning = false;
+							} });
+					});
 				} });
 		}
 	}, {
@@ -4479,22 +4465,22 @@ var XPView = (function () {
 				this.iframe = null;
 				console.clear();
 				this.logo.removeEventListener('click', this.onLogoClick);
-				this.logo.removeEventListener('touchStart', this.onLogoClick);
+				this.logo.removeEventListener('touchstart', this.onLogoClick);
 				document.body.removeChild(this.logo);
 				this.logo = null;
 
 				this.nextBtn.removeEventListener('click', this.onNextClick);
-				this.nextBtn.removeEventListener('touchStart', this.onNextClick);
+				this.nextBtn.removeEventListener('touchstart', this.onNextClick);
 				document.body.removeChild(this.nextBtn);
 				this.nextBtn = null;
 
 				this.prevBtn.removeEventListener('click', this.onPrevClick);
-				this.prevBtn.removeEventListener('touchStart', this.onPrevClick);
+				this.prevBtn.removeEventListener('touchstart', this.onPrevClick);
 				document.body.removeChild(this.prevBtn);
 				this.prevBtn = null;
 
 				this.shareBtn.removeEventListener('click', this.onShareClick);
-				this.shareBtn.removeEventListener('touchStart', this.onShareClick);
+				this.shareBtn.removeEventListener('touchstart', this.onShareClick);
 				document.body.removeChild(this.shareBtn);
 				this.shareBtn = null;
 
@@ -4511,32 +4497,32 @@ var XPView = (function () {
 
 	}, {
 		key: "createIframe",
-		value: function createIframe(xp) {
+		value: function createIframe(xp, onReady) {
 			this.currentXP = true;
 
 			// UI Elements
 			this.logo = document.createElement('div');
 			this.logo.id = 'logo';
 			this.logo.addEventListener('click', this.onLogoClick);
-			this.logo.addEventListener('touchStart', this.onLogoClick);
+			this.logo.addEventListener('touchstart', this.onLogoClick);
 			document.body.appendChild(this.logo);
 
 			this.nextBtn = document.createElement('div');
 			this.nextBtn.id = 'next';
 			this.nextBtn.addEventListener('click', this.onNextClick);
-			this.nextBtn.addEventListener('touchStart', this.onNextClick);
+			this.nextBtn.addEventListener('touchstart', this.onNextClick);
 			document.body.appendChild(this.nextBtn);
 
 			this.prevBtn = document.createElement('div');
 			this.prevBtn.id = 'prev';
 			this.prevBtn.addEventListener('click', this.onPrevClick);
-			this.prevBtn.addEventListener('touchStart', this.onPrevClick);
+			this.prevBtn.addEventListener('touchstart', this.onPrevClick);
 			document.body.appendChild(this.prevBtn);
 
 			this.shareBtn = document.createElement('div');
 			this.shareBtn.id = 'share';
 			this.shareBtn.addEventListener('click', this.onShareClick);
-			this.shareBtn.addEventListener('touchStart', this.onShareClick);
+			this.shareBtn.addEventListener('touchstart', this.onShareClick);
 			document.body.appendChild(this.shareBtn);
 
 			this.xpinfos = document.createElement('div');
@@ -4548,61 +4534,50 @@ var XPView = (function () {
 
 			// The iframe
 			this.iframe = document.createElement('iframe');
+			if (this.iframe.contentWindow && this.iframe.contentWindow.document.readyState === 'complete') {
+				onReady();
+			} else {
+				this.iframe.addEventListener('load', onReady);
+			}
 			this.iframe.src = xp.path.replace('./', '/');
 			this.iframe.className = 'xp';
 			document.body.appendChild(this.iframe);
 		}
 	}, {
 		key: "bindEvents",
-		value: function bindEvents() {
-			// stage.on( "resize", this._binds.onResize )
-			// this._onResize()
-			// window.addEventListener( "mousewheel", this._binds.onMouseScroll, false )
-			// loop.add( this._binds.onUpdate )
-		}
+		value: function bindEvents() {}
 	}, {
 		key: "unbindEvents",
 		value: function unbindEvents() {}
-		// stage.off( "resize", this._binds.onResize )
-		// window.removeEventListener( "mousewheel", this._binds.onMouseScroll, false )
-		// loop.remove( this._binds.onUpdate )
 
 		//FEEBACK USER
 
 	}, {
 		key: "onNextClick",
-		value: function onNextClick() {
+		value: function onNextClick(e) {
 			this.prev();
 			var folder = this.xp.folder;
 			page('/xps/' + this.xpDay + folder);
 		}
 	}, {
 		key: "onPrevClick",
-		value: function onPrevClick() {
+		value: function onPrevClick(e) {
 			this.next();
 			var folder = this.xp.folder;
 			page('/xps/' + this.xpDay + folder);
 		}
 	}, {
 		key: "onLogoClick",
-		value: function onLogoClick() {
+		value: function onLogoClick(e) {
 			this.direction = 'next';
 			page('/home');
 		}
 	}, {
 		key: "onShareClick",
-		value: function onShareClick() {
-			//TODO Twitter
-
-			//TODO Facebook
-
-		}
+		value: function onShareClick() {}
 	}, {
 		key: "onAuthorOver",
-		value: function onAuthorOver() {
-			//TODO CoolAnim to show his website / twitter / autre
-
-		}
+		value: function onAuthorOver() {}
 	}]);
 
 	return XPView;

@@ -1,1 +1,75 @@
-function createBalls(o){for(var a=new THREE.Mesh(new THREE.IcosahedronGeometry(.3,2),new THREE.MeshBasicMaterial),e=new THREE.Vector3(0,1.6,0),t=new THREE.Vector3(0,1,0),r=new THREE.Vector3,n=new THREE.Vector3,s=0,i=!0,c=0;c<o.length-2;c++)for(var l=o[c][1],h=0;h<.7*(l.length-1);h++){s++;var E=Math.random();E*=h/l.length,r.copy(l[h]),i=!0,r.y<light.position.y&&(i=!1),n.copy(l[h+1]),r.sub(n),r.normalize();var d=r.dot(t);if(Math.abs(d)<.1&&E>.5&&s>5&&0==i){var w=a.clone();w.position.copy(l[h]),w.position.sub(e),s=0,w.audioParams={baseOffset:.8*Math.random(),attack:.56,release:.14*10.3,trans:.3},w.hoverOver=function(){console.log("whas"),console.log(this.audioParams),grain.playNote(this.audioParams)},treeObj.add(w),objectControls.add(w)}}}
+
+
+    function createBalls( curves ){
+
+      var ball = new THREE.Mesh( new THREE.IcosahedronGeometry(.3 , 2 ), new THREE.MeshBasicMaterial())
+
+      //var ball = new THREE.Mesh( new THREE.IcosahedronGeometry(.3 , 1 ), new THREE.MeshBasicMaterial())
+
+      var p = new THREE.Vector3( 0 , 1.6 , 0 );
+      var up = new THREE.Vector3( 0 , 1 , 0 );
+
+      var p1 = new THREE.Vector3();
+      var p2 = new THREE.Vector3();
+
+      var notToClose = 0;
+      var above = true;
+      for( var i = 0; i < curves.length - 2; i++ ){
+        var c = curves[i][1];
+
+        for( var j = 0; j < (c.length-1) * .7; j++ ){
+          notToClose ++
+
+          var r = Math.random();
+
+          r *= (j / c.length);
+
+          p1.copy( c[j]) ;
+
+          above = true;
+          if( p1.y < light.position.y ) above = false;
+
+          p2.copy( c[j+1]);
+
+          p1.sub( p2 );
+          p1.normalize();
+
+          var v = p1.dot( up );
+
+
+
+          if( Math.abs(v) < .1  && r > .5  && notToClose > 5 && above == false ){
+
+              var b = ball.clone();
+              b.position.copy( c[j] )
+              b.position.sub( p );
+              notToClose = 0;
+
+              b.audioParams = {
+
+                baseOffset: Math.random() * .8,
+                attack    : .140 * 4.,
+                release   : .140 * 10.3,
+                trans     : .3// + Math.random() * .5
+
+              }
+
+              b.hoverOver = function(){
+
+                console.log('whas')
+                console.log( this.audioParams )
+
+                grain.playNote( this.audioParams );
+
+              }
+              treeObj.add( b );
+              objectControls.add( b );
+
+          }
+
+        }
+
+      }
+
+
+    }

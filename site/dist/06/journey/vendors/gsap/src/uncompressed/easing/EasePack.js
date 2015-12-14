@@ -1,1 +1,345 @@
-var _gsScope="undefined"!=typeof module&&module.exports&&"undefined"!=typeof global?global:this||window;(_gsScope._gsQueue||(_gsScope._gsQueue=[])).push(function(){"use strict";_gsScope._gsDefine("easing.Back",["easing.Ease"],function(t){var n,e,i,o=_gsScope.GreenSockGlobals||_gsScope,s=o.com.greensock,r=2*Math.PI,u=Math.PI/2,p=s._class,c=function(n,e){var i=p("easing."+n,function(){},!0),o=i.prototype=new t;return o.constructor=i,o.getRatio=e,i},a=t.register||function(){},h=function(t,n,e,i,o){var s=p("easing."+t,{easeOut:new n,easeIn:new e,easeInOut:new i},!0);return a(s,t),s},_=function(t,n,e){this.t=t,this.v=n,e&&(this.next=e,e.prev=this,this.c=e.v-n,this.gap=e.t-t)},f=function(n,e){var i=p("easing."+n,function(t){this._p1=t||0===t?t:1.70158,this._p2=1.525*this._p1},!0),o=i.prototype=new t;return o.constructor=i,o.getRatio=e,o.config=function(t){return new i(t)},i},g=h("Back",f("BackOut",function(t){return(t-=1)*t*((this._p1+1)*t+this._p1)+1}),f("BackIn",function(t){return t*t*((this._p1+1)*t-this._p1)}),f("BackInOut",function(t){return(t*=2)<1?.5*t*t*((this._p2+1)*t-this._p2):.5*((t-=2)*t*((this._p2+1)*t+this._p2)+2)})),w=p("easing.SlowMo",function(t,n,e){n=n||0===n?n:.7,null==t?t=.7:t>1&&(t=1),this._p=1!==t?n:0,this._p1=(1-t)/2,this._p2=t,this._p3=this._p1+this._p2,this._calcEnd=e===!0},!0),l=w.prototype=new t;return l.constructor=w,l.getRatio=function(t){var n=t+(.5-t)*this._p;return t<this._p1?this._calcEnd?1-(t=1-t/this._p1)*t:n-(t=1-t/this._p1)*t*t*t*n:t>this._p3?this._calcEnd?1-(t=(t-this._p3)/this._p1)*t:n+(t-n)*(t=(t-this._p3)/this._p1)*t*t*t:this._calcEnd?1:n},w.ease=new w(.7,.7),l.config=w.config=function(t,n,e){return new w(t,n,e)},n=p("easing.SteppedEase",function(t){t=t||1,this._p1=1/t,this._p2=t+1},!0),l=n.prototype=new t,l.constructor=n,l.getRatio=function(t){return 0>t?t=0:t>=1&&(t=.999999999),(this._p2*t>>0)*this._p1},l.config=n.config=function(t){return new n(t)},e=p("easing.RoughEase",function(n){n=n||{};for(var e,i,o,s,r,u,p=n.taper||"none",c=[],a=0,h=0|(n.points||20),f=h,g=n.randomize!==!1,w=n.clamp===!0,l=n.template instanceof t?n.template:null,M="number"==typeof n.strength?.4*n.strength:.4;--f>-1;)e=g?Math.random():1/h*f,i=l?l.getRatio(e):e,"none"===p?o=M:"out"===p?(s=1-e,o=s*s*M):"in"===p?o=e*e*M:.5>e?(s=2*e,o=s*s*.5*M):(s=2*(1-e),o=s*s*.5*M),g?i+=Math.random()*o-.5*o:f%2?i+=.5*o:i-=.5*o,w&&(i>1?i=1:0>i&&(i=0)),c[a++]={x:e,y:i};for(c.sort(function(t,n){return t.x-n.x}),u=new _(1,1,null),f=h;--f>-1;)r=c[f],u=new _(r.x,r.y,u);this._prev=new _(0,0,0!==u.t?u:u.next)},!0),l=e.prototype=new t,l.constructor=e,l.getRatio=function(t){var n=this._prev;if(t>n.t){for(;n.next&&t>=n.t;)n=n.next;n=n.prev}else for(;n.prev&&t<=n.t;)n=n.prev;return this._prev=n,n.v+(t-n.t)/n.gap*n.c},l.config=function(t){return new e(t)},e.ease=new e,h("Bounce",c("BounceOut",function(t){return 1/2.75>t?7.5625*t*t:2/2.75>t?7.5625*(t-=1.5/2.75)*t+.75:2.5/2.75>t?7.5625*(t-=2.25/2.75)*t+.9375:7.5625*(t-=2.625/2.75)*t+.984375}),c("BounceIn",function(t){return(t=1-t)<1/2.75?1-7.5625*t*t:2/2.75>t?1-(7.5625*(t-=1.5/2.75)*t+.75):2.5/2.75>t?1-(7.5625*(t-=2.25/2.75)*t+.9375):1-(7.5625*(t-=2.625/2.75)*t+.984375)}),c("BounceInOut",function(t){var n=.5>t;return t=n?1-2*t:2*t-1,t=1/2.75>t?7.5625*t*t:2/2.75>t?7.5625*(t-=1.5/2.75)*t+.75:2.5/2.75>t?7.5625*(t-=2.25/2.75)*t+.9375:7.5625*(t-=2.625/2.75)*t+.984375,n?.5*(1-t):.5*t+.5})),h("Circ",c("CircOut",function(t){return Math.sqrt(1-(t-=1)*t)}),c("CircIn",function(t){return-(Math.sqrt(1-t*t)-1)}),c("CircInOut",function(t){return(t*=2)<1?-.5*(Math.sqrt(1-t*t)-1):.5*(Math.sqrt(1-(t-=2)*t)+1)})),i=function(n,e,i){var o=p("easing."+n,function(t,n){this._p1=t>=1?t:1,this._p2=(n||i)/(1>t?t:1),this._p3=this._p2/r*(Math.asin(1/this._p1)||0),this._p2=r/this._p2},!0),s=o.prototype=new t;return s.constructor=o,s.getRatio=e,s.config=function(t,n){return new o(t,n)},o},h("Elastic",i("ElasticOut",function(t){return this._p1*Math.pow(2,-10*t)*Math.sin((t-this._p3)*this._p2)+1},.3),i("ElasticIn",function(t){return-(this._p1*Math.pow(2,10*(t-=1))*Math.sin((t-this._p3)*this._p2))},.3),i("ElasticInOut",function(t){return(t*=2)<1?-.5*(this._p1*Math.pow(2,10*(t-=1))*Math.sin((t-this._p3)*this._p2)):this._p1*Math.pow(2,-10*(t-=1))*Math.sin((t-this._p3)*this._p2)*.5+1},.45)),h("Expo",c("ExpoOut",function(t){return 1-Math.pow(2,-10*t)}),c("ExpoIn",function(t){return Math.pow(2,10*(t-1))-.001}),c("ExpoInOut",function(t){return(t*=2)<1?.5*Math.pow(2,10*(t-1)):.5*(2-Math.pow(2,-10*(t-1)))})),h("Sine",c("SineOut",function(t){return Math.sin(t*u)}),c("SineIn",function(t){return-Math.cos(t*u)+1}),c("SineInOut",function(t){return-.5*(Math.cos(Math.PI*t)-1)})),p("easing.EaseLookup",{find:function(n){return t.map[n]}},!0),a(o.SlowMo,"SlowMo","ease,"),a(e,"RoughEase","ease,"),a(n,"SteppedEase","ease,"),g},!0)}),_gsScope._gsDefine&&_gsScope._gsQueue.pop()();
+/*!
+ * VERSION: beta 1.15.2
+ * DATE: 2015-01-27
+ * UPDATES AND DOCS AT: http://greensock.com
+ *
+ * @license Copyright (c) 2008-2015, GreenSock. All rights reserved.
+ * This work is subject to the terms at http://greensock.com/standard-license or for
+ * Club GreenSock members, the software agreement that was issued with your membership.
+ * 
+ * @author: Jack Doyle, jack@greensock.com
+ **/
+var _gsScope = (typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window; //helps ensure compatibility with AMD/RequireJS and CommonJS/Node
+(_gsScope._gsQueue || (_gsScope._gsQueue = [])).push( function() {
+
+	"use strict";
+
+	_gsScope._gsDefine("easing.Back", ["easing.Ease"], function(Ease) {
+		
+		var w = (_gsScope.GreenSockGlobals || _gsScope),
+			gs = w.com.greensock,
+			_2PI = Math.PI * 2,
+			_HALF_PI = Math.PI / 2,
+			_class = gs._class,
+			_create = function(n, f) {
+				var C = _class("easing." + n, function(){}, true),
+					p = C.prototype = new Ease();
+				p.constructor = C;
+				p.getRatio = f;
+				return C;
+			},
+			_easeReg = Ease.register || function(){}, //put an empty function in place just as a safety measure in case someone loads an OLD version of TweenLite.js where Ease.register doesn't exist.
+			_wrap = function(name, EaseOut, EaseIn, EaseInOut, aliases) {
+				var C = _class("easing."+name, {
+					easeOut:new EaseOut(),
+					easeIn:new EaseIn(),
+					easeInOut:new EaseInOut()
+				}, true);
+				_easeReg(C, name);
+				return C;
+			},
+			EasePoint = function(time, value, next) {
+				this.t = time;
+				this.v = value;
+				if (next) {
+					this.next = next;
+					next.prev = this;
+					this.c = next.v - value;
+					this.gap = next.t - time;
+				}
+			},
+
+			//Back
+			_createBack = function(n, f) {
+				var C = _class("easing." + n, function(overshoot) {
+						this._p1 = (overshoot || overshoot === 0) ? overshoot : 1.70158;
+						this._p2 = this._p1 * 1.525;
+					}, true), 
+					p = C.prototype = new Ease();
+				p.constructor = C;
+				p.getRatio = f;
+				p.config = function(overshoot) {
+					return new C(overshoot);
+				};
+				return C;
+			},
+
+			Back = _wrap("Back",
+				_createBack("BackOut", function(p) {
+					return ((p = p - 1) * p * ((this._p1 + 1) * p + this._p1) + 1);
+				}),
+				_createBack("BackIn", function(p) {
+					return p * p * ((this._p1 + 1) * p - this._p1);
+				}),
+				_createBack("BackInOut", function(p) {
+					return ((p *= 2) < 1) ? 0.5 * p * p * ((this._p2 + 1) * p - this._p2) : 0.5 * ((p -= 2) * p * ((this._p2 + 1) * p + this._p2) + 2);
+				})
+			),
+
+
+			//SlowMo
+			SlowMo = _class("easing.SlowMo", function(linearRatio, power, yoyoMode) {
+				power = (power || power === 0) ? power : 0.7;
+				if (linearRatio == null) {
+					linearRatio = 0.7;
+				} else if (linearRatio > 1) {
+					linearRatio = 1;
+				}
+				this._p = (linearRatio !== 1) ? power : 0;
+				this._p1 = (1 - linearRatio) / 2;
+				this._p2 = linearRatio;
+				this._p3 = this._p1 + this._p2;
+				this._calcEnd = (yoyoMode === true);
+			}, true),
+			p = SlowMo.prototype = new Ease(),
+			SteppedEase, RoughEase, _createElastic;
+			
+		p.constructor = SlowMo;
+		p.getRatio = function(p) {
+			var r = p + (0.5 - p) * this._p;
+			if (p < this._p1) {
+				return this._calcEnd ? 1 - ((p = 1 - (p / this._p1)) * p) : r - ((p = 1 - (p / this._p1)) * p * p * p * r);
+			} else if (p > this._p3) {
+				return this._calcEnd ? 1 - (p = (p - this._p3) / this._p1) * p : r + ((p - r) * (p = (p - this._p3) / this._p1) * p * p * p);
+			}
+			return this._calcEnd ? 1 : r;
+		};
+		SlowMo.ease = new SlowMo(0.7, 0.7);
+		
+		p.config = SlowMo.config = function(linearRatio, power, yoyoMode) {
+			return new SlowMo(linearRatio, power, yoyoMode);
+		};
+
+
+		//SteppedEase
+		SteppedEase = _class("easing.SteppedEase", function(steps) {
+				steps = steps || 1;
+				this._p1 = 1 / steps;
+				this._p2 = steps + 1;
+			}, true);
+		p = SteppedEase.prototype = new Ease();	
+		p.constructor = SteppedEase;
+		p.getRatio = function(p) {
+			if (p < 0) {
+				p = 0;
+			} else if (p >= 1) {
+				p = 0.999999999;
+			}
+			return ((this._p2 * p) >> 0) * this._p1;
+		};
+		p.config = SteppedEase.config = function(steps) {
+			return new SteppedEase(steps);
+		};
+
+
+		//RoughEase
+		RoughEase = _class("easing.RoughEase", function(vars) {
+			vars = vars || {};
+			var taper = vars.taper || "none",
+				a = [],
+				cnt = 0,
+				points = (vars.points || 20) | 0,
+				i = points,
+				randomize = (vars.randomize !== false),
+				clamp = (vars.clamp === true),
+				template = (vars.template instanceof Ease) ? vars.template : null,
+				strength = (typeof(vars.strength) === "number") ? vars.strength * 0.4 : 0.4,
+				x, y, bump, invX, obj, pnt;
+			while (--i > -1) {
+				x = randomize ? Math.random() : (1 / points) * i;
+				y = template ? template.getRatio(x) : x;
+				if (taper === "none") {
+					bump = strength;
+				} else if (taper === "out") {
+					invX = 1 - x;
+					bump = invX * invX * strength;
+				} else if (taper === "in") {
+					bump = x * x * strength;
+				} else if (x < 0.5) {  //"both" (start)
+					invX = x * 2;
+					bump = invX * invX * 0.5 * strength;
+				} else {				//"both" (end)
+					invX = (1 - x) * 2;
+					bump = invX * invX * 0.5 * strength;
+				}
+				if (randomize) {
+					y += (Math.random() * bump) - (bump * 0.5);
+				} else if (i % 2) {
+					y += bump * 0.5;
+				} else {
+					y -= bump * 0.5;
+				}
+				if (clamp) {
+					if (y > 1) {
+						y = 1;
+					} else if (y < 0) {
+						y = 0;
+					}
+				}
+				a[cnt++] = {x:x, y:y};
+			}
+			a.sort(function(a, b) {
+				return a.x - b.x;
+			});
+
+			pnt = new EasePoint(1, 1, null);
+			i = points;
+			while (--i > -1) {
+				obj = a[i];
+				pnt = new EasePoint(obj.x, obj.y, pnt);
+			}
+
+			this._prev = new EasePoint(0, 0, (pnt.t !== 0) ? pnt : pnt.next);
+		}, true);
+		p = RoughEase.prototype = new Ease();
+		p.constructor = RoughEase;
+		p.getRatio = function(p) {
+			var pnt = this._prev;
+			if (p > pnt.t) {
+				while (pnt.next && p >= pnt.t) {
+					pnt = pnt.next;
+				}
+				pnt = pnt.prev;
+			} else {
+				while (pnt.prev && p <= pnt.t) {
+					pnt = pnt.prev;
+				}
+			}
+			this._prev = pnt;
+			return (pnt.v + ((p - pnt.t) / pnt.gap) * pnt.c);
+		};
+		p.config = function(vars) {
+			return new RoughEase(vars);
+		};
+		RoughEase.ease = new RoughEase();
+
+
+		//Bounce
+		_wrap("Bounce",
+			_create("BounceOut", function(p) {
+				if (p < 1 / 2.75) {
+					return 7.5625 * p * p;
+				} else if (p < 2 / 2.75) {
+					return 7.5625 * (p -= 1.5 / 2.75) * p + 0.75;
+				} else if (p < 2.5 / 2.75) {
+					return 7.5625 * (p -= 2.25 / 2.75) * p + 0.9375;
+				}
+				return 7.5625 * (p -= 2.625 / 2.75) * p + 0.984375;
+			}),
+			_create("BounceIn", function(p) {
+				if ((p = 1 - p) < 1 / 2.75) {
+					return 1 - (7.5625 * p * p);
+				} else if (p < 2 / 2.75) {
+					return 1 - (7.5625 * (p -= 1.5 / 2.75) * p + 0.75);
+				} else if (p < 2.5 / 2.75) {
+					return 1 - (7.5625 * (p -= 2.25 / 2.75) * p + 0.9375);
+				}
+				return 1 - (7.5625 * (p -= 2.625 / 2.75) * p + 0.984375);
+			}),
+			_create("BounceInOut", function(p) {
+				var invert = (p < 0.5);
+				if (invert) {
+					p = 1 - (p * 2);
+				} else {
+					p = (p * 2) - 1;
+				}
+				if (p < 1 / 2.75) {
+					p = 7.5625 * p * p;
+				} else if (p < 2 / 2.75) {
+					p = 7.5625 * (p -= 1.5 / 2.75) * p + 0.75;
+				} else if (p < 2.5 / 2.75) {
+					p = 7.5625 * (p -= 2.25 / 2.75) * p + 0.9375;
+				} else {
+					p = 7.5625 * (p -= 2.625 / 2.75) * p + 0.984375;
+				}
+				return invert ? (1 - p) * 0.5 : p * 0.5 + 0.5;
+			})
+		);
+
+
+		//CIRC
+		_wrap("Circ",
+			_create("CircOut", function(p) {
+				return Math.sqrt(1 - (p = p - 1) * p);
+			}),
+			_create("CircIn", function(p) {
+				return -(Math.sqrt(1 - (p * p)) - 1);
+			}),
+			_create("CircInOut", function(p) {
+				return ((p*=2) < 1) ? -0.5 * (Math.sqrt(1 - p * p) - 1) : 0.5 * (Math.sqrt(1 - (p -= 2) * p) + 1);
+			})
+		);
+
+
+		//Elastic
+		_createElastic = function(n, f, def) {
+			var C = _class("easing." + n, function(amplitude, period) {
+					this._p1 = (amplitude >= 1) ? amplitude : 1; //note: if amplitude is < 1, we simply adjust the period for a more natural feel. Otherwise the math doesn't work right and the curve starts at 1.
+					this._p2 = (period || def) / (amplitude < 1 ? amplitude : 1);
+					this._p3 = this._p2 / _2PI * (Math.asin(1 / this._p1) || 0);
+					this._p2 = _2PI / this._p2; //precalculate to optimize
+				}, true),
+				p = C.prototype = new Ease();
+			p.constructor = C;
+			p.getRatio = f;
+			p.config = function(amplitude, period) {
+				return new C(amplitude, period);
+			};
+			return C;
+		};
+		_wrap("Elastic",
+			_createElastic("ElasticOut", function(p) {
+				return this._p1 * Math.pow(2, -10 * p) * Math.sin( (p - this._p3) * this._p2 ) + 1;
+			}, 0.3),
+			_createElastic("ElasticIn", function(p) {
+				return -(this._p1 * Math.pow(2, 10 * (p -= 1)) * Math.sin( (p - this._p3) * this._p2 ));
+			}, 0.3),
+			_createElastic("ElasticInOut", function(p) {
+				return ((p *= 2) < 1) ? -0.5 * (this._p1 * Math.pow(2, 10 * (p -= 1)) * Math.sin( (p - this._p3) * this._p2)) : this._p1 * Math.pow(2, -10 *(p -= 1)) * Math.sin( (p - this._p3) * this._p2 ) * 0.5 + 1;
+			}, 0.45)
+		);
+
+
+		//Expo
+		_wrap("Expo",
+			_create("ExpoOut", function(p) {
+				return 1 - Math.pow(2, -10 * p);
+			}),
+			_create("ExpoIn", function(p) {
+				return Math.pow(2, 10 * (p - 1)) - 0.001;
+			}),
+			_create("ExpoInOut", function(p) {
+				return ((p *= 2) < 1) ? 0.5 * Math.pow(2, 10 * (p - 1)) : 0.5 * (2 - Math.pow(2, -10 * (p - 1)));
+			})
+		);
+
+
+		//Sine
+		_wrap("Sine",
+			_create("SineOut", function(p) {
+				return Math.sin(p * _HALF_PI);
+			}),
+			_create("SineIn", function(p) {
+				return -Math.cos(p * _HALF_PI) + 1;
+			}),
+			_create("SineInOut", function(p) {
+				return -0.5 * (Math.cos(Math.PI * p) - 1);
+			})
+		);
+
+		_class("easing.EaseLookup", {
+				find:function(s) {
+					return Ease.map[s];
+				}
+			}, true);
+
+		//register the non-standard eases
+		_easeReg(w.SlowMo, "SlowMo", "ease,");
+		_easeReg(RoughEase, "RoughEase", "ease,");
+		_easeReg(SteppedEase, "SteppedEase", "ease,");
+		
+		return Back;
+		
+	}, true);
+
+}); if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); }

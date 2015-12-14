@@ -1,1 +1,81 @@
-var _gsScope="undefined"!=typeof module&&module.exports&&"undefined"!=typeof global?global:this||window;(_gsScope._gsQueue||(_gsScope._gsQueue=[])).push(function(){"use strict";_gsScope._gsDefine.plugin({propName:"directionalRotation",version:"0.2.1",API:2,init:function(e,t,s){"object"!=typeof t&&(t={rotation:t}),this.finals={};var i,n,o,p,r,u,f=t.useRadians===!0?2*Math.PI:360,a=1e-6;for(i in t)"useRadians"!==i&&(u=(t[i]+"").split("_"),n=u[0],o=parseFloat("function"!=typeof e[i]?e[i]:e[i.indexOf("set")||"function"!=typeof e["get"+i.substr(3)]?i:"get"+i.substr(3)]()),p=this.finals[i]="string"==typeof n&&"="===n.charAt(1)?o+parseInt(n.charAt(0)+"1",10)*Number(n.substr(2)):Number(n)||0,r=p-o,u.length&&(n=u.join("_"),-1!==n.indexOf("short")&&(r%=f,r!==r%(f/2)&&(r=0>r?r+f:r-f)),-1!==n.indexOf("_cw")&&0>r?r=(r+9999999999*f)%f-(r/f|0)*f:-1!==n.indexOf("ccw")&&r>0&&(r=(r-9999999999*f)%f-(r/f|0)*f)),(r>a||-a>r)&&(this._addTween(e,i,o,o+r,i),this._overwriteProps.push(i)));return!0},set:function(e){var t;if(1!==e)this._super.setRatio.call(this,e);else for(t=this._firstPT;t;)t.f?t.t[t.p](this.finals[t.p]):t.t[t.p]=this.finals[t.p],t=t._next}})._autoCSS=!0}),_gsScope._gsDefine&&_gsScope._gsQueue.pop()();
+/*!
+ * VERSION: beta 0.2.1
+ * DATE: 2014-07-17
+ * UPDATES AND DOCS AT: http://www.greensock.com
+ *
+ * @license Copyright (c) 2008-2015, GreenSock. All rights reserved.
+ * This work is subject to the terms at http://greensock.com/standard-license or for
+ * Club GreenSock members, the software agreement that was issued with your membership.
+ * 
+ * @author: Jack Doyle, jack@greensock.com
+ **/
+var _gsScope = (typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window; //helps ensure compatibility with AMD/RequireJS and CommonJS/Node
+(_gsScope._gsQueue || (_gsScope._gsQueue = [])).push( function() {
+
+	"use strict";
+
+	_gsScope._gsDefine.plugin({
+		propName: "directionalRotation",
+		version: "0.2.1",
+		API: 2,
+
+		//called when the tween renders for the first time. This is where initial values should be recorded and any setup routines should run.
+		init: function(target, value, tween) {
+			if (typeof(value) !== "object") {
+				value = {rotation:value};
+			}
+			this.finals = {};
+			var cap = (value.useRadians === true) ? Math.PI * 2 : 360,
+				min = 0.000001,
+				p, v, start, end, dif, split;
+			for (p in value) {
+				if (p !== "useRadians") {
+					split = (value[p] + "").split("_");
+					v = split[0];
+					start = parseFloat( (typeof(target[p]) !== "function") ? target[p] : target[ ((p.indexOf("set") || typeof(target["get" + p.substr(3)]) !== "function") ? p : "get" + p.substr(3)) ]() );
+					end = this.finals[p] = (typeof(v) === "string" && v.charAt(1) === "=") ? start + parseInt(v.charAt(0) + "1", 10) * Number(v.substr(2)) : Number(v) || 0;
+					dif = end - start;
+					if (split.length) {
+						v = split.join("_");
+						if (v.indexOf("short") !== -1) {
+							dif = dif % cap;
+							if (dif !== dif % (cap / 2)) {
+								dif = (dif < 0) ? dif + cap : dif - cap;
+							}
+						}
+						if (v.indexOf("_cw") !== -1 && dif < 0) {
+							dif = ((dif + cap * 9999999999) % cap) - ((dif / cap) | 0) * cap;
+						} else if (v.indexOf("ccw") !== -1 && dif > 0) {
+							dif = ((dif - cap * 9999999999) % cap) - ((dif / cap) | 0) * cap;
+						}
+					}
+					if (dif > min || dif < -min) {
+						this._addTween(target, p, start, start + dif, p);
+						this._overwriteProps.push(p);
+					}
+				}
+			}
+			return true;
+		},
+
+		//called each time the values should be updated, and the ratio gets passed as the only parameter (typically it's a value between 0 and 1, but it can exceed those when using an ease like Elastic.easeOut or Back.easeOut, etc.)
+		set: function(ratio) {
+			var pt;
+			if (ratio !== 1) {
+				this._super.setRatio.call(this, ratio);
+			} else {
+				pt = this._firstPT;
+				while (pt) {
+					if (pt.f) {
+						pt.t[pt.p](this.finals[pt.p]);
+					} else {
+						pt.t[pt.p] = this.finals[pt.p];
+					}
+					pt = pt._next;
+				}
+			}
+		}
+
+	})._autoCSS = true;
+
+}); if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); }

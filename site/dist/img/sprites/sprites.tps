@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.9.4</string>
         <key>fileName</key>
-        <string>/Users/floz/Documents/projects/perso/digital/christmasxp2015/home/build/img/sprites/sprites.tps</string>
+        <string>/Users/floz/Documents/projects/perso/digital/christmasxp2015/site/build/img/sprites/sprites.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -191,10 +191,18 @@
         <key>fileList</key>
         <array>
             <filename>layer-blue.png</filename>
-            <filename>bg-entry-number_2x.png</filename>
             <filename>circle_2x.png</filename>
             <filename>poly_2x.png</filename>
             <filename>poly_big_2x.png</filename>
+            <filename>bt_about_hover.png</filename>
+            <filename>bt_about.png</filename>
+            <filename>bt_fb_hover.png</filename>
+            <filename>bt_fb.png</filename>
+            <filename>bt_submitxp_hover.png</filename>
+            <filename>bt_submitxp.png</filename>
+            <filename>bt_twitter_hover.png</filename>
+            <filename>bt_twitter.png</filename>
+            <filename>circle_preview.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

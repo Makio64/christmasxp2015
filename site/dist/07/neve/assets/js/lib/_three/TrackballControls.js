@@ -1,1 +1,634 @@
-THREE.TrackballControls=function(e,t){function o(e){u.enabled!==!1&&(window.removeEventListener("keydown",o),y=g,g===E.NONE&&(e.keyCode!==u.keys[E.ROTATE]||u.noRotate?e.keyCode!==u.keys[E.ZOOM]||u.noZoom?e.keyCode!==u.keys[E.PAN]||u.noPan||(g=E.PAN):g=E.ZOOM:g=E.ROTATE))}function n(e){u.enabled!==!1&&(g=y,window.addEventListener("keydown",o,!1))}function s(e){u.enabled!==!1&&(e.preventDefault(),e.stopPropagation(),g===E.NONE&&(g=e.button),g!==E.ROTATE||u.noRotate?g!==E.ZOOM||u.noZoom?g!==E.PAN||u.noPan||(N.copy(A(e.pageX,e.pageY)),V.copy(N)):(O.copy(A(e.pageX,e.pageY)),R.copy(O)):(f.copy(P(e.pageX,e.pageY)),w.copy(f)),document.addEventListener("mousemove",c,!1),document.addEventListener("mouseup",i,!1),u.dispatchEvent(j))}function c(e){u.enabled!==!1&&(e.preventDefault(),e.stopPropagation(),g!==E.ROTATE||u.noRotate?g!==E.ZOOM||u.noZoom?g!==E.PAN||u.noPan||V.copy(A(e.pageX,e.pageY)):R.copy(A(e.pageX,e.pageY)):(w.copy(f),f.copy(P(e.pageX,e.pageY))))}function i(e){u.enabled!==!1&&(e.preventDefault(),e.stopPropagation(),g=E.NONE,document.removeEventListener("mousemove",c),document.removeEventListener("mouseup",i),u.dispatchEvent(D))}function a(e){if(u.enabled!==!1){e.preventDefault(),e.stopPropagation();var t=0;e.wheelDelta?t=e.wheelDelta/40:e.detail&&(t=-e.detail/3),O.y+=.01*t,u.dispatchEvent(j),u.dispatchEvent(D)}}function r(e){if(u.enabled!==!1){switch(e.touches.length){case 1:g=E.TOUCH_ROTATE,f.copy(P(e.touches[0].pageX,e.touches[0].pageY)),w.copy(f);break;case 2:g=E.TOUCH_ZOOM_PAN;var t=e.touches[0].pageX-e.touches[1].pageX,o=e.touches[0].pageY-e.touches[1].pageY;H=L=Math.sqrt(t*t+o*o);var n=(e.touches[0].pageX+e.touches[1].pageX)/2,s=(e.touches[0].pageY+e.touches[1].pageY)/2;N.copy(A(n,s)),V.copy(N);break;default:g=E.NONE}u.dispatchEvent(j)}}function p(e){if(u.enabled!==!1)switch(e.preventDefault(),e.stopPropagation(),e.touches.length){case 1:w.copy(f),f.copy(P(e.touches[0].pageX,e.touches[0].pageY));break;case 2:var t=e.touches[0].pageX-e.touches[1].pageX,o=e.touches[0].pageY-e.touches[1].pageY;H=Math.sqrt(t*t+o*o);var n=(e.touches[0].pageX+e.touches[1].pageX)/2,s=(e.touches[0].pageY+e.touches[1].pageY)/2;V.copy(A(n,s));break;default:g=E.NONE}}function h(e){if(u.enabled!==!1){switch(e.touches.length){case 1:w.copy(f),f.copy(P(e.touches[0].pageX,e.touches[0].pageY));break;case 2:L=H=0;var t=(e.touches[0].pageX+e.touches[1].pageX)/2,o=(e.touches[0].pageY+e.touches[1].pageY)/2;V.copy(A(t,o)),N.copy(V)}g=E.NONE,u.dispatchEvent(D)}}function d(e){e.preventDefault()}var u=this,E={NONE:-1,ROTATE:0,ZOOM:1,PAN:2,TOUCH_ROTATE:3,TOUCH_ZOOM_PAN:4};this.object=e,this.domElement=void 0!==t?t:document,this.enabled=!0,this.screen={left:0,top:0,width:0,height:0},this.rotateSpeed=1,this.zoomSpeed=1.2,this.panSpeed=.3,this.noRotate=!1,this.noZoom=!1,this.noPan=!1,this.staticMoving=!1,this.dynamicDampingFactor=.2,this.minDistance=0,this.maxDistance=1/0,this.keys=[65,83,68],this.target=new THREE.Vector3;var m=1e-6,l=new THREE.Vector3,g=E.NONE,y=E.NONE,v=new THREE.Vector3,w=new THREE.Vector2,f=new THREE.Vector2,T=new THREE.Vector3,b=0,O=new THREE.Vector2,R=new THREE.Vector2,L=0,H=0,N=new THREE.Vector2,V=new THREE.Vector2;this.target0=this.target.clone(),this.position0=this.object.position.clone(),this.up0=this.object.up.clone();var k={type:"change"},j={type:"start"},D={type:"end"};this.handleResize=function(){if(this.domElement===document)this.screen.left=0,this.screen.top=0,this.screen.width=window.innerWidth,this.screen.height=window.innerHeight;else{var e=this.domElement.getBoundingClientRect(),t=this.domElement.ownerDocument.documentElement;this.screen.left=e.left+window.pageXOffset-t.clientLeft,this.screen.top=e.top+window.pageYOffset-t.clientTop,this.screen.width=e.width,this.screen.height=e.height}},this.handleEvent=function(e){"function"==typeof this[e.type]&&this[e.type](e)};var A=function(){var e=new THREE.Vector2;return function(t,o){return e.set((t-u.screen.left)/u.screen.width,(o-u.screen.top)/u.screen.height),e}}(),P=function(){var e=new THREE.Vector2;return function(t,o){return e.set((t-.5*u.screen.width-u.screen.left)/(.5*u.screen.width),(u.screen.height+2*(u.screen.top-o))/u.screen.width),e}}();this.rotateCamera=function(){var e,t=new THREE.Vector3,o=new THREE.Quaternion,n=new THREE.Vector3,s=new THREE.Vector3,c=new THREE.Vector3,i=new THREE.Vector3;return function(){i.set(f.x-w.x,f.y-w.y,0),e=i.length(),e?(v.copy(u.object.position).sub(u.target),n.copy(v).normalize(),s.copy(u.object.up).normalize(),c.crossVectors(s,n).normalize(),s.setLength(f.y-w.y),c.setLength(f.x-w.x),i.copy(s.add(c)),t.crossVectors(i,v).normalize(),e*=u.rotateSpeed,o.setFromAxisAngle(t,e),v.applyQuaternion(o),u.object.up.applyQuaternion(o),T.copy(t),b=e):!u.staticMoving&&b&&(b*=Math.sqrt(1-u.dynamicDampingFactor),v.copy(u.object.position).sub(u.target),o.setFromAxisAngle(T,b),v.applyQuaternion(o),u.object.up.applyQuaternion(o)),w.copy(f)}}(),this.zoomCamera=function(){var e;g===E.TOUCH_ZOOM_PAN?(e=L/H,L=H,v.multiplyScalar(e)):(e=1+(R.y-O.y)*u.zoomSpeed,1!==e&&e>0&&(v.multiplyScalar(e),u.staticMoving?O.copy(R):O.y+=(R.y-O.y)*this.dynamicDampingFactor))},this.panCamera=function(){var e=new THREE.Vector2,t=new THREE.Vector3,o=new THREE.Vector3;return function(){e.copy(V).sub(N),e.lengthSq()&&(e.multiplyScalar(v.length()*u.panSpeed),o.copy(v).cross(u.object.up).setLength(e.x),o.add(t.copy(u.object.up).setLength(e.y)),u.object.position.add(o),u.target.add(o),u.staticMoving?N.copy(V):N.add(e.subVectors(V,N).multiplyScalar(u.dynamicDampingFactor)))}}(),this.checkDistances=function(){u.noZoom&&u.noPan||(v.lengthSq()>u.maxDistance*u.maxDistance&&(u.object.position.addVectors(u.target,v.setLength(u.maxDistance)),O.copy(R)),v.lengthSq()<u.minDistance*u.minDistance&&(u.object.position.addVectors(u.target,v.setLength(u.minDistance)),O.copy(R)))},this.update=function(){v.subVectors(u.object.position,u.target),u.noRotate||u.rotateCamera(),u.noZoom||u.zoomCamera(),u.noPan||u.panCamera(),u.object.position.addVectors(u.target,v),u.checkDistances(),u.object.lookAt(u.target),l.distanceToSquared(u.object.position)>m&&(u.dispatchEvent(k),l.copy(u.object.position))},this.reset=function(){g=E.NONE,y=E.NONE,u.target.copy(u.target0),u.object.position.copy(u.position0),u.object.up.copy(u.up0),v.subVectors(u.object.position,u.target),u.object.lookAt(u.target),u.dispatchEvent(k),l.copy(u.object.position)},this.dispose=function(){this.domElement.removeEventListener("contextmenu",d,!1),this.domElement.removeEventListener("mousedown",s,!1),this.domElement.removeEventListener("mousewheel",a,!1),this.domElement.removeEventListener("MozMousePixelScroll",a,!1),this.domElement.removeEventListener("touchstart",r,!1),this.domElement.removeEventListener("touchend",h,!1),this.domElement.removeEventListener("touchmove",p,!1),document.removeEventListener("mousemove",c,!1),document.removeEventListener("mouseup",i,!1),window.removeEventListener("keydown",o,!1),window.removeEventListener("keyup",n,!1)},this.domElement.addEventListener("contextmenu",d,!1),this.domElement.addEventListener("mousedown",s,!1),this.domElement.addEventListener("mousewheel",a,!1),this.domElement.addEventListener("MozMousePixelScroll",a,!1),this.domElement.addEventListener("touchstart",r,!1),this.domElement.addEventListener("touchend",h,!1),this.domElement.addEventListener("touchmove",p,!1),window.addEventListener("keydown",o,!1),window.addEventListener("keyup",n,!1),this.handleResize(),this.update()},THREE.TrackballControls.prototype=Object.create(THREE.EventDispatcher.prototype),THREE.TrackballControls.prototype.constructor=THREE.TrackballControls;
+/**
+ * @author Eberhard Graether / http://egraether.com/
+ * @author Mark Lundin 	/ http://mark-lundin.com
+ * @author Simone Manini / http://daron1337.github.io
+ * @author Luca Antiga 	/ http://lantiga.github.io
+ */
+
+THREE.TrackballControls = function ( object, domElement ) {
+
+    var _this = this;
+    var STATE = { NONE: - 1, ROTATE: 0, ZOOM: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_ZOOM_PAN: 4 };
+
+    this.object = object;
+    this.domElement = ( domElement !== undefined ) ? domElement : document;
+
+    // API
+
+    this.enabled = true;
+
+    this.screen = { left: 0, top: 0, width: 0, height: 0 };
+
+    this.rotateSpeed = 1.0;
+    this.zoomSpeed = 1.2;
+    this.panSpeed = 0.3;
+
+    this.noRotate = false;
+    this.noZoom = false;
+    this.noPan = false;
+
+    this.staticMoving = false;
+    this.dynamicDampingFactor = 0.2;
+
+    this.minDistance = 0;
+    this.maxDistance = Infinity;
+
+    this.keys = [ 65 /*A*/, 83 /*S*/, 68 /*D*/ ];
+
+    // internals
+
+    this.target = new THREE.Vector3();
+
+    var EPS = 0.000001;
+
+    var lastPosition = new THREE.Vector3();
+
+    var _state = STATE.NONE,
+        _prevState = STATE.NONE,
+
+        _eye = new THREE.Vector3(),
+
+        _movePrev = new THREE.Vector2(),
+        _moveCurr = new THREE.Vector2(),
+
+        _lastAxis = new THREE.Vector3(),
+        _lastAngle = 0,
+
+        _zoomStart = new THREE.Vector2(),
+        _zoomEnd = new THREE.Vector2(),
+
+        _touchZoomDistanceStart = 0,
+        _touchZoomDistanceEnd = 0,
+
+        _panStart = new THREE.Vector2(),
+        _panEnd = new THREE.Vector2();
+
+    // for reset
+
+    this.target0 = this.target.clone();
+    this.position0 = this.object.position.clone();
+    this.up0 = this.object.up.clone();
+
+    // events
+
+    var changeEvent = { type: 'change' };
+    var startEvent = { type: 'start' };
+    var endEvent = { type: 'end' };
+
+
+    // methods
+
+    this.handleResize = function () {
+
+        if ( this.domElement === document ) {
+
+            this.screen.left = 0;
+            this.screen.top = 0;
+            this.screen.width = window.innerWidth;
+            this.screen.height = window.innerHeight;
+
+        } else {
+
+            var box = this.domElement.getBoundingClientRect();
+            // adjustments come from similar code in the jquery offset() function
+            var d = this.domElement.ownerDocument.documentElement;
+            this.screen.left = box.left + window.pageXOffset - d.clientLeft;
+            this.screen.top = box.top + window.pageYOffset - d.clientTop;
+            this.screen.width = box.width;
+            this.screen.height = box.height;
+
+        }
+
+    };
+
+    this.handleEvent = function ( event ) {
+
+        if ( typeof this[ event.type ] == 'function' ) {
+
+            this[ event.type ]( event );
+
+        }
+
+    };
+
+    var getMouseOnScreen = ( function () {
+
+        var vector = new THREE.Vector2();
+
+        return function getMouseOnScreen( pageX, pageY ) {
+
+            vector.set(
+                ( pageX - _this.screen.left ) / _this.screen.width,
+                ( pageY - _this.screen.top ) / _this.screen.height
+            );
+
+            return vector;
+
+        };
+
+    }() );
+
+    var getMouseOnCircle = ( function () {
+
+        var vector = new THREE.Vector2();
+
+        return function getMouseOnCircle( pageX, pageY ) {
+
+            vector.set(
+                ( ( pageX - _this.screen.width * 0.5 - _this.screen.left ) / ( _this.screen.width * 0.5 ) ),
+                ( ( _this.screen.height + 2 * ( _this.screen.top - pageY ) ) / _this.screen.width ) // screen.width intentional
+            );
+
+            return vector;
+
+        };
+
+    }() );
+
+    this.rotateCamera = ( function() {
+
+        var axis = new THREE.Vector3(),
+            quaternion = new THREE.Quaternion(),
+            eyeDirection = new THREE.Vector3(),
+            objectUpDirection = new THREE.Vector3(),
+            objectSidewaysDirection = new THREE.Vector3(),
+            moveDirection = new THREE.Vector3(),
+            angle;
+
+        return function rotateCamera() {
+
+            moveDirection.set( _moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0 );
+            angle = moveDirection.length();
+
+            if ( angle ) {
+
+                _eye.copy( _this.object.position ).sub( _this.target );
+
+                eyeDirection.copy( _eye ).normalize();
+                objectUpDirection.copy( _this.object.up ).normalize();
+                objectSidewaysDirection.crossVectors( objectUpDirection, eyeDirection ).normalize();
+
+                objectUpDirection.setLength( _moveCurr.y - _movePrev.y );
+                objectSidewaysDirection.setLength( _moveCurr.x - _movePrev.x );
+
+                moveDirection.copy( objectUpDirection.add( objectSidewaysDirection ) );
+
+                axis.crossVectors( moveDirection, _eye ).normalize();
+
+                angle *= _this.rotateSpeed;
+                quaternion.setFromAxisAngle( axis, angle );
+
+                _eye.applyQuaternion( quaternion );
+                _this.object.up.applyQuaternion( quaternion );
+
+                _lastAxis.copy( axis );
+                _lastAngle = angle;
+
+            } else if ( ! _this.staticMoving && _lastAngle ) {
+
+                _lastAngle *= Math.sqrt( 1.0 - _this.dynamicDampingFactor );
+                _eye.copy( _this.object.position ).sub( _this.target );
+                quaternion.setFromAxisAngle( _lastAxis, _lastAngle );
+                _eye.applyQuaternion( quaternion );
+                _this.object.up.applyQuaternion( quaternion );
+
+            }
+
+            _movePrev.copy( _moveCurr );
+
+        };
+
+    }() );
+
+
+    this.zoomCamera = function () {
+
+        var factor;
+
+        if ( _state === STATE.TOUCH_ZOOM_PAN ) {
+
+            factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+            _touchZoomDistanceStart = _touchZoomDistanceEnd;
+            _eye.multiplyScalar( factor );
+
+        } else {
+
+            factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * _this.zoomSpeed;
+
+            if ( factor !== 1.0 && factor > 0.0 ) {
+
+                _eye.multiplyScalar( factor );
+
+                if ( _this.staticMoving ) {
+
+                    _zoomStart.copy( _zoomEnd );
+
+                } else {
+
+                    _zoomStart.y += ( _zoomEnd.y - _zoomStart.y ) * this.dynamicDampingFactor;
+
+                }
+
+            }
+
+        }
+
+    };
+
+    this.panCamera = ( function() {
+
+        var mouseChange = new THREE.Vector2(),
+            objectUp = new THREE.Vector3(),
+            pan = new THREE.Vector3();
+
+        return function panCamera() {
+
+            mouseChange.copy( _panEnd ).sub( _panStart );
+
+            if ( mouseChange.lengthSq() ) {
+
+                mouseChange.multiplyScalar( _eye.length() * _this.panSpeed );
+
+                pan.copy( _eye ).cross( _this.object.up ).setLength( mouseChange.x );
+                pan.add( objectUp.copy( _this.object.up ).setLength( mouseChange.y ) );
+
+                _this.object.position.add( pan );
+                _this.target.add( pan );
+
+                if ( _this.staticMoving ) {
+
+                    _panStart.copy( _panEnd );
+
+                } else {
+
+                    _panStart.add( mouseChange.subVectors( _panEnd, _panStart ).multiplyScalar( _this.dynamicDampingFactor ) );
+
+                }
+
+            }
+
+        };
+
+    }() );
+
+    this.checkDistances = function () {
+
+        if ( ! _this.noZoom || ! _this.noPan ) {
+
+            if ( _eye.lengthSq() > _this.maxDistance * _this.maxDistance ) {
+
+                _this.object.position.addVectors( _this.target, _eye.setLength( _this.maxDistance ) );
+                _zoomStart.copy( _zoomEnd );
+
+            }
+
+            if ( _eye.lengthSq() < _this.minDistance * _this.minDistance ) {
+
+                _this.object.position.addVectors( _this.target, _eye.setLength( _this.minDistance ) );
+                _zoomStart.copy( _zoomEnd );
+
+            }
+
+        }
+
+    };
+
+    this.update = function () {
+
+        _eye.subVectors( _this.object.position, _this.target );
+
+        if ( ! _this.noRotate ) {
+
+            _this.rotateCamera();
+
+        }
+
+        if ( ! _this.noZoom ) {
+
+            _this.zoomCamera();
+
+        }
+
+        if ( ! _this.noPan ) {
+
+            _this.panCamera();
+
+        }
+
+        _this.object.position.addVectors( _this.target, _eye );
+
+        _this.checkDistances();
+
+        _this.object.lookAt( _this.target );
+
+        if ( lastPosition.distanceToSquared( _this.object.position ) > EPS ) {
+
+            _this.dispatchEvent( changeEvent );
+
+            lastPosition.copy( _this.object.position );
+
+        }
+
+    };
+
+    this.reset = function () {
+
+        _state = STATE.NONE;
+        _prevState = STATE.NONE;
+
+        _this.target.copy( _this.target0 );
+        _this.object.position.copy( _this.position0 );
+        _this.object.up.copy( _this.up0 );
+
+        _eye.subVectors( _this.object.position, _this.target );
+
+        _this.object.lookAt( _this.target );
+
+        _this.dispatchEvent( changeEvent );
+
+        lastPosition.copy( _this.object.position );
+
+    };
+
+    // listeners
+
+    function keydown( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        window.removeEventListener( 'keydown', keydown );
+
+        _prevState = _state;
+
+        if ( _state !== STATE.NONE ) {
+
+            return;
+
+        } else if ( event.keyCode === _this.keys[ STATE.ROTATE ] && ! _this.noRotate ) {
+
+            _state = STATE.ROTATE;
+
+        } else if ( event.keyCode === _this.keys[ STATE.ZOOM ] && ! _this.noZoom ) {
+
+            _state = STATE.ZOOM;
+
+        } else if ( event.keyCode === _this.keys[ STATE.PAN ] && ! _this.noPan ) {
+
+            _state = STATE.PAN;
+
+        }
+
+    }
+
+    function keyup( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        _state = _prevState;
+
+        window.addEventListener( 'keydown', keydown, false );
+
+    }
+
+    function mousedown( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if ( _state === STATE.NONE ) {
+
+            _state = event.button;
+
+        }
+
+        if ( _state === STATE.ROTATE && ! _this.noRotate ) {
+
+            _moveCurr.copy( getMouseOnCircle( event.pageX, event.pageY ) );
+            _movePrev.copy( _moveCurr );
+
+        } else if ( _state === STATE.ZOOM && ! _this.noZoom ) {
+
+            _zoomStart.copy( getMouseOnScreen( event.pageX, event.pageY ) );
+            _zoomEnd.copy( _zoomStart );
+
+        } else if ( _state === STATE.PAN && ! _this.noPan ) {
+
+            _panStart.copy( getMouseOnScreen( event.pageX, event.pageY ) );
+            _panEnd.copy( _panStart );
+
+        }
+
+        document.addEventListener( 'mousemove', mousemove, false );
+        document.addEventListener( 'mouseup', mouseup, false );
+
+        _this.dispatchEvent( startEvent );
+
+    }
+
+    function mousemove( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if ( _state === STATE.ROTATE && ! _this.noRotate ) {
+
+            _movePrev.copy( _moveCurr );
+            _moveCurr.copy( getMouseOnCircle( event.pageX, event.pageY ) );
+
+        } else if ( _state === STATE.ZOOM && ! _this.noZoom ) {
+
+            _zoomEnd.copy( getMouseOnScreen( event.pageX, event.pageY ) );
+
+        } else if ( _state === STATE.PAN && ! _this.noPan ) {
+
+            _panEnd.copy( getMouseOnScreen( event.pageX, event.pageY ) );
+
+        }
+
+    }
+
+    function mouseup( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        _state = STATE.NONE;
+
+        document.removeEventListener( 'mousemove', mousemove );
+        document.removeEventListener( 'mouseup', mouseup );
+        _this.dispatchEvent( endEvent );
+
+    }
+
+    function mousewheel( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        var delta = 0;
+
+        if ( event.wheelDelta ) {
+
+            // WebKit / Opera / Explorer 9
+
+            delta = event.wheelDelta / 40;
+
+        } else if ( event.detail ) {
+
+            // Firefox
+
+            delta = - event.detail / 3;
+
+        }
+
+        _zoomStart.y += delta * 0.01;
+        _this.dispatchEvent( startEvent );
+        _this.dispatchEvent( endEvent );
+
+    }
+
+    function touchstart( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        switch ( event.touches.length ) {
+
+            case 1:
+                _state = STATE.TOUCH_ROTATE;
+                _moveCurr.copy( getMouseOnCircle( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY ) );
+                _movePrev.copy( _moveCurr );
+                break;
+
+            case 2:
+                _state = STATE.TOUCH_ZOOM_PAN;
+                var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+                var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+                _touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
+
+                var x = ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX ) / 2;
+                var y = ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY ) / 2;
+                _panStart.copy( getMouseOnScreen( x, y ) );
+                _panEnd.copy( _panStart );
+                break;
+
+            default:
+                _state = STATE.NONE;
+
+        }
+        _this.dispatchEvent( startEvent );
+
+
+    }
+
+    function touchmove( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        switch ( event.touches.length ) {
+
+            case 1:
+                _movePrev.copy( _moveCurr );
+                _moveCurr.copy( getMouseOnCircle(  event.touches[ 0 ].pageX, event.touches[ 0 ].pageY ) );
+                break;
+
+            case 2:
+                var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+                var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+                _touchZoomDistanceEnd = Math.sqrt( dx * dx + dy * dy );
+
+                var x = ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX ) / 2;
+                var y = ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY ) / 2;
+                _panEnd.copy( getMouseOnScreen( x, y ) );
+                break;
+
+            default:
+                _state = STATE.NONE;
+
+        }
+
+    }
+
+    function touchend( event ) {
+
+        if ( _this.enabled === false ) return;
+
+        switch ( event.touches.length ) {
+
+            case 1:
+                _movePrev.copy( _moveCurr );
+                _moveCurr.copy( getMouseOnCircle(  event.touches[ 0 ].pageX, event.touches[ 0 ].pageY ) );
+                break;
+
+            case 2:
+                _touchZoomDistanceStart = _touchZoomDistanceEnd = 0;
+
+                var x = ( event.touches[ 0 ].pageX + event.touches[ 1 ].pageX ) / 2;
+                var y = ( event.touches[ 0 ].pageY + event.touches[ 1 ].pageY ) / 2;
+                _panEnd.copy( getMouseOnScreen( x, y ) );
+                _panStart.copy( _panEnd );
+                break;
+
+        }
+
+        _state = STATE.NONE;
+        _this.dispatchEvent( endEvent );
+
+    }
+
+    function contextmenu( event ) {
+
+        event.preventDefault();
+
+    }
+
+    this.dispose = function() {
+
+        this.domElement.removeEventListener( 'contextmenu', contextmenu, false );
+        this.domElement.removeEventListener( 'mousedown', mousedown, false );
+        this.domElement.removeEventListener( 'mousewheel', mousewheel, false );
+        this.domElement.removeEventListener( 'MozMousePixelScroll', mousewheel, false ); // firefox
+
+        this.domElement.removeEventListener( 'touchstart', touchstart, false );
+        this.domElement.removeEventListener( 'touchend', touchend, false );
+        this.domElement.removeEventListener( 'touchmove', touchmove, false );
+
+        document.removeEventListener( 'mousemove', mousemove, false );
+        document.removeEventListener( 'mouseup', mouseup, false );
+
+        window.removeEventListener( 'keydown', keydown, false );
+        window.removeEventListener( 'keyup', keyup, false );
+
+    }
+
+    this.domElement.addEventListener( 'contextmenu', contextmenu, false );
+    this.domElement.addEventListener( 'mousedown', mousedown, false );
+    this.domElement.addEventListener( 'mousewheel', mousewheel, false );
+    this.domElement.addEventListener( 'MozMousePixelScroll', mousewheel, false ); // firefox
+
+    this.domElement.addEventListener( 'touchstart', touchstart, false );
+    this.domElement.addEventListener( 'touchend', touchend, false );
+    this.domElement.addEventListener( 'touchmove', touchmove, false );
+
+    window.addEventListener( 'keydown', keydown, false );
+    window.addEventListener( 'keyup', keyup, false );
+
+    this.handleResize();
+
+    // force an update at start
+    this.update();
+
+};
+
+THREE.TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
+THREE.TrackballControls.prototype.constructor = THREE.TrackballControls;

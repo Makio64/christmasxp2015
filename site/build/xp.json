@@ -1,5 +1,5 @@
 {
-    "totalDay": 7,
+    "totalDay": 8,
     "days": {
         "1": [
             {
@@ -86,7 +86,18 @@
                 "folder": "/neve/",
                 "path": "/07/neve/"
             }
+        ],
+        "8": [
+            {
+                "uid": 8,
+                "title": "Winter",
+                "author": "Klas Kroon",
+                "website": "http://oos.moxiecode.com",
+                "twitter": "@oosmoxiecode",
+                "folder": "/winter/",
+                "path": "/08/winter/"
+            }
         ]
     },
-    "totalXP": 8
+    "totalXP": 9
 }

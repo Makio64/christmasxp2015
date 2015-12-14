@@ -1,1 +1,111 @@
-function makeSnowflakes(e){var t={dT:uniforms.dT,time:uniforms.time,noiseSize:{type:"f",value:.1},t_audio:uniforms.t_audio},r={t_pos:{type:"t",value:null},t_audio:uniforms.t_audio};simulation=new PhysicsRenderer(e,shaders.ss.sim,renderer);var a=createLookupGeometry(e),i=new THREE.ShaderMaterial({uniforms:r,vertexShader:shaders.vs.splat,fragmentShader:shaders.fs.splat,transparent:!0,blending:THREE.AdditiveBlending,depthWrite:!1});simulation.setUniforms(t);var n=new THREE.PointCloud(a,i);n.frustumCulled=!1,simulation.addBoundTexture(r.t_pos,"output"),size=100;for(var o=new Float32Array(e*e*4),s=0;s<o.length;s++)s%4==1?o[s]=Math.random()*size*.5:o[s]=(Math.random()-.5)*size,s%4==4&&(o[s]=0);var u=new THREE.DataTexture(o,this.size,this.size,THREE.RGBAFormat,THREE.FloatType);return u.minFilter=THREE.NearestFilter,u.magFilter=THREE.NearestFilter,u.needsUpdate=!0,simulation.reset(u),{body:n,soul:simulation}}function createLookupGeometry(e){for(var t=new THREE.BufferGeometry,r=new Float32Array(e*e*3),a=0,i=0,n=r.length/3;n>a;a++,i+=3)r[i]=a%e/e,r[i+1]=Math.floor(a/e)/e;var o=new THREE.BufferAttribute(r,3);return t.addAttribute("position",o),t}
+function makeSnowflakes( SIZE ){
+
+
+        var simulationUniforms = {
+        
+          dT:uniforms.dT,
+          time:uniforms.time,
+          noiseSize: { type:"f" , value: .1 },
+          t_audio: uniforms.t_audio
+
+        }
+
+        var renderUniforms = {
+
+          t_pos:{ type:"t" , value: null },
+          t_audio: uniforms.t_audio
+
+        }
+
+
+      simulation = new PhysicsRenderer( SIZE , shaders.ss.sim , renderer );
+
+
+      var geo = createLookupGeometry( SIZE );
+
+      var mat = new THREE.ShaderMaterial({
+        uniforms: renderUniforms,
+        vertexShader: shaders.vs.splat,
+        fragmentShader: shaders.fs.splat,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+
+      });
+
+      simulation.setUniforms( simulationUniforms );
+
+      var particles = new THREE.PointCloud( geo , mat );
+      particles.frustumCulled = false;
+
+
+      simulation.addBoundTexture( renderUniforms.t_pos , 'output' );
+
+
+      size = 100;
+ 
+      var data = new Float32Array( SIZE * SIZE  * 4 );
+
+      for( var i =0; i < data.length; i++ ){
+
+        //console.log('ss');
+        if( i % 4 == 1 ){
+         data[i] = (Math.random() ) * size * .5;
+        
+        }else{
+          data[i] = (Math.random() - .5 ) * size;
+        }
+
+        if( i % 4 == 4 ){
+          data[i] = 0;
+        }
+
+
+      }
+
+      var texture = new THREE.DataTexture( 
+        data,
+        this.size,
+        this.size,
+        THREE.RGBAFormat,
+        THREE.FloatType
+      );
+
+      texture.minFilter =  THREE.NearestFilter,
+      texture.magFilter = THREE.NearestFilter,
+
+      texture.needsUpdate = true;
+     
+
+      simulation.reset( texture );
+
+      return{
+        body: particles,
+        soul: simulation
+      }
+
+
+  }
+
+
+
+  function createLookupGeometry( size ){        
+        
+    var geo = new THREE.BufferGeometry();
+    var positions = new Float32Array(  size * size * 3 );
+
+    for ( var i = 0, j = 0, l = positions.length / 3; i < l; i ++, j += 3 ) {
+
+      positions[ j     ] = ( i % size ) / size;
+      positions[ j + 1 ] = Math.floor( i / size ) / size;
+    
+    }
+
+    var posA = new THREE.BufferAttribute( positions , 3 );
+    geo.addAttribute( 'position', posA );
+
+    return geo;
+    
+  }
+
+      

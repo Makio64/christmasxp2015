@@ -1,1 +1,369 @@
-var _gsScope="undefined"!=typeof module&&module.exports&&"undefined"!=typeof global?global:this||window;(_gsScope._gsQueue||(_gsScope._gsQueue=[])).push(function(){"use strict";var t=/[^\d\-\.]/g,e=Math.PI/180,r=/(\d|\.)+/g,s={aqua:[0,255,255],lime:[0,255,0],silver:[192,192,192],black:[0,0,0],maroon:[128,0,0],teal:[0,128,128],blue:[0,0,255],navy:[0,0,128],white:[255,255,255],fuchsia:[255,0,255],olive:[128,128,0],yellow:[255,255,0],orange:[255,165,0],gray:[128,128,128],purple:[128,0,128],green:[0,128,0],red:[255,0,0],pink:[255,192,203],cyan:[0,255,255],transparent:[255,255,255,0]},a=function(t){return"number"==typeof t?[t>>16,t>>8&255,255&t]:""===t||null==t||"none"===t||"string"!=typeof t?s.transparent:s[t]?s[t]:"#"===t.charAt(0)?(4===t.length&&(t="#"+t.charAt(1)+t.charAt(1)+t.charAt(2)+t.charAt(2)+t.charAt(3)+t.charAt(3)),t=parseInt(t.substr(1),16),[t>>16,t>>8&255,255&t]):t.match(r)||s.transparent},o={scaleX:1,scaleY:1,tx:1,ty:1,rotation:1,shortRotation:1,skewX:1,skewY:1,scale:1},n=function(t,e){var r=t.matrix,s=1e-6,a=r.a,o=r.b,n=r.c,i=r.d,p=e?t._gsTransform||{skewY:0}:{skewY:0},h=p.scaleX<0;return p.tx=r.e-(p.ox||0),p.ty=r.f-(p.oy||0),p.scaleX=Math.sqrt(a*a+o*o),p.scaleY=Math.sqrt(i*i+n*n),p.rotation=a||o?Math.atan2(o,a):p.rotation||0,p.skewX=n||i?Math.atan2(n,i)+p.rotation:p.skewX||0,Math.abs(p.skewX)>Math.PI/2&&(h?(p.scaleX*=-1,p.skewX+=p.rotation<=0?Math.PI:-Math.PI,p.rotation+=p.rotation<=0?Math.PI:-Math.PI):(p.scaleY*=-1,p.skewX+=p.skewX<=0?Math.PI:-Math.PI)),p.rotation<s&&p.rotation>-s&&(a||o)&&(p.rotation=0),p.skewX<s&&p.skewX>-s&&(o||n)&&(p.skewX=0),e&&(t._gsTransform=p),p},i=function(t,e){return null==t?e:"string"==typeof t&&1===t.indexOf("=")?parseInt(t.charAt(0)+"1",10)*Number(t.substr(2))+e:Number(t)},p=function(r,s){var a=-1===r.indexOf("rad")?e:1,o=1===r.indexOf("=");return r=Number(r.replace(t,""))*a,o?r+s:r},h=_gsScope._gsDefine.plugin({propName:"raphael",version:"0.2.2",API:2,init:function(e,r,s){if(!e.attr)return!1;this._target=e,this._tween=s,this._props=e._gsProps=e._gsProps||{};var n,i,p,h,l,c,u;for(n in r)p=r[n],"transform"!==n?o[n]||"pivot"===n?this._parseTransform(e,r):(i=e.attr(n),this._firstPT=h={_next:this._firstPT,t:this._props,p:n,b:i,f:!1,n:"raphael_"+n,r:!1,type:0},"fill"===n||"stroke"===n?(l=a(i),c=a(p),h.e=p,h.s=Number(l[0]),h.c=Number(c[0])-h.s,h.gs=Number(l[1]),h.gc=Number(c[1])-h.gs,h.bs=Number(l[2]),h.bc=Number(c[2])-h.bs,l.length>3||c.length>3?(h.as=l.length<4?1:Number(l[3]),h.ac=(c.length<4?1:Number(c[3]))-h.as,h.type=2):h.type=1):(i="string"==typeof i?parseFloat(i.replace(t,"")):Number(i),"string"==typeof p?(u="="===p.charAt(1),p=parseFloat(p.replace(t,""))):u=!1,h.e=p||0===p?u?p+i:p:r[n],!i&&0!==i||!p&&0!==p||!(h.c=u?p:p-i)?(h.type=-1,h.i=r[n],h.s=h.c=0):h.s=i),this._overwriteProps.push("raphael_"+n),h._next&&(h._next._prev=h)):this._parseTransform(e,p);return!0},set:function(t){for(var e,r=this._firstPT;r;)e=r.c*t+r.s,r.r&&(e=Math.round(e)),r.type?1===r.type?r.t[r.p]="rgb("+(e>>0)+", "+(r.gs+t*r.gc>>0)+", "+(r.bs+t*r.bc>>0)+")":2===r.type?r.t[r.p]="rgba("+(e>>0)+", "+(r.gs+t*r.gc>>0)+", "+(r.bs+t*r.bc>>0)+", "+(r.as+t*r.ac)+")":-1===r.type&&(r.t[r.p]=r.i):r.t[r.p]=e,r=r._next;if(this._target.attr(this._props),this._transform){r=this._transform;var s=r.rotation,a=s-r.skewX,o=Math.cos(s)*r.scaleX,n=Math.sin(s)*r.scaleX,i=Math.sin(a)*-r.scaleY,p=Math.cos(a)*r.scaleY,h=1e-6,l=this._pxl,c=this._pyl;h>n&&n>-h&&(n=0),h>i&&i>-h&&(i=0),r.ox=this._pxg-(l*o+c*i),r.oy=this._pyg-(l*n+c*p),this._target.transform("m"+o+","+n+","+i+","+p+","+(r.tx+r.ox)+","+(r.ty+r.oy))}}}),l=h.prototype;l._parseTransform=function(t,r){if(!this._transform){var s,a,h,l,c,u,f,_,g,y=this._transform=n(t,!0),w=1e-6;if("object"==typeof r){if(s={scaleX:i(null!=r.scaleX?r.scaleX:r.scale,y.scaleX),scaleY:i(null!=r.scaleY?r.scaleY:r.scale,y.scaleY),tx:i(r.tx,y.tx),ty:i(r.ty,y.ty)},null!=r.shortRotation){s.rotation="number"==typeof r.shortRotation?r.shortRotation*e:p(r.shortRotation,y.rotation);var b=(s.rotation-y.rotation)%(2*Math.PI);b!==b%Math.PI&&(b+=Math.PI*(0>b?2:-2)),s.rotation=y.rotation+b}else s.rotation=null==r.rotation?y.rotation:"number"==typeof r.rotation?r.rotation*e:p(r.rotation,y.rotation);s.skewX=null==r.skewX?y.skewX:"number"==typeof r.skewX?r.skewX*e:p(r.skewX,y.skewX),s.skewY=null==r.skewY?y.skewY:"number"==typeof r.skewY?r.skewY*e:p(r.skewY,y.skewY),(a=s.skewY-y.skewY)&&(s.skewX+=a,s.rotation+=a),s.skewY<w&&s.skewY>-w&&(s.skewY=0),s.skewX<w&&s.skewX>-w&&(s.skewX=0),s.rotation<w&&s.rotation>-w&&(s.rotation=0),g=r.localPivot||r.globalPivot,"string"==typeof g?(c=g.split(","),u=Number(c[0]),f=Number(c[1])):"object"==typeof g?(u=Number(g.x),f=Number(g.y)):r.localPivot?(c=t.getBBox(!0),u=c.width/2,f=c.height/2):(c=t.getBBox(),u=c.x+c.width/2,f=c.y+c.height/2),r.localPivot?(_=t.matrix,u+=t.attr("x"),f+=t.attr("y"),this._pxl=u,this._pyl=f,this._pxg=u*_.a+f*_.c+_.e-y.tx,this._pyg=u*_.b+f*_.d+_.f-y.ty):(_=t.matrix.invert(),this._pxl=u*_.a+f*_.c+_.e,this._pyl=u*_.b+f*_.d+_.f,this._pxg=u-y.tx,this._pyg=f-y.ty)}else{if("string"!=typeof r)return;c=this._target.transform(),t.transform(r),s=n(t,!1),t.transform(c)}for(h in o)y[h]!==s[h]&&"shortRotation"!==h&&"scale"!==h&&(this._firstPT=l={_next:this._firstPT,t:y,p:h,s:y[h],c:s[h]-y[h],n:h,f:!1,r:!1,b:y[h],e:s[h],type:0},l._next&&(l._next._prev=l),this._overwriteProps.push("raphael_"+h))}}}),_gsScope._gsDefine&&_gsScope._gsQueue.pop()();
+/*!
+ * VERSION: 0.2.2
+ * DATE: 2014-07-17
+ * UPDATES AND DOCS AT: http://www.greensock.com
+ *
+ * @license Copyright (c) 2008-2015, GreenSock. All rights reserved.
+ * This work is subject to the terms at http://greensock.com/standard-license or for
+ * Club GreenSock members, the software agreement that was issued with your membership.
+ * 
+ * @author: Jack Doyle, jack@greensock.com
+ */
+var _gsScope = (typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window; //helps ensure compatibility with AMD/RequireJS and CommonJS/Node
+(_gsScope._gsQueue || (_gsScope._gsQueue = [])).push( function() {
+
+	"use strict";
+
+	var	_NaNExp = /[^\d\-\.]/g,
+		_DEG2RAD = Math.PI / 180,
+		_numExp = /(\d|\.)+/g,
+		_colorLookup = {aqua:[0,255,255],
+			lime:[0,255,0],
+			silver:[192,192,192],
+			black:[0,0,0],
+			maroon:[128,0,0],
+			teal:[0,128,128],
+			blue:[0,0,255],
+			navy:[0,0,128],
+			white:[255,255,255],
+			fuchsia:[255,0,255],
+			olive:[128,128,0],
+			yellow:[255,255,0],
+			orange:[255,165,0],
+			gray:[128,128,128],
+			purple:[128,0,128],
+			green:[0,128,0],
+			red:[255,0,0],
+			pink:[255,192,203],
+			cyan:[0,255,255],
+			transparent:[255,255,255,0]},
+		//parses a color (like #9F0, #FF9900, or rgb(255,51,153)) into an array with 3 elements for red, green, and blue. Also handles rgba() values (splits into array of 4 elements of course)
+		_parseColor = function(color) {
+			if (typeof(color) === "number") {
+				return [color >> 16, (color >> 8) & 255, color & 255];
+			} else if (color === "" || color == null || color === "none" || typeof(color) !== "string") {
+				return _colorLookup.transparent;
+			} else if (_colorLookup[color]) {
+				return _colorLookup[color];
+			} else if (color.charAt(0) === "#") {
+				if (color.length === 4) { //for shorthand like #9F0
+					color = "#" + color.charAt(1) + color.charAt(1) + color.charAt(2) + color.charAt(2) + color.charAt(3) + color.charAt(3);
+				}
+				color = parseInt(color.substr(1), 16);
+				return [color >> 16, (color >> 8) & 255, color & 255];
+			}
+			return color.match(_numExp) || _colorLookup.transparent;
+		},
+
+		_transformMap = {scaleX:1, scaleY:1, tx:1, ty:1, rotation:1, shortRotation:1, skewX:1, skewY:1, scale:1},
+
+		//parses the transform values for an element, returning an object with x, y, scaleX, scaleY, rotation, skewX, and skewY properties. Note: by default (for performance reasons), all skewing is combined into skewX and rotation but skewY still has a place in the transform object so that we can record how much of the skew is attributed to skewX vs skewY. Remember, a skewY of 10 looks the same as a rotation of 10 and skewX of -10.
+		_getTransform = function(t, rec) {
+			var s = t.matrix,
+				min = 0.000001,
+				a = s.a,
+				b = s.b,
+				c = s.c,
+				d = s.d,
+				m = rec ? t._gsTransform || {skewY:0} : {skewY:0},
+				invX = (m.scaleX < 0); //in order to interpret things properly, we need to know if the user applied a negative scaleX previously so that we can adjust the rotation and skewX accordingly. Otherwise, if we always interpret a flipped matrix as affecting scaleY and the user only wants to tween the scaleX on multiple sequential tweens, it would keep the negative scaleY without that being the user's intent.
+
+			m.tx = s.e - (m.ox || 0); //ox is the offset x that we record in setRatio() whenever we apply a custom transform that might use a pivot point. Remember, s.e and s.f get affected by things like scale. For example, imagine an object whose top left corner is at 100,100 and then we scale it up to 300% using the center as the pivot point - that corner would now be very different even though to the user, they didn't intend to change/tween the x/y position per se. Therefore, we record whatever offsets we make so that we can compensate when reading the values back.
+			m.ty = s.f - (m.oy || 0); //oy is the offset y (see note above)
+			m.scaleX = Math.sqrt(a * a + b * b);
+			m.scaleY = Math.sqrt(d * d + c * c);
+			m.rotation = (a || b) ? Math.atan2(b, a) : m.rotation || 0; //note: if scaleX is 0, we cannot accurately measure rotation. Same for skewX with a scaleY of 0. Therefore, we default to the previously recorded value (or zero if that doesn't exist).
+			m.skewX = (c || d) ? Math.atan2(c, d) + m.rotation : m.skewX || 0;
+			if (Math.abs(m.skewX) > Math.PI / 2) {
+				if (invX) {
+					m.scaleX *= -1;
+					m.skewX += (m.rotation <= 0) ? Math.PI : -Math.PI;
+					m.rotation += (m.rotation <= 0) ? Math.PI : -Math.PI;
+				} else {
+					m.scaleY *= -1;
+					m.skewX += (m.skewX <= 0) ? Math.PI : -Math.PI;
+				}
+			}
+			//some browsers have a hard time with very small values like 2.4492935982947064e-16 (notice the "e-" towards the end) and would render the object slightly off. So we round to 0 in these cases. The conditional logic here is faster than calling Math.abs().
+			if (m.rotation < min) if (m.rotation > -min) if (a || b) {
+				m.rotation = 0;
+			}
+			if (m.skewX < min) if (m.skewX > -min) if (b || c) {
+				m.skewX = 0;
+			}
+			if (rec) {
+				t._gsTransform = m; //record to the object's _gsTransform which we use so that tweens can control individual properties independently (we need all the properties to accurately recompose the matrix in the setRatio() method)
+			}
+			return m;
+		},
+
+		//takes a value and a default number, checks if the value is relative, null, or numeric and spits back a normalized number accordingly. Primarily used in the _parseTransform() function.
+		_parseVal = function(v, d) {
+			return (v == null) ? d : (typeof(v) === "string" && v.indexOf("=") === 1) ? parseInt(v.charAt(0)+"1", 10) * Number(v.substr(2)) + d : Number(v);
+		},
+
+		//translates strings like "40deg" or "40" or 40rad" or "+=40deg" to a numeric radian angle, optionally relative to a default value (if "+=" or "-=" prefix is found)
+		_parseAngle = function(v, d) {
+			var m = (v.indexOf("rad") === -1) ? _DEG2RAD : 1,
+				r = (v.indexOf("=") === 1);
+			v = Number(v.replace(_NaNExp, "")) * m;
+			return r ? v + d : v;
+		},
+
+
+		RaphaelPlugin = _gsScope._gsDefine.plugin({
+			propName: "raphael",
+			version: "0.2.2",
+			API: 2,
+
+			//called when the tween renders for the first time. This is where initial values should be recorded and any setup routines should run.
+			init: function(target, value, tween) {
+				if (!target.attr) { //raphael must have attr() method
+					return false;
+				}
+				this._target = target;
+				this._tween = tween;
+				this._props = target._gsProps = target._gsProps || {};
+				var p, s, v, pt, clr1, clr2, rel;
+
+				for (p in value) {
+
+					v = value[p];
+
+					if (p === "transform") {
+						this._parseTransform(target, v);
+						continue;
+					} else if (_transformMap[p] || p === "pivot") {
+						this._parseTransform(target, value);
+						continue;
+					}
+
+					s = target.attr(p);
+
+					//Some of these properties are in place in order to conform with the standard PropTweens in TweenPlugins so that overwriting and roundProps occur properly. For example, f and r may seem unnecessary here, but they enable other functionality.
+					//_next:*	next linked list node		[object]
+					//t: 	*	target 						[object]
+					//p:	*	property (camelCase)		[string]
+					//s: 	*	starting value				[number]
+					//c:	*	change value				[number]
+					//f:	* 	is function					[boolean]
+					//n:	*	name (for overwriting)		[string]
+					//b:		beginning value				[string]
+					//i:		intermediate value			[string]
+					//e: 		ending value				[string]
+					//r:	*	round						[boolean]
+					//type:		0=normal, 1=color, 2=rgba, -1=non-tweening prop	[number]
+					this._firstPT = pt = {_next:this._firstPT,
+						t:this._props,
+						p:p,
+						b:s,
+						f:false,
+						n:"raphael_" + p,
+						r:false,
+						type:0};
+
+					//color values must be split apart into their R, G, B (and sometimes alpha) values and tweened independently.
+					if (p === "fill" || p === "stroke") {
+						clr1 = _parseColor(s);
+						clr2 = _parseColor(v);
+						pt.e = v;
+						pt.s = Number(clr1[0]);				//red starting value
+						pt.c = Number(clr2[0]) - pt.s;		//red change
+						pt.gs = Number(clr1[1]);			//green starting value
+						pt.gc = Number(clr2[1]) - pt.gs;	//green change
+						pt.bs = Number(clr1[2]);			//blue starting value
+						pt.bc = Number(clr2[2]) - pt.bs;	//blue change
+						if (clr1.length > 3 || clr2.length > 3) { //detect an rgba() value
+							pt.as = (clr1.length < 4) ? 1 : Number(clr1[3]);
+							pt.ac = ((clr2.length < 4) ? 1 : Number(clr2[3])) - pt.as;
+							pt.type = 2; //2 = rgba() tween
+						} else {
+							pt.type = 1; //1 = color tween, -1 = no tween, just set the value at the end because there's no changes
+						}
+
+					} else {
+
+						s = (typeof(s) === "string") ? parseFloat(s.replace(_NaNExp, "")) : Number(s);
+
+						if (typeof(v) === "string") {
+							rel = (v.charAt(1) === "=");
+							v = parseFloat(v.replace(_NaNExp, ""));
+						} else {
+							rel = false;
+						}
+
+						pt.e = (v || v === 0) ? (rel ? v + s : v) : value[p]; //ensures that any += or -= prefixes are taken care of.
+
+						if ((s || s === 0) && (v || v === 0) && (pt.c = (rel ? v : v - s))) { //faster than isNaN(). Also, we set pt.c (change) here because if it's 0, we'll just treat it like a non-tweening value. can't do (v !== start) because if it's a relative value and the CHANGE is identical to the START, the condition will fail unnecessarily.
+							pt.s = s;
+						} else {
+							pt.type = -1;
+							pt.i = value[p]; //intermediate value is typically the same as the end value.
+							pt.s = pt.c = 0;
+						}
+
+					}
+
+					this._overwriteProps.push("raphael_" + p);
+					if (pt._next) {
+						pt._next._prev = pt;
+					}
+				}
+
+				return true;
+			},
+
+			//called each time the values should be updated, and the ratio gets passed as the only parameter (typically it's a value between 0 and 1, but it can exceed those when using an ease like Elastic.easeOut or Back.easeOut, etc.)
+			set: function(v) {
+				var pt = this._firstPT, val;
+
+				while (pt) {
+					val = pt.c * v + pt.s;
+					if (pt.r) {
+						val = Math.round(val);
+					}
+					if (!pt.type) {
+						pt.t[pt.p] = val;
+					} else if (pt.type === 1) { //rgb()
+						pt.t[pt.p] = "rgb(" + (val >> 0) + ", " + ((pt.gs + (v * pt.gc)) >> 0) + ", " + ((pt.bs + (v * pt.bc)) >> 0) + ")";
+					} else if (pt.type === 2) { //rgba()
+						pt.t[pt.p] = "rgba(" + (val >> 0) + ", " + ((pt.gs + (v * pt.gc)) >> 0) + ", " + ((pt.bs + (v * pt.bc)) >> 0) + ", " + (pt.as + (v * pt.ac)) + ")";
+					} else if (pt.type === -1) { //non-tweening
+						pt.t[pt.p] = pt.i;
+					}
+					pt = pt._next;
+				}
+
+				this._target.attr(this._props);
+
+				//apply transform values like x, y, scaleX, scaleY, rotation, skewX, or skewY. We do these after looping through all the PropTweens because those are where the changes are made to scaleX/scaleY/rotation/skewX/skewY/x/y.
+				if (this._transform) {
+					pt = this._transform; //to improve speed and reduce size, reuse the pt variable as an alias to the _transform property
+					var ang = pt.rotation,
+						skew = ang - pt.skewX,
+						a = Math.cos(ang) * pt.scaleX,
+						b = Math.sin(ang) * pt.scaleX,
+						c = Math.sin(skew) * -pt.scaleY,
+						d = Math.cos(skew) * pt.scaleY,
+						min = 0.000001,
+						pxl = this._pxl,
+						pyl = this._pyl;
+
+					//some browsers have a hard time with very small values like 2.4492935982947064e-16 (notice the "e-" towards the end) and would render the object slightly off. So we round to 0 in these cases for both b and c. The conditional logic here is faster than calling Math.abs().
+					if (b < min) if (b > -min) {
+						b = 0;
+					}
+					if (c < min) if (c > -min) {
+						c = 0;
+					}
+					pt.ox = this._pxg - (pxl * a + pyl * c); //we must record the offset x/y that we're making from the regular tx/ty (matrix.e and f) so that we can correctly interpret positional data in _getTransform(). See note there on tx and ox.
+					pt.oy = this._pyg - (pxl * b + pyl * d);
+					this._target.transform("m" + a + "," + b + "," + c + "," + d + "," + (pt.tx + pt.ox) + "," + (pt.ty + pt.oy));
+				}
+
+			}
+
+		}),
+		p = RaphaelPlugin.prototype;
+
+	//compares the beginning x, y, scaleX, scaleY, rotation, and skewX properties with the ending ones and adds PropTweens accordingly wherever necessary. We must tween them individually (rather than just tweening the matrix values) so that elgant overwriting can occur, like if one tween is controlling scaleX, scaleY, and rotation and then another one starts mid-tween that is trying to control the scaleX only - this tween should continue tweening scaleY and rotation.
+	p._parseTransform = function(t, v) {
+		if (this._transform) { return; } //only need to parse the transform once, and only if the browser supports it.
+
+		var m1 = this._transform = _getTransform(t, true),
+			min = 0.000001,
+			m2, skewY, p, pt, copy, dx, dy, mtx, pivot;
+
+		if (typeof(v) === "object") { //for values like scaleX, scaleY, rotation, x, y, skewX, and skewY or transform:{...} (object)
+
+			m2 = {scaleX:_parseVal((v.scaleX != null) ? v.scaleX : v.scale, m1.scaleX),
+				  scaleY:_parseVal((v.scaleY != null) ? v.scaleY : v.scale, m1.scaleY),
+				  tx:_parseVal(v.tx, m1.tx),
+				  ty:_parseVal(v.ty, m1.ty)};
+
+			if (v.shortRotation != null) {
+				m2.rotation = (typeof(v.shortRotation) === "number") ? v.shortRotation * _DEG2RAD : _parseAngle(v.shortRotation, m1.rotation);
+				var dif = (m2.rotation - m1.rotation) % (Math.PI * 2);
+				if (dif !== dif % Math.PI) {
+					dif += Math.PI * ((dif < 0) ? 2 : -2);
+				}
+				m2.rotation = m1.rotation + dif;
+
+			} else {
+				m2.rotation = (v.rotation == null) ? m1.rotation : (typeof(v.rotation) === "number") ? v.rotation * _DEG2RAD : _parseAngle(v.rotation, m1.rotation);
+			}
+			m2.skewX = (v.skewX == null) ? m1.skewX : (typeof(v.skewX) === "number") ? v.skewX * _DEG2RAD : _parseAngle(v.skewX, m1.skewX);
+
+			//note: for performance reasons, we combine all skewing into the skewX and rotation values, ignoring skewY but we must still record it so that we can discern how much of the overall skew is attributed to skewX vs. skewY. Otherwise, if the skewY would always act relative (tween skewY to 10deg, for example, multiple times and if we always combine things into skewX, we can't remember that skewY was 10 from last time). Remember, a skewY of 10 degrees looks the same as a rotation of 10 degrees plus a skewX of -10 degrees.
+			m2.skewY = (v.skewY == null) ? m1.skewY : (typeof(v.skewY) === "number") ? v.skewY * _DEG2RAD : _parseAngle(v.skewY, m1.skewY);
+			if ((skewY = m2.skewY - m1.skewY)) {
+				m2.skewX += skewY;
+				m2.rotation += skewY;
+			}
+			//don't allow rotation/skew values to be a SUPER small decimal because when they're translated back to strings for setting the css property, the browser reports them in a funky way, like 1-e7. Of course we could use toFixed() to resolve that issue but that hurts performance quite a bit with all those function calls on every frame, plus it is virtually impossible to discern values that small visually (nobody will notice changing a rotation of 0.0000001 to 0, so the performance improvement is well worth it).
+			if (m2.skewY < min) if (m2.skewY > -min) {
+				m2.skewY = 0;
+			}
+			if (m2.skewX < min) if (m2.skewX > -min) {
+				m2.skewX = 0;
+			}
+			if (m2.rotation < min) if (m2.rotation > -min) {
+				m2.rotation = 0;
+			}
+
+			pivot = v.localPivot || v.globalPivot;
+
+			if (typeof(pivot) === "string") {
+				copy = pivot.split(",");
+				dx = Number(copy[0]);
+				dy = Number(copy[1]);
+			} else if (typeof(pivot) === "object") {
+				dx = Number(pivot.x);
+				dy = Number(pivot.y);
+			} else if (v.localPivot) {
+				copy = t.getBBox(true);
+				dx = copy.width / 2;
+				dy = copy.height / 2;
+			} else {
+				copy = t.getBBox();
+				dx = copy.x + copy.width / 2;
+				dy = copy.y + copy.height / 2;
+			}
+
+			if (v.localPivot) {
+				mtx = t.matrix;
+				dx += t.attr("x");
+				dy += t.attr("y");
+				this._pxl = dx;
+				this._pyl = dy;
+				this._pxg = dx * mtx.a + dy * mtx.c + mtx.e - m1.tx;
+				this._pyg = dx * mtx.b + dy * mtx.d + mtx.f - m1.ty;
+			} else {
+				mtx = t.matrix.invert();
+				this._pxl = dx * mtx.a + dy * mtx.c + mtx.e;
+				this._pyl = dx * mtx.b + dy * mtx.d + mtx.f;
+				this._pxg = dx - m1.tx;
+				this._pyg = dy - m1.ty;
+			}
+
+		} else if (typeof(v) === "string") { //for values like transform:"rotate(60deg) scale(0.5, 0.8)"
+			copy = this._target.transform();
+			t.transform(v);
+			m2 = _getTransform(t, false);
+			t.transform(copy);
+		} else {
+			return;
+		}
+
+		for (p in _transformMap) {
+			if (m1[p] !== m2[p]) if (p !== "shortRotation") if (p !== "scale") {
+				this._firstPT = pt = {_next:this._firstPT, t:m1, p:p, s:m1[p], c:m2[p] - m1[p], n:p, f:false, r:false, b:m1[p], e:m2[p], type:0};
+				if (pt._next) {
+					pt._next._prev = pt;
+				}
+				this._overwriteProps.push("raphael_" + p);
+			}
+		}
+	};
+
+}); if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); }
