@@ -77,7 +77,6 @@ class Home extends PIXI.Container {
 
 		this._countLinesVisible = Math.ceil( stage.height / (this._hLine*this.scale.y) )
 		this._countLinesVisible += 1
-
 		this._updateLines()
 		this._updateVisibles()
 	}

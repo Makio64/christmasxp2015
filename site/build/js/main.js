@@ -1421,7 +1421,6 @@ var Home = (function (_PIXI$Container) {
 
 			this._countLinesVisible = Math.ceil(stage.height / (this._hLine * this.scale.y));
 			this._countLinesVisible += 1;
-
 			this._updateLines();
 			this._updateVisibles();
 		}
@@ -1690,7 +1689,7 @@ var Line = (function (_PIXI$Container) {
 			var px = 0;
 			var yTime = 0;
 			var entry = null;
-			for (var i = 0; i < 4; i++) {
+			for (var i = 0; i < this._count; i++) {
 				if (i < this._count) {
 					entry = new Entry(i + 1, this._dataEntries[i]);
 					entry.x += px;
@@ -1712,7 +1711,7 @@ var Line = (function (_PIXI$Container) {
 			var px = 0;
 			var yTime = 0;
 			var entry = null;
-			for (var i = 0; i < 4; i++) {
+			for (var i = 0; i < 1; i++) {
 				if (i == 0) {
 					entry = new Entry();
 				} else {
@@ -3459,210 +3458,212 @@ var Title = require("xmas/ui/Title");
 var ProgressBar = require("xmas/ui/ProgressBar");
 
 var Logo = (function (_PIXI$Container) {
-  _inherits(Logo, _PIXI$Container);
+	_inherits(Logo, _PIXI$Container);
 
-  function Logo() {
-    _classCallCheck(this, Logo);
+	function Logo() {
+		_classCallCheck(this, Logo);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Logo).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Logo).call(this));
 
-    _this._title = new Title();
-    _this._title.x = -270;
-    _this._title.y = -140;
-    _this.addChild(_this._title);
+		_this._title = new Title();
+		_this._title.x = -270;
+		_this._title.y = -140;
+		_this.addChild(_this._title);
 
-    _this._progressBar = new ProgressBar();
-    _this._progressBar.y = -200;
-    _this.addChild(_this._progressBar);
+		_this._progressBar = new ProgressBar();
+		_this._progressBar.y = -200;
+		_this.addChild(_this._progressBar);
 
-    _this._a = 2 * Math.PI / 6;
-    _this._rad = 32;
+		_this._a = 2 * Math.PI / 6;
+		_this._rad = 32;
+		_this.animationEnd = false;
 
-    // const cntTmp = new PIXI.Container()
-    // this._cntLogo = new PIXI.Sprite( PIXI.Texture.fromFrame( "logo.png" ) )
-    // this.addChild( this._cntLogo )
+		// const cntTmp = new PIXI.Container()
+		// this._cntLogo = new PIXI.Sprite( PIXI.Texture.fromFrame( "logo.png" ) )
+		// this.addChild( this._cntLogo )
 
-    // this._treeGray = this._createTree( 0xbcc5dd, 0xffffff )
-    // this._treeGray.rotation = Math.PI / 6 * 4
-    // cntTmp.addChild( this._treeGray )
+		// this._treeGray = this._createTree( 0xbcc5dd, 0xffffff )
+		// this._treeGray.rotation = Math.PI / 6 * 4
+		// cntTmp.addChild( this._treeGray )
 
-    // this._treeWhite = this._createTree( 0xffffff, config.colors.red )
-    // this._treeWhite.rotation = -Math.PI / 6 * 4
-    // cntTmp.addChild( this._treeWhite )
+		// this._treeWhite = this._createTree( 0xffffff, config.colors.red )
+		// this._treeWhite.rotation = -Math.PI / 6 * 4
+		// cntTmp.addChild( this._treeWhite )
 
-    // this._treeMain = new PIXI.Graphics()
-    // cntTmp.addChild( this._treeMain )
+		// this._treeMain = new PIXI.Graphics()
+		// cntTmp.addChild( this._treeMain )
 
-    // const tex = cntTmp.generateTexture( pixi.renderer, stage.resolution )
+		// const tex = cntTmp.generateTexture( pixi.renderer, stage.resolution )
 
-    // this._updateTreeMain()
+		// this._updateTreeMain()
 
-    _this._cntLogo = new PIXI.Container();
-    _this.addChild(_this._cntLogo);
+		_this._cntLogo = new PIXI.Container();
+		_this.addChild(_this._cntLogo);
 
-    _this._logo = new PIXI.Sprite(PIXI.Texture.fromFrame("img/logo.png"));
-    _this._logo.anchor.set(.5, .5);
-    _this._cntLogo.addChild(_this._logo);
-    _this._cntLogo.alpha = 0;
+		_this._logo = new PIXI.Sprite(PIXI.Texture.fromFrame("img/logo.png"));
+		_this._logo.anchor.set(.5, .5);
+		_this._cntLogo.addChild(_this._logo);
+		_this._cntLogo.alpha = 0;
 
-    _this._initDate();
+		_this._initDate();
 
-    _this._canHideLoading = false;
-    _this._wantsToHideLoading = false;
-    return _this;
-  }
+		_this._canHideLoading = false;
+		_this._wantsToHideLoading = false;
+		return _this;
+	}
 
-  // _createTree( cBg, cDot ) {
-  //   let aCurr = -Math.PI / 4 * 2
-  //   let aCircle = 0
+	// _createTree( cBg, cDot ) {
+	//   let aCurr = -Math.PI / 4 * 2
+	//   let aCircle = 0
 
-  //   const g = new PIXI.Graphics()
-  //   g.beginFill( cBg )
-  //   g.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   aCurr += this._a * 2
-  //   aCircle = aCurr
-  //   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   aCurr += this._a
-  //   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   aCurr += this._a
-  //   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   const g = new PIXI.Graphics()
+	//   g.beginFill( cBg )
+	//   g.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr += this._a * 2
+	//   aCircle = aCurr
+	//   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr += this._a
+	//   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr += this._a
+	//   g.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
 
-  //   g.beginFill( cDot )
-  //   g.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
+	//   g.beginFill( cDot )
+	//   g.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
 
-  //   return g
-  // }
+	//   return g
+	// }
 
-  // _updateTreeMain() {
-  //   let aCurr = -Math.PI / 4 * 2
-  //   let aCircle = 0
+	// _updateTreeMain() {
+	//   let aCurr = -Math.PI / 4 * 2
+	//   let aCircle = 0
 
-  //   this._treeMain.clear()
+	//   this._treeMain.clear()
 
-  //   this._treeMain.beginFill( config.colors.blue )
-  //   this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   aCurr += this._a * 2
-  //   aCircle = aCurr
-  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   aCurr += this._a
-  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   aCurr += this._a
-  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   this._treeMain.beginFill( config.colors.blue )
+	//   this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr += this._a * 2
+	//   aCircle = aCurr
+	//   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr += this._a
+	//   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr += this._a
+	//   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
 
-  //   aCurr = -Math.PI / 4 * 2
-  //   this._treeMain.beginFill( 0x305ad1 )
-  //   this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
-  //   this._treeMain.lineTo( 0, 0 )
-  //   aCurr += this._a * 4
-  //   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   aCurr = -Math.PI / 4 * 2
+	//   this._treeMain.beginFill( 0x305ad1 )
+	//   this._treeMain.moveTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
+	//   this._treeMain.lineTo( 0, 0 )
+	//   aCurr += this._a * 4
+	//   this._treeMain.lineTo( Math.cos( aCurr ) * this._rad, Math.sin( aCurr ) * this._rad )
 
-  //   this._treeMain.beginFill( 0xffffff )
-  //   this._treeMain.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
-  // }
+	//   this._treeMain.beginFill( 0xffffff )
+	//   this._treeMain.drawCircle( 3, Math.sin( aCircle ) * this._rad, 3 )
+	// }
 
-  _createClass(Logo, [{
-    key: "_initDate",
-    value: function _initDate() {
-      var cntTmp = uTexts.create("2015", { font: "20px " + config.fonts.bold, fill: config.colors.blue }, 10);
+	_createClass(Logo, [{
+		key: "_initDate",
+		value: function _initDate() {
+			var cntTmp = uTexts.create("2015", { font: "20px " + config.fonts.bold, fill: config.colors.blue }, 10);
 
-      var tex = cntTmp.generateTexture(pixi.renderer, stage.resolution);
+			var tex = cntTmp.generateTexture(pixi.renderer, stage.resolution);
 
-      this._cntDate = new PIXI.Sprite(tex);
-      this._cntDate.x = -this._cntDate.width >> 1;
-      this._cntDate.y = 40;
-      this._cntLogo.addChild(this._cntDate);
+			this._cntDate = new PIXI.Sprite(tex);
+			this._cntDate.x = -this._cntDate.width >> 1;
+			this._cntDate.y = 40;
+			this._cntLogo.addChild(this._cntDate);
 
-      this._cntDate.alpha = 0;
-    }
-  }, {
-    key: "show",
-    value: function show() {
-      var _this2 = this;
+			this._cntDate.alpha = 0;
+		}
+	}, {
+		key: "show",
+		value: function show() {
+			var _this2 = this;
 
-      var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			var delay = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
-      this._title.show();
-      this._progressBar.show(.5);
+			this._title.show();
+			this._progressBar.show(.5);
 
-      TweenLite.to(this._cntLogo, .8, {
-        delay: delay + .3,
-        alpha: 1,
-        ease: Quart.easeInOut
-      });
-      TweenLite.to(this._logo.scale, 1.2, {
-        delay: delay + .3,
-        x: .6,
-        y: .6,
-        ease: Cubic.easeOut
-      });
+			TweenLite.to(this._cntLogo, .8, {
+				delay: delay + .3,
+				alpha: 1,
+				ease: Quart.easeInOut
+			});
+			TweenLite.to(this._logo.scale, 1.2, {
+				delay: delay + .3,
+				x: .6,
+				y: .6,
+				ease: Cubic.easeOut
+			});
 
-      TweenLite.to(this._cntDate, .8, {
-        delay: delay + .9,
-        alpha: 1,
-        ease: Quart.easeInOut
-      });
+			TweenLite.to(this._cntDate, .8, {
+				delay: delay + .9,
+				alpha: 1,
+				ease: Quart.easeInOut
+			});
 
-      //
-      this._progressBar.setPercent(.2);
-      TweenLite.set(this, {
-        delay: .8,
-        onComplete: function onComplete() {
-          _this2._progressBar.setPercent(.8);
-        }
-      });
+			//
+			this._progressBar.setPercent(.2);
+			TweenLite.set(this, {
+				delay: .8,
+				onComplete: function onComplete() {
+					_this2._progressBar.setPercent(.8);
+				}
+			});
 
-      TweenLite.set(this, {
-        delay: 1.4,
-        onComplete: function onComplete() {
-          _this2._canHideLoading = true;
-          if (_this2._wantsToHideLoading) {
-            _this2.hideLoading();
-          }
-        }
-      });
-    }
-  }, {
-    key: "hideLoading",
-    value: function hideLoading() {
-      var _this3 = this;
+			TweenLite.set(this, {
+				delay: 1.4,
+				onComplete: function onComplete() {
+					_this2._canHideLoading = true;
+					if (_this2._wantsToHideLoading) {
+						_this2.hideLoading();
+					}
+				}
+			});
+		}
+	}, {
+		key: "hideLoading",
+		value: function hideLoading() {
+			var _this3 = this;
 
-      this._wantsToHideLoading = true;
-      if (!this._canHideLoading) {
-        return;
-      }
-      // tmp
-      TweenLite.set(this, {
-        onComplete: function onComplete() {
-          _this3._progressBar.setPercent(1);
-        }
-      });
+			this._wantsToHideLoading = true;
+			if (!this._canHideLoading) {
+				return;
+			}
+			// tmp
+			TweenLite.set(this, {
+				onComplete: function onComplete() {
+					_this3._progressBar.setPercent(1);
+				}
+			});
 
-      TweenLite.set(this, {
-        delay: .6,
-        onComplete: function onComplete() {
-          _this3._title.hide();
-          TweenLite.to(_this3, .8, {
-            delay: .4,
-            y: 90 * _this3.scale.y,
-            ease: Quart.easeInOut
-          });
-          _this3._progressBar.switchMode(.4);
-          TweenLite.to(_this3._cntDate, .6, {
-            delay: 3,
-            alpha: 0,
-            ease: Quad.easeOut,
-            onComplete: function onComplete() {
-              _this3._cntLogo.removeChild(_this3._cntDate);
-            }
-          });
-          _this3._progressBar.hideBottomBar(3);
-          page("/");
-        }
-      });
-    }
-  }]);
+			TweenLite.set(this, {
+				delay: .6,
+				onComplete: function onComplete() {
+					_this3._title.hide();
+					TweenLite.to(_this3, .8, {
+						delay: .4,
+						y: 90 * _this3.scale.y,
+						ease: Quart.easeInOut
+					});
+					_this3._progressBar.switchMode(.4);
+					TweenLite.to(_this3._cntDate, .6, {
+						delay: 3,
+						alpha: 0,
+						ease: Quad.easeOut,
+						onComplete: function onComplete() {
+							_this3._cntLogo.removeChild(_this3._cntDate);
+						}
+					});
+					_this3._progressBar.hideBottomBar(3);
+					_this3.animationEnd = true;
+					page("/");
+				}
+			});
+		}
+	}]);
 
-  return Logo;
+	return Logo;
 })(PIXI.Container);
 
 module.exports = Logo;
@@ -4082,13 +4083,12 @@ var Ui = (function (_PIXI$Container) {
 		pixi.stage.addChild(_this);
 
 		_this._logo = new Logo();
+		_this._logo.position.y = stage.height >> 1;
 		_this.addChild(_this._logo);
 
 		_this._binds = {};
 		_this._binds.onResize = _this._onResize.bind(_this);
-
 		_this._onResize();
-		_this._logo.y = stage.height >> 1;
 		return _this;
 	}
 
@@ -4097,6 +4097,10 @@ var Ui = (function (_PIXI$Container) {
 		value: function _onResize() {
 			if (1320 > stage.width) {
 				this._logo.scale.set(stage.width / 1320, stage.width / 1320);
+			}
+			if (this._logo.animationEnd) {
+				console.log(this._logo.animationEnd);
+				this._logo.position.y = 90 * this._logo.scale.y;
 			}
 			this._logo.x = stage.width >> 1;
 			if (this._bts) {

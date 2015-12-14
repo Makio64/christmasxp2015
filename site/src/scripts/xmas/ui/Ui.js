@@ -13,18 +13,21 @@ class Ui extends PIXI.Container {
 		pixi.stage.addChild( this )
 
 		this._logo = new Logo()
+		this._logo.position.y = stage.height >> 1
 		this.addChild( this._logo )
 
 		this._binds = {}
 		this._binds.onResize = this._onResize.bind( this )
-
 		this._onResize()
-		this._logo.y = stage.height >> 1
 	}
 
 	_onResize() {
 		if( 1320 > stage.width ) {
 			this._logo.scale.set( stage.width/1320, stage.width/1320 )
+		}
+		if(this._logo.animationEnd){
+			console.log(this._logo.animationEnd)
+			this._logo.position.y = 90*this._logo.scale.y
 		}
 		this._logo.x = stage.width >> 1
 		if( this._bts ) {

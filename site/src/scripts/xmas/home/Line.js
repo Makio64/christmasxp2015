@@ -97,7 +97,7 @@ class Line extends PIXI.Container {
 		let px = 0
 		let yTime = 0
 		let entry = null
-		for( let i = 0; i < 4; i++ ) {
+		for( let i = 0; i < this._count; i++ ) {
 			if(i<this._count){
 				entry = new Entry( i + 1, this._dataEntries[ i ] )
 				entry.x += px
@@ -118,7 +118,7 @@ class Line extends PIXI.Container {
 		let px = 0
 		let yTime = 0
 		let entry = null
-		for( let i = 0; i < 4; i++ ) {
+		for( let i = 0; i < 1; i++ ) {
 			if(i==0){
 				entry = new Entry()
 			}
