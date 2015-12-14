@@ -13,7 +13,8 @@ class Loader extends Emitter {
 		// this._pxLoader.addFont( config.fonts.bold )
 
 		this._pixiLoader = new PIXI.loaders.Loader()
-		this._pixiLoader.add( "img/default.jpg" )
+    this._pixiLoader.add( "img/default.jpg" )
+		this._pixiLoader.add( "img/poly_mask.png" )
 		this._pixiLoader.add( "img/sprites/sprites.json" )
 		this._pixiLoader.add( "img/sprites/roboto_regular.fnt" )
 		this._pixiLoader.add( "img/sprites/roboto_medium.fnt" )

@@ -56,6 +56,7 @@ class Home extends PIXI.Container {
 	_onResize() {
 
 		let w = 1320
+    console.log( "yooo" )
 
 		if( w > stage.width ) {
 			this.scale.set( stage.width/w, stage.width/w )

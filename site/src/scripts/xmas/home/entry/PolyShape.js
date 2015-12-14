@@ -22,60 +22,58 @@ class Point {
 
 }
 
-class PolyShapeGraphics extends PIXI.Graphics {
+// class PolyShapeGraphics extends PIXI.Graphics {
+class PolyShapeGraphics extends PIXI.Sprite {
 
 	constructor( color = 0xff00ff ) {
-		super()
+    // super()
+		super( PIXI.Texture.fromFrame( "img/poly_mask.png" ) )
 
 		this._color = color
-		this._countMaskPoints = 6
-
-		this.rotation = Math.PI / 6
-
-		this._init()
-		this._update()
+    this.tint = this._color
+    this.anchor.set( .5, .5 )
 	}
 
-	_update() {
-		this.clear()
+// 	_update() {
+// 		this.clear()
 
-		this.beginFill( this._color )
-		this._draw()
-	}
+// 		this.beginFill( this._color )
+// 		this._draw()
+// 	}
 
-	_init() {
-		let a = 0
-		let radDefault = config.sizes.entry.h >> 1
-		let radOver = config.sizes.entry.w >> 1
-		let p = null
+// 	_init() {
+// 		let a = 0
+// 		let radDefault = config.sizes.entry.h >> 1
+// 		let radOver = config.sizes.entry.w >> 1
+// 		let p = null
 
-		this._points = []
+// 		this._points = []
 
-		const aAdd = 2 * Math.PI / this._countMaskPoints
-		for( let i = 0; i < this._countMaskPoints; i++ ) {
-			p = new Point()
-			p.set( a, radDefault, radOver)
-			this._points.push( p )
+// 		const aAdd = 2 * Math.PI / this._countMaskPoints
+// 		for( let i = 0; i < this._countMaskPoints; i++ ) {
+// 			p = new Point()
+// 			p.set( a, radDefault, radOver)
+// 			this._points.push( p )
 
-			a += aAdd
-		}
-	}
+// 			a += aAdd
+// 		}
+// 	}
 
-	_draw() {
-		let p = null
-		for( let i = 0; i < this._countMaskPoints; i++ ) {
-			p = this._points[ i ]
-			if( i != 0 ) {
-				this.lineTo( p.x, p.y )
-			} else {
-				this.moveTo( p.x, p.y )
-			}
-		}
-	}
+// 	_draw() {
+// 		let p = null
+// 		for( let i = 0; i < this._countMaskPoints; i++ ) {
+// 			p = this._points[ i ]
+// 			if( i != 0 ) {
+// 				this.lineTo( p.x, p.y )
+// 			} else {
+// 				this.moveTo( p.x, p.y )
+// 			}
+// 		}
+// 	}
 
 }
 
-let tex = null
+// let tex = null
 
 // class PolyShape extends PIXI.Sprite {
 

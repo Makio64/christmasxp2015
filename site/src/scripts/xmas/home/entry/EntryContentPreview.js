@@ -94,15 +94,15 @@ class DefaultShape extends PIXI.Container {
 		})
 		TweenLite.to( this._shapeOver.scale, .4, {
 			delay: .175,
-			x: 1.1,
-			y: 1.1,
+			x: 1.12,
+			y: 1.12,
 			ease: Quart.easeOut
 		})
 
 		TweenLite.to( this._polyShape.scale, .4, {
 			delay: .1,
-			x: 1.1,
-			y: 1.1,
+			x: 1.12,
+			y: 1.12,
 			ease: Quart.easeOut
 		} )
 	}
