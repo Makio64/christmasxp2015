@@ -5,16 +5,21 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-site/dist
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
+thumbs.db
 Thumbs.db
 
 # Ignore node modules
 node_modules
 .idea/
 idea
+
+site/dist/*
+/site/dist/*
+/site/dist/**/*.*
+site/dist/**/*.*
+site/dist/07/neve/preview.jpg
