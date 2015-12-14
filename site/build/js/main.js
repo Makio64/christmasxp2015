@@ -923,6 +923,7 @@ var Loader = (function (_Emitter) {
 
 		_this._pixiLoader = new PIXI.loaders.Loader();
 		_this._pixiLoader.add("img/default.jpg");
+		_this._pixiLoader.add("img/poly_mask.png");
 		_this._pixiLoader.add("img/sprites/sprites.json");
 		_this._pixiLoader.add("img/sprites/roboto_regular.fnt");
 		_this._pixiLoader.add("img/sprites/roboto_medium.fnt");
@@ -1400,6 +1401,7 @@ var Home = (function (_PIXI$Container) {
 		value: function _onResize() {
 
 			var w = 1320;
+			console.log("yooo");
 
 			if (w > stage.width) {
 				this.scale.set(stage.width / w, stage.width / w);
@@ -2282,15 +2284,15 @@ var DefaultShape = (function (_PIXI$Container) {
 			});
 			TweenLite.to(this._shapeOver.scale, .4, {
 				delay: .175,
-				x: 1.1,
-				y: 1.1,
+				x: 1.12,
+				y: 1.12,
 				ease: Quart.easeOut
 			});
 
 			TweenLite.to(this._polyShape.scale, .4, {
 				delay: .1,
-				x: 1.1,
-				y: 1.1,
+				x: 1.12,
+				y: 1.12,
 				ease: Quart.easeOut
 			});
 		}
@@ -3172,72 +3174,66 @@ var Point = (function () {
 	return Point;
 })();
 
-var PolyShapeGraphics = (function (_PIXI$Graphics) {
-	_inherits(PolyShapeGraphics, _PIXI$Graphics);
+// class PolyShapeGraphics extends PIXI.Graphics {
+
+var PolyShapeGraphics = (function (_PIXI$Sprite) {
+	_inherits(PolyShapeGraphics, _PIXI$Sprite);
 
 	function PolyShapeGraphics() {
 		var color = arguments.length <= 0 || arguments[0] === undefined ? 0xff00ff : arguments[0];
 
 		_classCallCheck(this, PolyShapeGraphics);
 
-		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this));
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PolyShapeGraphics).call(this, PIXI.Texture.fromFrame("img/poly_mask.png")));
+		// super()
 
 		_this._color = color;
-		_this._countMaskPoints = 6;
-
-		_this.rotation = Math.PI / 6;
-
-		_this._init();
-		_this._update();
+		_this.tint = _this._color;
+		_this.anchor.set(.5, .5);
 		return _this;
 	}
 
-	_createClass(PolyShapeGraphics, [{
-		key: "_update",
-		value: function _update() {
-			this.clear();
+	// 	_update() {
+	// 		this.clear()
 
-			this.beginFill(this._color);
-			this._draw();
-		}
-	}, {
-		key: "_init",
-		value: function _init() {
-			var a = 0;
-			var radDefault = config.sizes.entry.h >> 1;
-			var radOver = config.sizes.entry.w >> 1;
-			var p = null;
+	// 		this.beginFill( this._color )
+	// 		this._draw()
+	// 	}
 
-			this._points = [];
+	// 	_init() {
+	// 		let a = 0
+	// 		let radDefault = config.sizes.entry.h >> 1
+	// 		let radOver = config.sizes.entry.w >> 1
+	// 		let p = null
 
-			var aAdd = 2 * Math.PI / this._countMaskPoints;
-			for (var i = 0; i < this._countMaskPoints; i++) {
-				p = new Point();
-				p.set(a, radDefault, radOver);
-				this._points.push(p);
+	// 		this._points = []
 
-				a += aAdd;
-			}
-		}
-	}, {
-		key: "_draw",
-		value: function _draw() {
-			var p = null;
-			for (var i = 0; i < this._countMaskPoints; i++) {
-				p = this._points[i];
-				if (i != 0) {
-					this.lineTo(p.x, p.y);
-				} else {
-					this.moveTo(p.x, p.y);
-				}
-			}
-		}
-	}]);
+	// 		const aAdd = 2 * Math.PI / this._countMaskPoints
+	// 		for( let i = 0; i < this._countMaskPoints; i++ ) {
+	// 			p = new Point()
+	// 			p.set( a, radDefault, radOver)
+	// 			this._points.push( p )
+
+	// 			a += aAdd
+	// 		}
+	// 	}
+
+	// 	_draw() {
+	// 		let p = null
+	// 		for( let i = 0; i < this._countMaskPoints; i++ ) {
+	// 			p = this._points[ i ]
+	// 			if( i != 0 ) {
+	// 				this.lineTo( p.x, p.y )
+	// 			} else {
+	// 				this.moveTo( p.x, p.y )
+	// 			}
+	// 		}
+	// 	}
 
 	return PolyShapeGraphics;
-})(PIXI.Graphics);
+})(PIXI.Sprite);
 
-var tex = null;
+// let tex = null
 
 // class PolyShape extends PIXI.Sprite {
 
