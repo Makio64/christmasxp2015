@@ -1,0 +1,68 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: static;
+  background: #000; }
+
+html {
+  -webkit-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  text-size-adjust: none; }
+
+h1, h2, h3, h4, text, p {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-webkit-font-smoothing: antialiased; }
+
+.Main-Canvas {
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 1.5s ease-out; }
+  .isOpened .Main-Canvas {
+    opacity: 1; }
+
+.Sound-Icon {
+  color: white;
+  position: absolute;
+  cursor: pointer;
+  z-index: 999;
+  bottom: 0px;
+  right: 0px;
+  margin: 25px; }
+  .Sound-Icon.isOn .SoundIcon--On {
+    opacity: 1; }
+
+.Daniel-Sierra {
+  float: left;
+  opacity: 0;
+  letter-spacing: 1.5px;
+  padding-top: 1px;
+  color: #969696;
+  transition: all .5s ease-out; }
+  .isOn .Daniel-Sierra {
+    opacity: 1; }
+
+.Sound-Icon-Container {
+  margin-left: 10px;
+  float: left;
+  width: 15px;
+  height: 15px; }
+
+.SoundIcon--On {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  background: url(../assets/volumeOn.svg);
+  opacity: 0; }
+
+.SoundIcon--Off {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  background: url(../assets/volumeOff.svg); }

@@ -1,0 +1,12 @@
+{
+    "author":"Edan Kwan",
+    "nickname":"edankwan",
+    "website":"http://www.edankwan.com/",
+    "twitter":"edankwan",
+    "title":"Snowy Snow Globe",
+    "technology":"WebGL, sdf, GPGPU",
+    "description":"Snowy Snow Globe is a experiment to demonstrate the simple use of 3d fbo density map for physics in WebGL.",
+    "casestudy":"",
+    "source":"https://github.com/edankwan/snowy-snow-globe",
+    "mobileFriendly":"0"
+}

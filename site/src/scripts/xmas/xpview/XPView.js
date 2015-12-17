@@ -1,5 +1,7 @@
 const config = require( "xmas/core/config" )
 const scrollEmul = require( "xmas/core/scrollEmul" )
+const browsers = require( "fz/utils/browsers" )
+const stage = require( "fz/core/stage" )
 
 class XPView {
 
@@ -10,6 +12,7 @@ class XPView {
 	this.onNextClick = this.onNextClick.bind(this)
 	this.onPrevClick = this.onPrevClick.bind(this)
 	this.onLogoClick = this.onLogoClick.bind(this)
+	this.onResize = this.onResize.bind(this)
 	this.direction = 'next'
 	}
 
@@ -62,10 +65,10 @@ class XPView {
 			}
 		 }
 	}
- }
+	}
 
- // XP MANAGEMENT
- getDay(id){
+// XP MANAGEMENT
+	getDay(id){
 	 var days = config.data.days
 	 for(var j = 1; j <= 24; j++) {
 		 var day = days[j]
@@ -76,7 +79,7 @@ class XPView {
 			 }
 		 }
 	 }
- }
+	}
 	open(id) {
 	 this.xpIndex = id
 	 var day = this.getDay(this.xpIndex)
@@ -121,8 +124,8 @@ class XPView {
 				TweenMax.to(this.mask,.6,{delay:.1,scaleX:0,transformOrigin:origin,ease:Expo.easeOut,onComplete:()=>{
 					this.transitioning = false
 				}})
-				}
-			)
+				this.resizeIframe()
+			})
 		}})
 	}
 
@@ -216,8 +219,33 @@ class XPView {
 		document.body.appendChild(this.iframe)
 	}
 
-	bindEvents(){}
-	unbindEvents(){}
+	bindEvents(){
+		stage.on( "resize", this.onResize )
+	}
+	unbindEvents(){
+		stage.off( "resize", this.onResize )
+	}
+
+	resizeIframe(){
+		if(this.iframe){
+
+			let isIos = /ipad|iphone|ipod|iPad|iPhone|iPod/.test(navigator.userAgent)
+			let w = window.innerWidth
+			let h = window.innerHeight
+			if( isIos ){
+				 w -= 1
+				 h -= 2
+			}
+			this.iframe.style.height = h + 'px'
+			this.iframe.style.width = w + 'px'
+
+			if(this.iframe.contentWindow){
+				this.iframe.contentWindow.innerWidth = w
+				this.iframe.contentWindow.innerHeight = h
+				this.iframe.contentWindow.resizeTo(w,h)
+			}
+		}
+	}
 
 	//FEEBACK USER
 	onNextClick(e){
@@ -235,6 +263,10 @@ class XPView {
 	onLogoClick(e){
 		this.direction = 'next'
 		page('/home')
+	}
+
+	onResize(e){
+		this.resizeIframe()
 	}
 
 	onShareClick(){}

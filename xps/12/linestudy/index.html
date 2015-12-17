@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+           *             ,
+                       _/^\_
+                      <     >
+     *                 /.-.\         *
+              *        `/&\`                   *
+                      ,@.*;@,
+                     /_o.I %_\    *
+        *           (`'--:o(_@;
+                   /`;--.,__ `')             *
+                  ;@`o % O,*`'`&\
+            *    (`'--)_@ ;o %'()\      *
+                 /`;--._`''--._O'@;
+                /&*,()~o`;-.,_ `""`)
+     *          /`,@ ;+& () o*`;-';\
+               (`""--.,_0 +% @' &()\
+               /-.,_    ``''--....-'`)  *
+          *    /@%;o`:;'--,.__   __.'\
+              ;*,&(); @ % &^;~`"`o;@();         *
+              /(); o^~; & ().o@*&`;&%O\
+        jgs   `"="==""==,,,.,="=="==="`
+           __.----.(\-''#####---...___...-----._
+         '`         \)_`"""""`
+                 .--' ')
+               o(  )_-\
+                 `"""` `
+				  MERRY CHRISTMAS!
+    -->
+    <head>
+
+    	<title>Christmas Line Study</title>
+        <meta charset="utf-8">
+        <meta name="author" content="AUTHOR">
+        <meta name="description" content="DESCRIPTION">
+        <meta property="og:title" content="TITLE"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="URL"/>
+        <meta property="og:image" content="FACEBOOK_IMG"/>
+        <meta property="og:site_name" content="WEBSITE"/>
+        <meta property="og:description" content="DESCRIPTION"/>    
+		
+        
+        <link rel="stylesheet" href="css/normalize.css"> 
+        <style>
+			html {
+			    position: relative;
+			    min-height: 100%;
+			}
+
+			body {
+				background-color:#ffffff;
+				overflow: hidden;
+			}
+
+			#loadingText {
+				width: 300px;
+			    height: 50px;
+			    background-color: #ffffff;
+			    text-align: center;			    
+			    font-size: 12px;
+			    position: absolute;
+			    z-index: 99;
+			    top: 0;
+			    bottom: 0;
+			    left: 0;
+			    right: 0;
+
+			    margin: auto;
+			}
+
+			#verticalContainer {
+				position:absolute;	     
+							
+			}
+
+			#horizontalContainer {
+				position:absolute; 					
+				margin:0px;
+			}
+
+			#container {
+			    position: relative;
+			    background-color:#e5dbdb;      
+			    padding: 0px;
+			    margin: 0px;			
+			}
+
+			canvas[resize] {
+			    width: 100%;
+			    height: 100%;
+			}
+		</style>
+		
+</head>
+<body>
+	<body onload="KEEF.load();">
+		<div id="loadingText">
+        	loading...
+    	</div>
+    	<div id="verticalContainer">
+    		<div id="horizontalContainer">
+		        <div id="container"></div>
+	        </div>
+	    </div>
+	    <audio id="backgroundNoise" loop>
+		  <source src="audio/stillLife.ogg" type="audio/ogg">
+		  <source src="audio/stillLife.mp3" type="audio/mpeg">
+		</audio>
+	    
+    </body>
+    <script src="js/libs/paperjs-v0.9.25/dist/paper-full.min.js"></script>
+    <script src="js/lineStudy.js"></script>
+
+
+</body>
+</html>
