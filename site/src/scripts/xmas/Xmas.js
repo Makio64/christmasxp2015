@@ -34,6 +34,7 @@ class Xmas {
 	}
 
 	onStart(){
+		pixi.pause = false
 		if(cookie.getCookie("intro") == ""){
 			cookie.createCookie("intro", Date.now(), 1)
 			this.onIntro()
@@ -52,6 +53,7 @@ class Xmas {
 	}
 
 	onIntro(){
+		pixi.pause = false
 		if(this.status!="loaded"){
 			this.init(this.onIntro)
 		return
@@ -66,6 +68,7 @@ class Xmas {
 	}
 
 	onHome() {
+		pixi.pause = false
 		if(this.status!="loaded"){
 			this.init(this.onHome)
 		} else {
@@ -77,6 +80,7 @@ class Xmas {
 	}
 
 	onAbout() {
+		pixi.pause = false
 		if(this.status!="loaded"){
 			this.init(this.onAbout)
 		} else {
@@ -101,6 +105,7 @@ class Xmas {
 				this.xp = new XPView()
 			}
 		}
+		pixi.pause = true
 		this.current = this.xp
 		this.current.bindEvents()
 		this.current.show(e.params.day,e.params.name)

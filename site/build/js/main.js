@@ -79,57 +79,60 @@ var loop = require("fz/core/loop");
 var stage = require("fz/core/stage");
 
 var Pixi = (function () {
-  function Pixi() {
-    _classCallCheck(this, Pixi);
+	function Pixi() {
+		_classCallCheck(this, Pixi);
 
-    var opts = {
-      antialias: true,
-      // resolution: stage.resolution,
-      resolution: 2,
-      // resolution: 1,
-      transparent: true,
-      backgroundColor: 0xe9e9e9
-    };
-    this.renderer = new PIXI.autoDetectRenderer(0, 0, opts);
+		var opts = {
+			antialias: true,
+			// resolution: stage.resolution,
+			resolution: 2,
+			// resolution: 1,
+			transparent: true,
+			backgroundColor: 0xe9e9e9
+		};
+		this.renderer = new PIXI.autoDetectRenderer(0, 0, opts);
 
-    this.width = 0;
-    this.height = 0;
+		this.width = 0;
+		this.height = 0;
+		this.pause = false;
 
-    this.stage = new PIXI.Container();
+		this.stage = new PIXI.Container();
 
-    this.dom = this.renderer.view;
+		this.dom = this.renderer.view;
 
-    this._binds = {};
-    this._binds.onUpdate = this._onUpdate.bind(this);
-    this._binds.onResize = this._onResize.bind(this);
-  }
+		this._binds = {};
+		this._binds.onUpdate = this._onUpdate.bind(this);
+		this._binds.onResize = this._onResize.bind(this);
+	}
 
-  _createClass(Pixi, [{
-    key: "_onUpdate",
-    value: function _onUpdate() {
-      this.renderer.render(this.stage);
-      // console.log( this.renderer.drawCount )
-    }
-  }, {
-    key: "_onResize",
-    value: function _onResize() {
-      this.width = stage.width;
-      this.height = stage.height;
+	_createClass(Pixi, [{
+		key: "_onUpdate",
+		value: function _onUpdate() {
+			if (this.pause) {
+				return;
+			}
+			this.renderer.render(this.stage);
+		}
+	}, {
+		key: "_onResize",
+		value: function _onResize() {
+			this.width = stage.width;
+			this.height = stage.height;
 
-      this.renderer.resize(this.width, this.height);
-      this.renderer.view.style.width = this.width + "px";
-      this.renderer.view.style.height = this.height + "px";
-    }
-  }, {
-    key: "init",
-    value: function init() {
-      loop.add(this._binds.onUpdate);
-      stage.on("resize", this._binds.onResize);
-      this._onResize();
-    }
-  }]);
+			this.renderer.resize(this.width, this.height);
+			this.renderer.view.style.width = this.width + "px";
+			this.renderer.view.style.height = this.height + "px";
+		}
+	}, {
+		key: "init",
+		value: function init() {
+			loop.add(this._binds.onUpdate);
+			stage.on("resize", this._binds.onResize);
+			this._onResize();
+		}
+	}]);
 
-  return Pixi;
+	return Pixi;
 })();
 
 module.exports = new Pixi();
@@ -1074,6 +1077,7 @@ var Xmas = (function () {
 	_createClass(Xmas, [{
 		key: "onStart",
 		value: function onStart() {
+			pixi.pause = false;
 			if (cookie.getCookie("intro") == "") {
 				cookie.createCookie("intro", Date.now(), 1);
 				this.onIntro();
@@ -1094,6 +1098,7 @@ var Xmas = (function () {
 	}, {
 		key: "onIntro",
 		value: function onIntro() {
+			pixi.pause = false;
 			if (this.status != "loaded") {
 				this.init(this.onIntro);
 				return;
@@ -1111,6 +1116,7 @@ var Xmas = (function () {
 	}, {
 		key: "onHome",
 		value: function onHome() {
+			pixi.pause = false;
 			if (this.status != "loaded") {
 				this.init(this.onHome);
 			} else {
@@ -1122,6 +1128,7 @@ var Xmas = (function () {
 	}, {
 		key: "onAbout",
 		value: function onAbout() {
+			pixi.pause = false;
 			if (this.status != "loaded") {
 				this.init(this.onAbout);
 			} else {
@@ -1148,6 +1155,7 @@ var Xmas = (function () {
 					this.xp = new XPView();
 				}
 			}
+			pixi.pause = true;
 			this.current = this.xp;
 			this.current.bindEvents();
 			this.current.show(e.params.day, e.params.name);
