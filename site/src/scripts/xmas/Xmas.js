@@ -31,6 +31,8 @@ class Xmas {
 		page( "/xps/:day/:name/", this.onXP )
 		page( "/", this.onStart )
 		page()
+		pixi.pause = true
+		stage.init()
 	}
 
 	onStart(){
@@ -125,7 +127,6 @@ class Xmas {
 		}
 
 		this.status = "loading"
-		stage.init()
 		pixi.init()
 
 		let ui = null

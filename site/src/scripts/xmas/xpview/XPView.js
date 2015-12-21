@@ -227,7 +227,9 @@ class XPView {
 	}
 
 	resizeIframe(){
+		console.log('resize')
 		if(this.iframe){
+			console.log('resize iframe')
 
 			let isIos = /ipad|iphone|ipod|iPad|iPhone|iPod/.test(navigator.userAgent)
 			let w = window.innerWidth
@@ -240,6 +242,7 @@ class XPView {
 			this.iframe.style.width = w + 'px'
 
 			if(this.iframe.contentWindow){
+				console.log('resize contentWindow')
 				this.iframe.contentWindow.innerWidth = w
 				this.iframe.contentWindow.innerHeight = h
 				this.iframe.contentWindow.resizeTo(w,h)

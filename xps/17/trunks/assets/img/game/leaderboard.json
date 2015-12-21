@@ -1,0 +1,52 @@
+{"frames": {
+
+"button_copy_AllTime.png":
+{
+	"frame": {"x":869,"y":2,"w":117,"h":27},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":117,"h":27},
+	"sourceSize": {"w":117,"h":33}
+},
+"button_copy_Today.png":
+{
+	"frame": {"x":869,"y":31,"w":92,"h":33},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":92,"h":33},
+	"sourceSize": {"w":92,"h":33}
+},
+"button_copy_single.png":
+{
+	"frame": {"x":697,"y":2,"w":170,"h":33},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":170,"h":33},
+	"sourceSize": {"w":170,"h":33}
+},
+"button_copy_total.png":
+{
+	"frame": {"x":697,"y":37,"w":161,"h":27},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":161,"h":27},
+	"sourceSize": {"w":161,"h":33}
+},
+"leaderboard_BG_area.png":
+{
+	"frame": {"x":2,"y":2,"w":693,"h":235},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":693,"h":235},
+	"sourceSize": {"w":693,"h":235}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker ",
+	"version": "1.0",
+	"image": "leaderboard.png",
+	"format": "RGBA8888",
+	"size": {"w":1024,"h":256},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3614688781e106bdc146cfa859c5826e:5adb444384c0ce12d948f76ca06531cc:4fe47694e196b86d00aff58650e5f63b$"
+}
+}

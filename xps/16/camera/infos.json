@@ -1,0 +1,12 @@
+{
+	"author":"Nathan Gordon",
+	"nickname":"Nathan",
+	"website":"http://cinemont.com/",
+	"twitter":"https://twitter.com/gordonnl",
+	"title":"Camera",
+    "technology":"WebGL, Device Orientation, GLSL, Three.js",
+	"description":"A first step to fulfilling an old idea I had to replace guns in FPS games with a camera and making it just as fun. I also wanted to give myself an opportunity to do some real 3D. Finally was a test to see if I could make a 2D rendered image feel 3D by applying post effects and giving the user manual control.",
+    "casestudy":"",
+	"source":"",
+	"mobileFriendly":"1"
+}

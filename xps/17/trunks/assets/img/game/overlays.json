@@ -1,0 +1,48 @@
+{"frames": {
+
+"overlay_box.png":
+{
+	"frame": {"x":1138,"y":0,"w":624,"h":448},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":624,"h":448},
+	"sourceSize": {"w":624,"h":448},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"overlay_page.png":
+{
+	"frame": {"x":1764,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"overlay_page_current.png":
+{
+	"frame": {"x":1782,"y":0,"w":16,"h":16},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":16},
+	"sourceSize": {"w":16,"h":16},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"overlay_results.png":
+{
+	"frame": {"x":0,"y":0,"w":1136,"h":605},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1136,"h":605},
+	"sourceSize": {"w":1136,"h":605},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "overlays.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":1024},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:f2563877f05f87ecc946b514eca70693:31a37ec138566d08f5cca9516cba0c79:3e3fdb9952b3a9403ddef30418cea9dc$"
+}
+}

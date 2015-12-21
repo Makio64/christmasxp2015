@@ -1,0 +1,172 @@
+{"frames": {
+
+"lutin_00007.png":
+{
+	"frame": {"x":2,"y":2,"w":408,"h":444},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":68,"y":47,"w":408,"h":444},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00016.png":
+{
+	"frame": {"x":2,"y":448,"w":406,"h":446},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":67,"y":45,"w":406,"h":446},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00017.png":
+{
+	"frame": {"x":412,"y":2,"w":395,"h":446},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":74,"y":45,"w":395,"h":446},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00018.png":
+{
+	"frame": {"x":410,"y":450,"w":390,"h":444},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":79,"y":47,"w":390,"h":444},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00019.png":
+{
+	"frame": {"x":1179,"y":1358,"w":390,"h":442},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":80,"y":49,"w":390,"h":442},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00020.png":
+{
+	"frame": {"x":1572,"y":906,"w":390,"h":443},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":80,"y":48,"w":390,"h":443},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00021.png":
+{
+	"frame": {"x":802,"y":452,"w":390,"h":446},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":79,"y":45,"w":390,"h":446},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00022.png":
+{
+	"frame": {"x":1194,"y":455,"w":390,"h":447},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":79,"y":44,"w":390,"h":447},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00023.png":
+{
+	"frame": {"x":809,"y":2,"w":390,"h":448},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":79,"y":43,"w":390,"h":448},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00024.png":
+{
+	"frame": {"x":1201,"y":2,"w":390,"h":451},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":78,"y":40,"w":390,"h":451},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00025.png":
+{
+	"frame": {"x":2,"y":896,"w":392,"h":452},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":77,"y":39,"w":392,"h":452},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00026.png":
+{
+	"frame": {"x":2,"y":1350,"w":391,"h":450},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":78,"y":41,"w":391,"h":450},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00027.png":
+{
+	"frame": {"x":787,"y":1353,"w":390,"h":445},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":79,"y":46,"w":390,"h":445},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00028.png":
+{
+	"frame": {"x":1572,"y":1351,"w":390,"h":443},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":80,"y":48,"w":390,"h":443},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00029.png":
+{
+	"frame": {"x":1586,"y":456,"w":390,"h":448},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":80,"y":43,"w":390,"h":448},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00030.png":
+{
+	"frame": {"x":396,"y":896,"w":390,"h":452},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":80,"y":39,"w":390,"h":452},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00031.png":
+{
+	"frame": {"x":1593,"y":2,"w":389,"h":452},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":82,"y":39,"w":389,"h":452},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00032.png":
+{
+	"frame": {"x":788,"y":900,"w":390,"h":451},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":83,"y":40,"w":390,"h":451},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00033.png":
+{
+	"frame": {"x":395,"y":1350,"w":390,"h":450},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":85,"y":41,"w":390,"h":450},
+	"sourceSize": {"w":503,"h":491}
+},
+"lutin_00034.png":
+{
+	"frame": {"x":1180,"y":904,"w":390,"h":452},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":85,"y":39,"w":390,"h":452},
+	"sourceSize": {"w":503,"h":491}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "lutin_1.png",
+	"format": "RGBA8888",
+	"size": {"w":1984,"h":1802},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d850e33a59bb06469820b88cd987a86b:77579b5b393e25e1d1d2d3acc7a1330f:61e0281303d33770e888c3234d8898dd$"
+}
+}

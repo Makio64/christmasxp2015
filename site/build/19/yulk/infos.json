@@ -1,0 +1,12 @@
+{
+	"author":"Einar Öberg",
+	"nickname":"Einar Öberg",
+	"website":"http://inear.se",
+	"twitter":"inear",
+	"title":"Yule goat",
+    "technology":"Three.js",
+	"description":"Learn about the giant guardian of the yule tree",
+    "casestudy":"",
+	"source":"https://github.com/inear/yulegoat",
+	"mobileFriendly":"1"
+}

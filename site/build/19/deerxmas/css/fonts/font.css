@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'FjallaOne-Regular';
+  src: url('FjallaOne-Regular.eot'); /* IE9 Compat Modes */
+  src: url('FjallaOne-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('FjallaOne-Regular.woff') format('woff'), /* Modern Browsers */
+       url('FjallaOne-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('FjallaOne-Regular.svg#1b676175c38a8444b53290a72e9d0f4a') format('svg'); /* Legacy iOS */
+       
+  font-style:   normal;
+  font-weight:  400;
+}
+

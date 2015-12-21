@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+           *             ,
+                       _/^\_
+                      <     >
+     *                 /.-.\         *
+              *        `/&\`                   *
+                      ,@.*;@,
+                     /_o.I %_\    *
+        *           (`'--:o(_@;
+                   /`;--.,__ `')             *
+                  ;@`o % O,*`'`&\
+            *    (`'--)_@ ;o %'()\      *
+                 /`;--._`''--._O'@;
+                /&*,()~o`;-.,_ `""`)
+     *          /`,@ ;+& () o*`;-';\
+               (`""--.,_0 +% @' &()\
+               /-.,_    ``''--....-'`)  *
+          *    /@%;o`:;'--,.__   __.'\
+              ;*,&(); @ % &^;~`"`o;@();         *
+              /(); o^~; & ().o@*&`;&%O\
+        jgs   `"="==""==,,,.,="=="==="`
+           __.----.(\-''#####---...___...-----._
+         '`         \)_`"""""`
+                 .--' ')
+               o(  )_-\
+                 `"""` `
+                  MERRY CHRISTMAS!
+    -->
+    <head>
+        <title>TITLE</title>
+        <meta charset="utf-8">
+        <meta name="author" content="AUTHOR">
+        <meta name="description" content="DESCRIPTION">
+        <meta property="og:title" content="TITLE"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="URL"/>
+        <meta property="og:image" content="FACEBOOK_IMG"/>
+        <meta property="og:site_name" content="WEBSITE"/>
+        <meta property="og:description" content="DESCRIPTION"/>
+
+        <link rel="stylesheet" href="styles/e4d386b3.style.css" />
+    </head>
+    <body>
+        <div id="canvasWrapper" class="canvas-wrapper">
+            <div class="nowebgl-fallback">
+                <span>Your browser doesn't support webgl - Update it or switch to a different one to check the experience</span>
+            </div>
+
+            <div class="instructions">
+                <img class="arrows" src="img/arrows.svg" />
+                <img class="grab" src="img/grab.svg" />
+
+                <span>drag to go trough the day</span>
+            </div>
+        </div>
+        <h1 class="title">Winter Journey</h1>
+        <div class="credits">
+            by <a href="https://twitter.com/julien_rno" target="_blank">Julien Renau / @julien_rno</a>
+        </div>
+
+        <div class="loader">
+            <div class="wrapper-loader">
+                <span class="loader-title">Winter Journey</span>
+                <span class="baseline">"For every dark night,<br />there is a brighter day..."</span>
+
+                <div class="loader"></div>
+            </div>
+        </div>
+
+        <audio class="audio-bg" preload="auto" loop="true" src="media/bg.mp3"></audio>
+
+
+
+        <script id="vertexShader" type="x-shader/x-vertex">
+            varying vec3 vWorldPosition;
+
+            void main() {
+                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+                vWorldPosition = worldPosition.xyz;
+
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            }
+        </script>
+        <script id="fragmentShader" type="x-shader/x-vertex"> 
+            uniform vec3 topColor;
+            uniform vec3 bottomColor;
+            uniform float alpha;
+            uniform float offset;
+            uniform float exponent;
+
+            varying vec3 vWorldPosition;
+
+            void main() {
+                float h = normalize( vWorldPosition + offset ).y;
+                gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), alpha);
+            }
+        </script>
+
+        <script src="scripts/1d518864.vendor.min.js"></script>
+
+        <script src="scripts/9079a830.app.min.js"></script>
+    </body>
+</html>

@@ -1072,6 +1072,8 @@ var Xmas = (function () {
 		page("/xps/:day/:name/", this.onXP);
 		page("/", this.onStart);
 		page();
+		pixi.pause = true;
+		stage.init();
 	}
 
 	_createClass(Xmas, [{
@@ -1179,7 +1181,6 @@ var Xmas = (function () {
 			}
 
 			this.status = "loading";
-			stage.init();
 			pixi.init();
 
 			var ui = null;
@@ -4540,7 +4541,9 @@ var XPView = (function () {
 	}, {
 		key: "resizeIframe",
 		value: function resizeIframe() {
+			console.log('resize');
 			if (this.iframe) {
+				console.log('resize iframe');
 
 				var isIos = /ipad|iphone|ipod|iPad|iPhone|iPod/.test(navigator.userAgent);
 				var w = window.innerWidth;
@@ -4553,6 +4556,7 @@ var XPView = (function () {
 				this.iframe.style.width = w + 'px';
 
 				if (this.iframe.contentWindow) {
+					console.log('resize contentWindow');
 					this.iframe.contentWindow.innerWidth = w;
 					this.iframe.contentWindow.innerHeight = h;
 					this.iframe.contentWindow.resizeTo(w, h);

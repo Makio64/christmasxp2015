@@ -1,5 +1,5 @@
 {
-    "totalDay": 15,
+    "totalDay": 20,
     "days": {
         "1": [
             {
@@ -174,7 +174,62 @@
                 "folder": "/treelines/",
                 "path": "/15/treelines/"
             }
+        ],
+        "16": [
+            {
+                "uid": 16,
+                "title": "Camera",
+                "author": "Nathan Gordon",
+                "website": "http://cinemont.com/",
+                "twitter": "https://twitter.com/gordonnl",
+                "folder": "/camera/",
+                "path": "/16/camera/"
+            }
+        ],
+        "17": [
+            {
+                "uid": 17,
+                "title": "Trunk Santa",
+                "author": "Julien Suard / Clément Chenebault",
+                "website": "https://www.behance.net/suardjulien",
+                "twitter": "https://twitter.com/ClChenebault_vL",
+                "folder": "/trunks/",
+                "path": "/17/trunks/"
+            }
+        ],
+        "18": [
+            {
+                "uid": 18,
+                "title": "Winter Journey",
+                "author": "Julien Renau",
+                "website": "http://www.julienrenau.com",
+                "twitter": "@julien_rno",
+                "folder": "/winterjourney/",
+                "path": "/18/winterjourney/"
+            }
+        ],
+        "19": [
+            {
+                "uid": 19,
+                "title": "Deer Xmas",
+                "author": "Florian Zumbrunn",
+                "website": "http://www.floz.fr",
+                "twitter": "https://twitter.com/florianzumbrunn",
+                "folder": "/deerxmas/",
+                "path": "/19/deerxmas/"
+            }
+        ],
+        "20": [
+            {
+                "uid": 20,
+                "title": "Yule goat",
+                "author": "Einar Öberg",
+                "website": "http://inear.se",
+                "twitter": "inear",
+                "folder": "/yule/",
+                "path": "/20/yule/"
+            }
         ]
     },
-    "totalXP": 16
+    "totalXP": 21
 }

@@ -1,0 +1,76 @@
+{
+  "strings": {
+    "STR_L_HTML5": "This game uses HTML5. If it loads but does not run, please update your web browser.",
+
+    "STR_PRESENTS": "Presents...",
+
+    "STR_TITLE_IN": "IN",
+    "STR_TITLE_GAME": "HYDRO FRENZY",
+
+    "STR_LEVEL_SELECT": "SELECT A LEVEL",
+    
+    "STR_TUTORIAL_WELCOME":"Welcome to the park!",
+    "STR_TUTORIAL_TAP_TO_FILL":"Tap the thirsty customer to fill their cup",
+    "STR_TUTORIAL_WAIT_FOR_CUSTOMER":"Wait a while for them to finish their drink",
+    "STR_TUTORIAL_TAP_TO_COLLECT":"Now tap to collect their coupons",
+    "STR_TUTORIAL_WELL_DONE":"Well done!",
+    "STR_TUTORIAL_TAP_TO_REFILL":"Refill your tank by tapping here then you'll be ready to go!",
+
+    "STR_TUTORIAL_REFILL_TANK":"Stop the needle on the white to get a perfect fill!",
+
+    "STR_REFILL_FAIL":"OH NO!",
+    "STR_REFILL_PERFECT":"PERFECT!",
+    "STR_REFILL_GREAT":"NICE!",
+    "STR_REFILL_OK":"MEH",
+
+    "STR_LEVEL_1":"MORNING",
+    "STR_LEVEL_2":"NOON",
+    "STR_LEVEL_3":"NIGHT",
+
+    "STR_LEVEL_1_DESCRIPTION":"Wakey wakey!\n\nThe sun is rising and so is the temperature.\n\nGet ready to serve some hot-headed customers.",
+    "STR_LEVEL_2_DESCRIPTION":"Hot in the city!\n\nThe lunchtime crowds need their thirst quenching and Donald's going quackers!",
+    "STR_LEVEL_3_DESCRIPTION":"It's the Rush Hour Rampage!\n\nServe the hot and bothered commuters their home-time hydration.",
+
+    "STR_GAME_LEADERBOARD":"Leaderboard",
+    "STR_GAME_PAUSED":"PAUSED",
+    "STR_GAME_RESULTS":"RESULTS",
+    "STR_GAME_SCORE":"SCORE:",
+    "STR_GAME_SUBMIT":"SUBMIT SCORE",
+    "STR_CAN_YOU_MAKE":"Try to get:",
+    "STR_LEVEL_UNLOCKED":"LEVEL UNLOCKED!",
+    "STR_WELL_DONE":"WELL DONE!",
+    "STR_NEXT_LEVEL_AT":"NEXT LEVEL AT:",
+
+    "STR_BENCH_BONUS":"BENCH\nBONUS!",
+    
+    "STR_GAME_HELP":"HOW TO PLAY",
+    "STR_GAME_HELP_1":"Tap to move",
+    "STR_GAME_HELP_2":"Tap to fill cup",
+    "STR_GAME_HELP_3":"Tap to collect token",
+    "STR_GAME_HELP_4":"Tap to refill",
+    "STR_GAME_HELP_5":"Repeat actions for a combo bonus",
+
+
+
+    "STR_MEGA_TIP":"MEGA\nBONUS!",
+    "STR_HYPNO_TIME":"HYPNO\nTIME!",
+    "STR_SPLASH_ATTACK":"Splash\nattack!",
+    "STR_SPLASH_BACK":"BACK TO\nWORK!",
+    "STR_INSTANT_FILL":"SUPER\nTANK!",
+    "STR_SHARK":"Shark?!",
+
+    "STR_MEGA_TIP_DESCRIPTION":"Grab this and get a bonus burst of extra points.",
+    "STR_HYPNO_DESCRIPTION":"Wooo! You are feeling sleepy... Hypnotise all customers so they give tokens immediately!",
+    "STR_SPLASH_ATTACK_DESCRIPTION":"They want water?!\nI'll give them water!\nGet ready for a super-soaking...",
+    "STR_INSTANT_FILL_DESCRIPTION":"Insta-fill your tank full of combo-charged super water.",
+    "STR_SHARK_DESCRIPTION":"If things get out of hand, this will help by scaring off everyone in the park!",
+    
+
+    "STR_GAME_REFILL":"REFILL!",
+    "STR_GAME_HOSE_EM":"HOSE'em\nDOWN!",
+    "STR_GAME_FINAL_GO":"FINAL\nSPLASH!",
+
+    "STR_YOUR_SCORE":"Your score:"
+
+  }
+}

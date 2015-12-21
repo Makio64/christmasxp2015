@@ -1,0 +1,12 @@
+{
+	"author":"Julien Renau",
+	"nickname":"Julien Renau",
+	"website":"http://www.julienrenau.com",
+	"twitter":"@julien_rno",
+	"title":"Winter Journey",
+    "technology":"webGL, three.js, tweenmax, html5, audio",
+	"description":"Go through a winter journey, by dragging on your screen from left to right. By this action you are able to switch from day to night. The goal of this experiment was to create something poetical, playing around with winter colors and lightings.",
+    "casestudy":"",
+	"source":"",
+	"mobileFriendly":"0"
+}
