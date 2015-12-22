@@ -33,6 +33,16 @@ class Xmas {
 		page()
 		pixi.pause = true
 		stage.init()
+		document.addEventListener('touchstart', this.goFullScreen, false);
+	}
+
+	goFullScreen(){
+		let doc = window.document;
+		let docEl = doc.documentElement;
+		let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+		if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement){
+			requestFullScreen.call(docEl)
+		}
 	}
 
 	onStart(){

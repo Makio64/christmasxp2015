@@ -1074,9 +1074,20 @@ var Xmas = (function () {
 		page();
 		pixi.pause = true;
 		stage.init();
+		document.addEventListener('touchstart', this.goFullScreen, false);
 	}
 
 	_createClass(Xmas, [{
+		key: "goFullScreen",
+		value: function goFullScreen() {
+			var doc = window.document;
+			var docEl = doc.documentElement;
+			var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+			if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+				requestFullScreen.call(docEl);
+			}
+		}
+	}, {
 		key: "onStart",
 		value: function onStart() {
 			pixi.pause = false;

@@ -1,0 +1,33 @@
+uniform float uTime;
+uniform float uMoveDelta;
+
+varying float vTime;
+varying vec3 vNormal;
+varying vec3 vPosWorld;
+varying vec3 vPosWorldPreMove;
+varying float vMoveDelta;
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void main() {
+
+	vTime = uTime;
+	vNormal = normal;
+
+	vec3 pos = position;
+	vec3 posWorldPreMove = (modelMatrix * vec4(pos,1.0)).xyz;
+	vPosWorldPreMove = posWorldPreMove;
+
+	//float moveDelta = sin(vTime * 1.5 + rand(pos.xy)*0.5 + pos.x*0.5 - pos.z*0.1 + normal.y*50.0);
+	float moveDelta = sin( -vTime * 1.5 + rand(pos.xy)*2.0 + length(posWorldPreMove.xz)*0.4 );
+	vMoveDelta = moveDelta;
+	pos.y += moveDelta * uMoveDelta;
+
+	vPosWorld = (modelMatrix * vec4(pos,1.0)).xyz;
+	
+  	gl_Position = projectionMatrix *
+                modelViewMatrix *
+                vec4(pos,1.0);
+}

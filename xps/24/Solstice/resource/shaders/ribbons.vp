@@ -1,0 +1,28 @@
+/*
+"uniform mat4 modelMatrix;",
+"uniform mat4 modelViewMatrix;",
+"uniform mat4 projectionMatrix;",
+"uniform mat4 viewMatrix;",
+"uniform mat3 normalMatrix;",
+"uniform vec3 cameraPosition;",
+*/
+
+uniform float uAlpha;
+uniform float uTime;
+uniform vec3 uColorSky;
+
+varying vec3 vColor;
+varying vec3 vNormal;
+
+void main() {
+	vec3 pos = position;
+
+	//pos.y += sin(uTime + pos.x) * 10.0;
+
+	vec3 colorFinal = uColorSky;
+	colorFinal += (vec3(sin(uTime*5.0+(pos.x+pos.y)*1.5)) * 0.015*uAlpha);
+
+	vColor = colorFinal;//
+	vNormal = normal;
+  	gl_Position = projectionMatrix * modelViewMatrix * vec4(pos,1.0);
+}
