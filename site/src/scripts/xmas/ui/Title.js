@@ -51,7 +51,7 @@ class Title extends PIXI.Container {
   }
 
   _showLetter( letter, andIncrement = true ) {
-    TweenLite.to( letter, .8, {
+    TweenMax.to( letter, .8, {
       delay: this._delay,
       alpha: 1,
       ease: Quart.easeInOut
@@ -62,7 +62,7 @@ class Title extends PIXI.Container {
   }
 
   hide() {
-    TweenLite.to( this, .8, {
+    TweenMax.to( this, .8, {
       alpha: 0,
       ease: Cubic.easeInOut
     } )

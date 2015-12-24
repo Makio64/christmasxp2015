@@ -6,22 +6,16 @@ class Pixi {
 	constructor() {
 		const opts = {
 			antialias: true,
-			// resolution: stage.resolution,
 			resolution: 2,
-			// resolution: 1,
 			transparent: true,
 			backgroundColor: 0xe9e9e9
 		}
 		this.renderer = new PIXI.autoDetectRenderer( 0, 0, opts )
-
+		this.stage = new PIXI.Container()
 		this.width = 0
 		this.height = 0
 		this.pause = false
-
-		this.stage = new PIXI.Container()
-
 		this.dom = this.renderer.view
-
 		this._binds = {}
 		this._binds.onUpdate = this._onUpdate.bind( this )
 		this._binds.onResize = this._onResize.bind( this )
@@ -46,6 +40,7 @@ class Pixi {
 	init() {
 		loop.add( this._binds.onUpdate )
 		stage.on( "resize", this._binds.onResize )
+		document.getElementById( "main" ).appendChild( this.dom )
 		this._onResize()
 	}
 }

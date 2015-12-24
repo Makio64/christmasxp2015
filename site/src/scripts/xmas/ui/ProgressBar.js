@@ -55,7 +55,7 @@ class ProgressBar extends PIXI.Container {
     } else {
       this.unbindEvents()
       const wh = stage.width >> 1
-      TweenLite.to( this, .8, { 
+      TweenMax.to( this, .8, { 
         _percent: 1,
         _xStartTop: -28 >> 0,
         _xStartBottom: 28 >> 0,
@@ -75,7 +75,7 @@ class ProgressBar extends PIXI.Container {
   }
 
   show( delay = 0 ) {
-    TweenLite.to( this, .8, {
+    TweenMax.to( this, .8, {
       delay: delay,
       alpha: 1,
       ease: Quart.easeInOut
@@ -83,12 +83,12 @@ class ProgressBar extends PIXI.Container {
   }
 
   switchMode( delay = 0 ) {
-    TweenLite.to( this._gTop, .4, {
+    TweenMax.to( this._gTop, .4, {
       delay: delay,
       y: 140,
       ease: Quad.easeIn
     })
-    TweenLite.to( this._gBot, .4, {
+    TweenMax.to( this._gBot, .4, {
       delay: delay,
       y: 280,
       ease: Quad.easeIn
@@ -96,7 +96,7 @@ class ProgressBar extends PIXI.Container {
   }
 
   hideBottomBar( delay ) {
-    TweenLite.to( this._gBot, .6, {
+    TweenMax.to( this._gBot, .6, {
       delay: delay,
       alpha: 0,
       ease: Quad.easeOut

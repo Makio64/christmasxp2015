@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+           *             ,
+                       _/^\_
+                      <     >
+     *                 /.-.\         *
+              *        `/&\`                   *
+                      ,@.*;@,
+                     /_o.I %_\    *
+        *           (`'--:o(_@;
+                   /`;--.,__ `')             *
+                  ;@`o % O,*`'`&\
+            *    (`'--)_@ ;o %'()\      *
+                 /`;--._`''--._O'@;
+                /&*,()~o`;-.,_ `""`)
+     *          /`,@ ;+& () o*`;-';\
+               (`""--.,_0 +% @' &()\
+               /-.,_    ``''--....-'`)  *
+          *    /@%;o`:;'--,.__   __.'\
+              ;*,&(); @ % &^;~`"`o;@();         *
+              /(); o^~; & ().o@*&`;&%O\
+        jgs   `"="==""==,,,.,="=="==="`
+           __.----.(\-''#####---...___...-----._
+         '`         \)_`"""""`
+                 .--' ')
+               o(  )_-\
+                 `"""` `
+				  MERRY CHRISTMAS!
+    -->
+<head>
+    <title>Give me a gift</title>
+    <meta charset="utf-8">
+    <meta name="author" content="CATCH">
+    <meta name="description" content="">
+    <meta property="og:title" content="Give me a gift"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://www.catchad.com.tw/experiments/give-me-a-gift/"/>
+    <meta property="og:image" content="http://www.catchad.com.tw/experiments/give-me-a-gift/assets/images/ogimage.jpg"/>
+    <meta property="og:site_name" content="Give me a gift"/>
+    <meta property="og:description" content=""/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0">
+
+	<link rel="stylesheet" href="assets/styles/normalize.css">
+	<link rel="stylesheet" href="assets/styles/framework.css">
+	<link rel="stylesheet" href="assets/styles/main.css">
+	<link rel="shortcut icon" href="assets/images/favicon.jpg">
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-39381829-5', 'auto');
+	  ga('send', 'pageview', 'homepage');
+	</script>
+
+</head>
+<body>
+	<div id="landing">
+		<div class="table">
+			<div class="tablecell">
+				<div class="content">
+					<div class="row"><img class="logo" src="assets/images/logo.png" alt="give me a gift"></div>
+					<div class="row"><img src="assets/images/instruction.png" width="150"></div>
+					<div class="row">
+						<img class="snowman-left" src="assets/images/snowman.png">
+						<button class="start">START</button>
+						<img class="snowman-right" src="assets/images/snowman.png">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="credits" style="opacity:0; display:none;">
+		<div class="table">
+			<div class="tablecell">
+				<p class="created"><a href="http://www.catchad.com.tw/" target="_blank">Created by CATCH</a></p>
+				<div class="special">
+					<p>SPECIAL THANKS</p>
+					<a href="http://www.miracle-cg.com" target="_blank">Miracle CG - 3D Model</a><br/>
+					<a href="https://www.jamendo.com/track/977167/we-wish-you-a-merry-xmas-symphony" target="_blank">AKASHIC RECORDS - Music</a>
+				</div>
+
+				<button class="back">BACK</button>
+			</div>
+		</div>
+	</div>
+	<div id="result" style="opacity:0; display:none;">
+		<div class="table">
+			<div class="tablecell">
+				<p>Your Score</p>
+				<p class="score">0</p>
+				<button class="back">Home</button>
+				<button class="playagain">Restart</button>
+				<button class="credits">Credits</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="ui">
+		<div class="status">
+			<span>HP:</span><div class="hp"><div class="bar"></div></div>
+			<span>SCORE:</span><div class="score">0</div>
+		</div>
+		<div class="pause" style="opacity:0; display:none;">
+			<div class="table">
+				<div class="tablecell">
+					Click Anywhere To Resume
+				</div>
+			</div>
+		</div>
+		<div class="focus"></div>
+		<svg class="focus-progress" width="100px" height="100px" >
+			<circle cx="50" cy="50" r="20" stroke="black" stroke-width="3" fill="none" />
+		</svg>
+		<div class="hurt"></div>
+	</div>
+
+	<div id="ui-stereo">
+		<div class="status left">
+			<span>HP:</span><div class="hp"><div class="bar"></div></div>
+			<span>SCORE:</span><div class="score">0</div>
+		</div>
+
+		<div class="status right">
+			<span>HP:</span><div class="hp"><div class="bar"></div></div>
+			<span>SCORE:</span><div class="score">0</div>
+		</div>
+
+
+		<div class="focus-left"></div>
+		<div class="focus-right"></div>
+		<svg class="focus-progress-left" width="100px" height="100px" >
+			<circle cx="50" cy="50" r="20" stroke="black" stroke-width="3" fill="none" />
+		</svg>
+
+		<svg class="focus-progress-right" width="100px" height="100px" >
+			<circle cx="50" cy="50" r="20" stroke="black" stroke-width="3" fill="none" />
+		</svg>
+		<div class="hurt"></div>
+	</div>
+
+	<div id="music-switch" data-status="1"><span> ON</span></div>
+ 	<canvas id="threejs-container"></canvas>
+</body>
+
+</html>
+<script src="assets/scripts/lib/jquery-1.11.3.min.js"></script>
+<script src="assets/scripts/lib/soundjs-0.6.2.min.js"></script>
+<script src="assets/scripts/lib/device.min.js"></script>
+<script src="assets/scripts/lib/TweenMax.min.js"></script>
+<script src="assets/scripts/lib/three.min.js"></script>
+<script src="assets/scripts/lib/StereoEffect.js"></script>
+<script src="assets/scripts/lib/DeviceOrientationControls.js"></script>
+<script src="assets/scripts/lib/PointerLockControls.js"></script>
+<script src="assets/scripts/lib/SPE.min.js"></script>
+<script src="assets/scripts/main.min.js"></script>

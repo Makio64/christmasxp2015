@@ -216,6 +216,7 @@ class XPView {
 		}
 		this.iframe.src = xp.path.replace('./','/')
 		this.iframe.className = 'xp'
+		this.iframe.setAttribute('allowFullScreen', 'true')
 		document.body.appendChild(this.iframe)
 	}
 
@@ -227,10 +228,7 @@ class XPView {
 	}
 
 	resizeIframe(){
-		console.log('resize')
 		if(this.iframe){
-			console.log('resize iframe')
-
 			let isIos = /ipad|iphone|ipod|iPad|iPhone|iPod/.test(navigator.userAgent)
 			let w = window.innerWidth
 			let h = window.innerHeight
@@ -242,7 +240,7 @@ class XPView {
 			this.iframe.style.width = w + 'px'
 
 			if(this.iframe.contentWindow){
-				console.log('resize contentWindow')
+				console.log('resize iframe.contentWindow')
 				this.iframe.contentWindow.innerWidth = w
 				this.iframe.contentWindow.innerHeight = h
 				this.iframe.contentWindow.resizeTo(w,h)

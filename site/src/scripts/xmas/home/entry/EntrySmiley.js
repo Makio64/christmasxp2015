@@ -64,23 +64,23 @@ class EntrySmiley extends PIXI.Container {
   show( delay = 0, fast = false ) {
     const ratio = fast ? .5 : 1
 
-    TweenLite.to( this, .4 * ratio, {
+    TweenMax.to( this, .4 * ratio, {
       delay: delay,
       alpha: 1,
       ease: Cubic.easeInOut
     })
-    TweenLite.to( this.scale, .2 * ratio, {
+    TweenMax.to( this.scale, .2 * ratio, {
       delay: delay,
       x: 0.4,
       y: 0.4,
       ease: Sine.easeIn,
     } )
-    TweenLite.set( this.scale, {
+    TweenMax.set( this.scale, {
       delay: delay + .2 * ratio,
       x: .6,
       y: .6
     } )
-    TweenLite.to( this.scale, .8 * ratio, {
+    TweenMax.to( this.scale, .8 * ratio, {
       delay: delay + .2 * ratio,
       x: 1,
       y: 1,
@@ -89,15 +89,15 @@ class EntrySmiley extends PIXI.Container {
   }
 
   hide( delay = 0 ) {
-    TweenLite.killTweensOf( this )
-    TweenLite.killTweensOf( this.scale )
+    TweenMax.killTweensOf( this )
+    TweenMax.killTweensOf( this.scale )
 
-    TweenLite.to( this, .6, {
+    TweenMax.to( this, .6, {
       delay: delay,
       alpha: 0,
       ease: Cubic.easeInOut
     })
-    TweenLite.to( this.scale, .6, {
+    TweenMax.to( this.scale, .6, {
       delay: delay,
       x: 0,
       y: 0,

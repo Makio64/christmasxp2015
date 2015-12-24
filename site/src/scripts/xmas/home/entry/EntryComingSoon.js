@@ -49,7 +49,7 @@ class EntryComingSoon extends PIXI.Container {
 
 		const timing = fast ? .4 : .8
 
-		TweenLite.to( this._polyShape.scale, timing, {
+		TweenMax.to( this._polyShape.scale, timing, {
 			delay: delay,// + .25,
 			x: 1,
 			y: 1,
@@ -60,11 +60,11 @@ class EntryComingSoon extends PIXI.Container {
 		px -= 20
 		this._cntTfTop.x = px
 		this._cntTfTop.alpha = 0
-		TweenLite.set( this._cntTfTop, {
+		TweenMax.set( this._cntTfTop, {
 			delay: delay + .3,
 			alpha: .7
 		})
-		TweenLite.to( this._cntTfTop, timing, {
+		TweenMax.to( this._cntTfTop, timing, {
 			delay: delay + .3,
 			x: px + 20,
 			alpha: 1,
@@ -75,11 +75,11 @@ class EntryComingSoon extends PIXI.Container {
 		px -= 25
 		this._cntTfBottom.x = px
 		this._cntTfBottom.alpha = 0
-		TweenLite.set( this._cntTfBottom, {
+		TweenMax.set( this._cntTfBottom, {
 			delay: delay + .375,
 			alpha: .7
 		})
-		TweenLite.to( this._cntTfBottom, timing, {
+		TweenMax.to( this._cntTfBottom, timing, {
 			delay: delay + .375,
 			x: px + 25,
 			alpha: 1,
@@ -91,25 +91,25 @@ class EntryComingSoon extends PIXI.Container {
 	}
 
 	hide( delay = 0 ) {
-		TweenLite.killTweensOf( this._polyShape.scale )
-		TweenLite.killTweensOf( this._cntTfTop )
-		TweenLite.killTweensOf( this._cntTfBottom )
+		TweenMax.killTweensOf( this._polyShape.scale )
+		TweenMax.killTweensOf( this._cntTfTop )
+		TweenMax.killTweensOf( this._cntTfBottom )
 
-		TweenLite.to( this._polyShape.scale, .6, {
+		TweenMax.to( this._polyShape.scale, .6, {
 			delay: delay + .15,
 			x: 0,
 			y: 0,
 			ease: Quart.easeInOut,
 		} )
 
-		TweenLite.to( this._cntTfTop, .4, {
+		TweenMax.to( this._cntTfTop, .4, {
 			delay: delay,
 			x: this._cntTfTop.x + 25,
 			alpha: 0,
 			ease: Quart.easeInOut
 		})
 
-		TweenLite.to( this._cntTfBottom, .4, {
+		TweenMax.to( this._cntTfBottom, .4, {
 			delay: delay + .075,
 			x: this._cntTfBottom.x + 20,
 			alpha: 0,

@@ -1,0 +1,79 @@
+.table {
+	display: table;
+	width: 100%;
+	height: 100%
+}
+.tablecell {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center
+}
+a {
+	color: #CCCCCC;
+	text-decoration: none
+}
+a:hover {
+	text-decoration: underline
+}
+p {
+	margin: 10px 0;
+	color: #CCCCCC;
+	font-size: 20px
+}
+button {
+	position: relative;
+	border-radius: 2em;
+	border: none;
+	outline: 0;
+	background: none;
+	padding: 12px 30px;
+	color: #715902;
+	margin: 0 5px;
+	background-color: #FEC901;
+	overflow: hidden;
+	z-index: 1;
+	-webkit-transition: color .2s ease-out;
+	   -moz-transition: color .2s ease-out;
+	    -ms-transition: color .2s ease-out;
+	     -o-transition: color .2s ease-out;
+	        transition: color .2s ease-out;
+}
+
+button:hover {
+	color: #000000;
+}
+
+
+button:after {
+	content: " ";
+    position: absolute;
+    top: 0%;
+    left: 0;
+    width: calc(100% + 70px);
+    height: 100%;
+    z-index: -1;
+    /*background: repeating-linear-gradient(45deg, #FEC901, #FEC901 14px, #EF6F01 0px, #EF6F01 30.7px);*/
+    background: repeating-linear-gradient(45deg, #FEC901, #FEC901 25px, #EF6F01 0px, #EF6F01 50px);
+    opacity: 0;
+    animation-name: moveing;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    -webkit-transition: opacity .2s ease-out;
+       -moz-transition: opacity .2s ease-out;
+        -ms-transition: opacity .2s ease-out;
+         -o-transition: opacity .2s ease-out;
+            transition: opacity .2s ease-out;
+}
+button:hover:after {
+	opacity: 1;
+}
+@keyframes moveing {
+    from {left: 0px;}
+    to {left: -70px;}
+}
+
+.row {
+	position: relative;
+	margin: 7px 0
+}

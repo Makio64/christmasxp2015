@@ -124,19 +124,19 @@ class Logo extends PIXI.Container {
 		this._title.show()
 		this._progressBar.show( .5 )
 
-		TweenLite.to( this._cntLogo, .8, {
+		TweenMax.to( this._cntLogo, .8, {
 			delay: delay + .3,
 			alpha: 1,
 			ease: Quart.easeInOut
 		})
-		TweenLite.to( this._logo.scale, 1.2, {
+		TweenMax.to( this._logo.scale, 1.2, {
 			delay: delay + .3,
 			x: .6,
 			y: .6,
 			ease: Cubic.easeOut
 		})
 
-		TweenLite.to( this._cntDate, .8, {
+		TweenMax.to( this._cntDate, .8, {
 			delay: delay + .9,
 			alpha: 1,
 			ease: Quart.easeInOut
@@ -145,14 +145,14 @@ class Logo extends PIXI.Container {
 
 		//
 		this._progressBar.setPercent( .2 )
-		TweenLite.set( this, {
+		TweenMax.set( this, {
 			delay: .8,
 			onComplete: () => {
 				this._progressBar.setPercent( .8 )
 			}
 		})
 
-		TweenLite.set( this, {
+		TweenMax.set( this, {
 			delay: 1.4,
 			onComplete: () => {
 				this._canHideLoading = true
@@ -170,23 +170,23 @@ class Logo extends PIXI.Container {
 			return
 		}
 		// tmp
-		TweenLite.set( this, {
+		TweenMax.set( this, {
 			onComplete: () => {
 				this._progressBar.setPercent( 1 )
 			}
 		})
 
-		TweenLite.set( this, {
+		TweenMax.set( this, {
 			delay: .6,
 			onComplete: () => {
 				this._title.hide()
-				TweenLite.to( this, .8, {
+				TweenMax.to( this, .8, {
 					delay: .4,
 					y: 90 * this.scale.y,
 					ease: Quart.easeInOut,
 				})
 				this._progressBar.switchMode( .4 )
-				TweenLite.to( this._cntDate, .6, {
+				TweenMax.to( this._cntDate, .6, {
 					delay: 3,
 					alpha: 0,
 					ease: Quad.easeOut,

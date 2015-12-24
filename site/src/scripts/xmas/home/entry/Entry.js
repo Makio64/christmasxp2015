@@ -18,7 +18,6 @@ class Entry extends PIXI.Container {
 		if( idx >= 0 ) {
 			this._content = new EntryContentPreview( data )
 			this.addChild( this._content )
-
 			this._circle = new EntryNumber( idx )
 			this._circle.x = config.sizes.entry.w
 			this._circle.y = config.sizes.entry.h - 55
@@ -26,7 +25,6 @@ class Entry extends PIXI.Container {
 		} else {
 			this._content = new EntryComingSoon()
 			this.addChild( this._content )
-
 			this._circle = new EntrySmiley()
 			this._circle.x = config.sizes.entry.w
 			this._circle.y = config.sizes.entry.h - 55
@@ -86,7 +84,6 @@ class Entry extends PIXI.Container {
 		if( this._content.hoverZone ) {
 			this._content.hoverZone.interactive = true
 			this._content.hoverZone.buttonMode = true
-
 			this._content.hoverZone.on( "mouseover", this._binds.onMouseOver )
 			this._content.hoverZone.on( "mouseout", this._binds.onMouseOut )
 			this._content.hoverZone.on( "click", this._binds.onClick )
@@ -98,7 +95,6 @@ class Entry extends PIXI.Container {
 		if( this._content.hoverZone ) {
 			this._content.hoverZone.interactive = false
 			this._content.hoverZone.buttonMode = false
-
 			this._content.hoverZone.off( "mouseover", this._binds.onMouseOver )
 			this._content.hoverZone.off( "mouseout", this._binds.onMouseOut )
 			this._content.hoverZone.off( "click", this._binds.onClick )

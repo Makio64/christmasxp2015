@@ -1,0 +1,14 @@
+{
+  "config": {
+   
+    "FLIP_LANGUAGE":"false",
+    "ENABLE_LEADERBOARDS":"true",
+    "FORMAT_SCORE_WITH_COMMAS":"true",
+    "SCORE_PATH":"http://www.goodboydigital.com/client/disney/scores/public_html/Scores.php",
+    "ENABLE_TRACKING":"false",
+    "LOCALE":"en_US",
+    "FONTS_EXTENDED":"true",
+    "REMOVE_LOADER_LOGO":"false"
+    
+  }
+}

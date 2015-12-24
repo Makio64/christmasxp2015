@@ -85,8 +85,8 @@ class EntryNumber extends PIXI.Container {
     const n = this._cntText.children.length
     for( let i = 0; i < n; i++ ) {
       letter = this._cntText.children[ i ]
-      TweenLite.killTweensOf( letter )
-      TweenLite.to( letter, .4, {
+      TweenMax.killTweensOf( letter )
+      TweenMax.to( letter, .4, {
         delay: ( n - i ) * .04,
         x: letter.xBase + 25 >> 0,
         alpha: 0,
@@ -101,21 +101,21 @@ class EntryNumber extends PIXI.Container {
     this._percentArrowEnd = 0
     this._drawArrowLine()
     this._drawArrowEnd()
-    TweenLite.killTweensOf( this )
-    TweenLite.killTweensOf( this._cntArrow )
-    TweenLite.to( this, .4, {
+    TweenMax.killTweensOf( this )
+    TweenMax.killTweensOf( this._cntArrow )
+    TweenMax.to( this, .4, {
       delay: .2,
       _percentArrowLine: 1,
       ease: Cubic.easeInOut,
       onUpdate: this._binds.drawArrowLine
     })
-    TweenLite.to( this, .4, {
+    TweenMax.to( this, .4, {
       delay: .2,
       _percentArrowEnd: 1,
       ease: Cubic.easeInOut,
       onUpdate: this._binds.drawArrowEnd
     })
-    TweenLite.to( this._cntArrow, .4, {
+    TweenMax.to( this._cntArrow, .4, {
       delay: .2,
       x: 16,
       ease: Cubic.easeInOut
@@ -133,8 +133,8 @@ class EntryNumber extends PIXI.Container {
     for( let i = 0; i < n; i++ ) {
       letter = this._cntText.children[ i ]
       letter.x = letter.xBase - 25
-      TweenLite.killTweensOf( letter )
-      TweenLite.to( letter, .4, {
+      TweenMax.killTweensOf( letter )
+      TweenMax.to( letter, .4, {
         delay: ( n - i ) * .04,
         x: letter.xBase >> 0,
         alpha: 1,
@@ -142,19 +142,19 @@ class EntryNumber extends PIXI.Container {
       })  
     }
 
-    TweenLite.killTweensOf( this )
-    TweenLite.killTweensOf( this._cntArrow )
-    TweenLite.to( this, .4, {
+    TweenMax.killTweensOf( this )
+    TweenMax.killTweensOf( this._cntArrow )
+    TweenMax.to( this, .4, {
       _percentArrowLine: 0,
       ease: Cubic.easeInOut,
       onUpdate: this._binds.drawArrowLine
     })
-    TweenLite.to( this, .4, {
+    TweenMax.to( this, .4, {
       _percentArrowEnd: 0,
       ease: Cubic.easeInOut,
       onUpdate: this._binds.drawArrowEnd
     })
-    TweenLite.to( this._cntArrow, .4, {
+    TweenMax.to( this._cntArrow, .4, {
       x: 46,
       ease: Cubic.easeInOut,
       onComplete: () => {
@@ -164,30 +164,30 @@ class EntryNumber extends PIXI.Container {
   }
 
   show( delay = 0, fast = false ) {
-    // TweenLite.set( this, {
+    // TweenMax.set( this, {
     //   delay: delay,
     //   alpha: .6
     // })
 
     const ratio = fast ? .5 : 1
 
-    TweenLite.to( this, .6 * ratio, {
+    TweenMax.to( this, .6 * ratio, {
       delay: delay,
       alpha: 1,
       ease: Cubic.easeInOut
     })
-    TweenLite.to( this.scale, .2 * ratio, {
+    TweenMax.to( this.scale, .2 * ratio, {
       delay: delay,
       x: 0.4,
       y: 0.4,
       ease: Sine.easeIn,
     } )
-    TweenLite.set( this.scale, {
+    TweenMax.set( this.scale, {
       delay: delay + .2 * ratio,
       x: .6,
       y: .6
     } )
-    TweenLite.to( this.scale, .8 * ratio, {
+    TweenMax.to( this.scale, .8 * ratio, {
       delay: delay + .2 * ratio,
       x: 1,
       y: 1,
@@ -198,7 +198,7 @@ class EntryNumber extends PIXI.Container {
     const n = this._cntText.children.length
     for( let i = 0; i < n; i++ ) {
       letter = this._cntText.children[ i ]
-      TweenLite.to( letter, .6 * ratio, {
+      TweenMax.to( letter, .6 * ratio, {
         delay: delay + .2 * ratio + i * .04 * ratio,
         y: 0,
         alpha: 1,
@@ -210,15 +210,15 @@ class EntryNumber extends PIXI.Container {
   hide( delay = 0 ) {
     this.out()
 
-    TweenLite.killTweensOf( this )
-    TweenLite.killTweensOf( this.scale )
+    TweenMax.killTweensOf( this )
+    TweenMax.killTweensOf( this.scale )
     
-    TweenLite.to( this, .6, {
+    TweenMax.to( this, .6, {
       delay: delay,
       alpha: 0,
       ease: Cubic.easeInOut
     })
-    TweenLite.to( this.scale, .6, {
+    TweenMax.to( this.scale, .6, {
       delay: delay,
       x: 0,
       y: 0,

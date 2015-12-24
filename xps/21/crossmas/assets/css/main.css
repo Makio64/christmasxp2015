@@ -1,0 +1,351 @@
+* {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'inconsolatamedium';
+}
+
+body { background: #000; color:red; }
+.dg.ac{ position: absolute !important; right: 0 !important; z-index: 20 !important; top: 0 !important; height: auto !important;} 
+.slider { margin-top: -18px !important; }
+
+.ui { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 10; }
+.screens { width: 100%; height: 100%; position: relative; }
+.screen { visibility: hidden; width: 100%; height: 100%; position: absolute; top: 0; left: 0; transition: all 1s linear; opacity: 0; z-index: 10;}
+.screen.show { visibility: visible; opacity: 1 } 
+
+
+.app.gray {
+  transition: all .3s linear;
+  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
+}
+
+/*
+INTRO
+ */
+.intro {
+  z-index: 40;
+  transition: all .3s linear
+}
+
+/*.intro .title {
+  
+  width: 1128px;
+  height: 192px;
+}*/
+
+.intro .overlay {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  position: absolute;
+  opacity: .5;
+  transition: all 1s linear;
+}
+
+.intro .overlay.active {
+  opacity: 1
+}
+
+.intro .inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  margin-top: 70px;
+}
+
+.title {
+  width: 1128px;
+  height: 192px;
+}
+
+.start-btn {
+  width: 74px;
+  height: 74px;
+  margin: 80px auto 0;
+  position: relative;
+  cursor: pointer;
+  
+  visibility: hidden;
+  
+  margin: 100px auto 0;
+}
+.start-btn>svg {
+  width: 74px;
+  height: 74px;
+  stroke:#fff;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  transition: all .7s ease-in-out;
+}
+
+
+.start-btn .point {
+  transition: all .7s linear;
+  opacity: 0;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 4px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -4px 0 0 -4px;
+}
+
+.start-btn.active {
+  visibility: visible;
+}
+.start-btn.active .point {
+  opacity: 1;
+}
+.start-btn.active>svg {
+  stroke-dashoffset: 0;
+}
+
+.start-btn.active:hover .point{
+  transition-duration: .35s;
+  transform : scale(1.4);
+}
+.start-btn.active:hover>svg{
+  transition-timing-function:ease-out;
+  transition-duration: .35s;
+  transform : scale(0.8);
+}
+
+.start-btn.activated svg {
+  visibility: hidden;
+}
+.start-btn.activated>svg {
+  stroke-dashoffset: 220;
+}
+.start-btn.activated .point {
+  opacity: 0;
+}
+/*
+GAME
+ */
+.game .overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #000;
+  z-index: 10;
+  transition: all 1s linear;
+  opacity: 0
+}
+
+.game .overlay.active {
+  opacity: 1
+}
+
+.game .gauge {
+  width: 140px;
+  height: 140px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -70px;
+  margin-top: -70px;
+  text-align: center;
+  line-height: 140px;
+  transform: scale(1.2);
+  visibility: hidden;
+  opacity: 0;
+  transition: all 1s linear;
+  z-index: 2;
+}
+
+.game .gauge.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.game canvas {
+  position: absolute;
+  display: block;
+  z-index: -1;
+}
+
+.game .label {
+  font-size: 13px;
+  color: #fff;
+  opacity: 0
+}
+
+.game .creditsBtn {
+  display: block;
+  background: rgba(0, 0, 0, .5);
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+  transition: all .15s linear;
+  transform: translateX(-50%);
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.game .creditsBtn:hover {
+  background: rgba(0, 0, 0, 1);
+}
+
+.game .tuto {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  background: rgba( 0,0,0,0.5 );
+  z-index: 1;
+  transition: all .3s linear 0s;
+}
+
+.game .tuto.show {
+  visibility: visible;
+  opacity: 1;
+  transition: all .3s linear 1s;
+}
+
+.game .tuto .left,
+.game .tuto .right {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url('../img/arrow.svg');
+  background-size: 15px auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: -50px;
+}
+
+.game .tuto .left {
+  margin-left: -100px;
+
+}
+
+.game .tuto .right {
+  margin-left: 100px;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.game .tuto .label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  z-index: 1;
+  opacity: 1;
+  margin-top: -100px;
+  text-transform: uppercase;
+}
+
+/*
+CREDITS
+ */
+.credits {
+  visibility: hidden;
+  opacity: 0;
+  background: rgba( 0, 0, 0, .8 );
+  text-align: center;
+  color: #fff;
+  transition: all .3s linear;
+  z-index: 50;
+}
+
+.credits .inner {
+  width: 100%;
+  height: 560px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin-top: -255px;
+}
+
+.credits .close {
+  width: 66px;
+  height: 66px;
+  border: 2px solid rgba(255, 255, 255, .5);
+  border-radius: 40px;
+  position: relative;
+  margin: 0 auto 70px;
+  cursor: pointer;
+}
+
+.credits .close:hover .bars {
+  transform: rotate(90deg);
+}
+
+.credits .close .bars {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -10px 0 0 -10px;
+  background-image: url('../img/close.png');
+  background-size: cover;
+  transition: all .2s linear;
+}
+
+
+
+.credits .title {
+  width: 460px;
+  height: 74px;
+  background-image: url('../img/xp_title.png');
+  background-size: cover;
+  margin: 0 auto 50px;
+}
+
+.credits.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.credits p {
+  margin: 20px 0;
+  line-height: 18px;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.credits a {
+  color: #fff;
+  transition: all .15s linear;
+}
+
+.credits a:hover {
+  /*color: #b43939;*/
+  text-decoration: none;
+}
+
+
+@font-face {
+  font-family: 'inconsolatamedium';
+  src: url('../fonts/inconsolata-webfont.eot');
+  src: url('../fonts/inconsolata-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/inconsolata-webfont.woff2') format('woff2'),
+       url('../fonts/inconsolata-webfont.woff') format('woff'),
+       url('../fonts/inconsolata-webfont.ttf') format('truetype'),
+       url('../fonts/inconsolata-webfont.svg#inconsolatamedium') format('svg');
+  font-weight: normal;
+  font-style: normal;
+
+}

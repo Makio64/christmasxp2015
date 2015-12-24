@@ -195,7 +195,7 @@ class Home extends PIXI.Container {
 		for( let i = 0; i < this._countLinesVisible; i++ ) {
 			this._lines[ i ].show( i * .08 )
 		}
-		TweenLite.set( this, {
+		TweenMax.set( this, {
 			delay: 2,
 			onComplete: this.bindEvents.bind( this )
 		})

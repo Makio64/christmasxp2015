@@ -21,7 +21,7 @@ class Bts extends PIXI.Container {
 	_onMouseOver( e ) {
 		const target = e.target.children[ 0 ]
 		target.alpha = 1
-		TweenLite.to( target, .25, {
+		TweenMax.to( target, .25, {
 			x: 5,
 			ease: Quart.easeOut
 		})
@@ -29,7 +29,7 @@ class Bts extends PIXI.Container {
 
 	_onMouseOut( e ) {
 		const target = e.target.children[ 0 ]
-		TweenLite.to( target, .25, {
+		TweenMax.to( target, .25, {
 			x: 0,
 			ease: Quart.easeOut,
 			onComplete: () => {
@@ -118,25 +118,25 @@ class Bts extends PIXI.Container {
 	}
 
 	show( delay = 0 ) {
-		TweenLite.to( this._btSubmit, .8, {
+		TweenMax.to( this._btSubmit, .8, {
 			delay: delay,
 			alpha: 1,
 			ease: Quart.easeInOut
 		})
 
-		TweenLite.to( this._btAbout, .8, {
+		TweenMax.to( this._btAbout, .8, {
 			delay: delay + .2,
 			alpha: 1,
 			ease: Quart.easeInOut
 		})
 
-		TweenLite.to( this._btFB, .8, {
+		TweenMax.to( this._btFB, .8, {
 			delay: delay + .1,
 			alpha: 1,
 			ease: Quart.easeInOut
 		})
 
-		TweenLite.to( this._btTwitter, .8, {
+		TweenMax.to( this._btTwitter, .8, {
 			delay: delay + .3,
 			alpha: 1,
 			ease: Quart.easeInOut

@@ -48,14 +48,14 @@ class Storyline extends PIXI.Container {
       loop.add( this._binds.onUpdate )
     }, delay * 1000 )
 
-    TweenLite.to( this._poly.scale, .8, {
+    TweenMax.to( this._poly.scale, .8, {
       delay: delay,
       x: .5,
       y: .5,
       ease: Quart.easeInOut
     })
 
-    TweenLite.to( this._circle.scale, .8, {
+    TweenMax.to( this._circle.scale, .8, {
       delay: delay,
       x: .5,
       y: .5,
@@ -66,7 +66,7 @@ class Storyline extends PIXI.Container {
   _showWords( delay ) {
     const n = this._tf.children.length
     for( let i = 0; i < n; i++ ) {
-      TweenLite.to( this._tf.children[ i ], .8, {
+      TweenMax.to( this._tf.children[ i ], .8, {
         delay: delay,
         alpha: 1,
         ease: Quart.easeInOut,
@@ -85,14 +85,14 @@ class Storyline extends PIXI.Container {
 
   hide( delay = 0 ) {
     this._hideWords( delay )
-    TweenLite.to( this._poly.scale, .8, {
+    TweenMax.to( this._poly.scale, .8, {
       delay: delay + .2,
       x: 0,
       y: 0,
       ease: Quart.easeInOut
     })
 
-    TweenLite.to( this._circle.scale, .8, {
+    TweenMax.to( this._circle.scale, .8, {
       delay: delay,
       x: 0,
       y: 0,
@@ -103,7 +103,7 @@ class Storyline extends PIXI.Container {
   _hideWords( delay ) {
     const n = this._tf.children.length
     for( let i = 0; i < n; i++ ) {
-      TweenLite.to( this._tf.children[ i ], .8, {
+      TweenMax.to( this._tf.children[ i ], .8, {
         delay: delay,
         alpha: 0,
         ease: Cubic.easeInOut,

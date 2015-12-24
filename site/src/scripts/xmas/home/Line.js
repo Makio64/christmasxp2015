@@ -162,30 +162,30 @@ class Line extends PIXI.Container {
 			for( let i = 0; i < n; i++ ) {
 				letter = this._cntTfDay.children[ i ]
 				letter.alpha = 0
-				TweenLite.to( letter, timing, {
+				TweenMax.to( letter, timing, {
 					delay: delay + .1 + ( n - i ) * .1,
 					alpha: 1,
 					ease: Cubic.easeInOut
 				} )
 			}
-			TweenLite.set( this._cntTfDay, {
+			TweenMax.set( this._cntTfDay, {
 				delay: delay + .04,
 				alpha: 1,
 			})
 		}
-		TweenLite.to( this._line.scale, timing, {
+		TweenMax.to( this._line.scale, timing, {
 			delay: delay + .04,
 			x: 1,
 			ease: Cubic.easeInOut
 		})
 
-		TweenLite.to( this._bgLine, 2 * timing, {
+		TweenMax.to( this._bgLine, 2 * timing, {
 			delay: delay,
 			alpha: 1,
 			ease: Cubic.easeInOut
 		} )
 
-		TweenLite.to( this._cntTfNumber, timing, {
+		TweenMax.to( this._cntTfNumber, timing, {
 			delay: delay,
 			alpha: 1,
 			ease: Cubic.easeInOut
@@ -228,25 +228,25 @@ class Line extends PIXI.Container {
 			for( let i = 0; i < n; i++ ) {
 				letter = this._cntTfDay.children[ i ]
 				// letter.alpha = 0
-				TweenLite.to( letter, .4, {
+				TweenMax.to( letter, .4, {
 					delay: delay + .1 + ( n - i ) * .1,
 					alpha: 0,
 					ease: Cubic.easeInOut
 				} )
 			}
 		}
-		TweenLite.to( this._line.scale, .6, {
+		TweenMax.to( this._line.scale, .6, {
 			delay: delay + .04,
 			x: 0,
 			ease: Cubic.easeInOut
 		})
 
-		TweenLite.to( this._bgLine, 1, {
+		TweenMax.to( this._bgLine, 1, {
 			alpha: 0,
 			ease: Cubic.easeInOut
 		} )
 
-		TweenLite.to( this._cntTfNumber, .6, {
+		TweenMax.to( this._cntTfNumber, .6, {
 			delay: delay,
 			alpha: 0,
 			ease: Cubic.easeInOut

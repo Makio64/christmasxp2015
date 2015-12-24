@@ -1,0 +1,124 @@
+{  
+    "groups":{  
+        "diamonds":[  
+            {  
+                "id":"diamond_1",
+                "price":100,
+                "thumbnail":"item_diamond_1.png",
+                "imageUrl":"item_diamond_1.png",
+                "description":"Description of super diamond 1"
+            },
+            {  
+                "id":"diamond_2",
+                "price":115,
+                "thumbnail":"item_diamond_2.png",
+                "imageUrl":"item_diamond_2.png",
+                "description":"Description of super diamond 2"
+            },
+            {  
+                "id":"diamond_3",
+                "price":115,
+                "thumbnail":"item_diamond_3.png",
+                "imageUrl":"item_diamond_3.png",
+                "description":"Description of super diamond 3"
+            },
+            {  
+                "id":"diamond_4",
+                "price":176,
+                "thumbnail":"item_diamond_4.png",
+                "imageUrl":"item_diamond_4.png",
+                "description":"Description of super diamond 4"
+            }
+        ],
+        "squares":[  
+            {  
+                "id":"square_1",
+                "price":100,
+                "thumbnail":"item_square_1.png",
+                "imageUrl":"item_square_1.png",
+                "description":"Description of bear the square 1"
+            },
+            {  
+                "id":"square_2",
+                "price":157,
+                "thumbnail":"item_square_2.png",
+                "imageUrl":"item_square_2.png",
+                "description":"Description of bear the square 2"
+            },
+            {  
+                "id":"square_3",
+                "price":218,
+                "thumbnail":"item_square_3.png",
+                "imageUrl":"item_square_3.png",
+                "description":"Description of bear the square 3"
+            },
+            {  
+                "id":"square_4",
+                "price":218,
+                "thumbnail":"item_square_4.png",
+                "imageUrl":"item_square_4.png",
+                "description":"Description of bear the square 4"
+            }
+        ],
+        "triangles":[  
+            {  
+                "id":"triangle_1",
+                "price":100,
+                "thumbnail":"item_triangle_1.png",
+                "imageUrl":"item_triangle_1.png",
+                "description":"Description of the triangle of the masons N°1"
+            },
+            {  
+                "id":"triangle_2",
+                "price":126,
+                "thumbnail":"item_triangle_2.png",
+                "imageUrl":"item_triangle_2.png",
+                "description":"Description of the triangle of the masons N°2"
+            },
+            {  
+                "id":"triangle_3",
+                "price":103,
+                "thumbnail":"item_triangle_3.png",
+                "imageUrl":"item_triangle_3.png",
+                "description":"Description of the triangle of the masons N°3"
+            },
+            {  
+                "id":"triangle_4",
+                "price":149,
+                "thumbnail":"item_triangle_4.png",
+                "imageUrl":"item_triangle_4.png",
+                "description":"Description of the triangle of the masons N°4"
+            }
+        ],
+        "circles":[  
+            {  
+                "id":"circle_1",
+                "price":100,
+                "thumbnail":"item_circle_1.png",
+                "imageUrl":"item_circle_1.png",
+                "description":"Description of the swirly circle N°1"
+            },
+            {  
+                "id":"circle_2",
+                "price":133,
+                "thumbnail":"item_circle_2.png",
+                "imageUrl":"item_circle_2.png",
+                "description":"Description of the swirly circle N°2"
+            },
+            {  
+                "id":"circle_3",
+                "price":211,
+                "thumbnail":"item_circle_3.png",
+                "imageUrl":"item_circle_3.png",
+                "description":"Description of the swirly circle N°3"
+            },
+            {  
+                "id":"circle_4",
+                "price":273,
+                "thumbnail":"item_circle_4.png",
+                "imageUrl":"item_circle_4.png",
+                "description":"Description of the swirly circle N°4"
+            }
+        ]
+    }
+}

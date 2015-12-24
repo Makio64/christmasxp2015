@@ -1,0 +1,260 @@
+{"frames": {
+
+"base_trees.png":
+{
+	"frame": {"x":678,"y":1,"w":1136,"h":211},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1136,"h":211},
+	"sourceSize": {"w":1136,"h":211}
+},
+"charge_bg.png":
+{
+	"frame": {"x":678,"y":287,"w":92,"h":12},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":92,"h":12},
+	"sourceSize": {"w":99,"h":17}
+},
+"charge_fill_ADD.png":
+{
+	"frame": {"x":772,"y":287,"w":2,"h":9},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":2,"h":9},
+	"sourceSize": {"w":2,"h":9}
+},
+"charge_frame.png":
+{
+	"frame": {"x":926,"y":453,"w":99,"h":17},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":99,"h":17},
+	"sourceSize": {"w":99,"h":17}
+},
+"laser.png":
+{
+	"frame": {"x":678,"y":214,"w":1103,"h":71},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1103,"h":71},
+	"sourceSize": {"w":1103,"h":71}
+},
+"laser_end_crop.png":
+{
+	"frame": {"x":678,"y":303,"w":36,"h":168},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":168},
+	"sourceSize": {"w":36,"h":168}
+},
+"laser_end_flare.png":
+{
+	"frame": {"x":1468,"y":303,"w":84,"h":91},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":91},
+	"sourceSize": {"w":84,"h":91}
+},
+"laser_horiz_flare.png":
+{
+	"frame": {"x":935,"y":401,"w":856,"h":23},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":856,"h":23},
+	"sourceSize": {"w":856,"h":23}
+},
+"logo.png":
+{
+	"frame": {"x":1,"y":1,"w":675,"h":472},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":675,"h":472},
+	"sourceSize": {"w":675,"h":472}
+},
+"play_attract1.png":
+{
+	"frame": {"x":716,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"play_attract2.png":
+{
+	"frame": {"x":805,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"play_attract3.png":
+{
+	"frame": {"x":894,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"play_attract4.png":
+{
+	"frame": {"x":983,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"play_attract5.png":
+{
+	"frame": {"x":1072,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"play_attract6.png":
+{
+	"frame": {"x":1161,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"play_attract7.png":
+{
+	"frame": {"x":1250,"y":303,"w":87,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":87,"h":96},
+	"sourceSize": {"w":87,"h":96}
+},
+"shadow.png":
+{
+	"frame": {"x":1339,"y":303,"w":127,"h":91},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":127,"h":91},
+	"sourceSize": {"w":127,"h":91}
+},
+"snowflake1.png":
+{
+	"frame": {"x":878,"y":401,"w":26,"h":27},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":26,"h":27},
+	"sourceSize": {"w":26,"h":27}
+},
+"snowflake2.png":
+{
+	"frame": {"x":926,"y":427,"w":25,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":24},
+	"sourceSize": {"w":25,"h":24}
+},
+"snowflake3.png":
+{
+	"frame": {"x":906,"y":401,"w":27,"h":24},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":27,"h":24},
+	"sourceSize": {"w":27,"h":24}
+},
+"snowflake4.png":
+{
+	"frame": {"x":761,"y":401,"w":39,"h":39},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":39,"h":39},
+	"sourceSize": {"w":39,"h":39}
+},
+"snowflake5.png":
+{
+	"frame": {"x":761,"y":442,"w":26,"h":31},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":26,"h":31},
+	"sourceSize": {"w":26,"h":31}
+},
+"snowplosion1.png":
+{
+	"frame": {"x":843,"y":401,"w":33,"h":29},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":33,"h":29},
+	"sourceSize": {"w":33,"h":29}
+},
+"snowplosion2.png":
+{
+	"frame": {"x":1783,"y":266,"w":28,"h":35},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":35},
+	"sourceSize": {"w":28,"h":35}
+},
+"snowplosion3.png":
+{
+	"frame": {"x":892,"y":430,"w":32,"h":25},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":25},
+	"sourceSize": {"w":32,"h":25}
+},
+"snowplosion4.png":
+{
+	"frame": {"x":858,"y":432,"w":32,"h":28},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":28},
+	"sourceSize": {"w":32,"h":28}
+},
+"snowplosion5.png":
+{
+	"frame": {"x":824,"y":436,"w":32,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":30},
+	"sourceSize": {"w":32,"h":30}
+},
+"snowplosion6.png":
+{
+	"frame": {"x":802,"y":401,"w":39,"h":33},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":39,"h":33},
+	"sourceSize": {"w":39,"h":33}
+},
+"snowplosion7.png":
+{
+	"frame": {"x":1783,"y":214,"w":30,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":50},
+	"sourceSize": {"w":30,"h":50}
+},
+"snowplosion8.png":
+{
+	"frame": {"x":789,"y":442,"w":33,"h":30},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":33,"h":30},
+	"sourceSize": {"w":33,"h":30}
+},
+"user_arrow.png":
+{
+	"frame": {"x":716,"y":401,"w":43,"h":56},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":43,"h":56},
+	"sourceSize": {"w":43,"h":56}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "snow_scene.png",
+	"format": "RGBA8888",
+	"size": {"w":1815,"h":474},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c03aac4018e09964f12e7350a757cbf9:4fe2154fc8d434d28f1f137d120cf28e:8f6511c7ec85fa022eedbb466ce81a50$"
+}
+}

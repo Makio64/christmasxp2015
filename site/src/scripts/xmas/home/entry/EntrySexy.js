@@ -25,7 +25,7 @@ class EntrySexy extends PIXI.Container {
 	show( delay = 0, fast = false ) {
 		const timing = fast ? .4 : .8
 
-		TweenLite.to( this._polyShape.scale, timing, {
+		TweenMax.to( this._polyShape.scale, timing, {
 			delay: delay,
 			x: 1,
 			y: 1,
@@ -34,9 +34,9 @@ class EntrySexy extends PIXI.Container {
 	}
 
 	hide( delay = 0 ) {
-		TweenLite.killTweensOf( this._polyShape.scale )
+		TweenMax.killTweensOf( this._polyShape.scale )
 
-		TweenLite.to( this._polyShape.scale, .6, {
+		TweenMax.to( this._polyShape.scale, .6, {
 			delay: delay + .15,
 			x: 0,
 			y: 0,

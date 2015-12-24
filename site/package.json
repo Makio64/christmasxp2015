@@ -24,7 +24,9 @@
     "npm": "*"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.1.18",
+    "babel-core": "^6.3.21",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
     "babelify": "*",
     "browser-sync": "*",
     "browserify": "*",
@@ -56,6 +58,8 @@
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*",
     "watchify": "*",
+    "webpack": "^1.12.9",
+    "webpack-stream": "^3.1.0",
     "yargs": "*"
   }
 }

@@ -1,0 +1,652 @@
+{"frames": {
+
+"snobod_blue_01.png":
+{
+	"frame": {"x":1,"y":1,"w":98,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":2,"w":98,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_02.png":
+{
+	"frame": {"x":1,"y":537,"w":89,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":1,"w":89,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_03.png":
+{
+	"frame": {"x":938,"y":325,"w":79,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":1,"w":79,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_04.png":
+{
+	"frame": {"x":855,"y":325,"w":81,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":1,"w":81,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_05.png":
+{
+	"frame": {"x":332,"y":652,"w":80,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":80,"h":100},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_06.png":
+{
+	"frame": {"x":92,"y":652,"w":78,"h":101},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":78,"h":101},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_07.png":
+{
+	"frame": {"x":366,"y":220,"w":85,"h":106},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":85,"h":106},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_08.png":
+{
+	"frame": {"x":383,"y":110,"w":86,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":0,"w":86,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_09.png":
+{
+	"frame": {"x":480,"y":1,"w":92,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":92,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_10.png":
+{
+	"frame": {"x":180,"y":542,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_11.png":
+{
+	"frame": {"x":280,"y":219,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_12.png":
+{
+	"frame": {"x":884,"y":218,"w":80,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":0,"w":80,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_13.png":
+{
+	"frame": {"x":424,"y":436,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_14.png":
+{
+	"frame": {"x":508,"y":435,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":1,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_15.png":
+{
+	"frame": {"x":714,"y":218,"w":83,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":1,"w":83,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_blue_16.png":
+{
+	"frame": {"x":201,"y":1,"w":91,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":91,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_01.png":
+{
+	"frame": {"x":1,"y":107,"w":98,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":2,"w":98,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_02.png":
+{
+	"frame": {"x":1,"y":646,"w":89,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":1,"w":89,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_03.png":
+{
+	"frame": {"x":434,"y":541,"w":79,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":1,"w":79,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_04.png":
+{
+	"frame": {"x":515,"y":540,"w":81,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":1,"w":81,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_05.png":
+{
+	"frame": {"x":342,"y":439,"w":80,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":80,"h":100},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_06.png":
+{
+	"frame": {"x":172,"y":652,"w":78,"h":101},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":78,"h":101},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_07.png":
+{
+	"frame": {"x":453,"y":220,"w":85,"h":106},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":85,"h":106},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_08.png":
+{
+	"frame": {"x":94,"y":322,"w":86,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":0,"w":86,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_09.png":
+{
+	"frame": {"x":574,"y":1,"w":92,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":92,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_10.png":
+{
+	"frame": {"x":182,"y":329,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_11.png":
+{
+	"frame": {"x":268,"y":329,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_12.png":
+{
+	"frame": {"x":354,"y":329,"w":80,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":0,"w":80,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_13.png":
+{
+	"frame": {"x":592,"y":435,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_14.png":
+{
+	"frame": {"x":578,"y":646,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":1,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_15.png":
+{
+	"frame": {"x":799,"y":218,"w":83,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":1,"w":83,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_green_16.png":
+{
+	"frame": {"x":1,"y":319,"w":91,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":91,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_01.png":
+{
+	"frame": {"x":101,"y":1,"w":98,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":2,"w":98,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_02.png":
+{
+	"frame": {"x":101,"y":213,"w":89,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":1,"w":89,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_03.png":
+{
+	"frame": {"x":598,"y":540,"w":79,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":1,"w":79,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_04.png":
+{
+	"frame": {"x":414,"y":648,"w":81,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":1,"w":81,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_05.png":
+{
+	"frame": {"x":845,"y":537,"w":80,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":80,"h":100},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_06.png":
+{
+	"frame": {"x":252,"y":652,"w":78,"h":101},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":78,"h":101},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_07.png":
+{
+	"frame": {"x":901,"y":108,"w":85,"h":106},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":85,"h":106},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_08.png":
+{
+	"frame": {"x":94,"y":432,"w":86,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":0,"w":86,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_09.png":
+{
+	"frame": {"x":668,"y":1,"w":92,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":92,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_10.png":
+{
+	"frame": {"x":266,"y":542,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_11.png":
+{
+	"frame": {"x":471,"y":110,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_12.png":
+{
+	"frame": {"x":606,"y":328,"w":80,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":0,"w":80,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_13.png":
+{
+	"frame": {"x":662,"y":646,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_14.png":
+{
+	"frame": {"x":676,"y":435,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":1,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_15.png":
+{
+	"frame": {"x":436,"y":328,"w":83,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":1,"w":83,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_lime_16.png":
+{
+	"frame": {"x":294,"y":1,"w":91,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":91,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_01.png":
+{
+	"frame": {"x":1,"y":213,"w":98,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":2,"w":98,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_02.png":
+{
+	"frame": {"x":201,"y":110,"w":89,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":1,"w":89,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_03.png":
+{
+	"frame": {"x":497,"y":647,"w":79,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":1,"w":79,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_04.png":
+{
+	"frame": {"x":679,"y":540,"w":81,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":1,"w":81,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_05.png":
+{
+	"frame": {"x":927,"y":536,"w":80,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":80,"h":100},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_06.png":
+{
+	"frame": {"x":182,"y":439,"w":78,"h":101},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":78,"h":101},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_07.png":
+{
+	"frame": {"x":540,"y":220,"w":85,"h":106},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":85,"h":106},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_08.png":
+{
+	"frame": {"x":92,"y":542,"w":86,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":0,"w":86,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_09.png":
+{
+	"frame": {"x":762,"y":1,"w":92,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":92,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_10.png":
+{
+	"frame": {"x":557,"y":108,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_11.png":
+{
+	"frame": {"x":643,"y":108,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_12.png":
+{
+	"frame": {"x":688,"y":326,"w":80,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":0,"w":80,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_13.png":
+{
+	"frame": {"x":746,"y":646,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_14.png":
+{
+	"frame": {"x":830,"y":645,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":1,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_15.png":
+{
+	"frame": {"x":521,"y":328,"w":83,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":1,"w":83,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_purple_16.png":
+{
+	"frame": {"x":1,"y":428,"w":91,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":91,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_01.png":
+{
+	"frame": {"x":101,"y":107,"w":98,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":2,"w":98,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_02.png":
+{
+	"frame": {"x":292,"y":110,"w":89,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":1,"w":89,"h":107},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_03.png":
+{
+	"frame": {"x":760,"y":433,"w":79,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":20,"y":1,"w":79,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_04.png":
+{
+	"frame": {"x":762,"y":539,"w":81,"h":104},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":1,"w":81,"h":104},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_05.png":
+{
+	"frame": {"x":914,"y":639,"w":80,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":18,"y":0,"w":80,"h":100},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_06.png":
+{
+	"frame": {"x":262,"y":439,"w":78,"h":101},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":78,"h":101},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_07.png":
+{
+	"frame": {"x":627,"y":218,"w":85,"h":106},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":1,"w":85,"h":106},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_08.png":
+{
+	"frame": {"x":192,"y":219,"w":86,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":16,"y":0,"w":86,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_09.png":
+{
+	"frame": {"x":856,"y":1,"w":92,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":92,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_10.png":
+{
+	"frame": {"x":729,"y":108,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_11.png":
+{
+	"frame": {"x":815,"y":108,"w":84,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":0,"w":84,"h":108},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_12.png":
+{
+	"frame": {"x":352,"y":541,"w":80,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":6,"y":0,"w":80,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_13.png":
+{
+	"frame": {"x":841,"y":432,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":0,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_14.png":
+{
+	"frame": {"x":925,"y":431,"w":82,"h":103},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":1,"w":82,"h":103},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_15.png":
+{
+	"frame": {"x":770,"y":325,"w":83,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":1,"w":83,"h":105},
+	"sourceSize": {"w":104,"h":108}
+},
+"snobod_red_16.png":
+{
+	"frame": {"x":387,"y":1,"w":91,"h":107},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":91,"h":107},
+	"sourceSize": {"w":104,"h":108}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "snowbod_blue.png",
+	"format": "RGBA8888",
+	"size": {"w":1018,"h":754},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b8097050e9dbdea3cbd8c6b650326649:4cd9e8a629e2cb748d090fc8ce1608d8:588c40acc27e8ab3967e9fa0e7f8b239$"
+}
+}

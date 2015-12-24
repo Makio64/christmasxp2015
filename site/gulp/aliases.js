@@ -7,9 +7,9 @@ gulp.task( "default", function( cb ) {
 } );
 
 gulp.task( "build", function( cb ) {
-	runSequence( [ "scripts", "styles-build" ], cb );
+	runSequence( [ "webpack", "styles-build" ], cb );
 })
 
 gulp.task( "optimize", function( cb ) {
-	runSequence( "copyToDist", [ "js", "json", "imagemin" ], cb );
+	runSequence( [ "webpack-build", "styles-build" ], "copyToDist", [ "js", "json" ], cb );
 })
