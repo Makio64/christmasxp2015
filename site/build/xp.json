@@ -1,5 +1,5 @@
 {
-    "totalDay": 23,
+    "totalDay": 25,
     "days": {
         "1": [
             {
@@ -271,7 +271,29 @@
                 "folder": "/give-me-a-gift/",
                 "path": "/23/give-me-a-gift/"
             }
+        ],
+        "24": [
+            {
+                "uid": 25,
+                "title": "Winter Solstice",
+                "author": "Eddie Lee",
+                "website": "http://eddietree.com",
+                "twitter": "eddietree",
+                "folder": "/Solstice/",
+                "path": "/24/Solstice/"
+            }
+        ],
+        "25": [
+            {
+                "uid": 26,
+                "title": "XMas Virus",
+                "author": "thespite / acidbeat",
+                "website": "",
+                "twitter": "@thespite",
+                "folder": "/xmas-virus/",
+                "path": "/25/xmas-virus/"
+            }
         ]
     },
-    "totalXP": 25
+    "totalXP": 27
 }

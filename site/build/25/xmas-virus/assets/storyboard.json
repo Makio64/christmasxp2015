@@ -1,0 +1,99 @@
+{
+
+ "camera": [
+   "0 cut to 0",
+   "15.48 cut to 1",
+   "23.22 cut to 2",
+   "30.96 cut to 3",
+   "34.83 cut to 4",
+   "38.71 cut to 5",
+   "42.58 cut to 6",
+   "48.38 cut to 8",
+   "56.12 cut to 7",
+   "63.87 cut to 9",
+   "67.74 cut to 10",
+   "71.61 cut to 11",
+   "75.48 cut to 12",
+   "79.35 cut to 13",
+   "83.22 cut to 14",
+   "87.09 cut to 15",
+   "90.96 cut to 16",
+   "94.89 cut to 13",
+   "98.71 cut to 14",
+   "102.58 cut to 16",
+   "106.45 cut to 15",
+   "110.32 cut to 17"
+ ],
+
+"speed" :[
+   "0 cut to 1",
+   "46.45 cut to .05",
+   "48.38 cut to 1",
+   "61.93 cut to .1",
+   "63.87 cut to 1"
+],
+
+"focalDistance": [
+   "0 cut to 0",
+   "46 cut to .85",
+   "46.45 linear to 1",
+   "48.38 linear to 1",
+   "48.38 cut to 0"
+],
+
+ "cx": [
+   "0 cut to 0",
+   "15.48 cut to 25",
+   "200 linear to 0"
+ ],
+
+ "cy": [
+   "0 cut to 46",
+   "2.1 linear to 38",
+   "3.87 linear to 38",
+   "5.95 linear to 28",
+   "7.74 linear to 28",
+   "9.85 linear to 18",
+   "11.61 linear to 18",
+   "13.54 linear to 8",
+   "13.54 cut to 6",
+   "14.51 cut to 3",
+   "200 linear to 0"
+ ],
+
+ "cz": [
+   "0 cut to 0",
+   "14.51 cut to 0",
+   "15.48 cut to -25",
+   "200 linear to 0"
+ ],
+
+ "tx": [
+   "0 cut to 0",
+   "15.48 cut to 0",
+   "200 linear to 0"
+ ],
+
+ "ty": [
+   "0 cut to 0",
+   "15.48 cut to 0.6",
+   "200 linear to 0"
+ ],
+
+ "tz": [
+   "0 cut to 0",
+   "15.48 cut to -36",
+   "200 linear to 0"
+],
+
+"blur" :[
+   "0 cut to 0",
+   "118.06 cut to 0",
+   "120 linear to 1"
+],
+
+"fade" : [
+   "0 cut to 0",
+   "1 linear to 1"
+]
+}

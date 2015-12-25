@@ -56,7 +56,7 @@ class XPView {
 
 	getXP(id){
 	 var days = config.data.days
-	 for(var i = 1; i <= 24; i++) {
+	 for(var i = 1; i <= 25; i++) {
 		 var day = days[i]
 		 for (var j = 0; j < day.length; j++) {
 			 var d = day[j]
@@ -70,7 +70,7 @@ class XPView {
 // XP MANAGEMENT
 	getDay(id){
 	 var days = config.data.days
-	 for(var j = 1; j <= 24; j++) {
+	 for(var j = 1; j <= 25; j++) {
 		 var day = days[j]
 		 for (var i = 0; i < day.length; i++) {
 			 var d = day[i]

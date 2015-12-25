@@ -1,0 +1,13 @@
+/*
+"uniform mat4 modelMatrix;",
+"uniform mat4 modelViewMatrix;",
+"uniform mat4 projectionMatrix;",
+"uniform mat4 viewMatrix;",
+"uniform mat3 normalMatrix;",
+"uniform vec3 cameraPosition;",
+*/
+
+void main() {
+	vec3 pos = position;
+  	gl_Position = projectionMatrix * modelViewMatrix * vec4(pos,1.0);
+}
