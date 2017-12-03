@@ -51,7 +51,7 @@ Nb: Due to the limited number of place and to keep the savour of christmas exper
 - William Mappan / @willamappan
 - Franco Bouly / @rayfranco
 
-##Artists this year :
+## Artists this year :
 Coming soon
 
 # Merry XMAS!
